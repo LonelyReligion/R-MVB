@@ -8,7 +8,7 @@ namespace RMVB_konsola.MVB
 {
     internal class DeskryptorDrzewa : DeskryptorKorzenia
     {
-        Wezel lewy;
-        Wezel prawy;
+        //czy moze byc ich wiecej niz 2?
+        List<Wezel> wezly;
     }
 }

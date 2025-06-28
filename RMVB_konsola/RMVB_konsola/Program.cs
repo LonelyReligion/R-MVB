@@ -4,6 +4,7 @@ Console.WriteLine("Hello, World!");
 
 Urzadzenie testowe = new Urzadzenie();
 testowe.Aktywne = true;
+testowe.UrzadzenieID = 0;
 
 Pomiar testowy = new Pomiar();
 testowy.Wartosc = 0;
@@ -14,6 +15,8 @@ using (var ctx = new Kontekst()) {
     ctx.Urzadzenia.Add(testowe);
     ctx.Pomiary.Add(testowy);
     ctx.SaveChanges();
-}
 
-Console.WriteLine(testowe.Pomiary.ElementAt(0).PomiarID);
+    //jak zrobic zeby poprzednie wersje byly oznaczone jako nieaktywne automatycznie?
+    ctx.Urzadzenia.Add(testowe);
+    ctx.SaveChanges();
+}

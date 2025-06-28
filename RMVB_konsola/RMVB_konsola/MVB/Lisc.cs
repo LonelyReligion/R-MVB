@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace RMVB_konsola.MVB
 {
-    internal class Drzewo
+    internal class Lisc
     {
-        int maxLiczbaUrzadzen;
-
-        private DeskryptorKorzenia dk;
-        private List<DeskryptorDrzewa> dd;
+        //idUrzadzenia
+        List<(int, DateTime, DateTime)> wpisy;
     }
 }

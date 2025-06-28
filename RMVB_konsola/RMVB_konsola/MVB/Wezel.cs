@@ -8,6 +8,7 @@ namespace RMVB_konsola.MVB
 {
     internal class Wezel
     {
-        //(int, DateTime, DateTime, )
+        //minKey maxKey timeStart timeStop
+        List<(int, int, DateTime, DateTime, Lisc)> liscie;
     }
 }

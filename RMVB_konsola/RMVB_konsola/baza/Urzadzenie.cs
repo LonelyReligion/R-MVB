@@ -5,9 +5,14 @@ namespace RMVB_konsola
 {
     public class Urzadzenie
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //klucz złożony
+        [Key, Column(Order = 0)]
         public int UrzadzenieID { get; set; }
+
+        [Key, Column(Order = 1)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Wersja { get; set; }
+
 
         [Column(TypeName = "decimal")]
         public decimal Szerokosc { get; set; }

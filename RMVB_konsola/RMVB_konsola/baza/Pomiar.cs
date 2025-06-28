@@ -17,8 +17,13 @@ namespace RMVB_konsola
         public DateTime dtpomiaru { get; set; }
 
         //klucz obcy
-        [ForeignKey("UrzadzeniePomiarowe")]
+        [ForeignKey("UrzadzeniePomiarowe"), Column(Order = 0)]
         public int? UrzadzenieID { get; set; }
+
+        //klucz obcy
+        [ForeignKey("UrzadzeniePomiarowe"), Column(Order = 1)]
+        public int? Wersja { get; set; }
+
         public Urzadzenie UrzadzeniePomiarowe { get; set; }
     }
 }
