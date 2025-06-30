@@ -6,9 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-//TODO
-//zrobic konstruktor kopiujący dla urządzenia
-
 namespace RMVB_konsola
 {
     public class Srednia

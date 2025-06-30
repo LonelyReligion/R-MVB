@@ -1,0 +1,5 @@
+﻿USE master;
+
+ALTER DATABASE [RMVB_konsola.Kontekst] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+
+DROP DATABASE [RMVB_konsola.Kontekst];
