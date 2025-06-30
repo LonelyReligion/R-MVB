@@ -13,5 +13,10 @@ namespace RMVB_konsola
         public DbSet<Pomiar> Pomiary { get; set; }
         public DbSet<Srednia> Srednie { get; set; }
         public DbSet<Urzadzenie> Urzadzenia { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

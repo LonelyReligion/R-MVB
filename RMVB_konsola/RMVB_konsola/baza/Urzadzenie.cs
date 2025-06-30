@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-//TODO
-//zrobic konstruktor kopiujący dla urządzenia
-
 namespace RMVB_konsola
 {
+    //TODO
+    //> umozliwic dezaktywowanie urzadzenia
     public class Urzadzenie
     {
         //klucz złożony
@@ -24,9 +23,9 @@ namespace RMVB_konsola
         public decimal Dlugosc { get; set; }
 
         public bool Aktywne { get; set; }
-        public ICollection<Pomiar> Pomiary { get; set; }
-
-        public Urzadzenie(int UrzadzenieID, decimal szerokosc, decimal dlugosc)
+        public virtual ICollection<Pomiar> Pomiary { get; set; }
+        protected Urzadzenie() { Pomiary = new HashSet<Pomiar>(); }
+        public Urzadzenie(int UrzadzenieID, decimal szerokosc, decimal dlugosc) : this()
         {
             Szerokosc = szerokosc;
             Dlugosc = dlugosc;
@@ -35,14 +34,26 @@ namespace RMVB_konsola
             ustalWersje(UrzadzenieID);
         }
 
-        public Urzadzenie(int UrzadzenieID) {
+        public Urzadzenie(int UrzadzenieID) : this() {
             Aktywne = true;
             this.UrzadzenieID = UrzadzenieID;
             ustalWersje(UrzadzenieID);
         }
 
-        protected Urzadzenie() { }
+        //konstruktor kopiujący
+        public Urzadzenie(Urzadzenie urzadzenie) : this() {
+            this.Aktywne = true;
 
+            this.Dlugosc = urzadzenie.Dlugosc;
+            this.Szerokosc = urzadzenie.Szerokosc;
+            this.UrzadzenieID = urzadzenie.UrzadzenieID;
+
+            foreach (var element in urzadzenie.Pomiary)
+                this.Pomiary.Add(element);
+
+            ustalWersje(urzadzenie.UrzadzenieID);
+
+        }
         private void ustalWersje(int UrzadzenieID) {
             //zrobic osobna wersje dla drzewa R-MVB? moze będzie szybciej
             using (var ctx = new Kontekst())

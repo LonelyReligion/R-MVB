@@ -7,15 +7,15 @@ Urzadzenie testowe = new Urzadzenie(0);
 Pomiar testowy = new Pomiar();
 testowy.Wartosc = 0;
 testowy.dtpomiaru = DateTime.Now;
-testowy.UrzadzeniePomiarowe = testowe;
+testowy.UrzadzeniaPomiarowe.Add(testowe);
 
 using (var ctx = new Kontekst()) {
     ctx.Urzadzenia.Add(testowe);
     ctx.Pomiary.Add(testowy);
     ctx.SaveChanges();
 
-    testowe = new Urzadzenie(0);
-    ctx.Urzadzenia.Add(testowe);
+    Urzadzenie testowe2 = new Urzadzenie(testowe);
+    ctx.Urzadzenia.Add(testowe2);
     ctx.SaveChanges();
 
     ctx.Urzadzenia.Find(0, 0);
@@ -27,5 +27,4 @@ using (var ctx = new Kontekst())
 {
     ctx.Urzadzenia.Add(testowe1);
     ctx.SaveChanges();
-
 }

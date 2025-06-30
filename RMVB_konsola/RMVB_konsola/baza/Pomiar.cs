@@ -16,14 +16,11 @@ namespace RMVB_konsola
         public decimal Wartosc { get; set; }
         public DateTime dtpomiaru { get; set; }
 
-        //klucz obcy
-        [ForeignKey("UrzadzeniePomiarowe"), Column(Order = 0)]
-        public int? UrzadzenieID { get; set; }
+        //relacja wiele do wielu wynika z dodania wersji
+        public virtual ICollection<Urzadzenie> UrzadzeniaPomiarowe { get; set; }
 
-        //klucz obcy
-        [ForeignKey("UrzadzeniePomiarowe"), Column(Order = 1)]
-        public int? Wersja { get; set; }
-
-        public Urzadzenie UrzadzeniePomiarowe { get; set; }
+        public Pomiar() { 
+            UrzadzeniaPomiarowe = new HashSet<Urzadzenie>();
+        }
     }
 }
