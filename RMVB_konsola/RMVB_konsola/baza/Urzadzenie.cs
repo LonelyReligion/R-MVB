@@ -3,8 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RMVB_konsola
 {
-    //TODO
-    //> umozliwic dezaktywowanie urzadzenia
     public class Urzadzenie
     {
         //klucz złożony
@@ -54,6 +52,12 @@ namespace RMVB_konsola
             ustalWersje(urzadzenie.UrzadzenieID);
 
         }
+
+        //czy umozliwic ponowne aktywowanie?
+        private void dezaktywuj() {
+            this.Aktywne = false;
+        }
+
         private void ustalWersje(int UrzadzenieID) {
             //zrobic osobna wersje dla drzewa R-MVB? moze będzie szybciej
             using (var ctx = new Kontekst())

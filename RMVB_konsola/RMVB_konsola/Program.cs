@@ -1,6 +1,8 @@
-﻿using RMVB_konsola; //aby nie przejmować się folderami
+﻿using RMVB_konsola;
+using RMVB_konsola.MVB; //aby nie przejmować się folderami
 
 Console.WriteLine("Hello, World!");
+Drzewo mvb = new Drzewo();
 
 Urzadzenie testowe = new Urzadzenie(0);
 
@@ -28,3 +30,5 @@ using (var ctx = new Kontekst())
     ctx.Urzadzenia.Add(testowe1);
     ctx.SaveChanges();
 }
+
+mvb.wypiszDrzewo();
