@@ -8,17 +8,29 @@ namespace RMVB_konsola.MVB
 {
     internal class Wezel
     {
+        static char aktualne_id = 'A';
+        public char id;
         static int pojemnoscWezla = 6;
         //minKey maxKey timeStart timeStop
-        List<(int, DateTime, DateTime)> wpisy;
+        List<(int, DateTime, DateTime, Urzadzenie)> wpisy;
         internal Wezel() { 
-            wpisy = new List<(int, DateTime, DateTime)> ();
+            wpisy = new List<(int, DateTime, DateTime, Urzadzenie)> ();
+            id = aktualne_id++;
+        }
+        //zwraca true jezeli sie zmiescilo, false jezeli block ov
+        internal bool dodaj(Urzadzenie u) {
+            if (wpisy.Count() <= pojemnoscWezla) {
+                //przekazac przez ref jakos?
+                wpisy.Add((u.UrzadzenieID, u.dataOstaniejModyfikacji, u.dataWygasniecia, u));
+                return true;
+            }
+            return false;
         }
         internal void wypisz()
         {
+            Console.WriteLine(id);
             if (wpisy.Count == 0)
             {
-                Console.WriteLine("Wezel");
                 Console.WriteLine("******");
                 Console.WriteLine("*    *");
                 Console.WriteLine("******");

@@ -21,7 +21,13 @@ namespace RMVB_konsola
         public decimal Dlugosc { get; set; }
 
         public bool Aktywne { get; set; }
+        public DateTime dataOstaniejModyfikacji { get; set; }
+        public DateTime dataWygasniecia { get; set; }
+
+        //wlasnosc nawigacyjna
         public virtual ICollection<Pomiar> Pomiary { get; set; }
+        
+        //metody
         protected Urzadzenie() { Pomiary = new HashSet<Pomiar>(); }
         public Urzadzenie(int UrzadzenieID, decimal szerokosc, decimal dlugosc) : this()
         {
@@ -30,12 +36,17 @@ namespace RMVB_konsola
             Aktywne = true;
             this.UrzadzenieID = UrzadzenieID;
             ustalWersje(UrzadzenieID);
+
+            dataOstaniejModyfikacji = DateTime.Now;
+            dataWygasniecia = DateTime.MaxValue;
         }
 
         public Urzadzenie(int UrzadzenieID) : this() {
             Aktywne = true;
             this.UrzadzenieID = UrzadzenieID;
             ustalWersje(UrzadzenieID);
+            dataOstaniejModyfikacji = DateTime.Now;
+            dataWygasniecia = DateTime.MaxValue;
         }
 
         //konstruktor kopiujący
@@ -50,12 +61,15 @@ namespace RMVB_konsola
                 this.Pomiary.Add(element);
 
             ustalWersje(urzadzenie.UrzadzenieID);
+            dataOstaniejModyfikacji = urzadzenie.dataOstaniejModyfikacji;
+            dataWygasniecia = urzadzenie.dataWygasniecia;
 
         }
 
         //czy umozliwic ponowne aktywowanie?
         private void dezaktywuj() {
             this.Aktywne = false;
+            dataWygasniecia = DateTime.Now;
         }
 
         private void ustalWersje(int UrzadzenieID) {
@@ -77,9 +91,26 @@ namespace RMVB_konsola
 
                     //zakładając (na razie pewnie błędnie) zatwierdzanie po każdej tranzacji 
                     ostatni_element.Aktywne = false;
+                    dataWygasniecia = DateTime.Now;
                     ctx.SaveChanges();
                 }
             }
+        }
+
+        public void dodajPomiar(Pomiar testowy) {
+            testowy.UrzadzeniaPomiarowe.Add(this);
+
+            //ostatni dodany elemeny
+            //dataOstaniejModyfikacji = testowy.dtpomiaru;
+
+            //najpozniej zmierzony pomiar
+            //dataOstaniejModyfikacji = Pomiary.Aggregate((p1, p2) => p1.dtpomiaru > p2.dtpomiaru ? p1 : p2).dtpomiaru;
+
+            dataOstaniejModyfikacji = DateTime.Now;
+        }
+
+        public void usunPomiar() { 
+            //do zaimplementownia
         }
     }
 }

@@ -22,7 +22,7 @@ namespace RMVB_konsola.MVB
         }
 
         public void dodajUrzadzenie(Urzadzenie u) { 
-            //nastepne do zaimplementowania
+            dk.dodaj(u);
         }
     }
 }
