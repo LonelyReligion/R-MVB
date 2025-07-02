@@ -11,17 +11,17 @@ namespace RMVB_konsola.MVB
         static char aktualne_id = 'A';
         public char id;
         static int pojemnoscWezla = 6;
-        //minKey maxKey timeStart timeStop
-        List<(int, DateTime, DateTime, Urzadzenie)> wpisy;
+        //moze samo urzadzenie atp
+        List<(int, Urzadzenie)> wpisy;
         internal Wezel() { 
-            wpisy = new List<(int, DateTime, DateTime, Urzadzenie)> ();
+            wpisy = new List<(int, Urzadzenie)> ();
             id = aktualne_id++;
         }
         //zwraca true jezeli sie zmiescilo, false jezeli block ov
         internal bool dodaj(Urzadzenie u) {
             if (wpisy.Count() <= pojemnoscWezla) {
                 //przekazac przez ref jakos?
-                wpisy.Add((u.UrzadzenieID, u.dataOstaniejModyfikacji, u.dataWygasniecia, u));
+                wpisy.Add((u.UrzadzenieID, u));
                 return true;
             }
             return false;
@@ -40,7 +40,7 @@ namespace RMVB_konsola.MVB
                 List<String> wynikowy = new List<String>();
                 for (int i = 0; i < wpisy.Count; i++)
                 {
-                    wynikowy.Add("<" + wpisy[i].Item1.ToString() + "," + wpisy[i].Item2.ToString() + "," + wpisy[i].Item3.ToString() + ">");
+                    wynikowy.Add("<" + (wpisy[i].Item1.ToString() + "v" + wpisy[i].Item2.Wersja.ToString()) + "," + wpisy[i].Item2.dataOstaniejModyfikacji.ToString() + "," + wpisy[i].Item2.dataWygasniecia.ToString() + ">");
                 }
                 int max = wynikowy.Max(x => x.Length);
                 String pozioma = "";

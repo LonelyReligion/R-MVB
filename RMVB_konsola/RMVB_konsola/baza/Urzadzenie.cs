@@ -28,29 +28,29 @@ namespace RMVB_konsola
         public virtual ICollection<Pomiar> Pomiary { get; set; }
         
         //metody
-        protected Urzadzenie() { Pomiary = new HashSet<Pomiar>(); }
-        public Urzadzenie(int UrzadzenieID, decimal szerokosc, decimal dlugosc) : this()
+        protected Urzadzenie() { Pomiary = new HashSet<Pomiar>(); Console.WriteLine("wywolano konstruktor bezarg. urzadzenia"); }
+        public Urzadzenie(int UrzadzenieID, decimal szerokosc, decimal dlugosc, Repo repo) : this()
         {
             Szerokosc = szerokosc;
             Dlugosc = dlugosc;
             Aktywne = true;
             this.UrzadzenieID = UrzadzenieID;
-            ustalWersje(UrzadzenieID);
+            ustalWersje(UrzadzenieID, repo);
 
             dataOstaniejModyfikacji = DateTime.Now;
             dataWygasniecia = DateTime.MaxValue;
         }
 
-        public Urzadzenie(int UrzadzenieID) : this() {
+        public Urzadzenie(int UrzadzenieID, Repo repo) : this() {
             Aktywne = true;
             this.UrzadzenieID = UrzadzenieID;
-            ustalWersje(UrzadzenieID);
+            ustalWersje(UrzadzenieID, repo);
             dataOstaniejModyfikacji = DateTime.Now;
             dataWygasniecia = DateTime.MaxValue;
         }
 
         //konstruktor kopiujący
-        public Urzadzenie(Urzadzenie urzadzenie) : this() {
+        public Urzadzenie(Urzadzenie urzadzenie, Repo repo) : this() {
             this.Aktywne = true;
 
             this.Dlugosc = urzadzenie.Dlugosc;
@@ -60,38 +60,30 @@ namespace RMVB_konsola
             foreach (var element in urzadzenie.Pomiary)
                 this.Pomiary.Add(element);
 
-            ustalWersje(urzadzenie.UrzadzenieID);
-            dataOstaniejModyfikacji = urzadzenie.dataOstaniejModyfikacji;
-            dataWygasniecia = urzadzenie.dataWygasniecia;
-
+            ustalWersje(urzadzenie.UrzadzenieID, repo);
+            dataOstaniejModyfikacji = urzadzenie.dataWygasniecia;
+            dataWygasniecia = DateTime.MaxValue; //idk 
         }
 
-        //czy umozliwic ponowne aktywowanie?
         private void dezaktywuj() {
             this.Aktywne = false;
             dataWygasniecia = DateTime.Now;
         }
 
-        private void ustalWersje(int UrzadzenieID) {
-            //zrobic osobna wersje dla drzewa R-MVB? moze będzie szybciej
+        private void ustalWersje(int UrzadzenieID, Repo repo) {
             using (var ctx = new Kontekst())
             {
-                var wersje = from u in ctx.Urzadzenia
-                             where u.UrzadzenieID == UrzadzenieID
-                             select u;
-                var zmaterializowane_wersje = wersje.ToList();
-                if (!zmaterializowane_wersje.Any())
+                var wersje = repo.urzadzenia.Where(u => u.UrzadzenieID == UrzadzenieID).ToList();
+                if (!wersje.Any())
                 {
                     this.Wersja = 0;
                 }
                 else
                 {
-                    var ostatni_element = zmaterializowane_wersje.LastOrDefault();
+                    var ostatni_element = wersje.LastOrDefault(); 
                     this.Wersja = ostatni_element.Wersja + 1;
 
-                    //zakładając (na razie pewnie błędnie) zatwierdzanie po każdej tranzacji 
-                    ostatni_element.Aktywne = false;
-                    dataWygasniecia = DateTime.Now;
+                    ostatni_element.dezaktywuj(); 
                     ctx.SaveChanges();
                 }
             }
