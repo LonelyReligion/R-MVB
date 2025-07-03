@@ -10,11 +10,13 @@ namespace RMVB_konsola.MVB
     internal class Drzewo
     {
         double Pversion = 1/3;
+        Repo Repo;
 
         private DeskryptorKorzenia dk;
 
-        public Drzewo() {
-            dk = new DeskryptorKorzenia();
+        public Drzewo(Repo repo) {
+            dk = new DeskryptorKorzenia(repo);
+            this.Repo = repo;
         }
 
         public void wypiszDrzewo() {

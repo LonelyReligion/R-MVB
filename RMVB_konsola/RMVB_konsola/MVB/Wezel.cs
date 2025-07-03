@@ -12,14 +12,14 @@ namespace RMVB_konsola.MVB
         public char id;
         static int pojemnoscWezla = 6;
         //moze samo urzadzenie atp
-        List<(int, Urzadzenie)> wpisy;
+        internal List<(int, Urzadzenie)> wpisy;
         internal Wezel() { 
             wpisy = new List<(int, Urzadzenie)> ();
             id = aktualne_id++;
         }
         //zwraca true jezeli sie zmiescilo, false jezeli block ov
         internal bool dodaj(Urzadzenie u) {
-            if (wpisy.Count() <= pojemnoscWezla) {
+            if (wpisy.Count() < pojemnoscWezla) {
                 //przekazac przez ref jakos?
                 wpisy.Add((u.UrzadzenieID, u));
                 return true;

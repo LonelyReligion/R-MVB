@@ -10,9 +10,11 @@ namespace RMVB_konsola.MVB
 {
     internal class DeskryptorKorzenia
     {
+        Repo repo;
         List<Wpis> wpisy;
-        internal DeskryptorKorzenia() { 
+        internal DeskryptorKorzenia(Repo repo) { 
             wpisy = new List<Wpis> ();
+            this.repo = repo;
         }
 
         internal void dodaj(Urzadzenie u)
@@ -26,21 +28,51 @@ namespace RMVB_konsola.MVB
             }
             else {
                 bool dodano = false;
-                for (int i = 0; i < wpisy.Count; i++) {
-                    if (wpisy[i].wezel.dodaj(u))
-                    {
-                        if(wpisy[i].minKlucz > u.UrzadzenieID)
-                            wpisy[i].minKlucz = u.UrzadzenieID;
-                        else if (wpisy[i].maxKlucz < u.UrzadzenieID)
-                            wpisy[i].maxKlucz = u.UrzadzenieID;
+                int numer_wezla = wpisy.Count-1;//do tego powinnismy wstawic jezeli nie nalezy
+                //do zadnego przedzialu
 
-                        dodano = true;
-                        break;
+                for (int i = 0; i < wpisy.Count; i++) {
+                    //czy nalezy do odp przedzialu kluczy
+                    if (wpisy[i].maxKlucz > u.UrzadzenieID)
+                    {
+                        numer_wezla = i;
+                        if (wpisy[i].wezel.dodaj(u)) //czy jest miejsce
+                        {
+                            if (wpisy[i].minKlucz > u.UrzadzenieID)
+                                wpisy[i].minKlucz = u.UrzadzenieID;
+                            else if (wpisy[i].maxKlucz < u.UrzadzenieID)
+                                wpisy[i].maxKlucz = u.UrzadzenieID;
+
+                            dodano = true;
+                            break;
+                        }
                     }
                 }
 
-                if (!dodano) {
+                //jezeli nie dodano i id nie jest wieksze niz maxId ostatniego wezla lub on sam nie ma miejsca do wstawienia
+                if (!dodano && !(numer_wezla == wpisy.Count - 1 && wpisy[numer_wezla].wezel.dodaj(u))) {
                     //version split
+                    List<Urzadzenie> kopie = new List<Urzadzenie>();
+                    kopie.Add(u);
+                    foreach(var urzadzenie in wpisy[numer_wezla].wezel.wpisy) {
+                        if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue) { //kopiujemy zywe
+                            Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
+                            urzadzenie.Item2.dataWygasniecia = DateTime.Now;
+                            kopia.dataOstaniejModyfikacji = DateTime.Now;
+                            kopie.Add(kopia);
+                        }
+                    }
+                    //posortuj liste po id 
+                    var posortowanaLista = kopie.OrderBy(q => q.UrzadzenieID).ToList();
+                    //dodaj do wezla (w odp kolejnosci?)
+                    Wezel nowy = new Wezel();
+                    foreach (Urzadzenie urzadzenie in posortowanaLista) {
+                        nowy.dodaj(urzadzenie);
+                    }
+
+                    //dodaj wpis
+                    wpisy.Add(new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy));
+                    wpisy[numer_wezla].maxData = DateTime.Now;
                 }
             }
         }

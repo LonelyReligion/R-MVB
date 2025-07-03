@@ -6,7 +6,7 @@ using RMVB_konsola.MVB; //aby nie przejmować się folderami
 Console.WriteLine("Hello, World!");
 
 Repo repo = new Repo();
-Drzewo mvb = new Drzewo();
+Drzewo mvb = new Drzewo(repo);
 
 
 Urzadzenie testowe = new Urzadzenie(0, repo);
@@ -33,13 +33,18 @@ using (var ctx = new Kontekst()) {
     ctx.Urzadzenia.Find(0, 0);
 }
 
-//przetestowac
-Urzadzenie testowe1 = new Urzadzenie(1, repo);
 
 using (var ctx = new Kontekst())
 {
-    ctx.Urzadzenia.Add(testowe1);
-    ctx.SaveChanges();
+    for (int i = 0; i < 5; i++)
+    {
+        Urzadzenie testowe1 = new Urzadzenie(i % 3, repo);
+        ctx.Urzadzenia.Add(testowe1);
+        ctx.SaveChanges();
+
+        repo.dodajUrzadzenie(testowe1);
+        mvb.dodajUrzadzenie(testowe1);
+    }
 }
 
 mvb.wypiszDrzewo();
