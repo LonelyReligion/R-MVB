@@ -40,7 +40,7 @@ namespace RMVB_konsola.MVB
                 List<String> wynikowy = new List<String>();
                 for (int i = 0; i < wpisy.Count; i++)
                 {
-                    wynikowy.Add("<" + (wpisy[i].Item1.ToString() + "v" + wpisy[i].Item2.Wersja.ToString()) + "," + wpisy[i].Item2.dataOstaniejModyfikacji.ToString() + "," + wpisy[i].Item2.dataWygasniecia.ToString() + ">");
+                    wynikowy.Add("<" + (wpisy[i].Item1.ToString() + "v" + wpisy[i].Item2.Wersja.ToString()) + "," + wpisy[i].Item2.dataOstatniejModyfikacji.ToString() + "," + wpisy[i].Item2.dataWygasniecia.ToString() + ">");
                 }
                 int max = wynikowy.Max(x => x.Length);
                 String pozioma = "";
@@ -55,6 +55,16 @@ namespace RMVB_konsola.MVB
                 }
                 Console.WriteLine(pozioma);
             }
+        }
+
+        internal bool strongVersionOverflow(double Psvo)
+        {
+            return wpisy.Count > pojemnoscWezla * Psvo;
+        }
+
+        internal bool strongVersionUnderflow(double Psvu)
+        {
+            return wpisy.Count < pojemnoscWezla * Psvu;
         }
     }
 }

@@ -12,9 +12,19 @@ namespace RMVB_konsola.MVB
     {
         Repo repo;
         List<Wpis> wpisy;
-        internal DeskryptorKorzenia(Repo repo) { 
+        
+        //parametry drzewa, sa zdefiniowane w klasie drzewa
+        static double Pversion;
+        static double Psvu;
+        static double Psvo;
+
+        internal DeskryptorKorzenia(Repo repo, double pversion, double psvu, double psvo) { 
             wpisy = new List<Wpis> ();
             this.repo = repo;
+
+            Pversion = pversion;
+            Psvu = psvu;
+            Psvo = psvo;
         }
 
         internal void dodaj(Urzadzenie u)
@@ -24,7 +34,7 @@ namespace RMVB_konsola.MVB
                 Wezel nowy = new Wezel();
                 nowy.dodaj(u);
                 //przekazac przez ref jakos?
-                wpisy.Add(new Wpis(u.UrzadzenieID, u.UrzadzenieID, u.dataOstaniejModyfikacji, u.dataWygasniecia, nowy));
+                wpisy.Add(new Wpis(u.UrzadzenieID, u.UrzadzenieID, u.dataOstatniejModyfikacji, u.dataWygasniecia, nowy));
             }
             else {
                 bool dodano = false;
@@ -51,30 +61,48 @@ namespace RMVB_konsola.MVB
 
                 //jezeli nie dodano i id nie jest wieksze niz maxId ostatniego wezla lub on sam nie ma miejsca do wstawienia
                 if (!dodano && !(numer_wezla == wpisy.Count - 1 && wpisy[numer_wezla].wezel.dodaj(u))) {
-                    //version split
-                    List<Urzadzenie> kopie = new List<Urzadzenie>();
-                    kopie.Add(u);
-                    foreach(var urzadzenie in wpisy[numer_wezla].wezel.wpisy) {
-                        if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue) { //kopiujemy zywe
-                            Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
-                            urzadzenie.Item2.dataWygasniecia = DateTime.Now;
-                            kopia.dataOstaniejModyfikacji = DateTime.Now;
-                            kopie.Add(kopia);
-                        }
-                    }
-                    //posortuj liste po id 
-                    var posortowanaLista = kopie.OrderBy(q => q.UrzadzenieID).ToList();
-                    //dodaj do wezla (w odp kolejnosci?)
-                    Wezel nowy = new Wezel();
-                    foreach (Urzadzenie urzadzenie in posortowanaLista) {
-                        nowy.dodaj(urzadzenie);
-                    }
-
-                    //dodaj wpis
-                    wpisy.Add(new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy));
-                    wpisy[numer_wezla].maxData = DateTime.Now;
+                    versionSplit(numer_wezla, u);
                 }
             }
+        }
+        internal void versionSplit(int numer_wezla, Urzadzenie u) {
+            //version split
+            List<Urzadzenie> kopie = new List<Urzadzenie>();
+            kopie.Add(u);
+            foreach (var urzadzenie in wpisy[numer_wezla].wezel.wpisy)
+            {
+                if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
+                { //kopiujemy zywe
+                    Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
+                    urzadzenie.Item2.dataWygasniecia = DateTime.Now;
+                    kopia.dataOstatniejModyfikacji = DateTime.Now;
+                    kopie.Add(kopia);
+                }
+            }
+            //posortuj liste po id 
+            var posortowanaLista = kopie.OrderBy(q => q.UrzadzenieID).ToList();
+            //dodaj do wezla (w odp kolejnosci?)
+            Wezel nowy = new Wezel();
+            foreach (Urzadzenie urzadzenie in posortowanaLista)
+            {
+                nowy.dodaj(urzadzenie);
+            }
+
+            //dodaj wpis
+            wpisy.Add(new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy));
+            wpisy[numer_wezla].maxData = DateTime.Now;
+
+            if (wpisy.Last().wezel.strongVersionOverflow(Psvo) || wpisy.Last().wezel.strongVersionUnderflow(Psvu))
+            {
+                keySplit();
+            };
+        }
+
+        internal void keySplit() {
+            //keysplit
+            //do zaimplementowania
+            Console.WriteLine("zaszla potrzeba keysplit");
+            throw new NotImplementedException();
         }
 
         internal void wypisz()

@@ -21,7 +21,7 @@ namespace RMVB_konsola
         public decimal Dlugosc { get; set; }
 
         public bool Aktywne { get; set; }
-        public DateTime dataOstaniejModyfikacji { get; set; }
+        public DateTime dataOstatniejModyfikacji { get; set; }
         public DateTime dataWygasniecia { get; set; }
 
         //wlasnosc nawigacyjna
@@ -37,7 +37,7 @@ namespace RMVB_konsola
             this.UrzadzenieID = UrzadzenieID;
             ustalWersje(UrzadzenieID, repo);
 
-            dataOstaniejModyfikacji = DateTime.Now;
+            dataOstatniejModyfikacji = DateTime.Now;
             dataWygasniecia = DateTime.MaxValue;
         }
 
@@ -45,7 +45,7 @@ namespace RMVB_konsola
             Aktywne = true;
             this.UrzadzenieID = UrzadzenieID;
             ustalWersje(UrzadzenieID, repo);
-            dataOstaniejModyfikacji = DateTime.Now;
+            dataOstatniejModyfikacji = DateTime.Now;
             dataWygasniecia = DateTime.MaxValue;
         }
 
@@ -61,11 +61,11 @@ namespace RMVB_konsola
                 this.Pomiary.Add(element);
 
             ustalWersje(urzadzenie.UrzadzenieID, repo);
-            dataOstaniejModyfikacji = urzadzenie.dataWygasniecia;
+            dataOstatniejModyfikacji = urzadzenie.dataWygasniecia;
             dataWygasniecia = DateTime.MaxValue; //idk 
         }
 
-        private void dezaktywuj() {
+        public void dezaktywuj() {
             this.Aktywne = false;
             dataWygasniecia = DateTime.Now;
         }
@@ -98,11 +98,12 @@ namespace RMVB_konsola
             //najpozniej zmierzony pomiar
             //dataOstaniejModyfikacji = Pomiary.Aggregate((p1, p2) => p1.dtpomiaru > p2.dtpomiaru ? p1 : p2).dtpomiaru;
 
-            dataOstaniejModyfikacji = DateTime.Now;
+            dataOstatniejModyfikacji = DateTime.Now;
         }
 
-        public void usunPomiar() { 
+        public void usunPomiar() {
             //do zaimplementownia
+            throw new NotImplementedException();
         }
     }
 }

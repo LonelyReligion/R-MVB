@@ -9,13 +9,16 @@ namespace RMVB_konsola.MVB
 {
     internal class Drzewo
     {
-        double Pversion = 1/3;
+        double Pversion = 1.0/3;
+        double Psvu = 1.0/3;
+        double Psvo = 5.0/6;
+
         Repo Repo;
 
         private DeskryptorKorzenia dk;
 
         public Drzewo(Repo repo) {
-            dk = new DeskryptorKorzenia(repo);
+            dk = new DeskryptorKorzenia(repo, Pversion, Psvu, Psvo);
             this.Repo = repo;
         }
 
@@ -25,6 +28,11 @@ namespace RMVB_konsola.MVB
 
         public void dodajUrzadzenie(Urzadzenie u) { 
             dk.dodaj(u);
+        }
+
+        internal void usunUrzadzenie(Urzadzenie testowe2)
+        {
+            throw new NotImplementedException();
         }
     }
 }

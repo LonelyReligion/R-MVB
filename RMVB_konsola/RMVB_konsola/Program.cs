@@ -27,8 +27,10 @@ using (var ctx = new Kontekst()) {
     ctx.Urzadzenia.Add(testowe2);
     ctx.SaveChanges();
     repo.dodajUrzadzenie(testowe2);
-
     mvb.dodajUrzadzenie(testowe2);
+
+    testowe2.dezaktywuj();
+    mvb.usunUrzadzenie(testowe2); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
 
     ctx.Urzadzenia.Find(0, 0);
 }
