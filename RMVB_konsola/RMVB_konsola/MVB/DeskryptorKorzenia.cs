@@ -68,7 +68,7 @@ namespace RMVB_konsola.MVB
         internal void versionSplit(int numer_wezla, Urzadzenie u) {
             //version split
             List<Urzadzenie> kopie = new List<Urzadzenie>();
-            kopie.Add(u);
+            if(u != null) kopie.Add(u);
             foreach (var urzadzenie in wpisy[numer_wezla].wezel.wpisy)
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
@@ -92,17 +92,34 @@ namespace RMVB_konsola.MVB
             wpisy.Add(new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy));
             wpisy[numer_wezla].maxData = DateTime.Now;
 
-            if (wpisy.Last().wezel.strongVersionOverflow(Psvo) || wpisy.Last().wezel.strongVersionUnderflow(Psvu))
+            //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
+            if (wpisy.Last().wezel.strongVersionOverflow(Psvo))
             {
-                keySplit();
+                keySplit(numer_wezla);
+            };
+
+            //nietestowane
+            if (wpisy.Last().wezel.strongVersionUnderflow(Psvu)) {
+                // u juz jest w wezle
+                versionSplit(numer_wezla, null);
             };
         }
 
-        internal void keySplit() {
+        internal void keySplit(int numer_wezla) {
             //keysplit
             //do zaimplementowania
-            Console.WriteLine("zaszla potrzeba keysplit");
-            throw new NotImplementedException();
+            List<Urzadzenie> kopie = new List<Urzadzenie>();
+            foreach (var urzadzenie in wpisy[numer_wezla].wezel.wpisy)
+            {
+                if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
+                { //kopiujemy zywe
+                    Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
+                    urzadzenie.Item2.dataWygasniecia = DateTime.Now;
+                    kopia.dataOstatniejModyfikacji = DateTime.Now;
+                    kopie.Add(kopia);
+                }
+            }
+            //bla bla bla...
         }
 
         internal void wypisz()

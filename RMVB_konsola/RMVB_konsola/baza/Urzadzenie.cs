@@ -101,9 +101,10 @@ namespace RMVB_konsola
             dataOstatniejModyfikacji = DateTime.Now;
         }
 
-        public void usunPomiar() {
-            //do zaimplementownia
-            throw new NotImplementedException();
+        public void usunPomiar(Pomiar testowy) {
+            //nietestowane
+            this.Pomiary.Remove(testowy);
+            dataOstatniejModyfikacji = DateTime.Now;
         }
     }
 }
