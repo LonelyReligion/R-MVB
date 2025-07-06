@@ -20,8 +20,8 @@ namespace RMVB_konsola.MVB
         //zwraca true jezeli sie zmiescilo, false jezeli block ov
         internal bool dodaj(Urzadzenie u) {
             if (wpisy.Count() < pojemnoscWezla) {
-                //przekazac przez ref jakos?
                 wpisy.Add((u.UrzadzenieID, u));
+                wpisy = wpisy.OrderBy(w => w.Item1).ToList();
                 return true;
             }
             return false;

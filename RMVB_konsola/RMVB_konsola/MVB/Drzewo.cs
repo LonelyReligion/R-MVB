@@ -32,7 +32,12 @@ namespace RMVB_konsola.MVB
 
         internal void usunUrzadzenie(Urzadzenie testowe2)
         {
-            throw new NotImplementedException();
+            dk.usun(testowe2);
+        }
+
+        internal Urzadzenie szukaj(int v1, int v2)
+        {
+            return dk.szukaj(v1, v2);
         }
     }
 }

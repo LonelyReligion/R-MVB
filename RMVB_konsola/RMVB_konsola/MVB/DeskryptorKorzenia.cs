@@ -11,15 +11,16 @@ namespace RMVB_konsola.MVB
     internal class DeskryptorKorzenia
     {
         Repo repo;
-        List<Wpis> wpisy;
-        
+        List<(int, Wpis)> wpisy;
+
         //parametry drzewa, sa zdefiniowane w klasie drzewa
         static double Pversion;
         static double Psvu;
         static double Psvo;
 
-        internal DeskryptorKorzenia(Repo repo, double pversion, double psvu, double psvo) { 
-            wpisy = new List<Wpis> ();
+        internal DeskryptorKorzenia(Repo repo, double pversion, double psvu, double psvo)
+        {
+            wpisy = new List<(int, Wpis)>();
             this.repo = repo;
 
             Pversion = pversion;
@@ -34,24 +35,26 @@ namespace RMVB_konsola.MVB
                 Wezel nowy = new Wezel();
                 nowy.dodaj(u);
                 //przekazac przez ref jakos?
-                wpisy.Add(new Wpis(u.UrzadzenieID, u.UrzadzenieID, u.dataOstatniejModyfikacji, u.dataWygasniecia, nowy));
+                wpisy.Add((wpisy.Count, new Wpis(u.UrzadzenieID, u.UrzadzenieID, u.dataOstatniejModyfikacji, u.dataWygasniecia, nowy)));
             }
-            else {
+            else
+            {
                 bool dodano = false;
-                int numer_wezla = wpisy.Count-1;//do tego powinnismy wstawic jezeli nie nalezy
+                int numer_wezla = wpisy.Count - 1;//do tego powinnismy wstawic jezeli nie nalezy
                 //do zadnego przedzialu
 
-                for (int i = 0; i < wpisy.Count; i++) {
+                for (int i = 0; i < wpisy.Count; i++)
+                {
                     //czy nalezy do odp przedzialu kluczy
-                    if (wpisy[i].maxKlucz > u.UrzadzenieID)
+                    if (wpisy[i].Item2.maxKlucz > u.UrzadzenieID)
                     {
                         numer_wezla = i;
-                        if (wpisy[i].wezel.dodaj(u)) //czy jest miejsce
+                        if (wpisy[i].Item2.wezel.dodaj(u)) //czy jest miejsce
                         {
-                            if (wpisy[i].minKlucz > u.UrzadzenieID)
-                                wpisy[i].minKlucz = u.UrzadzenieID;
-                            else if (wpisy[i].maxKlucz < u.UrzadzenieID)
-                                wpisy[i].maxKlucz = u.UrzadzenieID;
+                            if (wpisy[i].Item2.minKlucz > u.UrzadzenieID)
+                                wpisy[i].Item2.minKlucz = u.UrzadzenieID;
+                            else if (wpisy[i].Item2.maxKlucz < u.UrzadzenieID)
+                                wpisy[i].Item2.maxKlucz = u.UrzadzenieID;
 
                             dodano = true;
                             break;
@@ -60,16 +63,24 @@ namespace RMVB_konsola.MVB
                 }
 
                 //jezeli nie dodano i id nie jest wieksze niz maxId ostatniego wezla lub on sam nie ma miejsca do wstawienia
-                if (!dodano && !(numer_wezla == wpisy.Count - 1 && wpisy[numer_wezla].wezel.dodaj(u))) {
+                if (!dodano && !(numer_wezla == wpisy.Count - 1 && wpisy[numer_wezla].Item2.wezel.dodaj(u)))
+                {
                     versionSplit(numer_wezla, u);
+                }
+                else {
+                    if (wpisy[numer_wezla].Item2.minKlucz > u.UrzadzenieID)
+                        wpisy[numer_wezla].Item2.minKlucz = u.UrzadzenieID;
+                    else if (wpisy[numer_wezla].Item2.maxKlucz < u.UrzadzenieID)
+                        wpisy[numer_wezla].Item2.maxKlucz = u.UrzadzenieID;
                 }
             }
         }
-        internal void versionSplit(int numer_wezla, Urzadzenie u) {
+        internal void versionSplit(int numer_wezla, Urzadzenie u)
+        {
             //version split
             List<Urzadzenie> kopie = new List<Urzadzenie>();
-            if(u != null) kopie.Add(u);
-            foreach (var urzadzenie in wpisy[numer_wezla].wezel.wpisy)
+            if (u != null) kopie.Add(u);
+            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
                 { //kopiujemy zywe
@@ -89,27 +100,29 @@ namespace RMVB_konsola.MVB
             }
 
             //dodaj wpis
-            wpisy.Add(new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy));
-            wpisy[numer_wezla].maxData = DateTime.Now;
+            wpisy.Add((wpisy.Count, new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy)));
+            wpisy[numer_wezla].Item2.maxData = DateTime.Now;
 
             //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
-            if (wpisy.Last().wezel.strongVersionOverflow(Psvo))
+            if (wpisy.Last().Item2.wezel.strongVersionOverflow(Psvo))
             {
                 keySplit(numer_wezla);
             };
 
             //nietestowane
-            if (wpisy.Last().wezel.strongVersionUnderflow(Psvu)) {
+            if (wpisy.Last().Item2.wezel.strongVersionUnderflow(Psvu))
+            {
                 // u juz jest w wezle
                 versionSplit(numer_wezla, null);
             };
         }
 
-        internal void keySplit(int numer_wezla) {
+        //do zaimplementowania
+        internal void keySplit(int numer_wezla)
+        {
             //keysplit
-            //do zaimplementowania
             List<Urzadzenie> kopie = new List<Urzadzenie>();
-            foreach (var urzadzenie in wpisy[numer_wezla].wezel.wpisy)
+            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
                 { //kopiujemy zywe
@@ -125,7 +138,8 @@ namespace RMVB_konsola.MVB
         internal void wypisz()
         {
             Console.WriteLine("Korzen");
-            if (wpisy.Count == 0) {
+            if (wpisy.Count == 0)
+            {
                 Console.WriteLine("******");
                 Console.WriteLine("*    *");
                 Console.WriteLine("******");
@@ -135,11 +149,12 @@ namespace RMVB_konsola.MVB
                 List<String> wynikowy = new List<String>();
                 for (int i = 0; i < wpisy.Count; i++)
                 {
-                    wynikowy.Add("<" + wpisy[i].minKlucz.ToString() + "," + wpisy[i].maxKlucz.ToString() + "," + wpisy[i].minData.ToString() + "," + wpisy[i].maxData.ToString() + "," + wpisy[i].wezel.id + ">");
+                    wynikowy.Add("<" + wpisy[i].Item2.minKlucz.ToString() + "," + wpisy[i].Item2.maxKlucz.ToString() + "," + wpisy[i].Item2.minData.ToString() + "," + wpisy[i].Item2.maxData.ToString() + "," + wpisy[i].Item2.wezel.id + ">");
                 }
                 int max = wynikowy.Max(x => x.Length);
                 String pozioma = "";
-                for (int i = -2; i < max; i++) {
+                for (int i = -2; i < max; i++)
+                {
                     pozioma += "*";
                 }
                 Console.WriteLine(pozioma);
@@ -150,9 +165,73 @@ namespace RMVB_konsola.MVB
                 Console.WriteLine(pozioma);
             }
 
-            foreach (var wpis in wpisy) {
-                wpis.wezel.wypisz();
+            foreach (var wpis in wpisy)
+            {
+                wpis.Item2.wezel.wypisz();
             }
         }
+
+        //dezaktywuj urzadzenie, usuwanie nie jest dostepne i potrzebne
+        internal void usun(Urzadzenie u)
+        {
+            throw new NotImplementedException();
+        }
+
+        //szukaj id i wersji
+        internal Urzadzenie szukaj(int id, int v)
+        {
+            //binarysearch
+            int dlugosc_listy = wpisy.Count;
+            int poczatkowy_indeks = dlugosc_listy / 2;
+            Stack<(int, Wpis)> do_przejrzenia = new Stack<(int, Wpis)>();
+            do_przejrzenia.Push(wpisy[poczatkowy_indeks]);
+
+            while(do_przejrzenia.Count != 0){
+                (int indeks, Wpis w) = do_przejrzenia.Pop();
+                int najwyzsza_wersja = -1;
+                if (w.minKlucz <= id && w.maxKlucz >= id) {
+                    var wpisy_wezla = w.wezel.wpisy;
+                    for (int i = 0; i < wpisy_wezla.Count; i++) {
+                        if (wpisy_wezla[i].Item1 == id)
+                        {
+                            int wersja = wpisy_wezla[i].Item2.Wersja;
+                            if (wersja == v) {
+                                return wpisy_wezla[i].Item2;
+                            }
+                            najwyzsza_wersja = wersja;
+                        }
+                        else if (wpisy_wezla[i].Item1 > id)
+                            break;
+                    }
+                }
+                if (najwyzsza_wersja == -1) //ryzyko deadlocka :/
+                {
+                    if (indeks + 1 < wpisy.Count)
+                        do_przejrzenia.Push(wpisy[indeks + 1]);
+                    if (indeks - 1 > 0)
+                        do_przejrzenia.Push(wpisy[indeks - 1]);
+                }
+                else {
+                    if (najwyzsza_wersja < v && indeks + 1 < wpisy.Count)
+                        do_przejrzenia.Push(wpisy[indeks + 1]);
+                    else if (indeks - 1 >= 0)
+                        do_przejrzenia.Push(wpisy[indeks - 1]);
+                }
+            }
+
+            return null; //nie znaleziono
+        }
+
+        //szukaj wersji aktualnej w danym momencie
+        internal void szukaj(int v1, DateTime dt)
+        {
+            throw new NotImplementedException();
+        }
+
+        //szukaj ostatniej wersji
+        internal void szukaj(int v1)
+        {
+            throw new NotImplementedException();
+        }
     }
-}
+    }

@@ -102,7 +102,6 @@ namespace RMVB_konsola
         }
 
         public void usunPomiar(Pomiar testowy) {
-            //nietestowane
             this.Pomiary.Remove(testowy);
             dataOstatniejModyfikacji = DateTime.Now;
         }

@@ -24,15 +24,14 @@ using (var ctx = new Kontekst()) {
     repo.dodajUrzadzenie(testowe);
 
     Urzadzenie testowe2 = new Urzadzenie(testowe, repo);
+    testowe.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, ale zachowujemy go w bazie
     ctx.Urzadzenia.Add(testowe2);
     ctx.SaveChanges();
     repo.dodajUrzadzenie(testowe2);
     mvb.dodajUrzadzenie(testowe2);
 
-    testowe2.dezaktywuj();
-    mvb.usunUrzadzenie(testowe2); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
-
-    ctx.Urzadzenia.Find(0, 0);
+    //testowe2.dezaktywuj();
+    //mvb.usunUrzadzenie(testowe2); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
 }
 
 
@@ -47,6 +46,12 @@ using (var ctx = new Kontekst())
         repo.dodajUrzadzenie(testowe1);
         mvb.dodajUrzadzenie(testowe1);
     }
+
+
+    //wyszukiwanie po id i wersji
+    Console.WriteLine(ctx.Urzadzenia.Find(2, 0).UrzadzenieID + "v" + ctx.Urzadzenia.Find(2, 0).Wersja);
+    Console.WriteLine(mvb.szukaj(2, 0).UrzadzenieID + "v" + mvb.szukaj(2, 0).Wersja);
+
 }
 
 mvb.wypiszDrzewo();
