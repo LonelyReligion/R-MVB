@@ -80,21 +80,24 @@ namespace RMVB_konsola.MVB
             //version split
             List<Urzadzenie> kopie = new List<Urzadzenie>();
             if (u != null) kopie.Add(u);
-            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
-            {
-                if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
-                { //kopiujemy zywe
-                    Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
-                    urzadzenie.Item2.dataWygasniecia = DateTime.Now;
-                    kopia.dataOstatniejModyfikacji = DateTime.Now;
-                    kopie.Add(kopia);
+            using (var ctx = new Kontekst())
+            { //zrobic jeden kontekst dla klasy? 
+                foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
+                {
+                    if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
+                    { //kopiujemy zywe
+                        Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
+                        urzadzenie.Item2.dataWygasniecia = DateTime.Now;
+                        kopia.dataOstatniejModyfikacji = DateTime.Now;
+                        kopie.Add(kopia);
 
-                    repo.dodajUrzadzenie(kopia);
-
-                    using (var ctx = new Kontekst()) { //zrobic jeden kontekst dla klasy? 
-                        ctx.Urzadzenia.Add(kopia);
-                        ctx.SaveChanges();
                         repo.dodajUrzadzenie(kopia);
+
+                   
+                            ctx.Urzadzenia.Add(kopia);
+                            ctx.SaveChanges();
+                            repo.dodajUrzadzenie(kopia);
+                    
                     }
                 }
             }
@@ -212,7 +215,7 @@ namespace RMVB_konsola.MVB
                             break;
                     }
                 }
-                if (najwyzsza_wersja == -1) //ryzyko deadlocka :/
+                if (najwyzsza_wersja == -1) //ryzyko nieskonczonej petli
                 {
                     if (indeks + 1 < wpisy.Count)
                         do_przejrzenia.Push(wpisy[indeks + 1]);
@@ -232,9 +235,22 @@ namespace RMVB_konsola.MVB
         }
 
         //szukaj wersji aktualnej w danym momencie
-        internal void szukaj(int v1, DateTime dt)
+        //problem projektowy: (] (] czy [)[) :/ bo inaczej sa 2 poprawne odpowiedzi i od ktorej strony zaczniemy szukac od tej bedzie "znalezione"
+        //nietestowane
+        internal Urzadzenie szukaj(int id, DateTime dt)
         {
-            throw new NotImplementedException();
+            //zastapic jakas wersja z binary search i stosem?
+            for (int i = 0; i < wpisy.Count; i++) {
+                var wpis = wpisy[i].Item2;
+                if ((wpis.minData <= dt && wpis.maxData <= dt) && (wpis.minKlucz <= id && wpis.maxKlucz >= id)) {
+                    for (int j = 0; j < wpis.wezel.wpisy.Count(); j++) {
+                        (int index, Urzadzenie urzadzenie) = wpis.wezel.wpisy[j];
+                        if(index == id && urzadzenie.dataOstatniejModyfikacji <= dt && urzadzenie.dataWygasniecia >= dt)
+                            return urzadzenie;
+                    }
+                }
+            }
+            return null;
         }
 
         //szukaj ostatniej wersji

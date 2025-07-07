@@ -41,6 +41,11 @@ namespace RMVB_konsola.MVB
             return dk.szukaj(id, v);
         }
 
+        //szukaj wersji aktualnej w danym momencie
+        internal Urzadzenie szukaj(int id, DateTime dt) { 
+            return dk.szukaj(id, dt);
+        }
+
         //szukaj ostatniej wersji
         internal Urzadzenie szukaj(int id) { 
             return dk.szukaj(id);
