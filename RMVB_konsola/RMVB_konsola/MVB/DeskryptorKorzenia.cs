@@ -88,6 +88,14 @@ namespace RMVB_konsola.MVB
                     urzadzenie.Item2.dataWygasniecia = DateTime.Now;
                     kopia.dataOstatniejModyfikacji = DateTime.Now;
                     kopie.Add(kopia);
+
+                    repo.dodajUrzadzenie(kopia);
+
+                    using (var ctx = new Kontekst()) { //zrobic jeden kontekst dla klasy? 
+                        ctx.Urzadzenia.Add(kopia);
+                        ctx.SaveChanges();
+                        repo.dodajUrzadzenie(kopia);
+                    }
                 }
             }
             //posortuj liste po id 
@@ -219,6 +227,7 @@ namespace RMVB_konsola.MVB
                 }
             }
 
+            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
             return null; //nie znaleziono
         }
 
@@ -229,9 +238,21 @@ namespace RMVB_konsola.MVB
         }
 
         //szukaj ostatniej wersji
-        internal void szukaj(int v1)
+        internal Urzadzenie szukaj(int id)
         {
-            throw new NotImplementedException();
+            for (int i = wpisy.Count-1; i >= 0; i--) { //od tylu 
+                (int index, Wpis w) = wpisy[i];
+                if (w.minKlucz <= id && w.maxKlucz >= id) {
+                    for (int j = w.wezel.wpisy.Count - 1; j >= 0; j--) {
+                        (int index_urzadzenia, Urzadzenie u) = w.wezel.wpisy[j];
+                        if (index_urzadzenia == id)
+                            return u;
+                    }
+                }
+            }
+
+            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
+            return null;
         }
     }
     }

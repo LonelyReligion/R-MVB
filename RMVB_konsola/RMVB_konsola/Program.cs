@@ -39,18 +39,29 @@ using (var ctx = new Kontekst())
 {
     for (int i = 0; i < 5; i++)
     {
-        Urzadzenie testowe1 = new Urzadzenie(i % 3, repo);
+        int id = i % 3;
+        Urzadzenie testowe1 = new Urzadzenie(id, repo);
         ctx.Urzadzenia.Add(testowe1);
-        ctx.SaveChanges();
+        ctx.SaveChanges(); //wyjac z petli?
 
         repo.dodajUrzadzenie(testowe1);
         mvb.dodajUrzadzenie(testowe1);
     }
 
+    //wyszukiwanie ostatniej wersji po id
+    var szukane = ctx.Urzadzenia
+        .Where(u => u.UrzadzenieID == 2)
+        .OrderByDescending(u => u.Wersja)
+        .FirstOrDefault();
+    Console.WriteLine(szukane.UrzadzenieID + "v" + szukane.Wersja);
+    szukane = mvb.szukaj(2);
+    Console.WriteLine(szukane.UrzadzenieID + "v" + szukane.Wersja);
 
     //wyszukiwanie po id i wersji
-    Console.WriteLine(ctx.Urzadzenia.Find(2, 0).UrzadzenieID + "v" + ctx.Urzadzenia.Find(2, 0).Wersja);
-    Console.WriteLine(mvb.szukaj(2, 0).UrzadzenieID + "v" + mvb.szukaj(2, 0).Wersja);
+    szukane = ctx.Urzadzenia.Find(2, 0);
+    Console.WriteLine(szukane.UrzadzenieID + "v" + szukane.Wersja);
+    szukane = mvb.szukaj(2, 0);
+    Console.WriteLine(szukane.UrzadzenieID + "v" + szukane.Wersja);
 
 }
 
