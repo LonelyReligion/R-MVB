@@ -5,6 +5,8 @@ namespace RMVB_konsola
 {
     public class Urzadzenie
     {
+        public static Kontekst ctx;
+
         //klucz złożony
         [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -62,30 +64,28 @@ namespace RMVB_konsola
 
             ustalWersje(urzadzenie.UrzadzenieID, repo);
             dataOstatniejModyfikacji = urzadzenie.dataWygasniecia;
-            dataWygasniecia = DateTime.MaxValue; //idk 
+            dataWygasniecia = DateTime.MaxValue; 
         }
 
         public void dezaktywuj() {
             this.Aktywne = false;
             dataWygasniecia = DateTime.Now;
+            ctx.SaveChanges();
         }
 
         private void ustalWersje(int UrzadzenieID, Repo repo) {
-            using (var ctx = new Kontekst())
+            var wersje = repo.urzadzenia.Where(u => u.UrzadzenieID == UrzadzenieID).ToList();
+            if (!wersje.Any())
             {
-                var wersje = repo.urzadzenia.Where(u => u.UrzadzenieID == UrzadzenieID).ToList();
-                if (!wersje.Any())
-                {
-                    this.Wersja = 0;
-                }
-                else
-                {
-                    var ostatni_element = wersje.LastOrDefault(); 
-                    this.Wersja = ostatni_element.Wersja + 1;
+                this.Wersja = 0;
+            }
+            else
+            {
+                var ostatni_element = wersje.LastOrDefault(); 
+                this.Wersja = ostatni_element.Wersja + 1;
 
-                    ostatni_element.dezaktywuj(); 
-                    ctx.SaveChanges();
-                }
+                ctx.Urzadzenia.Attach(ostatni_element);
+                ostatni_element.dezaktywuj();
             }
         }
 

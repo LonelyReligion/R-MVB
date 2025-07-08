@@ -93,10 +93,9 @@ namespace RMVB_konsola.MVB
 
                         repo.dodajUrzadzenie(kopia);
 
-                   
-                            ctx.Urzadzenia.Add(kopia);
-                            ctx.SaveChanges();
-                            repo.dodajUrzadzenie(kopia);
+                        ctx.Urzadzenia.Add(kopia);
+                        ctx.SaveChanges();
+                        repo.dodajUrzadzenie(kopia);
                     
                     }
                 }
@@ -235,21 +234,22 @@ namespace RMVB_konsola.MVB
         }
 
         //szukaj wersji aktualnej w danym momencie
-        //problem projektowy: (] (] czy [)[) :/ bo inaczej sa 2 poprawne odpowiedzi i od ktorej strony zaczniemy szukac od tej bedzie "znalezione"
-        //nietestowane
+        // [)[)
         internal Urzadzenie szukaj(int id, DateTime dt)
         {
             //zastapic jakas wersja z binary search i stosem?
-            for (int i = 0; i < wpisy.Count; i++) {
+            for (int i = wpisy.Count - 1; i >= 0; i--) {
                 var wpis = wpisy[i].Item2;
-                if ((wpis.minData <= dt && wpis.maxData <= dt) && (wpis.minKlucz <= id && wpis.maxKlucz >= id)) {
+                if ((wpis.minData <= dt && wpis.maxData > dt) && (wpis.minKlucz <= id && wpis.maxKlucz >= id)) {
                     for (int j = 0; j < wpis.wezel.wpisy.Count(); j++) {
                         (int index, Urzadzenie urzadzenie) = wpis.wezel.wpisy[j];
-                        if(index == id && urzadzenie.dataOstatniejModyfikacji <= dt && urzadzenie.dataWygasniecia >= dt)
+                        if(index == id && urzadzenie.dataOstatniejModyfikacji <= dt && urzadzenie.dataWygasniecia > dt)
                             return urzadzenie;
                     }
                 }
             }
+
+            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
             return null;
         }
 
