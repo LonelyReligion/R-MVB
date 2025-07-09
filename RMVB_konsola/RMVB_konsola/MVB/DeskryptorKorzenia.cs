@@ -127,11 +127,12 @@ namespace RMVB_konsola.MVB
             };
         }
 
-        //do zaimplementowania
+        //nietestowane
         internal void keySplit(int numer_wezla)
         {
             //keysplit
             List<Urzadzenie> kopie = new List<Urzadzenie>();
+            //wybieramy zywe
             foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
@@ -142,7 +143,35 @@ namespace RMVB_konsola.MVB
                     kopie.Add(kopia);
                 }
             }
-            //bla bla bla...
+
+            var pierwszy_wezel = kopie.Skip(kopie.Count/2);
+            var drugi_wezel = kopie.Except(pierwszy_wezel);
+
+            //moze zamiast tego zrobic metode dodajWezel, dla czytelnosci 
+            //posortuj liste po id 
+            var posortowanaLista = pierwszy_wezel.OrderBy(q => q.UrzadzenieID).ToList();
+            //dodaj do wezla (w odp kolejnosci?)
+            Wezel nowy = new Wezel();
+            foreach (Urzadzenie urzadzenie in posortowanaLista)
+            {
+                nowy.dodaj(urzadzenie);
+            }
+
+            //dodaj wpis
+            wpisy.Add((wpisy.Count, new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy)));
+            wpisy[numer_wezla].Item2.maxData = DateTime.Now;
+
+            posortowanaLista = drugi_wezel.OrderBy(q => q.UrzadzenieID).ToList();
+            //dodaj do wezla (w odp kolejnosci?)
+            Wezel nowy2 = new Wezel();
+            foreach (Urzadzenie urzadzenie in posortowanaLista)
+            {
+                nowy2.dodaj(urzadzenie);
+            }
+
+            //dodaj wpis
+            wpisy.Add((wpisy.Count, new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy2)));
+            wpisy[numer_wezla].Item2.maxData = DateTime.Now;
         }
 
         internal void wypisz()

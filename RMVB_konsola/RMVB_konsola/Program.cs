@@ -4,8 +4,6 @@ using System.Diagnostics;
 
 //jak zasymulować szybszy upływ czasu?
 
-Console.WriteLine("Hello, World!");
-
 Repo repo = new Repo();
 Drzewo mvb = new Drzewo(repo);
 Kontekst ctx = new Kontekst();
@@ -55,9 +53,17 @@ int szukane_id = 0;
 Urzadzenie? szukane = null;
 sw = Stopwatch.StartNew();
 for (int i = 0;  i < 10; i++)
-    szukane = ctx.Urzadzenia.Where(u => u.dataOstatniejModyfikacji <= data).Where(u => u.dataWygasniecia > data).Where(u => u.UrzadzenieID == szukane_id).ToList()[0];
+    szukane = ctx.Urzadzenia
+        .AsNoTracking()
+        .Where(u => u.dataOstatniejModyfikacji <= data)
+        .Where(u => u.dataWygasniecia > data)
+        .Where(u => u.UrzadzenieID == szukane_id)
+        .FirstOrDefault();
 long czas_baza = sw.ElapsedMilliseconds;
-Console.WriteLine("Baza: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_baza + " ms.");
+if (szukane == null)
+    Console.WriteLine("Blad: Baza nie odnalazla rekordu.");
+else
+    Console.WriteLine("Baza: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_baza + " ms.");
 sw = Stopwatch.StartNew();
 for (int i = 0; i < 10; i++)
     szukane = mvb.szukaj(0, data);
@@ -66,11 +72,14 @@ Console.WriteLine("MVB: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w cz
 
 //wyszukiwanie ostatniej wersji po id
 sw = Stopwatch.StartNew();
-for (int i = 0;i < 10; i++)
+for (int i = 0; i < 10; i++)
+{
     szukane = ctx.Urzadzenia
+        .AsNoTracking() //nie uzywamy zbuforowanych (wynikow poprzednich wykonan)
         .Where(u => u.UrzadzenieID == 2)
         .OrderByDescending(u => u.Wersja)
         .FirstOrDefault();
+}
 czas_baza = sw.ElapsedMilliseconds;
 Console.WriteLine("Baza: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_baza + " ms.");
 sw = Stopwatch.StartNew();
@@ -82,7 +91,10 @@ Console.WriteLine("MVB: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w cz
 //wyszukiwanie po id i wersji
 sw = Stopwatch.StartNew();
 for (int i = 0; i < 10; i++)
-    szukane = ctx.Urzadzenia.Find(2, 0);
+    szukane = ctx.Urzadzenia
+    .AsNoTracking()
+    .FirstOrDefault(u => u.UrzadzenieID == 2 && u.Wersja == 0);
+
 czas_baza = sw.ElapsedMilliseconds;
 Console.WriteLine("Baza: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_baza + " ms.");
 sw = Stopwatch.StartNew();
