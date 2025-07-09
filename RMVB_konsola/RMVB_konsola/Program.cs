@@ -7,7 +7,9 @@ using System.Diagnostics;
 Repo repo = new Repo();
 Drzewo mvb = new Drzewo(repo);
 Kontekst ctx = new Kontekst();
+
 Urzadzenie.ctx = ctx;
+DeskryptorKorzenia.ctx = ctx;
 
 Urzadzenie testowe = new Urzadzenie(0, repo);
 
@@ -39,12 +41,11 @@ for (int i = 0; i < 8; i++)
     int id = i % 7;
     Urzadzenie testowe1 = new Urzadzenie(id, repo);
     ctx.Urzadzenia.Add(testowe1);
-    ctx.SaveChanges(); //wyjac z petli?
+    ctx.SaveChanges(); 
 
     repo.dodajUrzadzenie(testowe1);
     mvb.dodajUrzadzenie(testowe1);
 }
-mvb.wypiszDrzewo();
 
 //wzory testow
 Stopwatch sw;
@@ -59,7 +60,7 @@ for (int i = 0;  i < 10; i++)
         .Where(u => u.dataOstatniejModyfikacji <= data)
         .Where(u => u.dataWygasniecia > data)
         .Where(u => u.UrzadzenieID == szukane_id)
-        .FirstOrDefault();
+        .FirstOrDefault(); //czasami nie dziala:/
 long czas_baza = sw.ElapsedMilliseconds;
 if (szukane == null)
     Console.WriteLine("Blad: Baza nie odnalazla rekordu.");

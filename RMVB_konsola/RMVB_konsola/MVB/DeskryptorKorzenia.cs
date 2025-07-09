@@ -10,7 +10,7 @@ namespace RMVB_konsola.MVB
 {
     internal class DeskryptorKorzenia
     {
-        public Kontekst ctx;
+        public static Kontekst ctx;
         Repo repo;
         List<(int, Wpis)> wpisy;
 
@@ -35,13 +35,12 @@ namespace RMVB_konsola.MVB
             {
                 Wezel nowy = new Wezel();
                 nowy.dodaj(u);
-                //przekazac przez ref jakos?
                 wpisy.Add((wpisy.Count, new Wpis(u.UrzadzenieID, u.UrzadzenieID, u.dataOstatniejModyfikacji, u.dataWygasniecia, nowy)));
             }
             else
             {
                 bool dodano = false;
-                int numer_wezla = wpisy.Count - 1;//do tego powinnismy wstawic jezeli nie nalezy
+                int numer_wezla = wpisy.Count - 1; //do tego powinnismy wstawic jezeli nie nalezy
                 //do zadnego przedzialu
 
                 for (int i = wpisy.Count - 1; i >= 0 ; i--) //szukamy od najnowszych do najstarszych
@@ -52,6 +51,7 @@ namespace RMVB_konsola.MVB
                         numer_wezla = i;
                         if (wpisy[i].Item2.wezel.dodaj(u)) //czy jest miejsce
                         {
+                            //czy to sie wgl wykona kiedykolwiek?
                             if (wpisy[i].Item2.minKlucz > u.UrzadzenieID)
                                 wpisy[i].Item2.minKlucz = u.UrzadzenieID;
                             else if (wpisy[i].Item2.maxKlucz < u.UrzadzenieID)
@@ -91,37 +91,26 @@ namespace RMVB_konsola.MVB
             //version split
             List<Urzadzenie> kopie = new List<Urzadzenie>();
             if (u != null) kopie.Add(u);
-            using (var ctx = new Kontekst())
-            { //zrobic jeden kontekst dla klasy? 
-                foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
-                {
-                    if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
-                    { //kopiujemy zywe
-                        Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
-                        urzadzenie.Item2.dataWygasniecia = DateTime.Now;
-                        kopia.dataOstatniejModyfikacji = DateTime.Now;
-                        kopie.Add(kopia);
+            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
+            {
+                if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
+                { //kopiujemy zywe
+                    Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
+                    urzadzenie.Item2.dataWygasniecia = DateTime.Now;
+                    kopia.dataOstatniejModyfikacji = DateTime.Now;
+                    kopie.Add(kopia);
 
-                        repo.dodajUrzadzenie(kopia);
+                    repo.dodajUrzadzenie(kopia);
 
-                        ctx.Urzadzenia.Add(kopia);
-                        ctx.SaveChanges();
-                        repo.dodajUrzadzenie(kopia);
+                    ctx.Urzadzenia.Add(kopia);
+                    ctx.SaveChanges();
+                    repo.dodajUrzadzenie(kopia);
                     
-                    }
                 }
             }
             //posortuj liste po id 
-            var posortowanaLista = kopie.OrderBy(q => q.UrzadzenieID).ToList();
-            //dodaj do wezla (w odp kolejnosci?)
-            Wezel nowy = new Wezel();
-            foreach (Urzadzenie urzadzenie in posortowanaLista)
-            {
-                nowy.dodaj(urzadzenie);
-            }
-
-            //dodaj wpis
-            wpisy.Add((wpisy.Count, new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy)));
+            var posortowanaLista = kopie.OrderBy(q => q.UrzadzenieID);
+            dodajZlisty(posortowanaLista);
             wpisy[numer_wezla].Item2.maxData = DateTime.Now;
 
             //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
@@ -144,7 +133,6 @@ namespace RMVB_konsola.MVB
             //keysplit
             List<Urzadzenie> kopie = new List<Urzadzenie>();
             //wybieramy zywe
-            using (var ctx = new Kontekst())
             foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
@@ -166,26 +154,22 @@ namespace RMVB_konsola.MVB
             var drugi_wezel = kopie.OrderBy(q => q.UrzadzenieID).Skip(kopie.Count/2);
             var pierwszy_wezel = kopie.Except(drugi_wezel);
 
-            //moze zamiast tego zrobic metode dodajWezel, dla czytelnosci 
+            dodajZlisty(pierwszy_wezel);
+            dodajZlisty(drugi_wezel);
+
+            wpisy[numer_wezla].Item2.maxData = DateTime.Now;
+        }
+
+        //tworzy nowy wezel z datami (data utworzenia, max_data], dodaje do niego urzadzenia z listy, dodaje wezel do drzewa
+        internal void dodajZlisty(IEnumerable<Urzadzenie> lista) {
             Wezel nowy = new Wezel();
-            foreach (Urzadzenie urzadzenie in pierwszy_wezel)
+            foreach (Urzadzenie urzadzenie in lista)
             {
                 nowy.dodaj(urzadzenie);
             }
 
             //dodaj wpis
-            wpisy.Add((wpisy.Count, new Wpis(pierwszy_wezel.First().UrzadzenieID, pierwszy_wezel.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy)));
-
-            //dodaj do wezla (w odp kolejnosci?)
-            Wezel nowy2 = new Wezel();
-            foreach (Urzadzenie urzadzenie in drugi_wezel)
-            {
-                nowy2.dodaj(urzadzenie);
-            }
-
-            //dodaj wpis
-            wpisy.Add((wpisy.Count, new Wpis(drugi_wezel.First().UrzadzenieID, drugi_wezel.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy2)));
-            wpisy[numer_wezla].Item2.maxData = DateTime.Now;
+            wpisy.Add((wpisy.Count, new Wpis(lista.First().UrzadzenieID, lista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy)));
         }
 
         internal void wypisz()
