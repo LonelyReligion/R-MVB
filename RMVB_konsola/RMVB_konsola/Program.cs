@@ -34,9 +34,9 @@ mvb.dodajUrzadzenie(testowe2);
 //testowe2.dezaktywuj();
 //mvb.usunUrzadzenie(testowe2); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
 
-for (int i = 0; i < 5; i++)
+for (int i = 0; i < 8; i++)
 {
-    int id = i % 3;
+    int id = i % 7;
     Urzadzenie testowe1 = new Urzadzenie(id, repo);
     ctx.Urzadzenia.Add(testowe1);
     ctx.SaveChanges(); //wyjac z petli?
@@ -44,6 +44,7 @@ for (int i = 0; i < 5; i++)
     repo.dodajUrzadzenie(testowe1);
     mvb.dodajUrzadzenie(testowe1);
 }
+mvb.wypiszDrzewo();
 
 //wzory testow
 Stopwatch sw;

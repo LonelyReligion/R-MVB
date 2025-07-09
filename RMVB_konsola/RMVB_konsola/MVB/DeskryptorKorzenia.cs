@@ -10,6 +10,7 @@ namespace RMVB_konsola.MVB
 {
     internal class DeskryptorKorzenia
     {
+        public Kontekst ctx;
         Repo repo;
         List<(int, Wpis)> wpisy;
 
@@ -43,10 +44,10 @@ namespace RMVB_konsola.MVB
                 int numer_wezla = wpisy.Count - 1;//do tego powinnismy wstawic jezeli nie nalezy
                 //do zadnego przedzialu
 
-                for (int i = 0; i < wpisy.Count; i++)
+                for (int i = wpisy.Count - 1; i >= 0 ; i--) //szukamy od najnowszych do najstarszych
                 {
                     //czy nalezy do odp przedzialu kluczy
-                    if (wpisy[i].Item2.maxKlucz > u.UrzadzenieID)
+                    if (wpisy[i].Item2.maxKlucz >= u.UrzadzenieID && wpisy[i].Item2.minKlucz <= u.UrzadzenieID) //uwzglednic tez daty?
                     {
                         numer_wezla = i;
                         if (wpisy[i].Item2.wezel.dodaj(u)) //czy jest miejsce
@@ -55,6 +56,11 @@ namespace RMVB_konsola.MVB
                                 wpisy[i].Item2.minKlucz = u.UrzadzenieID;
                             else if (wpisy[i].Item2.maxKlucz < u.UrzadzenieID)
                                 wpisy[i].Item2.maxKlucz = u.UrzadzenieID;
+
+                            if (wpisy[i].Item2.minData > u.dataOstatniejModyfikacji)
+                                wpisy[i].Item2.minData = u.dataOstatniejModyfikacji;
+                            else if (wpisy[i].Item2.maxData < u.dataWygasniecia)
+                                wpisy[i].Item2.maxData = u.dataWygasniecia;
 
                             dodano = true;
                             break;
@@ -72,6 +78,11 @@ namespace RMVB_konsola.MVB
                         wpisy[numer_wezla].Item2.minKlucz = u.UrzadzenieID;
                     else if (wpisy[numer_wezla].Item2.maxKlucz < u.UrzadzenieID)
                         wpisy[numer_wezla].Item2.maxKlucz = u.UrzadzenieID;
+
+                    if (wpisy[numer_wezla].Item2.minData > u.dataOstatniejModyfikacji)
+                        wpisy[numer_wezla].Item2.minData = u.dataOstatniejModyfikacji;
+                    else if (wpisy[numer_wezla].Item2.maxData < u.dataWygasniecia)
+                        wpisy[numer_wezla].Item2.maxData = u.dataWygasniecia;
                 }
             }
         }
@@ -116,14 +127,14 @@ namespace RMVB_konsola.MVB
             //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
             if (wpisy.Last().Item2.wezel.strongVersionOverflow(Psvo))
             {
-                keySplit(numer_wezla);
+                keySplit(wpisy.Last().Item1);
             };
 
             //nietestowane
             if (wpisy.Last().Item2.wezel.strongVersionUnderflow(Psvu))
             {
                 // u juz jest w wezle
-                versionSplit(numer_wezla, null);
+                versionSplit(wpisy.Last().Item1, null);
             };
         }
 
@@ -133,6 +144,7 @@ namespace RMVB_konsola.MVB
             //keysplit
             List<Urzadzenie> kopie = new List<Urzadzenie>();
             //wybieramy zywe
+            using (var ctx = new Kontekst())
             foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
@@ -141,36 +153,38 @@ namespace RMVB_konsola.MVB
                     urzadzenie.Item2.dataWygasniecia = DateTime.Now;
                     kopia.dataOstatniejModyfikacji = DateTime.Now;
                     kopie.Add(kopia);
+
+                    repo.dodajUrzadzenie(kopia);
+
+                    ctx.Urzadzenia.Add(kopia);
+                    ctx.SaveChanges();
+                    repo.dodajUrzadzenie(kopia);
                 }
             }
 
-            var pierwszy_wezel = kopie.Skip(kopie.Count/2);
-            var drugi_wezel = kopie.Except(pierwszy_wezel);
+
+            var drugi_wezel = kopie.OrderBy(q => q.UrzadzenieID).Skip(kopie.Count/2);
+            var pierwszy_wezel = kopie.Except(drugi_wezel);
 
             //moze zamiast tego zrobic metode dodajWezel, dla czytelnosci 
-            //posortuj liste po id 
-            var posortowanaLista = pierwszy_wezel.OrderBy(q => q.UrzadzenieID).ToList();
-            //dodaj do wezla (w odp kolejnosci?)
             Wezel nowy = new Wezel();
-            foreach (Urzadzenie urzadzenie in posortowanaLista)
+            foreach (Urzadzenie urzadzenie in pierwszy_wezel)
             {
                 nowy.dodaj(urzadzenie);
             }
 
             //dodaj wpis
-            wpisy.Add((wpisy.Count, new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy)));
-            wpisy[numer_wezla].Item2.maxData = DateTime.Now;
+            wpisy.Add((wpisy.Count, new Wpis(pierwszy_wezel.First().UrzadzenieID, pierwszy_wezel.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy)));
 
-            posortowanaLista = drugi_wezel.OrderBy(q => q.UrzadzenieID).ToList();
             //dodaj do wezla (w odp kolejnosci?)
             Wezel nowy2 = new Wezel();
-            foreach (Urzadzenie urzadzenie in posortowanaLista)
+            foreach (Urzadzenie urzadzenie in drugi_wezel)
             {
                 nowy2.dodaj(urzadzenie);
             }
 
             //dodaj wpis
-            wpisy.Add((wpisy.Count, new Wpis(posortowanaLista[0].UrzadzenieID, posortowanaLista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy2)));
+            wpisy.Add((wpisy.Count, new Wpis(drugi_wezel.First().UrzadzenieID, drugi_wezel.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy2)));
             wpisy[numer_wezla].Item2.maxData = DateTime.Now;
         }
 
