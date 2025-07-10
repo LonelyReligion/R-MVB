@@ -51,43 +51,10 @@ Test.ctx = ctx;
 Test.repo = repo;
 Test.mvb = mvb;
 Test jednostka_testujaca = new Test();
+
 jednostka_testujaca.testDataId(10);
-
-//wyszukiwanie ostatniej wersji po id
-Stopwatch sw;
-Urzadzenie? szukane = null;
-long czas_baza, czas_mvb;
-
-sw = Stopwatch.StartNew();
-for (int i = 0; i < 10; i++)
-    szukane = ctx.Urzadzenia
-        .AsNoTracking() //nie uzywamy zbuforowanych (wynikow poprzednich wykonan)
-        .Where(u => u.UrzadzenieID == 2)
-        .OrderByDescending(u => u.Wersja)
-        .FirstOrDefault();
-
-czas_baza = sw.ElapsedMilliseconds;
-Console.WriteLine("Baza: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_baza + " ms.");
-sw = Stopwatch.StartNew();
-for (int i = 0; i < 10; i++)
-    szukane = mvb.szukaj(2);
-czas_mvb = sw.ElapsedMilliseconds;
-Console.WriteLine("MVB: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " +  czas_mvb + " ms.");
-
-//wyszukiwanie po id i wersji
-sw = Stopwatch.StartNew();
-for (int i = 0; i < 10; i++)
-    szukane = ctx.Urzadzenia
-    .AsNoTracking()
-    .FirstOrDefault(u => u.UrzadzenieID == 2 && u.Wersja == 0);
-
-czas_baza = sw.ElapsedMilliseconds;
-Console.WriteLine("Baza: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_baza + " ms.");
-sw = Stopwatch.StartNew();
-for (int i = 0; i < 10; i++) 
-    szukane = mvb.szukaj(2, 0);
-czas_mvb = sw.ElapsedMilliseconds;
-Console.WriteLine("MVB: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_mvb + " ms.");
+jednostka_testujaca.testId(10);
+jednostka_testujaca.testIdV(10);
 
 
 mvb.wypiszDrzewo();

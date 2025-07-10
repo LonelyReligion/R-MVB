@@ -216,8 +216,12 @@ namespace RMVB_konsola.MVB
         }
 
         //szukaj id i wersji
+        //wpada w petle nieskonczona, do poprawki
         internal Urzadzenie szukaj(int id, int v)
         {
+            id = 4;
+            v = 2;
+
             //binarysearch
             int dlugosc_listy = wpisy.Count;
             int poczatkowy_indeks = dlugosc_listy / 2;
