@@ -47,41 +47,25 @@ for (int i = 0; i < 8; i++)
     mvb.dodajUrzadzenie(testowe1);
 }
 
-//wzory testow
-Stopwatch sw;
-//wyszukiwanie po dacie i id
-DateTime data = testowe2.dataOstatniejModyfikacji;
-int szukane_id = 0;
-Urzadzenie? szukane = null;
-sw = Stopwatch.StartNew();
-for (int i = 0;  i < 10; i++)
-    szukane = ctx.Urzadzenia
-        .AsNoTracking()
-        .Where(u => u.dataOstatniejModyfikacji <= data)
-        .Where(u => u.dataWygasniecia > data)
-        .Where(u => u.UrzadzenieID == szukane_id)
-        .FirstOrDefault(); //czasami nie dziala:/
-long czas_baza = sw.ElapsedMilliseconds;
-if (szukane == null)
-    Console.WriteLine("Blad: Baza nie odnalazla rekordu.");
-else
-    Console.WriteLine("Baza: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_baza + " ms.");
-sw = Stopwatch.StartNew();
-for (int i = 0; i < 10; i++)
-    szukane = mvb.szukaj(0, data);
-long czas_mvb = sw.ElapsedMilliseconds;
-Console.WriteLine("MVB: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_mvb + "ms.");
+Test.ctx = ctx;
+Test.repo = repo;
+Test.mvb = mvb;
+Test jednostka_testujaca = new Test();
+jednostka_testujaca.testDataId(10);
 
 //wyszukiwanie ostatniej wersji po id
+Stopwatch sw;
+Urzadzenie? szukane = null;
+long czas_baza, czas_mvb;
+
 sw = Stopwatch.StartNew();
 for (int i = 0; i < 10; i++)
-{
     szukane = ctx.Urzadzenia
         .AsNoTracking() //nie uzywamy zbuforowanych (wynikow poprzednich wykonan)
         .Where(u => u.UrzadzenieID == 2)
         .OrderByDescending(u => u.Wersja)
         .FirstOrDefault();
-}
+
 czas_baza = sw.ElapsedMilliseconds;
 Console.WriteLine("Baza: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_baza + " ms.");
 sw = Stopwatch.StartNew();

@@ -130,6 +130,7 @@ namespace RMVB_konsola.MVB
         //nietestowane
         internal void keySplit(int numer_wezla)
         {
+            DateTime data_zaksiegowania = DateTime.Now;
             //keysplit
             List<Urzadzenie> kopie = new List<Urzadzenie>();
             //wybieramy zywe
@@ -138,8 +139,8 @@ namespace RMVB_konsola.MVB
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
                 { //kopiujemy zywe
                     Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
-                    urzadzenie.Item2.dataWygasniecia = DateTime.Now;
-                    kopia.dataOstatniejModyfikacji = DateTime.Now;
+                    urzadzenie.Item2.dataWygasniecia = data_zaksiegowania;
+                    kopia.dataOstatniejModyfikacji = data_zaksiegowania;
                     kopie.Add(kopia);
 
                     repo.dodajUrzadzenie(kopia);
@@ -157,7 +158,7 @@ namespace RMVB_konsola.MVB
             dodajZlisty(pierwszy_wezel);
             dodajZlisty(drugi_wezel);
 
-            wpisy[numer_wezla].Item2.maxData = DateTime.Now;
+            wpisy[numer_wezla].Item2.maxData = data_zaksiegowania;
         }
 
         //tworzy nowy wezel z datami (data utworzenia, max_data], dodaje do niego urzadzenia z listy, dodaje wezel do drzewa
@@ -169,7 +170,7 @@ namespace RMVB_konsola.MVB
             }
 
             //dodaj wpis
-            wpisy.Add((wpisy.Count, new Wpis(lista.First().UrzadzenieID, lista.Last().UrzadzenieID, DateTime.Now, DateTime.MaxValue, nowy)));
+            wpisy.Add((wpisy.Count, new Wpis(lista.First().UrzadzenieID, lista.Last().UrzadzenieID, lista.OrderBy(q => q.dataOstatniejModyfikacji).First().dataOstatniejModyfikacji, lista.OrderBy(q => q.dataWygasniecia).Last().dataWygasniecia, nowy)));
         }
 
         internal void wypisz()
