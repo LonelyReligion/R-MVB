@@ -47,6 +47,8 @@ for (int i = 0; i < 8; i++)
     mvb.dodajUrzadzenie(testowe1);
 }
 
+mvb.wypiszDrzewo();
+
 Test.ctx = ctx;
 Test.repo = repo;
 Test.mvb = mvb;
@@ -56,6 +58,13 @@ jednostka_testujaca.testDataId(10);
 jednostka_testujaca.testId(10);
 jednostka_testujaca.testIdV(10);
 
-
-mvb.wypiszDrzewo();
+DateTime poczatek = DateTime.Now.AddSeconds(-1);
+DateTime koniec = DateTime.Now;
+var szukane_urzadzenia = ctx.Urzadzenia.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList();
+foreach (Urzadzenie u in szukane_urzadzenia)
+    Console.WriteLine(u.UrzadzenieID + "v" + u.Wersja);
+Console.WriteLine("===============================");
+szukane_urzadzenia = mvb.szukaj(poczatek, koniec);
+foreach (Urzadzenie u in szukane_urzadzenia)
+    Console.WriteLine(u.UrzadzenieID + "v" + u.Wersja);
 ctx.Dispose();

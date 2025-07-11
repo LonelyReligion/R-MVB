@@ -50,5 +50,10 @@ namespace RMVB_konsola.MVB
         internal Urzadzenie szukaj(int id) { 
             return dk.szukaj(id);
         }
+
+        //zwraca wersje z danego skonczonego przedzialu czasowego
+        internal List<Urzadzenie> szukaj(DateTime poczatek, DateTime koniec) {
+            return dk.szukaj(poczatek, koniec); //niezaimplementowane
+        }
     }
 }

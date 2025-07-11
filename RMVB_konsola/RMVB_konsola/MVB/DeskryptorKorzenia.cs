@@ -219,18 +219,14 @@ namespace RMVB_konsola.MVB
         //wpada w petle nieskonczona, do poprawki
         internal Urzadzenie szukaj(int id, int v)
         {
-            id = 4;
-            v = 2;
-
             //binarysearch
             int dlugosc_listy = wpisy.Count;
             int poczatkowy_indeks = dlugosc_listy / 2;
             Stack<(int, Wpis)> do_przejrzenia = new Stack<(int, Wpis)>();
             do_przejrzenia.Push(wpisy[poczatkowy_indeks]);
-
-            while(do_przejrzenia.Count != 0){
+            int najwyzsza_wersja = -1;
+            while (do_przejrzenia.Count != 0){
                 (int indeks, Wpis w) = do_przejrzenia.Pop();
-                int najwyzsza_wersja = -1;
                 if (w.minKlucz <= id && w.maxKlucz >= id) {
                     var wpisy_wezla = w.wezel.wpisy;
                     for (int i = 0; i < wpisy_wezla.Count; i++) {
@@ -301,6 +297,31 @@ namespace RMVB_konsola.MVB
 
             Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
             return null;
+        }
+
+        //nietestowane
+        internal List<Urzadzenie> szukaj(DateTime poczatek, DateTime koniec)
+        {
+            if(poczatek == DateTime.MinValue && koniec==DateTime.MaxValue)
+                return repo.urzadzenia.ToList();
+
+            List<Urzadzenie> wynikowa = new List<Urzadzenie>();
+            //znowu, poprawic na binarysearch i stos?
+            for (int i = 0; i < wpisy.Count; i++) {
+                Wpis wpis = wpisy[i].Item2;
+                if (wpis.minData > poczatek || wpis.maxData < poczatek)
+                    ;
+                else if (wpis.minData == poczatek && wpis.maxData < koniec)
+                    wynikowa.AddRange(wpis.wezel.zwrocUrzadzenia());
+                else {
+                    var urzadzenia = wpis.wezel.wpisy;
+                    for (int j = 0; j < urzadzenia.Count(); j++) {
+                        if (urzadzenia[j].Item2.dataOstatniejModyfikacji >= poczatek && urzadzenia[j].Item2.dataWygasniecia < koniec)
+                            wynikowa.Add(urzadzenia[j].Item2);
+                    }
+                }
+            }
+            return wynikowa; //niezaimplementowane
         }
     }
     }

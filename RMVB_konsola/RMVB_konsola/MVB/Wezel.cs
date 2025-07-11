@@ -66,5 +66,12 @@ namespace RMVB_konsola.MVB
         {
             return wpisy.Count < pojemnoscWezla * Psvu;
         }
+
+        public List<Urzadzenie> zwrocUrzadzenia() { 
+            List<Urzadzenie> output = new List<Urzadzenie>();
+            foreach (var wpis in wpisy)
+                output.Add(wpis.Item2);
+            return output;
+        }
     }
 }
