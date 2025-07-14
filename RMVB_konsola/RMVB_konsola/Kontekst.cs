@@ -16,6 +16,15 @@ namespace RMVB_konsola
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            //wieksza precyzja
+            modelBuilder.Entity<Urzadzenie>()
+            .Property(u => u.dataOstatniejModyfikacji)
+            .HasColumnType("datetime2");
+
+            modelBuilder.Entity<Urzadzenie>()
+            .Property(u => u.dataWygasniecia)
+            .HasColumnType("datetime2");
+
             base.OnModelCreating(modelBuilder);
         }
     }

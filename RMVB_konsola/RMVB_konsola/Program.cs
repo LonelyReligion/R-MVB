@@ -54,17 +54,16 @@ Test.repo = repo;
 Test.mvb = mvb;
 Test jednostka_testujaca = new Test();
 
+Console.WriteLine("Wyszukiwanie po dacie i id");
 jednostka_testujaca.testDataId(10);
+
+Console.WriteLine("Wyszukiwanie po id");
 jednostka_testujaca.testId(10);
+
+Console.WriteLine("Wyszukiwanie po id i wersji");
 jednostka_testujaca.testIdV(10);
 
-DateTime poczatek = DateTime.Now.AddSeconds(-1);
-DateTime koniec = DateTime.Now;
-var szukane_urzadzenia = ctx.Urzadzenia.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList();
-foreach (Urzadzenie u in szukane_urzadzenia)
-    Console.WriteLine(u.UrzadzenieID + "v" + u.Wersja);
-Console.WriteLine("===============================");
-szukane_urzadzenia = mvb.szukaj(poczatek, koniec);
-foreach (Urzadzenie u in szukane_urzadzenia)
-    Console.WriteLine(u.UrzadzenieID + "v" + u.Wersja);
+Console.WriteLine("Wyszukiwanie po dacie i dacie");
+jednostka_testujaca.testDataData(10);
+
 ctx.Dispose();

@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using RMVB_konsola.MVB;
+using System.Data;
+using System.Collections;
 
 namespace RMVB_konsola
 {
@@ -124,6 +126,44 @@ namespace RMVB_konsola
             }
             long czas_mvb = sw.ElapsedMilliseconds;
             Console.WriteLine("MVB: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_mvb + " ms.");
+        }
+
+        public void testDataData(int ileRazy) {
+            DateTime poczatek = ctx.Urzadzenia.OrderBy(u=>u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji.AddTicks(-10);
+            DateTime koniec = ctx.Urzadzenia
+                                .OrderByDescending(u => u.dataWygasniecia)
+                                .Select(u => u.dataWygasniecia)
+                                .First();
+            int range = ((TimeSpan)(koniec - poczatek)).Milliseconds;
+            List<DateTime> randos = new List<DateTime>();
+            randos.Add(poczatek.AddTicks(rnd.Next(range)));
+
+            var szukane_urzadzenia = new List<Urzadzenie>();
+            var szukane_urzadzenia_mvb = new List<Urzadzenie>();
+
+            //Console.WriteLine(poczatek.Ticks + "-" + koniec.Ticks);
+            sw = Stopwatch.StartNew();
+            for(int i = 0; i < ileRazy; i++)
+                szukane_urzadzenia = ctx.Urzadzenia.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList();
+            long czas_baza = sw.ElapsedMilliseconds;
+            Console.WriteLine("Baza: " + szukane_urzadzenia.Count + " w czasie: " + czas_baza + " ms.");
+            
+            sw = Stopwatch.StartNew();
+            szukane_urzadzenia_mvb = mvb.szukaj(poczatek, koniec);
+            long czas_mvb = sw.ElapsedMilliseconds;
+            Console.WriteLine("MVB: " + szukane_urzadzenia_mvb.Count + " w czasie: " + czas_mvb + " ms.");
+
+            if (szukane_urzadzenia.Count != szukane_urzadzenia_mvb.Count)
+            {
+                //except nie zadziala
+                var nieznalezione = szukane_urzadzenia
+                                    .Where(d => !szukane_urzadzenia_mvb.Any(mvb =>
+                                        mvb.UrzadzenieID == d.UrzadzenieID &&
+                                        mvb.Wersja == d.Wersja))
+                                    .ToList();
+                foreach(var u in nieznalezione)
+                    Console.WriteLine(u.UrzadzenieID + "v" + u.Wersja + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+            }
         }
     }
 }

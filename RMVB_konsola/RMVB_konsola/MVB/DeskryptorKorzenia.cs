@@ -216,13 +216,14 @@ namespace RMVB_konsola.MVB
         }
 
         //szukaj id i wersji
-        //wpada w petle nieskonczona, do poprawki
         internal Urzadzenie szukaj(int id, int v)
         {
             //binarysearch
             int dlugosc_listy = wpisy.Count;
             int poczatkowy_indeks = dlugosc_listy / 2;
             Stack<(int, Wpis)> do_przejrzenia = new Stack<(int, Wpis)>();
+            HashSet<int> odwiedzone = new HashSet<int>(); //powinno naprawic nieskonczona petle
+
             do_przejrzenia.Push(wpisy[poczatkowy_indeks]);
             int najwyzsza_wersja = -1;
             while (do_przejrzenia.Count != 0){
@@ -242,18 +243,30 @@ namespace RMVB_konsola.MVB
                             break;
                     }
                 }
-                if (najwyzsza_wersja == -1) //ryzyko nieskonczonej petli
+                if (najwyzsza_wersja == -1) 
                 {
-                    if (indeks + 1 < wpisy.Count)
+                    if (indeks + 1 < wpisy.Count && !odwiedzone.Contains(indeks + 1))
+                    {
                         do_przejrzenia.Push(wpisy[indeks + 1]);
-                    if (indeks - 1 > 0)
+                        odwiedzone.Add(indeks + 1);
+                    }
+                    if (indeks - 1 >= 0 && !odwiedzone.Contains(indeks - 1))
+                    {
                         do_przejrzenia.Push(wpisy[indeks - 1]);
+                        odwiedzone.Add(indeks - 1);
+                    }
                 }
                 else {
                     if (najwyzsza_wersja < v && indeks + 1 < wpisy.Count)
+                    {
                         do_przejrzenia.Push(wpisy[indeks + 1]);
-                    else if (indeks - 1 >= 0)
+                        odwiedzone.Add(indeks + 1);
+                    }
+                    else if (indeks - 1 >= 0 && !odwiedzone.Contains(indeks - 1))
+                    {
                         do_przejrzenia.Push(wpisy[indeks - 1]);
+                        odwiedzone.Add(indeks - 1);
+                    }
                 }
             }
 
@@ -306,10 +319,9 @@ namespace RMVB_konsola.MVB
                 return repo.urzadzenia.ToList();
 
             List<Urzadzenie> wynikowa = new List<Urzadzenie>();
-            //znowu, poprawic na binarysearch i stos?
             for (int i = 0; i < wpisy.Count; i++) {
                 Wpis wpis = wpisy[i].Item2;
-                if (wpis.minData > poczatek || wpis.maxData < poczatek)
+                if ((wpis.minData < poczatek && wpis.maxData < poczatek)||(wpis.minData >= koniec && wpis.maxData >= koniec))
                     ;
                 else if (wpis.minData == poczatek && wpis.maxData < koniec)
                     wynikowa.AddRange(wpis.wezel.zwrocUrzadzenia());

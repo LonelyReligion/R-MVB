@@ -28,9 +28,12 @@ namespace RMVB_konsola
 
         //wlasnosc nawigacyjna
         public virtual ICollection<Pomiar> Pomiary { get; set; }
-        
+
         //metody
-        protected Urzadzenie() { Pomiary = new HashSet<Pomiar>(); Console.WriteLine("wywolano konstruktor bezarg. urzadzenia"); }
+        protected Urzadzenie() { 
+            Pomiary = new HashSet<Pomiar>(); 
+            //Console.WriteLine("wywolano konstruktor bezarg. urzadzenia");
+        }
         public Urzadzenie(int UrzadzenieID, decimal szerokosc, decimal dlugosc, Repo repo) : this()
         {
             Szerokosc = szerokosc;
