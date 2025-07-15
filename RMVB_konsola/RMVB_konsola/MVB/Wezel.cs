@@ -10,13 +10,15 @@ namespace RMVB_konsola.MVB
     {
         static char aktualne_id = 'A';
         public char id;
-        static int pojemnoscWezla = 6;
+        public static int pojemnoscWezla = 6;
+
         //moze samo urzadzenie atp
         internal List<(int, Urzadzenie)> wpisy;
         internal Wezel() { 
             wpisy = new List<(int, Urzadzenie)> ();
             id = aktualne_id++;
         }
+        
         //zwraca true jezeli sie zmiescilo, false jezeli block ov
         internal bool dodaj(Urzadzenie u) {
             if (wpisy.Count() < pojemnoscWezla) {

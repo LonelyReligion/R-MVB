@@ -73,7 +73,7 @@ namespace RMVB_konsola
         public void dezaktywuj() {
             this.Aktywne = false;
             dataWygasniecia = DateTime.Now;
-            ctx.SaveChanges();
+            ctx.SaveChanges(); //czy jest potrzebne?
         }
 
         private void ustalWersje(int UrzadzenieID, Repo repo) {
