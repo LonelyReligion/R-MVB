@@ -71,6 +71,7 @@ namespace RMVB_konsola.MVB
                 //jezeli nie dodano i id nie jest wieksze niz maxId ostatniego wezla lub on sam nie ma miejsca do wstawienia
                 if (!dodano && !(numer_wezla == wpisy.Count - 1 && wpisy[numer_wezla].Item2.wezel.dodaj(u)))
                 {
+                    //wezel jest pelny
                     versionSplit(numer_wezla, u);
                 }
                 else {
@@ -86,6 +87,12 @@ namespace RMVB_konsola.MVB
                 }
             }
         }
+
+        //dla POTENCJALNEGO węzła
+        internal bool strongVersionOverflow(int rozm_listy) {
+            return rozm_listy > Wezel.pojemnoscWezla * Psvo;
+        }
+
         internal void versionSplit(int numer_wezla, Urzadzenie u)
         {
             //version split
@@ -110,55 +117,36 @@ namespace RMVB_konsola.MVB
             }
             //posortuj liste po id 
             var posortowanaLista = kopie.OrderBy(q => q.UrzadzenieID);
-            dodajZlisty(posortowanaLista);
+            
+ 
+
             wpisy[numer_wezla].Item2.maxData = DateTime.Now;
 
             //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
-            if (wpisy.Last().Item2.wezel.strongVersionOverflow(Psvo))
+            if (strongVersionOverflow(posortowanaLista.ToList().Count))
             {
-                keySplit(wpisy.Last().Item1);
-            };
-
-            //nietestowane
-            if (wpisy.Last().Item2.wezel.strongVersionUnderflow(Psvu))
+                keySplit(posortowanaLista);
+            }
+/*            //nietestowane, czy to jest potrzebne? czy tylko przy usuwaniu logicznym
+            else if (wpisy.Last().Item2.wezel.strongVersionUnderflow(Psvu))
             {
                 // u juz jest w wezle
-                versionSplit(wpisy.Last().Item1, null);
+                versionSplit(wpisy.Last().Item1, null); //czy tu jest potencjalnie pętla?
+            }*/
+            else
+            {
+                dodajZlisty(posortowanaLista);
             };
         }
 
         //nietestowane
-        internal void keySplit(int numer_wezla)
+        internal void keySplit(IEnumerable<Urzadzenie> kopie)
         {
-            DateTime data_zaksiegowania = DateTime.Now;
-            //keysplit
-            List<Urzadzenie> kopie = new List<Urzadzenie>();
-            //wybieramy zywe
-            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
-            {
-                if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
-                { //kopiujemy zywe
-                    Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
-                    urzadzenie.Item2.dataWygasniecia = data_zaksiegowania;
-                    kopia.dataOstatniejModyfikacji = data_zaksiegowania;
-                    kopie.Add(kopia);
-
-                    repo.dodajUrzadzenie(kopia);
-
-                    ctx.Urzadzenia.Add(kopia);
-                    ctx.SaveChanges();
-                    repo.dodajUrzadzenie(kopia);
-                }
-            }
-
-
-            var drugi_wezel = kopie.OrderBy(q => q.UrzadzenieID).Skip(kopie.Count/2);
+            var drugi_wezel = kopie.OrderBy(q => q.UrzadzenieID).Skip(kopie.ToList().Count/2);
             var pierwszy_wezel = kopie.Except(drugi_wezel);
 
             dodajZlisty(pierwszy_wezel);
             dodajZlisty(drugi_wezel);
-
-            wpisy[numer_wezla].Item2.maxData = data_zaksiegowania;
         }
 
         //tworzy nowy wezel z datami (data utworzenia, max_data], dodaje do niego urzadzenia z listy, dodaje wezel do drzewa
@@ -333,7 +321,7 @@ namespace RMVB_konsola.MVB
                     }
                 }
             }
-            return wynikowa; //niezaimplementowane
+            return wynikowa; 
         }
     }
     }
