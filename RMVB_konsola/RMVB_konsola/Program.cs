@@ -9,7 +9,7 @@ Drzewo mvb = new Drzewo(repo);
 Kontekst ctx = new Kontekst();
 
 Urzadzenie.ctx = ctx;
-DeskryptorKorzenia.ctx = ctx;
+Korzen.ctx = ctx;
 
 Urzadzenie testowe = new Urzadzenie(0, repo);
 
@@ -57,13 +57,13 @@ Test jednostka_testujaca = new Test();
 Console.WriteLine("Wyszukiwanie po dacie i id");
 jednostka_testujaca.testDataId(10);
 
-Console.WriteLine("Wyszukiwanie po id");
+Console.WriteLine("\nWyszukiwanie po id");
 jednostka_testujaca.testId(10);
 
-Console.WriteLine("Wyszukiwanie po id i wersji");
+Console.WriteLine("\nWyszukiwanie po id i wersji");
 jednostka_testujaca.testIdV(10);
 
-Console.WriteLine("Wyszukiwanie po dacie i dacie");
+Console.WriteLine("\nWyszukiwanie po dacie i dacie");
 jednostka_testujaca.testDataData(10);
 
 ctx.Dispose();

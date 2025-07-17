@@ -15,10 +15,12 @@ namespace RMVB_konsola.MVB
 
         Repo Repo;
 
-        private DeskryptorKorzenia dk;
+        private List<DeskryptorKorzenia> desk = new List<DeskryptorKorzenia>();
+        Korzen dk;
 
         public Drzewo(Repo repo) {
-            dk = new DeskryptorKorzenia(repo, Pversion, Psvu, Psvo);
+            dk = new Korzen(repo, Pversion, Psvu, Psvo);
+            desk.Add(new DeskryptorKorzenia(DateTime.Now, DateTime.MaxValue, dk));
             this.Repo = repo;
         }
 
