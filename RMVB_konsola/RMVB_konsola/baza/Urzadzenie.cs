@@ -73,7 +73,6 @@ namespace RMVB_konsola
         public void dezaktywuj() {
             this.Aktywne = false;
             dataWygasniecia = DateTime.Now;
-            ctx.SaveChanges(); //czy jest potrzebne?
         }
 
         private void ustalWersje(int UrzadzenieID, Repo repo) {
@@ -94,13 +93,6 @@ namespace RMVB_konsola
 
         public void dodajPomiar(Pomiar testowy) {
             testowy.UrzadzeniaPomiarowe.Add(this);
-
-            //ostatni dodany elemeny
-            //dataOstaniejModyfikacji = testowy.dtpomiaru;
-
-            //najpozniej zmierzony pomiar
-            //dataOstaniejModyfikacji = Pomiary.Aggregate((p1, p2) => p1.dtpomiaru > p2.dtpomiaru ? p1 : p2).dtpomiaru;
-
             dataOstatniejModyfikacji = DateTime.Now;
         }
 

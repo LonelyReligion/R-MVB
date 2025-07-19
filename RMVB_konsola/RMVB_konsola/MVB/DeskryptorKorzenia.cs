@@ -11,7 +11,7 @@ namespace RMVB_konsola.MVB
         DateTime poczatek;
         DateTime koniec;
 
-        Korzen korzen;
+        public Korzen korzen;
 
         public DeskryptorKorzenia(DateTime poczatek, DateTime koniec, Korzen korzen)
         {

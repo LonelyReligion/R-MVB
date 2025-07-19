@@ -300,7 +300,6 @@ namespace RMVB_konsola.MVB
             return null;
         }
 
-        //nietestowane
         internal List<Urzadzenie> szukaj(DateTime poczatek, DateTime koniec)
         {
             if(poczatek == DateTime.MinValue && koniec==DateTime.MaxValue)
