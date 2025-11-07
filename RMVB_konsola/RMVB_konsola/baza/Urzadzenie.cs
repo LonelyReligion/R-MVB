@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using RMVB_konsola.MVB;
 
 namespace RMVB_konsola
 {
@@ -99,6 +100,62 @@ namespace RMVB_konsola
         public void usunPomiar(Pomiar testowy) {
             this.Pomiary.Remove(testowy);
             dataOstatniejModyfikacji = DateTime.Now;
+        }
+
+        //rtree
+        public decimal suma = 0;
+
+        private int liczba_uwzglednionych = 0;
+        private decimal rTimeAggregate { get; set; }
+
+        public void AddMeasure(Pomiar p, TreeRepository repository)
+        {
+            //if (p.dtpomiaru > granica)
+            {
+                suma += p.Wartosc;
+                liczba_uwzglednionych++;
+
+                rTimeAggregate = suma / liczba_uwzglednionych;
+                TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
+                repository.saveTimeAggregate(timeAggregate);
+            }
+        }
+
+        public void AddMeasure(DateTime t, decimal v, TreeRepository repository)
+        {
+            //if (t > granica)
+            {
+                suma += v;
+                liczba_uwzglednionych++;
+
+                rTimeAggregate = suma / liczba_uwzglednionych;
+                TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
+                repository.saveTimeAggregate(timeAggregate);
+            }
+        }
+
+        public decimal GetTimeAggregate()
+        {
+            return rTimeAggregate;
+        }
+
+        public (int, decimal) get_liczba_suma()
+        {
+            return (liczba_uwzglednionych, suma);
+        }
+
+        public Pomiar LastMeasurement()
+        {
+            return Pomiary.Count > 0 ? Pomiary.Last() : null;
+        }
+        public bool IsMeasurementValid()
+        {
+            return Pomiary.Count > 0;
+        }
+
+        public bool IsTimeAggregateValid()
+        {
+            return rTimeAggregate != null;
         }
     }
 }

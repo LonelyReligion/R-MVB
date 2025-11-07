@@ -65,7 +65,7 @@ namespace RMVB_konsola.MVB
         //zwraca wersje z danego skonczonego przedzialu czasowego
         internal List<Urzadzenie> szukaj(DateTime poczatek, DateTime koniec) {
             var dk = desk[0].korzen;
-            return dk.szukaj(poczatek, koniec); //niezaimplementowane
+            return dk.szukaj(poczatek, koniec); 
         }
     }
 }
