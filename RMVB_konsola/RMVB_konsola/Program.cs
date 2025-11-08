@@ -26,7 +26,7 @@ ctx.SaveChanges();
 mvb.dodajUrzadzenie(testowe);
 repo.dodajUrzadzenie(testowe);
 
-testowe2 = new Urzadzenie(testowe, repo);
+testowe2 = new Urzadzenie(testowe, repo); //konstruktor kopiujący
 testowe.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, ale zachowujemy go w bazie
 ctx.Urzadzenia.Add(testowe2);
 ctx.SaveChanges();

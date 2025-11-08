@@ -13,7 +13,7 @@ namespace RMVB_konsola.MVB
         public static int pojemnoscWezla = 6;
 
         //moze samo urzadzenie atp
-        internal List<(int, Urzadzenie)> wpisy;
+        internal List<(int, Urzadzenie)> wpisy; //zmienic
         internal Wezel() { 
             wpisy = new List<(int, Urzadzenie)> ();
             id = aktualne_id++;
