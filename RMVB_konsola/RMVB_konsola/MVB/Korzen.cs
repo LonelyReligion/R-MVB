@@ -98,7 +98,7 @@ namespace RMVB_konsola.MVB
             //version split
             List<Urzadzenie> kopie = new List<Urzadzenie>();
             if (u != null) kopie.Add(u);
-            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.wpisy)
+            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.urzadzenia)
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
                 { //kopiujemy zywe
@@ -217,7 +217,7 @@ namespace RMVB_konsola.MVB
             while (do_przejrzenia.Count != 0){
                 (int indeks, Wpis w) = do_przejrzenia.Pop();
                 if (w.minKlucz <= id && w.maxKlucz >= id) {
-                    var wpisy_wezla = w.wezel.wpisy;
+                    var wpisy_wezla = w.wezel.urzadzenia;
                     for (int i = 0; i < wpisy_wezla.Count; i++) {
                         if (wpisy_wezla[i].Item1 == id)
                         {
@@ -270,8 +270,8 @@ namespace RMVB_konsola.MVB
             for (int i = wpisy.Count - 1; i >= 0; i--) {
                 var wpis = wpisy[i].Item2;
                 if ((wpis.minData <= dt && wpis.maxData > dt) && (wpis.minKlucz <= id && wpis.maxKlucz >= id)) {
-                    for (int j = 0; j < wpis.wezel.wpisy.Count(); j++) {
-                        (int index, Urzadzenie urzadzenie) = wpis.wezel.wpisy[j];
+                    for (int j = 0; j < wpis.wezel.urzadzenia.Count(); j++) {
+                        (int index, Urzadzenie urzadzenie) = wpis.wezel.urzadzenia[j];
                         if(index == id && urzadzenie.dataOstatniejModyfikacji <= dt && urzadzenie.dataWygasniecia > dt)
                             return urzadzenie;
                     }
@@ -288,8 +288,8 @@ namespace RMVB_konsola.MVB
             for (int i = wpisy.Count-1; i >= 0; i--) { //od tylu 
                 (int index, Wpis w) = wpisy[i];
                 if (w.minKlucz <= id && w.maxKlucz >= id) {
-                    for (int j = w.wezel.wpisy.Count - 1; j >= 0; j--) {
-                        (int index_urzadzenia, Urzadzenie u) = w.wezel.wpisy[j];
+                    for (int j = w.wezel.urzadzenia.Count - 1; j >= 0; j--) {
+                        (int index_urzadzenia, Urzadzenie u) = w.wezel.urzadzenia[j];
                         if (index_urzadzenia == id)
                             return u;
                     }
@@ -313,7 +313,7 @@ namespace RMVB_konsola.MVB
                 else if (wpis.minData == poczatek && wpis.maxData < koniec)
                     wynikowa.AddRange(wpis.wezel.zwrocUrzadzenia());
                 else {
-                    var urzadzenia = wpis.wezel.wpisy;
+                    var urzadzenia = wpis.wezel.urzadzenia;
                     for (int j = 0; j < urzadzenia.Count(); j++) {
                         if (urzadzenia[j].Item2.dataOstatniejModyfikacji >= poczatek && urzadzenia[j].Item2.dataWygasniecia < koniec)
                             wynikowa.Add(urzadzenia[j].Item2);

@@ -13,17 +13,17 @@ namespace RMVB_konsola.MVB
         public static int pojemnoscWezla = 6;
 
         //moze samo urzadzenie atp
-        internal List<(int, Urzadzenie)> wpisy; //zmienic
+        internal List<(int, Urzadzenie)> urzadzenia; //zmienic
         internal Wezel() { 
-            wpisy = new List<(int, Urzadzenie)> ();
+            urzadzenia = new List<(int, Urzadzenie)> ();
             id = aktualne_id++;
         }
         
         //zwraca true jezeli sie zmiescilo, false jezeli block ov
         internal bool dodaj(Urzadzenie u) {
-            if (wpisy.Count() < pojemnoscWezla) {
-                wpisy.Add((u.UrzadzenieID, u));
-                wpisy = wpisy.OrderBy(w => w.Item1).ToList();
+            if (urzadzenia.Count() < pojemnoscWezla) {
+                urzadzenia.Add((u.UrzadzenieID, u));
+                urzadzenia = urzadzenia.OrderBy(w => w.Item1).ToList();
                 return true;
             }
             return false;
@@ -31,7 +31,7 @@ namespace RMVB_konsola.MVB
         internal void wypisz()
         {
             Console.WriteLine(id);
-            if (wpisy.Count == 0)
+            if (urzadzenia.Count == 0)
             {
                 Console.WriteLine("******");
                 Console.WriteLine("*    *");
@@ -40,9 +40,9 @@ namespace RMVB_konsola.MVB
             else
             {
                 List<String> wynikowy = new List<String>();
-                for (int i = 0; i < wpisy.Count; i++)
+                for (int i = 0; i < urzadzenia.Count; i++)
                 {
-                    wynikowy.Add("<" + (wpisy[i].Item1.ToString() + "v" + wpisy[i].Item2.Wersja.ToString()) + "," + wpisy[i].Item2.dataOstatniejModyfikacji.ToString() + "," + wpisy[i].Item2.dataWygasniecia.ToString() + ">");
+                    wynikowy.Add("<" + (urzadzenia[i].Item1.ToString() + "v" + urzadzenia[i].Item2.Wersja.ToString()) + "," + urzadzenia[i].Item2.dataOstatniejModyfikacji.ToString() + "," + urzadzenia[i].Item2.dataWygasniecia.ToString() + ">");
                 }
                 int max = wynikowy.Max(x => x.Length);
                 String pozioma = "";
@@ -61,17 +61,17 @@ namespace RMVB_konsola.MVB
 
         internal bool strongVersionOverflow(double Psvo)
         {
-            return wpisy.Count > pojemnoscWezla * Psvo;
+            return urzadzenia.Count > pojemnoscWezla * Psvo;
         }
 
         internal bool strongVersionUnderflow(double Psvu)
         {
-            return wpisy.Count < pojemnoscWezla * Psvu;
+            return urzadzenia.Count < pojemnoscWezla * Psvu;
         }
 
         public List<Urzadzenie> zwrocUrzadzenia() { 
             List<Urzadzenie> output = new List<Urzadzenie>();
-            foreach (var wpis in wpisy)
+            foreach (var wpis in urzadzenia)
                 output.Add(wpis.Item2);
             return output;
         }
