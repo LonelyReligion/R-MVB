@@ -16,7 +16,7 @@ namespace RMVB_konsola.MVB
 
         Repo Repo;
 
-        private List<DeskryptorKorzenia> desk = new List<DeskryptorKorzenia>();
+        private List<DeskryptorKorzenia> desk = new List<DeskryptorKorzenia>(); // "List of tree descriptors. Descriptors for all roots in the tree are connected in a list(or other structures) according to growing, separable life spans."
 
         public Drzewo(Repo repo) {
             Korzen k = new Korzen(repo, Pversion, Psvu, Psvo);

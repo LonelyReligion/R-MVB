@@ -5,7 +5,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola.MVB
+namespace RMVB_konsola.R
 {
     internal class RLeaf : RNode
     {

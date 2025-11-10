@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola.MVB
+namespace RMVB_konsola.R
 {
     public class Rectangle
     {

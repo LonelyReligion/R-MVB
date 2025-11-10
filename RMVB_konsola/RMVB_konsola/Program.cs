@@ -1,11 +1,20 @@
 ﻿using RMVB_konsola;
+
 using RMVB_konsola.MVB; //aby nie przejmować się folderami
+using RMVB_konsola.R;
+
 using System.Diagnostics;
 
 //jak zasymulować szybszy upływ czasu?
 
 Repo repo = new Repo();
 Drzewo mvb = new Drzewo(repo);
+
+// WIP
+TreeRepository repo_R = new InDBStorage();
+RTree rtree = new RTree(repo_R);
+//
+
 Kontekst ctx = new Kontekst();
 
 Urzadzenie.ctx = ctx;
