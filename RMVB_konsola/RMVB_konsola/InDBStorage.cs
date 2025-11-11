@@ -8,9 +8,12 @@ using RMVB_konsola.R;
 
 namespace RMVB_konsola
 {
-    internal class InDBStorage : TreeRepository
+    public class InDBStorage : TreeRepository
     {
-        public void saveDevice(Urzadzenie device)
+        //nie abstract, bo ma ciało
+        //virtual jest konieczne do tego, aby klasa Repo mogła ją napisać
+        //"znacza to, że dana metoda może zostać nadpisana w klasie która dziedziczy po klasie w której jest ta metoda zdefiniowana"
+        public virtual void saveDevice(Urzadzenie device)
         {
             using (var ctx = new Kontekst())
             {

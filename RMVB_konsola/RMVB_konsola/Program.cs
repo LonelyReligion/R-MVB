@@ -7,12 +7,11 @@ using System.Diagnostics;
 
 //jak zasymulować szybszy upływ czasu?
 
-Repo repo = new Repo();
+TreeRepository repo = new Repo();
 Drzewo mvb = new Drzewo(repo);
 
 // WIP
-TreeRepository repo_R = new InDBStorage();
-RTree rtree = new RTree(repo_R);
+RTree rtree = new RTree(repo);
 //
 
 Kontekst ctx = new Kontekst();
@@ -20,7 +19,7 @@ Kontekst ctx = new Kontekst();
 Urzadzenie.ctx = ctx;
 Korzen.ctx = ctx;
 
-Urzadzenie testowe = new Urzadzenie(0, repo);
+Urzadzenie testowe = new Urzadzenie(0, (Repo)repo);
 
 Pomiar testowy = new Pomiar();
 testowy.Wartosc = 0;
@@ -31,15 +30,15 @@ Urzadzenie testowe2;
 
 ctx.Urzadzenia.Add(testowe);
 ctx.Pomiary.Add(testowy);
-ctx.SaveChanges();
-mvb.dodajUrzadzenie(testowe);
-repo.dodajUrzadzenie(testowe);
 
-testowe2 = new Urzadzenie(testowe, repo); //konstruktor kopiujący
+mvb.dodajUrzadzenie(testowe);
+repo.saveDevice(testowe);
+
+testowe2 = new Urzadzenie(testowe, (Repo)repo); //konstruktor kopiujący
 testowe.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, ale zachowujemy go w bazie
 ctx.Urzadzenia.Add(testowe2);
-ctx.SaveChanges();
-repo.dodajUrzadzenie(testowe2);
+
+repo.saveDevice(testowe2);
 mvb.dodajUrzadzenie(testowe2);
     
 //testowe2.dezaktywuj();
@@ -48,18 +47,17 @@ mvb.dodajUrzadzenie(testowe2);
 for (int i = 0; i < 8; i++)
 {
     int id = i % 7;
-    Urzadzenie testowe1 = new Urzadzenie(id, repo);
-    ctx.Urzadzenia.Add(testowe1);
-    ctx.SaveChanges(); 
+    Urzadzenie testowe1 = new Urzadzenie(id, (Repo)repo);
+    ctx.Urzadzenia.Add(testowe1); 
 
-    repo.dodajUrzadzenie(testowe1);
+    repo.saveDevice(testowe1);
     mvb.dodajUrzadzenie(testowe1);
 }
 
 mvb.wypiszDrzewo();
 
 Test.ctx = ctx;
-Test.repo = repo;
+Test.repo = (Repo)repo;
 Test.mvb = mvb;
 Test jednostka_testujaca = new Test();
 

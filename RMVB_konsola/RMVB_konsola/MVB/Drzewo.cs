@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using RMVB_konsola.R;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,11 @@ namespace RMVB_konsola.MVB
         double Psvu = 1.0/3;
         double Psvo = 5.0/6;
 
-        Repo Repo;
+        TreeRepository Repo;
 
         private List<DeskryptorKorzenia> desk = new List<DeskryptorKorzenia>(); // "List of tree descriptors. Descriptors for all roots in the tree are connected in a list(or other structures) according to growing, separable life spans."
 
-        public Drzewo(Repo repo) {
+        public Drzewo(TreeRepository repo) {
             Korzen k = new Korzen(repo, Pversion, Psvu, Psvo);
             desk.Add(new DeskryptorKorzenia(DateTime.Now, DateTime.MaxValue, k));
             this.Repo = repo;

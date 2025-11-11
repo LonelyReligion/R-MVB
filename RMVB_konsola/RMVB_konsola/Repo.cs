@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace RMVB_konsola
 {
-    public class Repo
+    public class Repo : InDBStorage
     {
         public List<Urzadzenie> urzadzenia = new List<Urzadzenie>();
 
-        public void dodajUrzadzenie(Urzadzenie u) {
-            urzadzenia.Add(u);
+        //override jest konieczne inaczej realizowana jest wersja z klasy bazowej
+        //"Modyfikator override jest wymagany do rozszerzenia lub zmodyfikowania abstrakcyjnej lub wirtualnej implementacji dziedziczonej metody, właściwości, indeksatora lub zdarzenia."
+        public override void saveDevice(Urzadzenie device) {
+            base.saveDevice(device);
+            urzadzenia.Add(device);
         }
     }
 }

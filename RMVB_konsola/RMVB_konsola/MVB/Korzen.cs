@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RMVB_konsola.R;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace RMVB_konsola.MVB
     internal class Korzen
     {
         public static Kontekst ctx;
-        Repo repo;
+        TreeRepository repo;
         List<(int, Wpis)> wpisy;
 
         //parametry drzewa, sa zdefiniowane w klasie drzewa
@@ -19,7 +20,7 @@ namespace RMVB_konsola.MVB
         static double Psvu;
         static double Psvo;
 
-        internal Korzen(Repo repo, double pversion, double psvu, double psvo)
+        internal Korzen(TreeRepository repo, double pversion, double psvu, double psvo)
         {
             wpisy = new List<(int, Wpis)>();
             this.repo = repo;
@@ -102,16 +103,15 @@ namespace RMVB_konsola.MVB
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
                 { //kopiujemy zywe
-                    Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, repo);
+                    Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, (Repo)repo);
                     urzadzenie.Item2.dataWygasniecia = DateTime.Now;
                     kopia.dataOstatniejModyfikacji = DateTime.Now;
                     kopie.Add(kopia);
 
-                    repo.dodajUrzadzenie(kopia);
+                    repo.saveDevice(kopia);
 
                     ctx.Urzadzenia.Add(kopia);
-                    ctx.SaveChanges();
-                    repo.dodajUrzadzenie(kopia);
+                    repo.saveDevice(kopia);
                     
                 }
             }
@@ -303,7 +303,7 @@ namespace RMVB_konsola.MVB
         internal List<Urzadzenie> szukaj(DateTime poczatek, DateTime koniec)
         {
             if(poczatek == DateTime.MinValue && koniec==DateTime.MaxValue)
-                return repo.urzadzenia.ToList();
+                return ((Repo)repo).urzadzenia.ToList();
 
             List<Urzadzenie> wynikowa = new List<Urzadzenie>();
             for (int i = 0; i < wpisy.Count; i++) {
