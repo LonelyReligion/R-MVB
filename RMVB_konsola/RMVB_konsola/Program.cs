@@ -6,15 +6,13 @@ using RMVB_konsola.R;
 using System.Diagnostics;
 
 //jak zasymulować szybszy upływ czasu?
-
+Kontekst ctx = new Kontekst();
 TreeRepository repo = new Repo();
-Drzewo mvb = new Drzewo(repo);
+DrzewoMVB mvb = new DrzewoMVB(repo, ctx);
 
 // WIP
-RTree rtree = new RTree(repo);
+RTree rtree = new RTree((Repo)repo, ctx);
 //
-
-Kontekst ctx = new Kontekst();
 
 Urzadzenie.ctx = ctx;
 Korzen.ctx = ctx;
@@ -32,15 +30,15 @@ ctx.Urzadzenia.Add(testowe);
 ctx.Pomiary.Add(testowy);
 
 mvb.dodajUrzadzenie(testowe);
-repo.saveDevice(testowe);
+repo.saveDevice(testowe, ctx);
 
 testowe2 = new Urzadzenie(testowe, (Repo)repo); //konstruktor kopiujący
 testowe.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, ale zachowujemy go w bazie
 ctx.Urzadzenia.Add(testowe2);
 
-repo.saveDevice(testowe2);
 mvb.dodajUrzadzenie(testowe2);
-    
+repo.saveDevice(testowe2, ctx);
+
 //testowe2.dezaktywuj();
 //mvb.usunUrzadzenie(testowe2); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
 
@@ -50,8 +48,8 @@ for (int i = 0; i < 8; i++)
     Urzadzenie testowe1 = new Urzadzenie(id, (Repo)repo);
     ctx.Urzadzenia.Add(testowe1); 
 
-    repo.saveDevice(testowe1);
     mvb.dodajUrzadzenie(testowe1);
+    repo.saveDevice(testowe1, ctx);
 }
 
 mvb.wypiszDrzewo();

@@ -17,7 +17,7 @@ namespace RMVB_konsola
     {
         public static Repo repo;
         public static Kontekst ctx;
-        public static Drzewo mvb;
+        public static DrzewoMVB mvb;
 
         internal Stopwatch sw;
         internal Random rnd = new Random();

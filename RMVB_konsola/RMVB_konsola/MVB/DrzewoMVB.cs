@@ -9,20 +9,23 @@ using System.Threading.Tasks;
 
 namespace RMVB_konsola.MVB
 {
-    internal class Drzewo
+    internal class DrzewoMVB : Drzewo
     {
         double Pversion = 1.0/3;
         double Psvu = 1.0/3;
         double Psvo = 5.0/6;
 
         TreeRepository Repo;
+        Kontekst ctx;
 
         private List<DeskryptorKorzenia> desk = new List<DeskryptorKorzenia>(); // "List of tree descriptors. Descriptors for all roots in the tree are connected in a list(or other structures) according to growing, separable life spans."
 
-        public Drzewo(TreeRepository repo) {
+        public DrzewoMVB(TreeRepository repo, Kontekst ctx)
+        {
             Korzen k = new Korzen(repo, Pversion, Psvu, Psvo);
             desk.Add(new DeskryptorKorzenia(DateTime.Now, DateTime.MaxValue, k));
             this.Repo = repo;
+            this.ctx = ctx;
         }
 
         public void wypiszDrzewo() {
@@ -38,7 +41,7 @@ namespace RMVB_konsola.MVB
             dk.dodaj(u);
         }
 
-        internal void usunUrzadzenie(Urzadzenie testowe2)
+        public void usunUrzadzenie(Urzadzenie testowe2)
         {
             var dk = desk[0].korzen;
             dk.usun(testowe2);

@@ -13,6 +13,7 @@ namespace RMVB_konsola.MVB
     {
         public static Kontekst ctx;
         TreeRepository repo;
+
         List<(int, Wpis)> wpisy;
 
         //parametry drzewa, sa zdefiniowane w klasie drzewa
@@ -108,10 +109,10 @@ namespace RMVB_konsola.MVB
                     kopia.dataOstatniejModyfikacji = DateTime.Now;
                     kopie.Add(kopia);
 
-                    repo.saveDevice(kopia);
+                    repo.saveDevice(kopia, ctx);
 
                     ctx.Urzadzenia.Add(kopia);
-                    repo.saveDevice(kopia);
+                    repo.saveDevice(kopia, ctx);
                     
                 }
             }

@@ -13,14 +13,9 @@ namespace RMVB_konsola
         //nie abstract, bo ma ciało
         //virtual jest konieczne do tego, aby klasa Repo mogła ją napisać
         //"znacza to, że dana metoda może zostać nadpisana w klasie która dziedziczy po klasie w której jest ta metoda zdefiniowana"
-        public virtual void saveDevice(Urzadzenie device)
+        public virtual void saveDevice(Urzadzenie device, Kontekst ctx)
         {
-            using (var ctx = new Kontekst())
-            {
-                Console.WriteLine(device.UrzadzenieID);
-                ctx.Urzadzenia.AddOrUpdate(device);
-                ctx.SaveChanges();
-            }
+            ctx.SaveChanges();
         }
         public void saveMeasurement(Pomiar measure)
         {

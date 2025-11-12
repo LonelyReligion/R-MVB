@@ -14,25 +14,24 @@ namespace RMVB_konsola.R
 
         private RNode root = new RLeaf(ROOTMBR);
 
-        public List<Urzadzenie> devices = new List<Urzadzenie>();
+        private Repo repository;
+        Kontekst ctx;
 
-        private TreeRepository repository;
-
-        public RTree(TreeRepository r)
+        public RTree(Repo r, Kontekst context)
         {
             repository = r;
+            ctx = context;
         }
 
         public void Insert(Urzadzenie dev)
         {
             root.Insert(dev, new TreeWalker(this));
-            devices.Add(dev);
-            repository.saveDevice(dev);
+            repository.saveDevice(dev, ctx);
         }
 
         public void AddMeasure(int id, Pomiar p)
         {
-            Urzadzenie dev = devices[id];
+            Urzadzenie dev = repository.urzadzenia[id];
             if (dev != null)
             {
                 dev.AddMeasure(p, repository);
@@ -41,7 +40,7 @@ namespace RMVB_konsola.R
 
         public void AddMeasure(int ix, DateTime t, Decimal v)
         {
-            Urzadzenie dev = devices[ix];
+            Urzadzenie dev = repository.urzadzenia[ix];
             if (dev != null)
             {
                 dev.AddMeasure(t, v, repository);
@@ -111,7 +110,7 @@ namespace RMVB_konsola.R
 
         public int GtDeviceCout()
         {
-            return devices.Count;
+            return repository.urzadzenia.Count;
         }
     }
 

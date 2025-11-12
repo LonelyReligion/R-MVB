@@ -12,9 +12,9 @@ namespace RMVB_konsola
 
         //override jest konieczne inaczej realizowana jest wersja z klasy bazowej
         //"Modyfikator override jest wymagany do rozszerzenia lub zmodyfikowania abstrakcyjnej lub wirtualnej implementacji dziedziczonej metody, właściwości, indeksatora lub zdarzenia."
-        public override void saveDevice(Urzadzenie device) {
-            base.saveDevice(device);
+        public override void saveDevice(Urzadzenie device, Kontekst ctx) {
             urzadzenia.Add(device);
+            base.saveDevice(device, ctx);
         }
     }
 }
