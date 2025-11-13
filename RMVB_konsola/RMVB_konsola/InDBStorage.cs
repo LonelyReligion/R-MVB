@@ -10,13 +10,20 @@ namespace RMVB_konsola
 {
     public class InDBStorage : TreeRepository
     {
+        public static Kontekst ctx;
+
         //nie abstract, bo ma ciało
         //virtual jest konieczne do tego, aby klasa Repo mogła ją napisać
         //"znacza to, że dana metoda może zostać nadpisana w klasie która dziedziczy po klasie w której jest ta metoda zdefiniowana"
-        public virtual void saveDevice(Urzadzenie device, Kontekst ctx)
+        public virtual void saveDevice(Urzadzenie device)
         {
             ctx.SaveChanges();
         }
+
+        public virtual void saveVersion(Wersja version) { 
+            ctx.SaveChanges();
+        }
+
         public void saveMeasurement(Pomiar measure)
         {
             using (var ctx = new Kontekst())

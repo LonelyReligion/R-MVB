@@ -31,7 +31,7 @@ namespace RMVB_konsola.MVB
             Psvo = psvo;
         }
 
-        internal void dodaj(Urzadzenie u)
+        internal void dodaj(Wersja u)
         {
             if (wpisy.Count() == 0)
             {
@@ -95,24 +95,24 @@ namespace RMVB_konsola.MVB
             return rozm_listy > Wezel.pojemnoscWezla * Psvo;
         }
 
-        internal void versionSplit(int numer_wezla, Urzadzenie u)
+        internal void versionSplit(int numer_wezla, Wersja u)
         {
             //version split
-            List<Urzadzenie> kopie = new List<Urzadzenie>();
+            List<Wersja> kopie = new List<Wersja>();
             if (u != null) kopie.Add(u);
             foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.urzadzenia)
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
                 { //kopiujemy zywe
-                    Urzadzenie kopia = new Urzadzenie(urzadzenie.Item1, (Repo)repo);
+                    Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo);
                     urzadzenie.Item2.dataWygasniecia = DateTime.Now;
                     kopia.dataOstatniejModyfikacji = DateTime.Now;
                     kopie.Add(kopia);
 
-                    repo.saveDevice(kopia, ctx);
+                    repo.saveVersion(kopia);
 
-                    ctx.Urzadzenia.Add(kopia);
-                    repo.saveDevice(kopia, ctx);
+                    ctx.Wersje.Add(kopia);
+                    repo.saveVersion(kopia);
                     
                 }
             }
@@ -141,7 +141,7 @@ namespace RMVB_konsola.MVB
         }
 
         //nietestowane
-        internal void keySplit(IEnumerable<Urzadzenie> kopie)
+        internal void keySplit(IEnumerable<Wersja> kopie)
         {
             var drugi_wezel = kopie.OrderBy(q => q.UrzadzenieID).Skip(kopie.ToList().Count/2);
             var pierwszy_wezel = kopie.Except(drugi_wezel);
@@ -151,9 +151,9 @@ namespace RMVB_konsola.MVB
         }
 
         //tworzy nowy wezel z datami (data utworzenia, max_data], dodaje do niego urzadzenia z listy, dodaje wezel do drzewa
-        internal void dodajZlisty(IEnumerable<Urzadzenie> lista) {
+        internal void dodajZlisty(IEnumerable<Wersja> lista) {
             Wezel nowy = new Wezel();
-            foreach (Urzadzenie urzadzenie in lista)
+            foreach (Wersja urzadzenie in lista)
             {
                 nowy.dodaj(urzadzenie);
             }
@@ -199,13 +199,13 @@ namespace RMVB_konsola.MVB
         }
 
         //dezaktywuj urzadzenie, usuwanie nie jest dostepne i potrzebne
-        internal void usun(Urzadzenie u)
+        internal void usun(Wersja u)
         {
             throw new NotImplementedException();
         }
 
         //szukaj id i wersji
-        internal Urzadzenie szukaj(int id, int v)
+        internal Wersja szukaj(int id, int v)
         {
             //binarysearch
             int dlugosc_listy = wpisy.Count;
@@ -222,7 +222,7 @@ namespace RMVB_konsola.MVB
                     for (int i = 0; i < wpisy_wezla.Count; i++) {
                         if (wpisy_wezla[i].Item1 == id)
                         {
-                            int wersja = wpisy_wezla[i].Item2.Wersja;
+                            int wersja = wpisy_wezla[i].Item2.WersjaID;
                             if (wersja == v) {
                                 return wpisy_wezla[i].Item2;
                             }
@@ -265,14 +265,14 @@ namespace RMVB_konsola.MVB
 
         //szukaj wersji aktualnej w danym momencie
         // [)[)
-        internal Urzadzenie szukaj(int id, DateTime dt)
+        internal Wersja szukaj(int id, DateTime dt)
         {
             //zastapic jakas wersja z binary search i stosem?
             for (int i = wpisy.Count - 1; i >= 0; i--) {
                 var wpis = wpisy[i].Item2;
                 if ((wpis.minData <= dt && wpis.maxData > dt) && (wpis.minKlucz <= id && wpis.maxKlucz >= id)) {
                     for (int j = 0; j < wpis.wezel.urzadzenia.Count(); j++) {
-                        (int index, Urzadzenie urzadzenie) = wpis.wezel.urzadzenia[j];
+                        (int index, Wersja urzadzenie) = wpis.wezel.urzadzenia[j];
                         if(index == id && urzadzenie.dataOstatniejModyfikacji <= dt && urzadzenie.dataWygasniecia > dt)
                             return urzadzenie;
                     }
@@ -284,13 +284,13 @@ namespace RMVB_konsola.MVB
         }
 
         //szukaj ostatniej wersji
-        internal Urzadzenie szukaj(int id)
+        internal Wersja szukaj(int id)
         {
             for (int i = wpisy.Count-1; i >= 0; i--) { //od tylu 
                 (int index, Wpis w) = wpisy[i];
                 if (w.minKlucz <= id && w.maxKlucz >= id) {
                     for (int j = w.wezel.urzadzenia.Count - 1; j >= 0; j--) {
-                        (int index_urzadzenia, Urzadzenie u) = w.wezel.urzadzenia[j];
+                        (int index_urzadzenia, Wersja u) = w.wezel.urzadzenia[j];
                         if (index_urzadzenia == id)
                             return u;
                     }
@@ -301,12 +301,12 @@ namespace RMVB_konsola.MVB
             return null;
         }
 
-        internal List<Urzadzenie> szukaj(DateTime poczatek, DateTime koniec)
+        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec)
         {
             if(poczatek == DateTime.MinValue && koniec==DateTime.MaxValue)
-                return ((Repo)repo).urzadzenia.ToList();
+                return ((Repo)repo).wersje.ToList();
 
-            List<Urzadzenie> wynikowa = new List<Urzadzenie>();
+            List<Wersja> wynikowa = new List<Wersja>();
             for (int i = 0; i < wpisy.Count; i++) {
                 Wpis wpis = wpisy[i].Item2;
                 if ((wpis.minData < poczatek && wpis.maxData < poczatek)||(wpis.minData >= koniec && wpis.maxData >= koniec))

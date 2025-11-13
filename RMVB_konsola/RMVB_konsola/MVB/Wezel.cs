@@ -13,14 +13,14 @@ namespace RMVB_konsola.MVB
         public static int pojemnoscWezla = 6;
 
         //moze samo urzadzenie atp
-        internal List<(int, Urzadzenie)> urzadzenia; //zmienic
+        internal List<(int, Wersja)> urzadzenia; //zmienic
         internal Wezel() { 
-            urzadzenia = new List<(int, Urzadzenie)> ();
+            urzadzenia = new List<(int, Wersja)> ();
             id = aktualne_id++;
         }
         
         //zwraca true jezeli sie zmiescilo, false jezeli block ov
-        internal bool dodaj(Urzadzenie u) {
+        internal bool dodaj(Wersja u) {
             if (urzadzenia.Count() < pojemnoscWezla) {
                 urzadzenia.Add((u.UrzadzenieID, u));
                 urzadzenia = urzadzenia.OrderBy(w => w.Item1).ToList();
@@ -42,7 +42,7 @@ namespace RMVB_konsola.MVB
                 List<String> wynikowy = new List<String>();
                 for (int i = 0; i < urzadzenia.Count; i++)
                 {
-                    wynikowy.Add("<" + (urzadzenia[i].Item1.ToString() + "v" + urzadzenia[i].Item2.Wersja.ToString()) + "," + urzadzenia[i].Item2.dataOstatniejModyfikacji.ToString() + "," + urzadzenia[i].Item2.dataWygasniecia.ToString() + ">");
+                    wynikowy.Add("<" + (urzadzenia[i].Item1.ToString() + "v" + urzadzenia[i].Item2.WersjaID.ToString()) + "," + urzadzenia[i].Item2.dataOstatniejModyfikacji.ToString() + "," + urzadzenia[i].Item2.dataWygasniecia.ToString() + ">");
                 }
                 int max = wynikowy.Max(x => x.Length);
                 String pozioma = "";
@@ -69,8 +69,8 @@ namespace RMVB_konsola.MVB
             return urzadzenia.Count < pojemnoscWezla * Psvu;
         }
 
-        public List<Urzadzenie> zwrocUrzadzenia() { 
-            List<Urzadzenie> output = new List<Urzadzenie>();
+        public List<Wersja> zwrocUrzadzenia() { 
+            List<Wersja> output = new List<Wersja>();
             foreach (var wpis in urzadzenia)
                 output.Add(wpis.Item2);
             return output;

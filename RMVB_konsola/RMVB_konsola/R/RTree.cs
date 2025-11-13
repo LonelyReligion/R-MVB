@@ -26,7 +26,7 @@ namespace RMVB_konsola.R
         public void Insert(Urzadzenie dev)
         {
             root.Insert(dev, new TreeWalker(this));
-            repository.saveDevice(dev, ctx);
+            repository.saveDevice(dev);
         }
 
         public void AddMeasure(int id, Pomiar p)

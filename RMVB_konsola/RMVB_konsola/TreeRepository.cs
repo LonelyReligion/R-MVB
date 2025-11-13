@@ -8,7 +8,8 @@ namespace RMVB_konsola.R
 {
     public interface TreeRepository
     {
-        void saveDevice(Urzadzenie device, Kontekst ctx);
+        void saveDevice(Urzadzenie device);
+        void saveVersion(Wersja version);
 
         void saveMeasurement(Pomiar measure);
 

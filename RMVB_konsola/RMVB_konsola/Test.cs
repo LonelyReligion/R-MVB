@@ -27,9 +27,9 @@ namespace RMVB_konsola
         //wyszukiwanie losowego urządzenia po dacie i id x ileRazy
         public void testDataId(int ileRazy)
         {
-            List<Urzadzenie> szukane_urzadzenia = new List<Urzadzenie>();
+/*            List<Urzadzenie> szukane_urzadzenia = new List<Urzadzenie>();
             for (int i = 0; i < ileRazy; i++) {
-                Urzadzenie losowe_urzadzenie = repo.urzadzenia.ElementAt(rnd.Next(repo.urzadzenia.Count - 1));
+                Urzadzenie losowe_urzadzenie = repo.urzadzenia.ElementAt(rnd.Next(repo.urzadzenia.Count - 1)).Value;
                 szukane_urzadzenia.Add(losowe_urzadzenie);
             }
 
@@ -58,12 +58,12 @@ namespace RMVB_konsola
                 szukane = mvb.szukaj(id, dt);
             }
             long czas_mvb = sw.ElapsedMilliseconds;
-            Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
+            Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");*/
         }
 
         //wyszukiwanie ostatniej wersji po id
         public void testId(int ileRazy) {
-            List<int> szukane_id = new List<int>();
+            /*List<int> szukane_id = new List<int>();
             for (int i = 0; i < ileRazy; i++)
             {
                 int losowe_urzadzenie = repo.urzadzenia.ElementAt(rnd.Next(repo.urzadzenia.Count - 1)).UrzadzenieID;
@@ -126,11 +126,11 @@ namespace RMVB_konsola
                 szukane = mvb.szukaj(id, v);
             }
             long czas_mvb = sw.ElapsedMilliseconds;
-            Console.WriteLine("MVB: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_mvb + " ms.");
+            Console.WriteLine("MVB: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_mvb + " ms.");*/
         }
 
         public void testDataData(int ileRazy) {
-            DateTime poczatek = ctx.Urzadzenia.OrderBy(u=>u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji.AddTicks(-10);
+           /* DateTime poczatek = ctx.Urzadzenia.OrderBy(u=>u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji.AddTicks(-10);
             DateTime koniec = ctx.Urzadzenia
                                 .OrderByDescending(u => u.dataWygasniecia)
                                 .Select(u => u.dataWygasniecia)
@@ -164,7 +164,7 @@ namespace RMVB_konsola
                                     .ToList();
                 foreach(var u in nieznalezione)
                     Console.WriteLine(u.UrzadzenieID + "v" + u.Wersja + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-            }
+            }*/
         }
     }
 }

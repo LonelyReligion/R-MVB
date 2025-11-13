@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RMVB_konsola.MVB
 {
-    internal class DrzewoMVB : Drzewo
+    internal class DrzewoMVB
     {
         double Pversion = 1.0/3;
         double Psvu = 1.0/3;
@@ -35,39 +35,39 @@ namespace RMVB_konsola.MVB
             }
         }
 
-        public void dodajUrzadzenie(Urzadzenie u) {
+        public void dodajUrzadzenie(Wersja u) {
             //w jakis sposob (na podstawie dat) wybieramy korzen
             var dk = desk[0].korzen;
             dk.dodaj(u);
         }
 
-        public void usunUrzadzenie(Urzadzenie testowe2)
+        public void usunUrzadzenie(Wersja testowe2)
         {
             var dk = desk[0].korzen;
             dk.usun(testowe2);
         }
 
         //szukaj id i wersji
-        internal Urzadzenie szukaj(int id, int v)
+        internal Wersja szukaj(int id, int v)
         {
             var dk = desk[0].korzen;
             return dk.szukaj(id, v);
         }
 
         //szukaj wersji aktualnej w danym momencie
-        internal Urzadzenie szukaj(int id, DateTime dt) {
+        internal Wersja szukaj(int id, DateTime dt) {
             var dk = desk[0].korzen;
             return dk.szukaj(id, dt);
         }
 
         //szukaj ostatniej wersji
-        internal Urzadzenie szukaj(int id) {
+        internal Wersja szukaj(int id) {
             var dk = desk[0].korzen;
             return dk.szukaj(id);
         }
 
         //zwraca wersje z danego skonczonego przedzialu czasowego
-        internal List<Urzadzenie> szukaj(DateTime poczatek, DateTime koniec) {
+        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) {
             var dk = desk[0].korzen;
             return dk.szukaj(poczatek, koniec); 
         }
