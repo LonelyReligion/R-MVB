@@ -29,6 +29,16 @@ namespace RMVB_konsola
             .Property(u => u.dataWygasniecia)
             .HasColumnType("datetime2");
 
+            //potrzebne żeby się skompilowało, i tak nie będziemy usuwać ¯\_(ツ)_/¯
+            modelBuilder.Entity<Wersja>()
+            .HasRequired(w => w.UrzadzenieRodzic)
+            .WithMany(u => u.Wersje)
+            .HasForeignKey(w => w.UrzadzenieID)
+            .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Wersja>()
+            .HasKey(w => new { w.WersjaID, w.UrzadzenieID });
+
             base.OnModelCreating(modelBuilder);
         }
     }

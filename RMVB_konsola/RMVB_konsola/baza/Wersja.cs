@@ -74,7 +74,7 @@ namespace RMVB_konsola
 
         public void dodajPomiar(Pomiar testowy)
         {
-            testowy.UrzadzeniaPomiarowe.Add(this);
+            testowy.WersjeUrzadzenia.Add(this);
             dataOstatniejModyfikacji = DateTime.Now;
         }
 

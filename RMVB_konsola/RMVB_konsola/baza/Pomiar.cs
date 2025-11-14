@@ -18,10 +18,9 @@ namespace RMVB_konsola
         public DateTime dtpomiaru { get; set; }
 
         //relacja wiele do wielu wynika z dodania wersji
-        public virtual ICollection<Wersja> UrzadzeniaPomiarowe { get; set; }
-
-        public Pomiar() { 
-            UrzadzeniaPomiarowe = new HashSet<Wersja>();
+        public virtual ICollection<Wersja> WersjeUrzadzenia { get; set; }
+        public Pomiar() {
+            WersjeUrzadzenia = new HashSet<Wersja>();
         }
     }
 }
