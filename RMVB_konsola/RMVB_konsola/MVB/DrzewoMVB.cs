@@ -22,7 +22,11 @@ namespace RMVB_konsola.MVB
 
         public DrzewoMVB(TreeRepository repo, Kontekst ctx)
         {
-            Korzen k = new Korzen(repo, Pversion, Psvu, Psvo);
+            Korzen k = new Korzen(repo, Pversion);
+
+            Wezel.Psvu = Psvu;
+            Wezel.Psvo = Psvo;
+
             desk.Add(new DeskryptorKorzenia(DateTime.Now, DateTime.MaxValue, k));
             this.Repo = repo;
             this.ctx = ctx;

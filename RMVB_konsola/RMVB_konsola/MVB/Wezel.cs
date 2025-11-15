@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +11,10 @@ namespace RMVB_konsola.MVB
     {
         static char aktualne_id = 'A';
         public char id;
+
         public static int pojemnoscWezla = 6;
+        public static double Psvu;
+        public static double Psvo;
 
         //moze samo urzadzenie atp
         internal List<(int, Wersja)> urzadzenia; //zmienic
@@ -59,14 +63,30 @@ namespace RMVB_konsola.MVB
             }
         }
 
-        internal bool strongVersionOverflow(double Psvo)
+        internal bool strongVersionOverflow()
         {
-            return urzadzenia.Count > pojemnoscWezla * Psvo;
+            return liczbaZywych() > pojemnoscWezla * Psvo;
         }
 
-        internal bool strongVersionUnderflow(double Psvu)
+        //"A strong version underflow occurs when the number of entries becomes lower than B x Psvu." 
+        internal bool strongVersionUnderflow()
         {
-            return urzadzenia.Count < pojemnoscWezla * Psvu;
+            return liczbaZywych() < pojemnoscWezla * Psvu;
+        }
+
+        internal bool weakVersionUnderFlow()
+        {
+            return liczbaZywych() < pojemnoscWezla * Psvu;
+        }
+
+        internal int liczbaZywych() 
+        { 
+            int output = 0;
+            foreach (var u in urzadzenia) {
+                if (u.Item2.Aktywne)
+                    output++;
+            }
+            return output;
         }
 
         public List<Wersja> zwrocUrzadzenia() { 
@@ -76,9 +96,15 @@ namespace RMVB_konsola.MVB
             return output;
         }
 
-        internal bool weakVersionUnderFlow()
+        internal List<Wersja> pobierzZyweUrzadzenia()
         {
-            throw new NotImplementedException();
+            List<Wersja> output = new List<Wersja>();
+            foreach (var u in urzadzenia)
+            {
+                if (u.Item2.Aktywne)
+                    output.Add(u.Item2);
+            }
+            return output;
         }
     }
 }

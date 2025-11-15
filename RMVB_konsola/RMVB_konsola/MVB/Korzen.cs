@@ -1,6 +1,8 @@
-﻿using RMVB_konsola.R;
+﻿using Microsoft.SqlServer.Server;
+using RMVB_konsola.R;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Numerics;
@@ -18,17 +20,13 @@ namespace RMVB_konsola.MVB
 
         //parametry drzewa, sa zdefiniowane w klasie drzewa
         static double Pversion;
-        static double Psvu;
-        static double Psvo;
 
-        internal Korzen(TreeRepository repo, double pversion, double psvu, double psvo)
+        internal Korzen(TreeRepository repo, double pversion)
         {
             wpisy = new List<(int, Wpis)>();
             this.repo = repo;
 
             Pversion = pversion;
-            Psvu = psvu;
-            Psvo = psvo;
         }
 
         internal void dodaj(Wersja u)
@@ -92,7 +90,7 @@ namespace RMVB_konsola.MVB
 
         //dla POTENCJALNEGO węzła
         internal bool strongVersionOverflow(int rozm_listy) {
-            return rozm_listy > Wezel.pojemnoscWezla * Psvo;
+            return rozm_listy > Wezel.pojemnoscWezla * Wezel.Psvo;
         }
 
         internal void versionSplit(int numer_wezla, Wersja u)
@@ -120,7 +118,6 @@ namespace RMVB_konsola.MVB
             var posortowanaLista = kopie.OrderBy(q => q.UrzadzenieID);
             
  
-
             wpisy[numer_wezla].Item2.maxData = DateTime.Now;
 
             //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
@@ -128,16 +125,33 @@ namespace RMVB_konsola.MVB
             {
                 keySplit(posortowanaLista);
             }
-/*            //nietestowane, czy to jest potrzebne? czy tylko przy usuwaniu logicznym
-            else if (wpisy.Last().Item2.wezel.strongVersionUnderflow(Psvu))
-            {
-                // u juz jest w wezle
-                versionSplit(wpisy.Last().Item1, null); //czy tu jest potencjalnie pętla?
-            }*/
             else
             {
-                dodajZlisty(posortowanaLista);
+                Wezel wynikowy = dodajZlisty(posortowanaLista);
+                //Strong version underflows are similar to weak version
+                //underflows, the only difference being that the former
+                //happen after a version split, while the latter occur when
+                //the weak version condition is violated.
+                if (wynikowy.strongVersionUnderflow()) //po version split w wezle 1 są same żywe czyli jest miejsce
+                {
+                    //a merge is attempted with the copy of a sibling node using only its live entries
+
+                    //dodalismy na koniec, wiec sąsiad to przedostatni węzeł
+                    //dodajemy same zywe wpisy z przedostatniego i zmieniamy daty obowiazywania wersji aż nie przedobrzymy, ale tym sie zajmuje .dodaj() ;)
+                    List<Wersja> dzieci_sasiada = wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia();
+                    foreach (Wersja zywe_urzadzenie in dzieci_sasiada) {
+                        wynikowy.dodaj(zywe_urzadzenie);
+                    }
+                }
             };
+        }
+        
+
+
+        private bool strongVersionUnderflow(int count)
+        {
+            //zalozenie -- w liscie sa same zywe
+            return count < Wezel.pojemnoscWezla * Wezel.Psvu;
         }
 
         //nietestowane
@@ -150,8 +164,9 @@ namespace RMVB_konsola.MVB
             dodajZlisty(drugi_wezel);
         }
 
+        //do używania tylko wewnątrz metody .dodaj() i .versionSplit()!
         //tworzy nowy wezel z datami (data utworzenia, max_data], dodaje do niego urzadzenia z listy, dodaje wezel do drzewa
-        internal void dodajZlisty(IEnumerable<Wersja> lista) {
+        private Wezel dodajZlisty(IEnumerable<Wersja> lista) {
             Wezel nowy = new Wezel();
             foreach (Wersja urzadzenie in lista)
             {
@@ -160,6 +175,7 @@ namespace RMVB_konsola.MVB
 
             //dodaj wpis
             wpisy.Add((wpisy.Count, new Wpis(lista.First().UrzadzenieID, lista.Last().UrzadzenieID, lista.OrderBy(q => q.dataOstatniejModyfikacji).First().dataOstatniejModyfikacji, lista.OrderBy(q => q.dataWygasniecia).Last().dataWygasniecia, nowy)));
+            return nowy;
         }
 
         internal void wypisz()
