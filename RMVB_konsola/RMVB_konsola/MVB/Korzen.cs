@@ -198,14 +198,26 @@ namespace RMVB_konsola.MVB
             }
         }
 
-        //dezaktywuj urzadzenie, usuwanie nie jest dostepne i potrzebne
+        //potrzebne sprawdzenie weakVersionUnderflow
         internal void usun(Wersja u)
         {
+            //dezaktywuj
+            u.dezaktywuj();
+
+            //znajdz wersje
+            Wezel wezel_zawierający = szukaj(u.UrzadzenieID, u.WersjaID).Item1;
+            //sprawdz warunek
+            if (wezel_zawierający.weakVersionUnderFlow())
+            {
+                //In both cases, a
+                //merge is attempted with the copy of a sibling node using
+                //only its live entries. 
+            }; 
             throw new NotImplementedException();
         }
 
         //szukaj id i wersji
-        internal Wersja szukaj(int id, int v)
+        internal (Wezel, Wersja) szukaj(int id, int v)
         {
             //binarysearch
             int dlugosc_listy = wpisy.Count;
@@ -224,7 +236,7 @@ namespace RMVB_konsola.MVB
                         {
                             int wersja = wpisy_wezla[i].Item2.WersjaID;
                             if (wersja == v) {
-                                return wpisy_wezla[i].Item2;
+                                return (w.wezel, wpisy_wezla[i].Item2);
                             }
                             najwyzsza_wersja = wersja;
                         }
@@ -260,7 +272,7 @@ namespace RMVB_konsola.MVB
             }
 
             Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
-            return null; //nie znaleziono
+            return (null, null); //nie znaleziono
         }
 
         //szukaj wersji aktualnej w danym momencie

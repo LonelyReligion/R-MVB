@@ -75,5 +75,10 @@ namespace RMVB_konsola.MVB
                 output.Add(wpis.Item2);
             return output;
         }
+
+        internal bool weakVersionUnderFlow()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

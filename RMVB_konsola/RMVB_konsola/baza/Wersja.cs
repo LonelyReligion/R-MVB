@@ -49,7 +49,9 @@ namespace RMVB_konsola
             ustalWersje(this.UrzadzenieID, repo);
         }
 
-        public void dezaktywuj()
+        //przetestowac, ograniczyc
+        //nie używać bezpośrednio!! tylko poprzez mvb
+        internal void dezaktywuj()
         {
             this.Aktywne = false;
             dataWygasniecia = DateTime.Now;

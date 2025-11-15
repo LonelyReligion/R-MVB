@@ -37,12 +37,12 @@ repo.saveVersion(alfa);
 // Urzadzenie 0v1
 Wersja beta = new Wersja(alfa, (Repo)repo);
 beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, ale zachowujemy go w bazie
+mvb.dodajUrzadzenie(beta); //musi zostac zapisana najpierw
+mvb.usunUrzadzenie(beta); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
 repo.saveVersion(beta);
 //
 
 /*
-//testowe2.dezaktywuj();
-//mvb.usunUrzadzenie(testowe2); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
 
 for (int i = 0; i < 8; i++)
 {
