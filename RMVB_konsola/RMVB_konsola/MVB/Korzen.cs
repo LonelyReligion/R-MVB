@@ -16,7 +16,7 @@ namespace RMVB_konsola.MVB
         public static Kontekst ctx;
         TreeRepository repo;
 
-        List<(int, Wpis)> wpisy;
+        List<(int, Wpis)> wpisy; //po to zeby mozna bylo znalezc ostatni wezel szybko np.
 
         //parametry drzewa, sa zdefiniowane w klasie drzewa
         static double Pversion;
@@ -92,6 +92,11 @@ namespace RMVB_konsola.MVB
         internal bool strongVersionOverflow(int rozm_listy) {
             return rozm_listy > Wezel.pojemnoscWezla * Wezel.Psvo;
         }
+        private bool strongVersionUnderflow(int count)
+        {
+            //zalozenie -- w liscie sa same zywe
+            return count < Wezel.pojemnoscWezla * Wezel.Psvu;
+        }
 
         internal void versionSplit(int numer_wezla, Wersja u)
         {
@@ -127,33 +132,55 @@ namespace RMVB_konsola.MVB
             }
             else
             {
-                Wezel wynikowy = dodajZlisty(posortowanaLista);
                 //Strong version underflows are similar to weak version
                 //underflows, the only difference being that the former
                 //happen after a version split, while the latter occur when
                 //the weak version condition is violated.
-                if (wynikowy.strongVersionUnderflow()) //po version split w wezle 1 są same żywe czyli jest miejsce
+                if (strongVersionUnderflow(posortowanaLista.Count())) //po version split w wezle 1 są same żywe czyli jest miejsce
                 {
                     //a merge is attempted with the copy of a sibling node using only its live entries
 
                     //dodalismy na koniec, wiec sąsiad to przedostatni węzeł
                     //dodajemy same zywe wpisy z przedostatniego i zmieniamy daty obowiazywania wersji aż nie przedobrzymy, ale tym sie zajmuje .dodaj() ;)
                     List<Wersja> dzieci_sasiada = wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia();
-                    foreach (Wersja zywe_urzadzenie in dzieci_sasiada) {
-                        wynikowy.dodaj(zywe_urzadzenie);
+
+                    List<Wersja> zywe = new List<Wersja>(); //zawiera zywe
+                    foreach (var urzadzenie in dzieci_sasiada.Concat(kopie))
+                    {
+                        if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
+                        { //kopiujemy zywe
+                            Wersja kopia = new Wersja(urzadzenie, (Repo)repo);
+                            urzadzenie.dataWygasniecia = DateTime.Now;
+                            kopia.dataOstatniejModyfikacji = DateTime.Now;
+                            kopie.Add(kopia);
+
+                            repo.saveVersion(kopia);
+
+                            ctx.Wersje.Add(kopia);
+                            repo.saveVersion(kopia);
+
+                        }
                     }
+
+                    //posortuj liste po id 
+                    var posortowaneZywe = zywe.OrderBy(q => q.UrzadzenieID);
+
+                    this.wpisy[wpisy.Count - 2].Item2.maxData = DateTime.Now;
+
+                    //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
+                    if (strongVersionOverflow(posortowaneZywe.ToList().Count))
+                    {
+                        keySplit(posortowaneZywe);
+                    }
+                    else
+                    {
+                        //a jezeli dalej underflow no to chyba juz trudno? innego sasiada nie ma
+                        dodajZlisty(posortowaneZywe);
+                    };
                 }
             };
         }
         
-
-
-        private bool strongVersionUnderflow(int count)
-        {
-            //zalozenie -- w liscie sa same zywe
-            return count < Wezel.pojemnoscWezla * Wezel.Psvu;
-        }
-
         //nietestowane
         internal void keySplit(IEnumerable<Wersja> kopie)
         {
@@ -223,13 +250,51 @@ namespace RMVB_konsola.MVB
             //znajdz wersje
             Wezel wezel_zawierający = szukaj(u.UrzadzenieID, u.WersjaID).Item1;
             //sprawdz warunek
-            if (wezel_zawierający.weakVersionUnderFlow())
+            if (wezel_zawierający.weakVersionUnderFlow() && this.wpisy.Count != 1 /*musi miec sasiada*/)
             {
                 //In both cases, a
                 //merge is attempted with the copy of a sibling node using
                 //only its live entries. 
+                Wezel sasiad;
+                if (this.wpisy.Count > wezel_zawierający.id + 1)
+                    sasiad = this.wpisy[wezel_zawierający.id - 65 + 1].Item2.wezel;
+                else
+                    sasiad = this.wpisy[wezel_zawierający.id - 65 - 1].Item2.wezel;
+
+                List<Wersja> kopie = new List<Wersja>(); //zawiera zywe
+                foreach (var urzadzenie in wezel_zawierający.urzadzenia.Concat(sasiad.urzadzenia))
+                {
+                    if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
+                    { //kopiujemy zywe
+                        Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo);
+                        urzadzenie.Item2.dataWygasniecia = DateTime.Now;
+                        kopia.dataOstatniejModyfikacji = DateTime.Now;
+                        kopie.Add(kopia);
+
+                        repo.saveVersion(kopia);
+
+                        ctx.Wersje.Add(kopia);
+                        repo.saveVersion(kopia);
+
+                    }
+                }
+
+                //posortuj liste po id 
+                var posortowanaLista = kopie.OrderBy(q => q.UrzadzenieID);
+
+                this.wpisy[wezel_zawierający.id - 65].Item2.maxData = DateTime.Now;
+                this.wpisy[sasiad.id - 65].Item2.maxData = DateTime.Now;
+
+                //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
+                if (strongVersionOverflow(posortowanaLista.ToList().Count))
+                {
+                    keySplit(posortowanaLista);
+                }
+                else
+                {
+                    dodajZlisty(posortowanaLista);
+                };
             }; 
-            throw new NotImplementedException();
         }
 
         //szukaj id i wersji

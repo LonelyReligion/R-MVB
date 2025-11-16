@@ -9,8 +9,9 @@ namespace RMVB_konsola.MVB
 {
     internal class Wezel
     {
+        //A to 65
         static char aktualne_id = 'A';
-        public char id;
+        public char id; //do wyswietlania, ale i wyszukiwania sasiada
 
         public static int pojemnoscWezla = 6;
         public static double Psvu;

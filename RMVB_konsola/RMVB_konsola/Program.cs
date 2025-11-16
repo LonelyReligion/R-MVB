@@ -4,6 +4,10 @@ using RMVB_konsola.R;
 
 using System.Diagnostics;
 
+char a = 'A';
+int rzut_a = (int)a;
+Console.WriteLine(a + " to tak naprawdę " + rzut_a);
+
 //jak zasymulować szybszy upływ czasu?
 Kontekst ctx = new Kontekst();
 Wersja.ctx = ctx;
