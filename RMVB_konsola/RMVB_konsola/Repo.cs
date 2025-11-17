@@ -11,8 +11,8 @@ namespace RMVB_konsola
 
         //zmienic na przechowywanie samych id urzadzen i wersji
         //list, bo często sięgamy do ostatniego (największego) elementu
-        public Dictionary<int, List<Wersja>> urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
-        public Dictionary<int, Urzadzenie> urzadzenia = new Dictionary<int, Urzadzenie>();
+        private Dictionary<int, List<Wersja>> urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
+        private Dictionary<int, Urzadzenie> urzadzenia = new Dictionary<int, Urzadzenie>();
         //do zwrocenia wszystkich
         public List<Wersja> wersje = new List<Wersja>();
 
@@ -32,6 +32,28 @@ namespace RMVB_konsola
             urzadzenia_wersje[v.UrzadzenieID].Add(v);
             wersje.Add(v);
             base.saveVersion(v);
+        }
+
+        public bool czyUrzadzenieIstnieje(int UrzadzenieID) {
+            return urzadzenia.ContainsKey(UrzadzenieID);
+        }
+
+        public bool czyWersjaIstnieje(int UrzadzenieID, int WersjaID) {
+            if (!urzadzenia.ContainsKey(UrzadzenieID))
+                return false;
+            else 
+                foreach (Wersja w in urzadzenia_wersje[UrzadzenieID]) 
+                    if(w.WersjaID == WersjaID)
+                        return  true;
+            return false;
+        }
+
+        public Dictionary<int, List<Wersja>> pobierzUrzadzeniaWersje() {
+            return urzadzenia_wersje;
+        }
+
+        public Dictionary<int, Urzadzenie> pobierzUrzadzenia() {
+            return urzadzenia;
         }
     }
 }

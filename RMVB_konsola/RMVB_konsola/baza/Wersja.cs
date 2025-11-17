@@ -32,6 +32,16 @@ namespace RMVB_konsola
             repo = r;
         }
 
+        public Wersja(int UrzadzenieID, Repo r)
+        {
+            Pomiary = new HashSet<Pomiar>();
+            dataOstatniejModyfikacji = DateTime.Now;
+            dataWygasniecia = DateTime.MaxValue;
+            Aktywne = true;
+            repo = r;
+            ustalWersje(this.UrzadzenieID, repo);
+        }
+
         //czy istnieje taki przypadek
         protected Wersja(DateTime start, DateTime koniec, Repo r) : this(r)
         {
@@ -59,7 +69,7 @@ namespace RMVB_konsola
 
         private void ustalWersje(int UrzadzenieID, Repo repo)
         {
-            var wersje = repo.urzadzenia_wersje[UrzadzenieID];
+            var wersje = repo.pobierzUrzadzeniaWersje()[UrzadzenieID];
             if (!wersje.Any())
             {
                 this.WersjaID = 0;

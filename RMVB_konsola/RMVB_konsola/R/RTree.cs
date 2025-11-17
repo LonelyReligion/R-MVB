@@ -31,7 +31,7 @@ namespace RMVB_konsola.R
 
         public void AddMeasure(int id, Pomiar p)
         {
-            Urzadzenie dev = repository.urzadzenia[id];
+            Urzadzenie dev = repository.pobierzUrzadzenia()[id];
             if (dev != null)
             {
                 dev.AddMeasure(p, repository);
@@ -40,7 +40,7 @@ namespace RMVB_konsola.R
 
         public void AddMeasure(int ix, DateTime t, Decimal v)
         {
-            Urzadzenie dev = repository.urzadzenia[ix];
+            Urzadzenie dev = repository.pobierzUrzadzenia()[ix];
             if (dev != null)
             {
                 dev.AddMeasure(t, v, repository);
@@ -110,7 +110,7 @@ namespace RMVB_konsola.R
 
         public int GtDeviceCout()
         {
-            return repository.urzadzenia.Count;
+            return repository.pobierzUrzadzenia().Count;
         }
     }
 
