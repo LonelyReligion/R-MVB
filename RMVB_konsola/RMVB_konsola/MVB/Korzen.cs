@@ -2,6 +2,7 @@
 using RMVB_konsola.R;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Diagnostics.Metrics;
 using System.Drawing.Printing;
 using System.Linq;
@@ -103,20 +104,16 @@ namespace RMVB_konsola.MVB
             //version split
             List<Wersja> kopie = new List<Wersja>();
             if (u != null) kopie.Add(u);
-            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.urzadzenia)
+            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.urzadzenia) 
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
                 { //kopiujemy zywe
-                    Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo);
+                    Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo); 
                     urzadzenie.Item2.dataWygasniecia = DateTime.Now;
                     kopia.dataOstatniejModyfikacji = DateTime.Now;
                     kopie.Add(kopia);
 
-                    repo.saveVersion(kopia);
-
-                    ctx.Wersje.Add(kopia);
-                    repo.saveVersion(kopia);
-                    
+                    repo.saveVersion(kopia); 
                 }
             }
             //posortuj liste po id 
@@ -178,7 +175,11 @@ namespace RMVB_konsola.MVB
                         dodajZlisty(posortowaneZywe);
                     };
                 }
-            };
+                else
+                {
+                    dodajZlisty(posortowanaLista);
+                }; ;
+            }
         }
         
         //nietestowane

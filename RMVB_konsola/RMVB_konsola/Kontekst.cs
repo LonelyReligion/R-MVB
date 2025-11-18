@@ -37,7 +37,7 @@ namespace RMVB_konsola
             .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Wersja>()
-            .HasKey(w => new { w.WersjaID, w.UrzadzenieID });
+            .HasKey(w => new { w.UrzadzenieID, w.WersjaID });
 
             base.OnModelCreating(modelBuilder);
         }

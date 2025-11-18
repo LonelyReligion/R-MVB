@@ -55,7 +55,7 @@ for (int i = 0; i < 8; i++)
     Wersja tmp = new Wersja(id, (Repo)repo);
 
     mvb.dodajUrzadzenie(tmp);
-
+    repo.saveVersion(tmp);
 }
 
 mvb.wypiszDrzewo();

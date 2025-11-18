@@ -32,14 +32,18 @@ namespace RMVB_konsola
             repo = r;
         }
 
-        public Wersja(int UrzadzenieID, Repo r)
+        public Wersja(int UrzadzenieID, Repo r) : this(r)
         {
-            Pomiary = new HashSet<Pomiar>();
-            dataOstatniejModyfikacji = DateTime.Now;
-            dataWygasniecia = DateTime.MaxValue;
-            Aktywne = true;
-            repo = r;
-            ustalWersje(this.UrzadzenieID, repo);
+            this.UrzadzenieID = UrzadzenieID;
+            if (r.czyUrzadzenieIstnieje(UrzadzenieID) && r.pobierzUrzadzeniaWersje()[UrzadzenieID].Count() != 0)
+            {
+                Wersja w = r.pobierzUrzadzeniaWersje()[UrzadzenieID].Last();
+                foreach (var element in w.Pomiary)
+                    this.Pomiary.Add(element);
+                dataOstatniejModyfikacji = w.dataWygasniecia;
+                dataWygasniecia = DateTime.MaxValue;
+                ustalWersje(this.UrzadzenieID, r);
+            }
         }
 
         //czy istnieje taki przypadek
@@ -52,6 +56,7 @@ namespace RMVB_konsola
 
         //konstruktor kopiujący
         public Wersja(Wersja w, Repo r) : this(r) {
+            this.UrzadzenieID = w.UrzadzenieID;
             foreach (var element in w.Pomiary)
                 this.Pomiary.Add(element);
             dataOstatniejModyfikacji = w.dataWygasniecia;
