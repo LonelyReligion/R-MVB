@@ -10,10 +10,11 @@ namespace RMVB_konsola
     public class Wersja
     {
         public static Kontekst ctx;
-        public int WersjaID { get; set; }
         [ForeignKey("UrzadzenieRodzic")]
         public int UrzadzenieID { get; set; }
 
+        public int WersjaID { get; set; }
+        
         public bool Aktywne { get; set; }
         public DateTime dataOstatniejModyfikacji { get; set; }
         public DateTime dataWygasniecia { get; set; }
@@ -24,11 +25,16 @@ namespace RMVB_konsola
 
         private Repo repo;
 
-        public Wersja(Repo r) {
+        //potrzebne do firstordefualt
+        public Wersja() 
+        {
             Pomiary = new HashSet<Pomiar>();
             dataOstatniejModyfikacji = DateTime.Now;
             dataWygasniecia = DateTime.MaxValue;
             Aktywne = true;
+        }
+        public Wersja(Repo r) : this()
+        {
             repo = r;
         }
 

@@ -27,24 +27,24 @@ namespace RMVB_konsola
         //wyszukiwanie losowego urządzenia po dacie i id x ileRazy
         public void testDataId(int ileRazy)
         {
-/*            List<Urzadzenie> szukane_urzadzenia = new List<Urzadzenie>();
+            List<Wersja> szukane_wersje = new List<Wersja>();
             for (int i = 0; i < ileRazy; i++) {
-                Urzadzenie losowe_urzadzenie = repo.urzadzenia.ElementAt(rnd.Next(repo.urzadzenia.Count - 1)).Value;
-                szukane_urzadzenia.Add(losowe_urzadzenie);
+                Wersja losowa_wersja = repo.wersje.ElementAt(rnd.Next(repo.wersje.Count - 1));
+                szukane_wersje.Add(losowa_wersja);
             }
 
-            Urzadzenie? szukane = null;
+            Wersja? szukana = null;
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++) {
-                int id = szukane_urzadzenia[i].UrzadzenieID;
-                DateTime dt = szukane_urzadzenia[i].dataOstatniejModyfikacji;
-                szukane = ctx.Urzadzenia
+                int id = szukane_wersje[i].UrzadzenieID;
+                DateTime dt = szukane_wersje[i].dataOstatniejModyfikacji;
+                szukana = ctx.Wersje
                     .AsNoTracking()
                     .Where(u => u.dataOstatniejModyfikacji <= dt)
                     .Where(u => u.dataWygasniecia > dt)
                     .Where(u => u.UrzadzenieID == id)
                     .FirstOrDefault(); //czasami nie dziala:/
-                if (szukane == null)
+                if (szukana == null)
                     Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
             }
             long czas_baza = sw.ElapsedMilliseconds;
@@ -53,12 +53,14 @@ namespace RMVB_konsola
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++)
             {
-                int id = szukane_urzadzenia[i].UrzadzenieID;
-                DateTime dt =  szukane_urzadzenia[i].dataOstatniejModyfikacji;
-                szukane = mvb.szukaj(id, dt);
+                int id = szukane_wersje[i].UrzadzenieID;
+                DateTime dt =  szukane_wersje[i].dataOstatniejModyfikacji;
+                szukana = mvb.szukaj(id, dt);
+                if (szukana == null)
+                    Console.WriteLine("Uwaga: MVB nie odnalazlo rekordu.");
             }
             long czas_mvb = sw.ElapsedMilliseconds;
-            Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");*/
+            Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
         }
 
         //wyszukiwanie ostatniej wersji po id
