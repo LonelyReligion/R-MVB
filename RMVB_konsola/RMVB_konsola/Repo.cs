@@ -14,7 +14,7 @@ namespace RMVB_konsola
         private Dictionary<int, List<Wersja>> urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
         private Dictionary<int, Urzadzenie> urzadzenia = new Dictionary<int, Urzadzenie>();
         //do zwrocenia wszystkich
-        public List<Wersja> wersje = new List<Wersja>();
+        private List<Wersja> wersje = new List<Wersja>();
 
         public static Kontekst ctx;
 
@@ -54,6 +54,10 @@ namespace RMVB_konsola
 
         public Dictionary<int, Urzadzenie> pobierzUrzadzenia() {
             return urzadzenia;
+        }
+
+        public List<Wersja> pobierzWersje() {
+            return wersje;
         }
     }
 }

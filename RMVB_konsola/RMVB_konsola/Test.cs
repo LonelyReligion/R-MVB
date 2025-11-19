@@ -10,6 +10,7 @@ using System.Data;
 using System.Collections;
 using RMVB_konsola.R;
 
+//singleton?
 namespace RMVB_konsola
 {
     //singleton?
@@ -23,15 +24,26 @@ namespace RMVB_konsola
         internal Random rnd = new Random();
 
         //konstruktor z polami statycznymi
+        public Test(Repo r, Kontekst c, DrzewoMVB m) {
+            repo = r;
+            ctx = c;
+            mvb = m;
+        }
+
+        private List<Wersja> wylosujWersje(int ile) {
+            List<Wersja> szukane_wersje = new List<Wersja>();
+            for (int i = 0; i < ile; i++)
+            {
+                Wersja losowa_wersja = repo.pobierzWersje().ElementAt(rnd.Next(repo.pobierzWersje().Count - 1));
+                szukane_wersje.Add(losowa_wersja);
+            }
+            return szukane_wersje;
+        }
 
         //wyszukiwanie losowego urządzenia po dacie i id x ileRazy
         public void testDataId(int ileRazy)
         {
-            List<Wersja> szukane_wersje = new List<Wersja>();
-            for (int i = 0; i < ileRazy; i++) {
-                Wersja losowa_wersja = repo.wersje.ElementAt(rnd.Next(repo.wersje.Count - 1));
-                szukane_wersje.Add(losowa_wersja);
-            }
+            List<Wersja> szukane_wersje = wylosujWersje(ileRazy);
 
             Wersja? szukana = null;
             sw = Stopwatch.StartNew();
@@ -63,38 +75,49 @@ namespace RMVB_konsola
             Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
         }
 
-        //wyszukiwanie ostatniej wersji po id
-        public void testId(int ileRazy) {
-            /*List<int> szukane_id = new List<int>();
-            for (int i = 0; i < ileRazy; i++)
+        private List<int> wylosujIdUrzadzen(int ile) {
+            List<int> szukane_id = new List<int>();
+            for (int i = 0; i < ile; i++)
             {
-                int losowe_urzadzenie = repo.urzadzenia.ElementAt(rnd.Next(repo.urzadzenia.Count - 1)).UrzadzenieID;
+                int losowe_urzadzenie = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Key;
                 szukane_id.Add(losowe_urzadzenie);
             }
+            return szukane_id;
+        }
 
-            Urzadzenie? szukane = null;
+        //wyszukiwanie ostatniej wersji po id
+        public void testId(int ileRazy) {
+            List<int> szukane_id = wylosujIdUrzadzen(ileRazy);
+
+            Wersja? szukana = null;
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++) {
                 int id = szukane_id[i];
-                szukane = ctx.Urzadzenia
+                szukana = ctx.Wersje
                     .AsNoTracking() //nie uzywamy zbuforowanych (wynikow poprzednich wykonan)
                     .Where(u => u.UrzadzenieID == id)
-                    .OrderByDescending(u => u.Wersja)
+                    .OrderByDescending(u => u.WersjaID)
                     .FirstOrDefault();
-                if (szukane == null)
+                if (szukana == null)
                     Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
             }
             long czas_baza = sw.ElapsedMilliseconds;
             Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++)
-                szukane = mvb.szukaj(szukane_id[i]);
+            {
+                szukana = mvb.szukaj(szukane_id[i]);
+                if (szukana == null)
+                    Console.WriteLine("Uwaga: MVB nie odnalazlo rekordu.");
+            }
             long czas_mvb = sw.ElapsedMilliseconds;
             Console.WriteLine("MVB w czasie: " + czas_mvb + " ms.");
+            
         }
 
         //wyszukiwanie po id i wersji
         public void testIdV(int ileRazy) {
+            /*
             List<(int, int)> szukane_id_v = new List<(int, int)>();
             for (int i = 0; i < ileRazy; i++)
             {

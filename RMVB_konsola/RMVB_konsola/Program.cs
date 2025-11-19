@@ -61,18 +61,16 @@ for (int i = 0; i < 8; i++)
 mvb.wypiszDrzewo();
 
 
-Test.ctx = ctx;
-Test.repo = (Repo)repo;
-Test.mvb = mvb;
-Test jednostka_testujaca = new Test();
+Test jednostka_testujaca = new Test((Repo)repo, ctx, mvb);
 
 Console.WriteLine("Wyszukiwanie po dacie i id");
 jednostka_testujaca.testDataId(10);
 
-/*
+
 Console.WriteLine("\nWyszukiwanie po id");
 jednostka_testujaca.testId(10);
 
+/*
 Console.WriteLine("\nWyszukiwanie po id i wersji");
 jednostka_testujaca.testIdV(10);
 

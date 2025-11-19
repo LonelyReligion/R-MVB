@@ -398,7 +398,7 @@ namespace RMVB_konsola.MVB
         internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec)
         {
             if(poczatek == DateTime.MinValue && koniec==DateTime.MaxValue)
-                return ((Repo)repo).wersje.ToList();
+                return ((Repo)repo).pobierzWersje().ToList();
 
             List<Wersja> wynikowa = new List<Wersja>();
             for (int i = 0; i < wpisy.Count; i++) {
