@@ -158,8 +158,8 @@ namespace RMVB_konsola
         }
 
         public void testDataData(int ileRazy) {
-           /* DateTime poczatek = ctx.Urzadzenia.OrderBy(u=>u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji.AddTicks(-10);
-            DateTime koniec = ctx.Urzadzenia
+            DateTime poczatek = ctx.Wersje.OrderBy(u=>u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji.AddTicks(-10);
+            DateTime koniec = ctx.Wersje
                                 .OrderByDescending(u => u.dataWygasniecia)
                                 .Select(u => u.dataWygasniecia)
                                 .First();
@@ -167,32 +167,32 @@ namespace RMVB_konsola
             List<DateTime> randos = new List<DateTime>();
             randos.Add(poczatek.AddTicks(rnd.Next(range)));
 
-            var szukane_urzadzenia = new List<Urzadzenie>();
-            var szukane_urzadzenia_mvb = new List<Urzadzenie>();
+            var szukane_wersje = new List<Wersja>();
+            var szukane_wersje_mvb = new List<Wersja>();
 
             //Console.WriteLine(poczatek.Ticks + "-" + koniec.Ticks);
             sw = Stopwatch.StartNew();
             for(int i = 0; i < ileRazy; i++)
-                szukane_urzadzenia = ctx.Urzadzenia.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList();
+                szukane_wersje = ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList();
             long czas_baza = sw.ElapsedMilliseconds;
-            Console.WriteLine("Baza: " + szukane_urzadzenia.Count + " w czasie: " + czas_baza + " ms.");
+            Console.WriteLine("Baza: " + szukane_wersje.Count + " w czasie: " + czas_baza + " ms.");
             
             sw = Stopwatch.StartNew();
-            szukane_urzadzenia_mvb = mvb.szukaj(poczatek, koniec);
+            szukane_wersje_mvb = mvb.szukaj(poczatek, koniec);
             long czas_mvb = sw.ElapsedMilliseconds;
-            Console.WriteLine("MVB: " + szukane_urzadzenia_mvb.Count + " w czasie: " + czas_mvb + " ms.");
+            Console.WriteLine("MVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
 
-            if (szukane_urzadzenia.Count != szukane_urzadzenia_mvb.Count)
+            if (szukane_wersje.Count != szukane_wersje_mvb.Count)
             {
                 //except nie zadziala
-                var nieznalezione = szukane_urzadzenia
-                                    .Where(d => !szukane_urzadzenia_mvb.Any(mvb =>
+                var nieznalezione = szukane_wersje
+                                    .Where(d => !szukane_wersje_mvb.Any(mvb =>
                                         mvb.UrzadzenieID == d.UrzadzenieID &&
-                                        mvb.Wersja == d.Wersja))
+                                        mvb.WersjaID == d.WersjaID))
                                     .ToList();
                 foreach(var u in nieznalezione)
-                    Console.WriteLine(u.UrzadzenieID + "v" + u.Wersja + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-            }*/
+                    Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+            }
         }
     }
 }

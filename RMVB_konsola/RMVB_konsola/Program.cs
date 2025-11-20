@@ -74,8 +74,8 @@ jednostka_testujaca.testId(10);
 Console.WriteLine("\nWyszukiwanie po id i wersji");
 jednostka_testujaca.testIdV(10);
 
-/*
+
 Console.WriteLine("\nWyszukiwanie po dacie i dacie");
 jednostka_testujaca.testDataData(10);
-*/
+
 ctx.Dispose();
