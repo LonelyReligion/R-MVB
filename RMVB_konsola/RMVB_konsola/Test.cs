@@ -117,41 +117,44 @@ namespace RMVB_konsola
 
         //wyszukiwanie po id i wersji
         public void testIdV(int ileRazy) {
-            /*
+            
             List<(int, int)> szukane_id_v = new List<(int, int)>();
             for (int i = 0; i < ileRazy; i++)
             {
-                Urzadzenie losowe_urzadzenie = repo.urzadzenia.ElementAt(rnd.Next(repo.urzadzenia.Count - 1));
-                szukane_id_v.Add((losowe_urzadzenie.UrzadzenieID, losowe_urzadzenie.Wersja));
+                int lodowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
+                int losowa_wersja_id = repo.pobierzUrzadzeniaWersje().ElementAt(lodowe_urzadzenie_id).Value.ElementAt(rnd.Next(repo.pobierzUrzadzeniaWersje().ElementAt(lodowe_urzadzenie_id).Value.Count - 1)).WersjaID;
+                szukane_id_v.Add((lodowe_urzadzenie_id, losowa_wersja_id));
             }
-
-            Urzadzenie? szukane = null;
+            //>
+            Wersja? szukana = null;
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++)
             {
                 int id = szukane_id_v[i].Item1;
                 int v = szukane_id_v[i].Item2;
 
-                szukane = ctx.Urzadzenia
+                szukana = ctx.Wersje
                 .AsNoTracking()
-                .FirstOrDefault(u => u.UrzadzenieID == id && u.Wersja == v);
+                .FirstOrDefault(u => u.UrzadzenieID == id && u.WersjaID == v);
 
-                if (szukane == null)
+                if (szukana == null)
                     Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
             }
 
             long czas_baza = sw.ElapsedMilliseconds;
-            Console.WriteLine("Baza: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_baza + " ms.");
+            Console.WriteLine("Baza: " + szukana.UrzadzenieID + "v" + szukana.WersjaID + " w czasie: " + czas_baza + " ms.");
 
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++)
             {
                 int id = szukane_id_v[i].Item1;
                 int v = szukane_id_v[i].Item2;
-                szukane = mvb.szukaj(id, v);
+                szukana = mvb.szukaj(id, v);
+                if (szukana == null)
+                    Console.WriteLine("Uwaga: MVB nie odnalazlo rekordu.");
             }
             long czas_mvb = sw.ElapsedMilliseconds;
-            Console.WriteLine("MVB: " + szukane.UrzadzenieID + "v" + szukane.Wersja + " w czasie: " + czas_mvb + " ms.");*/
+            Console.WriteLine("MVB: " + szukana.UrzadzenieID + "v" + szukana.WersjaID + " w czasie: " + czas_mvb + " ms.");
         }
 
         public void testDataData(int ileRazy) {
