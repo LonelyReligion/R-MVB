@@ -28,15 +28,18 @@ testowy.dtpomiaru = DateTime.Now;
 Wersja alfa = new Wersja((Repo)repo);
 alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
 alfa.dodajPomiar(testowy);
-mvb.dodajUrzadzenie(alfa);
+
 repo.saveDevice(testowe);
 ctx.Pomiary.Add(testowy);
+
+mvb.dodajUrzadzenie(alfa);
 repo.saveVersion(alfa);
 ///
 
 // Urzadzenie 0v1
 Wersja beta = new Wersja(alfa, (Repo)repo); //to deazktywuje alfe
 beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, ale zachowujemy go w bazie
+
 mvb.dodajUrzadzenie(beta); //musi zostac zapisana najpierw
 mvb.usunUrzadzenie(beta); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
 repo.saveVersion(beta);
