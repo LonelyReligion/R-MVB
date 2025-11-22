@@ -10,34 +10,27 @@ Wersja.ctx = ctx;
 InDBStorage.ctx = ctx;
 Repo.ctx = ctx;
 
-TreeRepository repo = new Repo();
-DrzewoMVB mvb = new DrzewoMVB(repo, ctx);
-
-// WIP
-RTree rtree = new RTree((Repo)repo, ctx);
-//
+RMVB rmvb = new RMVB(ctx);
 
 Urzadzenie.ctx = ctx;
 Korzen.ctx = ctx;
 
 // Urzadzenie 0v0
-Urzadzenie testowe = new Urzadzenie(0, (Repo)repo);
+Urzadzenie testowe = new Urzadzenie(0, rmvb.zwrocRepo());
 Pomiar testowy = new Pomiar();
 testowy.Wartosc = 0;
 testowy.dtpomiaru = DateTime.Now;
-Wersja alfa = new Wersja((Repo)repo);
+Wersja alfa = new Wersja(rmvb.zwrocRepo());
 alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
 alfa.dodajPomiar(testowy);
 
-repo.saveDevice(testowe);
-ctx.Pomiary.Add(testowy);
-
-mvb.dodajUrzadzenie(alfa);
-repo.saveVersion(alfa);
+rmvb.dodajUrzadzenie(testowe);
+rmvb.dodajPomiar(testowe.UrzadzenieID, testowy);
+rmvb.dodajWersje(alfa);
 ///
 
 // Urzadzenie 0v1
-Wersja beta = new Wersja(alfa, (Repo)repo); //to deazktywuje alfe
+Wersja beta = new Wersja(alfa, rmvb.zwrocRepo()); //to deazktywuje alfe
 beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, ale zachowujemy go w bazie
 
 mvb.dodajUrzadzenie(beta); //musi zostac zapisana najpierw
@@ -52,10 +45,10 @@ for (int i = 0; i < 8; i++)
     //do zdebugowania
     int id = i % 7;
     if (!((Repo)repo).czyUrzadzenieIstnieje(id)) { 
-        Urzadzenie testowe1 = new Urzadzenie(id, (Repo)repo);
+        Urzadzenie testowe1 = new Urzadzenie(id, rmvb.zwrocRepo());
         repo.saveDevice(testowe1);
     }
-    Wersja tmp = new Wersja(id, (Repo)repo);
+    Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
 
     mvb.dodajUrzadzenie(tmp);
     repo.saveVersion(tmp);
@@ -64,7 +57,7 @@ for (int i = 0; i < 8; i++)
 mvb.wypiszDrzewo();
 
 
-Test jednostka_testujaca = new Test((Repo)repo, ctx, mvb);
+Test jednostka_testujaca = new Test(rmvb.zwrocRepo(), ctx, rmvb.zwrocMVB());
 
 Console.WriteLine("Wyszukiwanie po dacie i id");
 jednostka_testujaca.testDataId(10);

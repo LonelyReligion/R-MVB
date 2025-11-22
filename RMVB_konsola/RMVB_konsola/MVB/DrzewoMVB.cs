@@ -11,16 +11,16 @@ namespace RMVB_konsola.MVB
 {
     internal class DrzewoMVB
     {
-        double Pversion = 1.0/3;
-        double Psvu = 1.0/3;
-        double Psvo = 5.0/6;
+        private double Pversion = 1.0/3;
+        private double Psvu = 1.0/3;
+        private double Psvo = 5.0/6;
 
-        TreeRepository Repo;
-        Kontekst ctx;
+        private TreeRepository Repo;
+        private Kontekst ctx;
 
         private List<DeskryptorKorzenia> desk = new List<DeskryptorKorzenia>(); // "List of tree descriptors. Descriptors for all roots in the tree are connected in a list(or other structures) according to growing, separable life spans."
 
-        public DrzewoMVB(TreeRepository repo, Kontekst ctx)
+        internal DrzewoMVB(TreeRepository repo, Kontekst ctx)
         {
             Korzen k = new Korzen(repo, Pversion);
 
@@ -32,20 +32,20 @@ namespace RMVB_konsola.MVB
             this.ctx = ctx;
         }
 
-        public void wypiszDrzewo() {
+        internal void wypiszDrzewo() {
             foreach (DeskryptorKorzenia dk in desk)
             {
                 dk.korzen.wypisz();
             }
         }
 
-        public void dodajUrzadzenie(Wersja u) {
+        internal void dodajUrzadzenie(Wersja u) {
             //w jakis sposob (na podstawie dat) wybieramy korzen
             var dk = desk[0].korzen;
             dk.dodaj(u);
         }
 
-        public void usunUrzadzenie(Wersja testowe2)
+        internal void usunUrzadzenie(Wersja testowe2)
         {
             var dk = desk[0].korzen;
             dk.usun(testowe2);

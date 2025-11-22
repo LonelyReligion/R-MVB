@@ -14,39 +14,79 @@ namespace RMVB_konsola
         private DrzewoMVB MVB;
         private RTreeAdapter R;
         private Repo repo;
-        public RMVB(Kontekst ctx) {
+        internal RMVB(Kontekst ctx) {
             this.ctx = ctx;
             repo = new Repo();
             MVB = new DrzewoMVB(repo, ctx);
             R = new RTreeAdapter(new RTree(repo, ctx));
         }
 
+        internal Repo zwrocRepo() { return repo; }
+        internal DrzewoMVB zwrocMVB() { return MVB; }
+
         //dodaj
-        public void dodajUrzadzenie(Urzadzenie u) {
+        internal void dodajUrzadzenie(Urzadzenie u) {
             R.dodajUrzadzenie(u);
-            ctx.SaveChanges();
+            repo.saveDevice(u);
         }
 
-        public void dodajWersje(Wersja w) {
+        internal void dodajWersje(Wersja w) {
             MVB.dodajUrzadzenie(w);
             repo.saveVersion(w);
         }
 
-        public void dodajPomiar(int UrzadzenieID, Pomiar p) {
+        internal void dodajPomiar(int UrzadzenieID, Pomiar p) {
             ctx.Pomiary.Add(p);
             R.dodajPomiar(UrzadzenieID, p);
             ctx.SaveChanges();//?
         }
 
         //usun
-        public void usunWersje(Wersja w) {
+        internal void usunWersje(Wersja w) {
             MVB.dodajUrzadzenie(w);
             MVB.usunUrzadzenie(w);
             repo.saveVersion(w);
         }
 
         //szukaj
+        //wyszukiwanie wersji o UrządzenieID równym id i WersjaID równym v
+        internal Wersja szukaj(int id, int v) { 
+            return MVB.szukaj(id, v);
+        }
 
+        //wyszukiwanie wersji urządzenia o UrzadzenieID aktualnej w chwili dt
+        internal Wersja szukaj(int id, DateTime dt)
+        {
+            return MVB.szukaj(id, dt);
+        }
 
+        //wyszukiwanie ostatniej wersji o UrzadzenieID równym id
+        internal Wersja szukaj(int id)
+        {
+            return MVB.szukaj(id);
+        }
+
+        //wyszukiwanie wersji aktualnych w podanym przedziale czasowym
+        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) { 
+            return MVB.szukaj(poczatek, koniec);
+        }
+
+        //zwraca listę urządzeń znajdujących się w zadanym prostokącie
+        internal List<Urzadzenie> szukaj(Rectangle rect)
+        {
+            return R.szukaj(rect);
+        }
+
+        //zwraca urządzenie w podanym punkcie
+        internal Urzadzenie szukaj(decimal x, decimal y)
+        {
+            return R.szukaj((decimal)x, (decimal)y);
+        }
+
+        //zwraca liczbę pomiarów i agregat czasowy (z czego?)
+        internal (decimal, decimal) szukajAgregatu(Rectangle rect)
+        {
+            return szukajAgregatu(rect);
+        }
     }
 }
