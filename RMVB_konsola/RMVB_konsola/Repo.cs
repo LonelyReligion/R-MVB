@@ -18,11 +18,12 @@ namespace RMVB_konsola
 
         public static Kontekst ctx;
 
+        internal Dictionary<int, List<Wersja>>  zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
         //override jest konieczne inaczej realizowana jest wersja z klasy bazowej
         //"Modyfikator override jest wymagany do rozszerzenia lub zmodyfikowania abstrakcyjnej lub wirtualnej implementacji dziedziczonej metody, właściwości, indeksatora lub zdarzenia."
         public override void saveDevice(Urzadzenie device) {
             ctx.Urzadzenia.Add(device);
-            urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
+            urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>()); //System.ArgumentException: „An item with the same key has already been added. Key: 0”
             urzadzenia.Add(device.UrzadzenieID, device);
             base.saveDevice(device);
         }

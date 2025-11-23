@@ -17,25 +17,25 @@ Korzen.ctx = ctx;
 
 // Urzadzenie 0v0
 Urzadzenie testowe = new Urzadzenie(0, rmvb.zwrocRepo());
+rmvb.dodajUrzadzenie(testowe);
+
 Pomiar testowy = new Pomiar();
 testowy.Wartosc = 0;
 testowy.dtpomiaru = DateTime.Now;
+
 Wersja alfa = new Wersja(rmvb.zwrocRepo());
 alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
-alfa.dodajPomiar(testowy);
-
-rmvb.dodajUrzadzenie(testowe);
-rmvb.dodajPomiar(testowe.UrzadzenieID, testowy);
 rmvb.dodajWersje(alfa);
+
+alfa.dodajPomiar(testowy);
+rmvb.dodajPomiar(testowe.UrzadzenieID, testowy);
 ///
 
 // Urzadzenie 0v1
 Wersja beta = new Wersja(alfa, rmvb.zwrocRepo()); //to deazktywuje alfe
 beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, ale zachowujemy go w bazie
 
-mvb.dodajUrzadzenie(beta); //musi zostac zapisana najpierw
-mvb.usunUrzadzenie(beta); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
-repo.saveVersion(beta);
+rmvb.usunWersje(beta);
 //
 
 
@@ -44,17 +44,16 @@ for (int i = 0; i < 8; i++)
 {
     //do zdebugowania
     int id = i % 7;
-    if (!((Repo)repo).czyUrzadzenieIstnieje(id)) { 
+    if (!rmvb.czyUrzadzenieIstnieje(id)) { 
         Urzadzenie testowe1 = new Urzadzenie(id, rmvb.zwrocRepo());
-        repo.saveDevice(testowe1);
+        rmvb.dodajUrzadzenie(testowe1);
     }
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
 
-    mvb.dodajUrzadzenie(tmp);
-    repo.saveVersion(tmp);
+    rmvb.dodajWersje(tmp);
 }
 
-mvb.wypiszDrzewo();
+rmvb.wypiszMVB();
 
 
 Test jednostka_testujaca = new Test(rmvb.zwrocRepo(), ctx, rmvb.zwrocMVB());

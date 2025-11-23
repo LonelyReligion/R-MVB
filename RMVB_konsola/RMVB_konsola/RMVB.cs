@@ -22,8 +22,9 @@ namespace RMVB_konsola
         }
 
         internal Repo zwrocRepo() { return repo; }
+        internal bool czyUrzadzenieIstnieje(int id) { return repo.czyUrzadzenieIstnieje(id); }
         internal DrzewoMVB zwrocMVB() { return MVB; }
-
+        internal void wypiszMVB() { MVB.wypiszDrzewo(); }
         //dodaj
         internal void dodajUrzadzenie(Urzadzenie u) {
             R.dodajUrzadzenie(u);
@@ -43,8 +44,8 @@ namespace RMVB_konsola
 
         //usun
         internal void usunWersje(Wersja w) {
-            MVB.dodajUrzadzenie(w);
-            MVB.usunUrzadzenie(w);
+            MVB.dodajUrzadzenie(w); //musi zostac zapisana najpierw
+            MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
             repo.saveVersion(w);
         }
 
