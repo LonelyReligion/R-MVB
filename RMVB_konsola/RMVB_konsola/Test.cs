@@ -80,9 +80,9 @@ namespace RMVB_konsola
                     int cnt = 0;
                     foreach (Urzadzenie u in ctx.Urzadzenia)
                     {
-                        if (u.Szerokosc <= 0 && u.Szerokosc >= 0 && u.Dlugosc >= 0 && u.Dlugosc <= 0)//zmienic na zapytanie
-                            //problem: nie zgadza sie wynik dla edgecase 0,0,0,0!! najpierw znalezc formule z ktorej korzysta rdrzewo
-                            cnt++;
+                        if ((searchRect.XMin < u.Dlugosc) && (searchRect.XMax > u.Dlugosc) && (searchRect.YMin < u.Szerokosc) && (searchRect.YMax > u.Szerokosc) || 
+                            (searchRect.XMin <= u.Dlugosc) && (searchRect.YMin <= u.Szerokosc) && (searchRect.XMax >= u.Dlugosc) && (searchRect.YMax >= u.Szerokosc))
+                        cnt++;
                     }
                     cnt_1 = cnt;
                 }

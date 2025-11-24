@@ -27,10 +27,10 @@ namespace RMVB_konsola
         protected Urzadzenie() { 
             Wersje = new HashSet<Wersja>();
         }
-        public Urzadzenie(int UrzadzenieID, decimal szerokosc, decimal dlugosc, Repo repo) : this()
+        public Urzadzenie(int UrzadzenieID, (decimal, decimal) dlugosc_szerokosc, Repo repo) : this()
         {
-            Szerokosc = szerokosc;
-            Dlugosc = dlugosc;
+            Szerokosc = dlugosc_szerokosc.Item2;
+            Dlugosc = dlugosc_szerokosc.Item1;
             
             this.UrzadzenieID = UrzadzenieID;
         }
