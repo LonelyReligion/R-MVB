@@ -56,21 +56,7 @@ for (int i = 0; i < 8; i++)
 rmvb.wypiszMVB();
 
 
-Test jednostka_testujaca = new Test(rmvb.zwrocRepo(), ctx, rmvb.zwrocMVB());
-
-Console.WriteLine("Wyszukiwanie po dacie i id");
-jednostka_testujaca.testDataId(10);
-
-
-Console.WriteLine("\nWyszukiwanie po id");
-jednostka_testujaca.testId(10);
-
-
-Console.WriteLine("\nWyszukiwanie po id i wersji");
-jednostka_testujaca.testIdV(10);
-
-
-Console.WriteLine("\nWyszukiwanie po dacie i dacie");
-jednostka_testujaca.testDataData(10);
+Test jednostka_testujaca = new Test(rmvb.zwrocRepo(), ctx, rmvb);
+jednostka_testujaca.wykonajTesty(10);
 
 ctx.Dispose();

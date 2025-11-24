@@ -16,18 +16,43 @@ namespace RMVB_konsola
     //singleton?
     internal class Test
     {
-        public static Repo repo;
-        public static Kontekst ctx;
-        public static DrzewoMVB mvb;
+        private Repo repo;
+        private Kontekst ctx;
+        private RMVB rmvb;
 
         internal Stopwatch sw;
         internal Random rnd = new Random();
 
-        //konstruktor z polami statycznymi
-        public Test(Repo r, Kontekst c, DrzewoMVB m) {
+        public Test(Repo r, Kontekst c, RMVB rmvb)
+        {
             repo = r;
             ctx = c;
-            mvb = m;
+            this.rmvb = rmvb;
+        }
+
+        public void wykonajTesty(int ileRazy) {
+            Console.WriteLine("Poniżej zaprezentowano wyniki przeprowadzonych testów");
+            
+            Console.WriteLine("Sekcja pierwsza: zapytania realizowane przez MVB");
+            Console.WriteLine("# Wyszukiwanie po dacie i id");
+            testDataId(ileRazy);
+
+
+            Console.WriteLine("\n# Wyszukiwanie po id");
+            testId(ileRazy);
+
+
+            Console.WriteLine("\n# Wyszukiwanie po id i wersji");
+            testIdV(ileRazy);
+
+
+            Console.WriteLine("\n# Wyszukiwanie po dacie i dacie");
+            testDataData(ileRazy);
+            Console.WriteLine("\n");
+
+            Console.WriteLine("Sekcja druga: zapytania realizowane przez R");
+            Console.WriteLine("# Wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie");
+            testProstokat(ileRazy); //nieskonczone
         }
 
         private List<Wersja> wylosujWersje(int ile) {
@@ -39,6 +64,52 @@ namespace RMVB_konsola
             }
             return szukane_wersje;
         }
+
+        //wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie x ileRazy
+
+        private void testProstokat(int ileRazy) {
+            using (var ctx = new Kontekst())
+            {
+                Rectangle searchRect = new Rectangle(0, 0, 0, 0); //losowac
+
+                Stopwatch sw;
+                sw = Stopwatch.StartNew();
+                int cnt_1 = 0;
+                for (int i = 0; i < 10; i++)
+                {
+                    int cnt = 0;
+                    foreach (Urzadzenie u in ctx.Urzadzenia)
+                    {
+                        if (u.Szerokosc <= 0 && u.Szerokosc >= 0 && u.Dlugosc >= 0 && u.Dlugosc <= 0)//zmienic na zapytanie
+                            //problem: nie zgadza sie wynik dla edgecase 0,0,0,0!! najpierw znalezc formule z ktorej korzysta rdrzewo
+                            cnt++;
+                    }
+                    cnt_1 = cnt;
+                }
+                long wynik = sw.ElapsedMilliseconds;
+
+                sw = Stopwatch.StartNew();
+                
+
+                int cnt_r = 0;
+                for (int i = 0; i < 10; i++)
+                {
+                    cnt_r = rmvb.szukaj(searchRect).Count();
+                }
+                long wynik3 = sw.ElapsedMilliseconds;
+
+                Console.WriteLine("Znaleziono " + cnt_r.ToString() + "(rt) " + cnt_1.ToString() + "(zapytanie w bazie)");
+                Console.WriteLine("RMVB: " + wynik3 + " vs " + "Recznie: " + wynik);
+            }
+        }
+
+
+        //wyszukuje urządzenie w podanym punkcie x ileRazy
+        private void testPunkt(int ileRazy) { 
+            throw new NotImplementedException();
+        }
+
+        //wyszukuje agregat czasowy x ileRazy
 
         //wyszukiwanie losowego urządzenia po dacie i id x ileRazy
         public void testDataId(int ileRazy)
@@ -67,9 +138,9 @@ namespace RMVB_konsola
             {
                 int id = szukane_wersje[i].UrzadzenieID;
                 DateTime dt =  szukane_wersje[i].dataOstatniejModyfikacji;
-                szukana = mvb.szukaj(id, dt);
+                szukana = rmvb.szukaj(id, dt);
                 if (szukana == null)
-                    Console.WriteLine("Uwaga: MVB nie odnalazlo rekordu.");
+                    Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
             }
             long czas_mvb = sw.ElapsedMilliseconds;
             Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
@@ -106,9 +177,9 @@ namespace RMVB_konsola
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++)
             {
-                szukana = mvb.szukaj(szukane_id[i]);
+                szukana = rmvb.szukaj(szukane_id[i]);
                 if (szukana == null)
-                    Console.WriteLine("Uwaga: MVB nie odnalazlo rekordu.");
+                    Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
             }
             long czas_mvb = sw.ElapsedMilliseconds;
             Console.WriteLine("MVB w czasie: " + czas_mvb + " ms.");
@@ -149,12 +220,12 @@ namespace RMVB_konsola
             {
                 int id = szukane_id_v[i].Item1;
                 int v = szukane_id_v[i].Item2;
-                szukana = mvb.szukaj(id, v);
+                szukana = rmvb.szukaj(id, v);
                 if (szukana == null)
-                    Console.WriteLine("Uwaga: MVB nie odnalazlo rekordu.");
+                    Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
             }
             long czas_mvb = sw.ElapsedMilliseconds;
-            Console.WriteLine("MVB: " + szukana.UrzadzenieID + "v" + szukana.WersjaID + " w czasie: " + czas_mvb + " ms.");
+            Console.WriteLine("RMVB: " + szukana.UrzadzenieID + "v" + szukana.WersjaID + " w czasie: " + czas_mvb + " ms.");
         }
 
         public void testDataData(int ileRazy) {
@@ -178,9 +249,9 @@ namespace RMVB_konsola
             Console.WriteLine("Baza: " + szukane_wersje.Count + " w czasie: " + czas_baza + " ms.");
             
             sw = Stopwatch.StartNew();
-            szukane_wersje_mvb = mvb.szukaj(poczatek, koniec);
+            szukane_wersje_mvb = rmvb.szukaj(poczatek, koniec);
             long czas_mvb = sw.ElapsedMilliseconds;
-            Console.WriteLine("MVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
+            Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
 
             if (szukane_wersje.Count != szukane_wersje_mvb.Count)
             {
