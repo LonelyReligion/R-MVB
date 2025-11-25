@@ -29,9 +29,10 @@ namespace RMVB_konsola
         }
         public Urzadzenie(int UrzadzenieID, (decimal, decimal) dlugosc_szerokosc, Repo repo) : this()
         {
-            Szerokosc = dlugosc_szerokosc.Item2;
+ 
             Dlugosc = dlugosc_szerokosc.Item1;
-            
+            Szerokosc = dlugosc_szerokosc.Item2;
+
             this.UrzadzenieID = UrzadzenieID;
         }
 

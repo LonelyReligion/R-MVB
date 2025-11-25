@@ -70,21 +70,35 @@ namespace RMVB_konsola
         private void testProstokat(int ileRazy) {
             using (var ctx = new Kontekst())
             {
-                Rectangle searchRect = new Rectangle(0, 0, 0, 0); //losowac
+                Generatory generator_granic = new Generatory();
+
+                Rectangle searchRect = generator_granic.generujProstokatDeterministycznie(); //powinno wyjsc 1 przy det. 7 urzadzeniach
 
                 Stopwatch sw;
                 sw = Stopwatch.StartNew();
                 int cnt_1 = 0;
                 for (int i = 0; i < 10; i++)
                 {
-                    int cnt = 0;
-                    foreach (Urzadzenie u in ctx.Urzadzenia)
+                    cnt_1 = ctx.Urzadzenia
+                    .AsNoTracking()
+                    //intersects
+                    .Where(u => searchRect.XMin < u.Dlugosc)
+                    .Where(u => searchRect.XMax > u.Dlugosc)
+                    .Where(u => searchRect.YMin < u.Szerokosc)
+                    .Where(u => searchRect.YMax > u.Szerokosc)
+                    //contains
+                    .Where(u => searchRect.XMin <= u.Dlugosc)
+                    .Where(u => searchRect.YMin <= u.Szerokosc)
+                    .Where(u => searchRect.XMax >= u.Dlugosc)
+                    .Where(u => searchRect.YMax >= u.Szerokosc)
+                    .Count();
+
+/*                    foreach (Urzadzenie u in ctx.Urzadzenia)
                     {
                         if ((searchRect.XMin < u.Dlugosc) && (searchRect.XMax > u.Dlugosc) && (searchRect.YMin < u.Szerokosc) && (searchRect.YMax > u.Szerokosc) || 
                             (searchRect.XMin <= u.Dlugosc) && (searchRect.YMin <= u.Szerokosc) && (searchRect.XMax >= u.Dlugosc) && (searchRect.YMax >= u.Szerokosc))
                         cnt++;
-                    }
-                    cnt_1 = cnt;
+                    }*/
                 }
                 long wynik = sw.ElapsedMilliseconds;
 

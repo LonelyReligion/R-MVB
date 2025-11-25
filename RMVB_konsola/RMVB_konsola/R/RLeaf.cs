@@ -142,7 +142,7 @@ namespace RMVB_konsola.R
 
             foreach (Urzadzenie dev in devices)
             {
-                if (rect.Contains(dev.Szerokosc, dev.Dlugosc))
+                if (rect.Contains(dev.Dlugosc, dev.Szerokosc))
                 {
                     result.Add(dev);
                 }

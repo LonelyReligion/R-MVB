@@ -6,6 +6,8 @@ using System.Diagnostics;
 
 //jak zasymulować szybszy upływ czasu?
 Generatory generator = new Generatory();
+Generatory.liczba_urzadzen = 7;
+
 Kontekst ctx = new Kontekst();
 Wersja.ctx = ctx;
 InDBStorage.ctx = ctx;
@@ -17,7 +19,7 @@ Urzadzenie.ctx = ctx;
 Korzen.ctx = ctx;
 
 // Urzadzenie 0v0
-Urzadzenie testowe = new Urzadzenie(0, generator.generujWspolrzedneDeterministycznie(7), rmvb.zwrocRepo());
+Urzadzenie testowe = new Urzadzenie(0, generator.generujWspolrzedneDeterministycznie(), rmvb.zwrocRepo());
 rmvb.dodajUrzadzenie(testowe);
 
 Pomiar testowy = new Pomiar();
@@ -46,7 +48,7 @@ for (int i = 0; i < 8; i++)
     //do zdebugowania
     int id = i % 7;
     if (!rmvb.czyUrzadzenieIstnieje(id)) { 
-        Urzadzenie testowe1 = new Urzadzenie(id, generator.generujWspolrzedneDeterministycznie(7), rmvb.zwrocRepo());
+        Urzadzenie testowe1 = new Urzadzenie(id, generator.generujWspolrzedneDeterministycznie(), rmvb.zwrocRepo());
         rmvb.dodajUrzadzenie(testowe1);
     }
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());

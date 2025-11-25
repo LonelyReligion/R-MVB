@@ -16,7 +16,7 @@ namespace RMVB_konsola.R
 
         public decimal YMax;
 
-        public Rectangle(decimal xMin, decimal yMin, decimal xMax, decimal yMax)
+        public Rectangle(decimal yMin, decimal xMin, decimal yMax, decimal xMax)
         {
             if ((xMin > xMax) || (yMin > yMax)) {
                 throw new ArgumentException("\"min\" coordinates must be less than the \"max\" ones");
