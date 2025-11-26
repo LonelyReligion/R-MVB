@@ -89,5 +89,10 @@ namespace RMVB_konsola
         {
             return szukajAgregatu(rect);
         }
+
+        //zwraca agregat czasowy urzadzenia
+        internal decimal szukajAgregatuCzasowego(decimal x, decimal y) {
+            return szukajAgregatuCzasowego(x, y);
+        }
     }
 }

@@ -44,9 +44,14 @@ namespace RMVB_konsola.R
             return drzewo.SearchBy(x, y);
         }
 
-        //zwraca liczbę pomiarów i agregat czasowy (z czego?)
-        internal (decimal, decimal) szukajAgregatu(Rectangle rect) { 
+        //zwraca liczbę pomiarów i agregat powierzchniowy (z czego?)
+        internal (decimal, decimal) szukajAgregatuPowierzchniowego(Rectangle rect) { 
             return drzewo.FindSpaceAggregate(rect);
+        }
+
+        //zwraca agregat czasowy
+        public decimal szukajAgregatuCzasowego(decimal x, decimal y) {
+            return drzewo.GetTimeAggregate(x, y);
         }
 
     }

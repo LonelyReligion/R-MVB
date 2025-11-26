@@ -27,7 +27,7 @@ namespace RMVB_konsola
         }
 
         public Rectangle generujProstokatDeterministycznie() {
-            return new Rectangle(50, 15, 51, 18);
+            return new Rectangle(50, 15, 52, 19);
         }
 
     }

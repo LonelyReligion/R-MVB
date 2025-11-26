@@ -29,6 +29,16 @@ namespace RMVB_konsola
             .Property(u => u.dataWygasniecia)
             .HasColumnType("datetime2");
 
+            modelBuilder.Entity<Urzadzenie>()
+                .Property(e => e.Szerokosc)
+                .HasColumnType("decimal")
+                .HasPrecision(18, 4);
+
+            modelBuilder.Entity<Urzadzenie>()
+                .Property(e => e.Dlugosc)
+                .HasColumnType("decimal")
+                .HasPrecision(18, 4);
+
             //potrzebne żeby się skompilowało, i tak nie będziemy usuwać ¯\_(ツ)_/¯
             modelBuilder.Entity<Wersja>()
             .HasRequired(w => w.UrzadzenieRodzic)
