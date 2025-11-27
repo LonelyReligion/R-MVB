@@ -102,7 +102,7 @@ namespace RMVB_konsola.R
 
         public decimal GetTimeAggregate(decimal x, decimal y)
         {
-            Urzadzenie dev = SearchBy(x, y); //y, x?
+            Urzadzenie dev = SearchBy(x, y);
             decimal result = dev.GetTimeAggregate();
             return result;
         }

@@ -155,7 +155,7 @@ namespace RMVB_konsola.R
             Urzadzenie result = null;
             foreach (Urzadzenie dev in devices)
             {
-                if (Equals(x, dev.Szerokosc) && Equals(y, dev.Dlugosc))
+                if (Equals(x, dev.Dlugosc) && Equals(y, dev.Szerokosc))
                 {
                     result = dev;
                 }

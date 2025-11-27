@@ -54,5 +54,8 @@ namespace RMVB_konsola.R
             return drzewo.GetTimeAggregate(x, y);
         }
 
+        public void obliczAgregaty() {
+            drzewo.SpaceAggregate();
+        }
     }
 }

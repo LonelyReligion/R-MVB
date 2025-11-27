@@ -92,7 +92,12 @@ namespace RMVB_konsola
 
         //zwraca agregat czasowy urzadzenia
         internal decimal szukajAgregatuCzasowego(decimal x, decimal y) {
-            return szukajAgregatuCzasowego(x, y);
+            return R.szukajAgregatuCzasowego(x, y);
+        }
+
+        //oblicza agregaty powierzchniowe
+        internal void obliczAgregaty() { 
+            R.obliczAgregaty();
         }
     }
 }

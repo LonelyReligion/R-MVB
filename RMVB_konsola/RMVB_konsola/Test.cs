@@ -127,8 +127,7 @@ namespace RMVB_konsola
             sw = Stopwatch.StartNew();
             for (int i = 0; i < 10; i++)
             {
-                wynikR = rmvb.szukajAgregatuCzasowego(x, y); //stack overflow!!
-                // y, x?
+                wynikR = rmvb.szukajAgregatuCzasowego(x, y);
             }
             long czas = sw.ElapsedMilliseconds;
 

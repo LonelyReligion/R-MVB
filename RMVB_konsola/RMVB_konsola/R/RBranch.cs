@@ -198,15 +198,16 @@ namespace RMVB_konsola.R
 
         public override Urzadzenie SearchBy(decimal x, decimal y)
         {
-            Urzadzenie result = null;
             if (mbr.Contains(x, y))
             {
                 foreach (RNode ch in children)
                 {
-                    result = ch.SearchBy(x, y);
+                    Urzadzenie wynikowe = ch.SearchBy(x, y);
+                    if ( wynikowe != null)
+                        return wynikowe;
                 }
             }
-            return result;
+            return null;
         }
     }
 }
