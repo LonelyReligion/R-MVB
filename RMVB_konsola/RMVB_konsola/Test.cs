@@ -56,6 +56,7 @@ namespace RMVB_konsola
             testAgregatyCzasowe(); //nieskonczone, czy przerobic na ileRazy?
         }
 
+        //losowanie ze zwracaniem
         private List<Wersja> wylosujWersje(int ile) {
             List<Wersja> szukane_wersje = new List<Wersja>();
             for (int i = 0; i < ile; i++)
@@ -71,9 +72,11 @@ namespace RMVB_konsola
             Urzadzenie losowe = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value;
             return (losowe.Dlugosc, losowe.Szerokosc);
         }
+
+        //wyszukuje agregat czasowy 
         private void testAgregatyCzasowe()
         {
-            (Decimal x, Decimal y) = wylosujWspolrzedne();
+            (Decimal x, Decimal y) = (18.7795m, 51.5851m);//wylosujWspolrzedne();
 
             decimal wynikBD = 0;
             decimal wynikR = 0;
@@ -98,18 +101,13 @@ namespace RMVB_konsola
 
                 if (id != -1)
                 {
-                    foreach (Pomiar m in ctx.Pomiary)
-                    {
-                        if (m.WersjeUrzadzenia.First().UrzadzenieID == id && m.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0))
-                        {
-                            liczba++;
-                            wynikBD += m.Wartosc;
-                        }
-                        /*else if (m.UrzadzenieID == id && (m.dtpomiaru < new DateTime(2024, 7, 18, 0, 0, 0)))
-                        {
-                            Console.WriteLine("DB: Pomiar zostal dokonany zbyt dawno temu, aby umiescic go w sredniej! " + m.dtpomiaru);
-                        }*/
-                    }
+                    List<Pomiar> pomiary =  ctx.Pomiary
+                                            .AsNoTracking()
+                                            .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == id)
+                                            .Where(p => p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0)) //zparametryzowac
+                                            .ToList();
+                    liczba += pomiary.Count;
+                    foreach (Pomiar p in pomiary)  wynikBD += p.Wartosc;
 
                     if (liczba != 0)
                         wynikBD /= liczba;
@@ -185,8 +183,6 @@ namespace RMVB_konsola
         private void testPunkt(int ileRazy) { 
             throw new NotImplementedException();
         }
-
-        //wyszukuje agregat czasowy x ileRazy
 
         //wyszukiwanie losowego urządzenia po dacie i id x ileRazy
         public void testDataId(int ileRazy)

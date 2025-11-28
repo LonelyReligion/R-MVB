@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 //jak zasymulować szybszy upływ czasu?
 Generatory generator = new Generatory();
-Generatory.liczba_urzadzen = 7;
+Generatory.liczba_urzadzen = 100;
 
 Kontekst ctx = new Kontekst();
 Wersja.ctx = ctx;
@@ -43,10 +43,10 @@ rmvb.usunWersje(beta);
 
 
 
-for (int i = 0; i < 8; i++)
+for (int i = 0; i < 100; i++)
 {
     //do zdebugowania
-    int id = i % 7;
+    int id = i % 100;
     if (!rmvb.czyUrzadzenieIstnieje(id)) { 
         Urzadzenie testowe1 = new Urzadzenie(id, generator.generujWspolrzedneDeterministycznie(), rmvb.zwrocRepo());
         rmvb.dodajUrzadzenie(testowe1);
