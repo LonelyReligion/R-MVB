@@ -77,10 +77,10 @@ namespace RMVB_konsola.R
 
             foreach (Urzadzenie dev in devices)
             {
-                mbr.XMin = Math.Min(mbr.XMin, dev.Szerokosc);
-                mbr.YMin = Math.Min(mbr.YMin, dev.Dlugosc);
-                mbr.XMax = Math.Max(mbr.XMax, dev.Szerokosc);
-                mbr.YMax = Math.Max(mbr.YMax, dev.Dlugosc);
+                mbr.XMin = Math.Min(mbr.XMin, dev.Dlugosc);
+                mbr.YMin = Math.Min(mbr.YMin, dev.Szerokosc);
+                mbr.XMax = Math.Max(mbr.XMax, dev.Dlugosc);
+                mbr.YMax = Math.Max(mbr.YMax, dev.Szerokosc);
             }
 
         }
