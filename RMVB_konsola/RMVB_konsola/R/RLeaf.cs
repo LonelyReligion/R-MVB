@@ -12,7 +12,9 @@ namespace RMVB_konsola.R
 
         private List<Urzadzenie> devices = new List<Urzadzenie>();
 
-
+        public override int zwrocLiczbeDzieci() {
+            return 0;
+        }
         public RLeaf(decimal xmin, decimal ymin, decimal xmax, decimal ymax) : base(xmin, ymin, xmax, ymax)
         {
         }
@@ -53,8 +55,8 @@ namespace RMVB_konsola.R
 
         public override decimal Distance(int i, int j)
         {
-            decimal xDistance = Math.Max(devices[i].Szerokosc, devices[j].Szerokosc);
-            decimal yDistance = Math.Max(devices[i].Dlugosc, devices[j].Dlugosc);
+            decimal xDistance = Math.Max(devices[i].Dlugosc, devices[j].Dlugosc);
+            decimal yDistance = Math.Max(devices[i].Szerokosc, devices[j].Szerokosc); 
             return xDistance + yDistance;
         }
 
@@ -162,6 +164,5 @@ namespace RMVB_konsola.R
             }
             return result;
         }
-
     }
 }

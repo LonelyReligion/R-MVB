@@ -12,6 +12,9 @@ namespace RMVB_konsola.R
     {
         private List<RNode> children = new List<RNode>();
 
+        public override int zwrocLiczbeDzieci() { 
+            return children.Count;
+        }
         public RBranch(decimal xmin, decimal ymin, decimal xmax, decimal ymax) : base(xmin, ymin, xmax, ymax)
         {
 
@@ -79,7 +82,7 @@ namespace RMVB_konsola.R
                     minimal = ch;
                 }
             }
-            minimal.mbr.Enlarge(dev.Szerokosc, dev.Dlugosc);
+            minimal.mbr.Enlarge(dev.Dlugosc, dev.Szerokosc);
             minimal.Insert(dev, adaptor);
         }
 

@@ -19,6 +19,8 @@ namespace RMVB_konsola.R
 
         protected SpaceAggregate spaceAggregate;
 
+        //zwraca liczbe dzieci albo 0 jezeli to lisc
+        public abstract int zwrocLiczbeDzieci();
         public RNode(decimal xmin, decimal ymin, decimal xmax, decimal ymax)
         {
             mbr = new Rectangle(xmin, ymin, xmax, ymax);

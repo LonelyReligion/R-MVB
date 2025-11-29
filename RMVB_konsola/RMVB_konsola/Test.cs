@@ -76,7 +76,7 @@ namespace RMVB_konsola
         //wyszukuje agregat czasowy 
         private void testAgregatyCzasowe()
         {
-            (Decimal x, Decimal y) = (18.7795m, 51.5851m);//wylosujWspolrzedne();
+            (Decimal x, Decimal y) = wylosujWspolrzedne();
 
             decimal wynikBD = 0;
             decimal wynikR = 0;
