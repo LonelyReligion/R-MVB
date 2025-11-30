@@ -12,6 +12,7 @@ namespace RMVB_konsola
         private static Decimal szerokosc = 49.0001m;
         private static Decimal dlugosc = 14.0701m;
         public static int liczba_urzadzen;
+        private static Random rnd = new Random();
         private bool pierwszy = true;
 
         private int stopnieNaSekundy(Decimal wejsciowa) {
@@ -56,6 +57,45 @@ namespace RMVB_konsola
 
         public Rectangle generujProstokatDeterministycznie() {
             return new Rectangle(50, 15, 52, 19);
+        }
+
+        public Rectangle generujProstokat() {
+            List<decimal> szerokosci = new List<decimal>();
+            for (int i = 0; i < 2; i++) {
+                Decimal szerokosc = (Decimal)(rnd.Next(49, 54) * 10000);
+                if (szerokosc < 540000)
+                {
+                    szerokosc += rnd.Next(00, 59) * 100;
+                    szerokosc += rnd.Next(00, 59);
+                }
+                else
+                {
+                    szerokosc += rnd.Next(00, 50) * 100;
+                    if (szerokosc != 545000)
+                        szerokosc += rnd.Next(00, 59);
+                }
+                szerokosc = szerokosc / 10000.0m;
+                szerokosci.Add(szerokosc);
+            }
+
+            List<decimal> dlugosci = new List<decimal>();
+            for (int i = 0; i < 2; i++) {
+                Decimal dlugosc = (Decimal)(rnd.Next(14, 24) * 10000);
+                if (dlugosc < 240000)
+                {
+                    dlugosc += rnd.Next(07, 59) * 100;
+                    dlugosc += rnd.Next(00, 59);
+                }
+                else
+                {
+                    dlugosc += rnd.Next(00, 09) * 100;
+                    if (dlugosc != 240900)
+                        dlugosc += rnd.Next(00, 59);
+                }
+                dlugosc = dlugosc / 10000.0m;
+                dlugosci.Add(dlugosc);
+            }
+            return new Rectangle(szerokosci.Min(), dlugosci.Min(), szerokosci.Max(), dlugosci.Max());
         }
 
     }

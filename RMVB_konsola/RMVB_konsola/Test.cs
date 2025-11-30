@@ -9,6 +9,7 @@ using RMVB_konsola.MVB;
 using System.Data;
 using System.Collections;
 using RMVB_konsola.R;
+using System.Diagnostics.Metrics;
 
 //singleton?
 namespace RMVB_konsola
@@ -52,9 +53,124 @@ namespace RMVB_konsola
 
             Console.WriteLine("Sekcja druga: zapytania realizowane przez R");
             Console.WriteLine("# Wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie");
-            testProstokat(ileRazy);
-            testAgregatyCzasowe(); //nieskonczone, czy przerobic na ileRazy?
+            testProstokat(ileRazy); //przerobic na rozne granice
+            testAgregatyCzasowe(ileRazy); //nieskonczone, czy przerobic na ileRazy?
+            testAgregatyPowierzchniowe(); //niezaimplementowane
         }
+
+        private void testAgregatyPowierzchniowe()
+        {
+/*            decimal resultDB = 0;
+            decimal resultQt = 0;
+            decimal resultDBRTree = 0;
+            decimal resultRTree = 0;
+
+            Stopwatch sw;
+            sw = Stopwatch.StartNew();
+            int ile = 0;
+            int cnt_1 = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                resultDB = 0;
+                ile = 0;
+
+                int cnt = 0;
+                List<int> ids = new List<int>();
+                foreach (Urzadzenie u in ctx.Urzadzenia)
+                {
+                    bool a = u.Dlugosc < y1;
+                    bool b = u.Dlugosc >= y2;
+                    bool c = u.Szerokosc <= x1;
+                    bool d = u.Szerokosc > x2;
+
+                    if (a | b | c | d)
+                        ;
+                    else
+                        ids.Add(u.UrzadzenieID);
+                }
+                String Out = "(";
+                foreach (Pomiar p in ctx.Pomiary)
+                {
+                    if (p.UrzadzenieID != null && ids.Contains((int)p.UrzadzenieID) && p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0))
+                    {
+                        ile++;
+                        resultDB += p.Wartosc;
+                        Out += p.Wartosc + "+";
+                    }
+                }
+                Console.WriteLine(Out + ")/" + ile);
+                if (ile != 0)
+                    resultDB /= ile;
+                else
+                    resultDB = 0;
+                cnt_1 = cnt;
+                Console.WriteLine("===========");
+            }
+            long wynik = sw.ElapsedMilliseconds;
+            Console.WriteLine("(recznie) Policzona na podstawie " + ile.ToString() + " elementow")
+                ;
+            sw = Stopwatch.StartNew();
+            int cnt_4 = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                resultQt = qt.zwrocSrednia(y1, y2, x1, x2);
+            }
+            long wynik2 = sw.ElapsedMilliseconds;
+
+            sw = Stopwatch.StartNew();
+            int cnt_1R = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                resultDBRTree = 0;
+                int ilosc = 0;
+
+                int cntR = 0;
+                List<int> idiki = new List<int>();
+                foreach (Device u in ctx.Devices)
+                {
+                    bool a = u.y < y1;
+                    bool b = u.y >= y2;
+                    bool c = u.x <= x1;
+                    bool d = u.x > x2;
+
+                    if (a | b | c | d)
+                        ;
+                    else
+                        idiki.Add(u.DeviceId);
+                }
+
+                foreach (Measurement p in ctx.Measurements)
+                {
+                    if (p.DeviceId != null && idiki.Contains((int)p.DeviceId))
+                    {
+                        ilosc++;
+                        resultDBRTree += p.rvalue;
+                    }
+                }
+                if (ilosc != 0)
+                    resultDBRTree /= ilosc;
+                else
+                    resultDBRTree = 0;
+                cnt_1R = cntR;
+            }
+            long wynikDBRTree = sw.ElapsedMilliseconds;
+
+            sw = Stopwatch.StartNew();
+            Rectangle searchRect = new Rectangle(x1, y1, x2, y2);
+            int cnt_r = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                resultRTree = rtree.FindSpaceAggregate(searchRect);
+            }
+            long wynik3 = sw.ElapsedMilliseconds;
+
+            Console.WriteLine("");
+            Console.WriteLine("Szukanie agregatu przestrzennego dla obszaru: xMin(" + x1 + "), " + "yMin(" + y1 + "), " + "xMax(" + x2 + "), " + "yMax(" + y2 + "), ");
+            Console.WriteLine("WARTOŚCI: Recznie Qt: " + resultDB + " vs " + "Quadtree: " + resultQt + " vs " + " RTree DB: " + resultDBRTree + " vs " + "Rtree: " + resultRTree);
+            Console.WriteLine("CZASY:    Recznie Qt: " + wynik + " vs " + "Quadtree: " + wynik2 + " vs " + "RTree DB " + wynikDBRTree + " vs " + "Rtree: " + wynik3);
+            Console.WriteLine(qt.licz_elementy().ToString() + " " + ctx.Urzadzenia.Count().ToString());
+        }*/
+    }
 
         //losowanie ze zwracaniem
         private List<Wersja> wylosujWersje(int ile) {
@@ -74,9 +190,11 @@ namespace RMVB_konsola
         }
 
         //wyszukuje agregat czasowy 
-        private void testAgregatyCzasowe()
+        private void testAgregatyCzasowe(int ileRazy)
         {
-            (Decimal x, Decimal y) = wylosujWspolrzedne();
+            //losowanie ze zwracaniem
+            //for(int i = 0; i < ileRazy; i++)
+                (Decimal x, Decimal y) = wylosujWspolrzedne();
 
             decimal wynikBD = 0;
             decimal wynikR = 0;
@@ -87,7 +205,7 @@ namespace RMVB_konsola
             sw = Stopwatch.StartNew();
             int liczba = 0;
             int id = -1;
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < ileRazy; i++)
             {
                 wynikBD = 0;
                 liczba = 0;
@@ -123,7 +241,7 @@ namespace RMVB_konsola
 
             List<Urzadzenie> resDevices = new List<Urzadzenie>();
             sw = Stopwatch.StartNew();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < ileRazy; i++)
             {
                 wynikR = rmvb.szukajAgregatuCzasowego(x, y);
             }
@@ -141,40 +259,50 @@ namespace RMVB_konsola
         private void testProstokat(int ileRazy) {
             Generatory generator_granic = new Generatory();
 
-            Rectangle searchRect = generator_granic.generujProstokatDeterministycznie(); //powinno wyjsc 2 przy det. 7 urzadzeniach
+            List<Rectangle> searchRect = new List<Rectangle>();
+            for(int i = 0; i < ileRazy; i++)
+                searchRect.Add(generator_granic.generujProstokat()); //powinno wyjsc 2 przy det. 7 urzadzeniach
 
             Stopwatch sw;
             sw = Stopwatch.StartNew();
-            int cnt_1 = 0;
-            for (int i = 0; i < 10; i++)
+            List<int> cnt_1 = new List<int>();
+            for (int i = 0; i < ileRazy; i++)
             {
-                cnt_1 = ctx.Urzadzenia
+                Rectangle rect = searchRect[i];
+                cnt_1.Add(ctx.Urzadzenia
                 .AsNoTracking()
                 //intersects
-                .Where(u => searchRect.XMin < u.Dlugosc)
-                .Where(u => searchRect.XMax > u.Dlugosc)
-                .Where(u => searchRect.YMin < u.Szerokosc)
-                .Where(u => searchRect.YMax > u.Szerokosc)
+                .Where(u => rect.XMin < u.Dlugosc)
+                .Where(u => rect.XMax > u.Dlugosc)
+                .Where(u => rect.YMin < u.Szerokosc)
+                .Where(u => rect.YMax > u.Szerokosc)
                 //contains
-                .Where(u => searchRect.XMin <= u.Dlugosc)
-                .Where(u => searchRect.YMin <= u.Szerokosc)
-                .Where(u => searchRect.XMax >= u.Dlugosc)
-                .Where(u => searchRect.YMax >= u.Szerokosc)
-                .Count();
+                .Where(u => rect.XMin <= u.Dlugosc)
+                .Where(u => rect.YMin <= u.Szerokosc)
+                .Where(u => rect.XMax >= u.Dlugosc)
+                .Where(u => rect.YMax >= u.Szerokosc)
+                .Count());
             }
             long wynik = sw.ElapsedMilliseconds;
 
             sw = Stopwatch.StartNew();
                 
 
-            int cnt_r = 0;
-            for (int i = 0; i < 10; i++)
+            List<int> cnt_r = new List<int>();
+            for (int i = 0; i < ileRazy; i++)
             {
-                cnt_r = rmvb.szukaj(searchRect).Count();
+                cnt_r.Add(rmvb.szukaj(searchRect[i]).Count());
             }
             long wynik3 = sw.ElapsedMilliseconds;
 
-            Console.WriteLine("Znaleziono " + cnt_r.ToString() + "(rt) " + cnt_1.ToString() + "(zapytanie w bazie)");
+            Console.WriteLine("**********************************");
+            for (int i = 0; i < ileRazy; i++)
+            {
+                Console.WriteLine("Prostokat: " + searchRect[i].XMin + " " + searchRect[i].XMax + "(x) " + searchRect[i].YMin + " " + searchRect[i].YMax + "(y)");
+                Console.WriteLine("Znaleziono " + cnt_r[i].ToString() + "(rt) " + cnt_1[i].ToString() + "(zapytanie w bazie)");
+                Console.WriteLine("**********************************");
+            }
+
             Console.WriteLine("RMVB: " + wynik3 + " vs " + "Recznie: " + wynik);
         }
 
