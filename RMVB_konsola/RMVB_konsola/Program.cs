@@ -19,7 +19,7 @@ Urzadzenie.ctx = ctx;
 Korzen.ctx = ctx;
 
 // Urzadzenie 0v0
-Urzadzenie testowe = new Urzadzenie(0, generator.generujWspolrzedneDeterministycznie(), rmvb.zwrocRepo());
+Urzadzenie testowe = new Urzadzenie(0, generator.generujWspolrzedne(), rmvb.zwrocRepo());
 rmvb.dodajUrzadzenie(testowe);
 
 Pomiar testowy = new Pomiar();
@@ -48,7 +48,7 @@ for (int i = 0; i < 100; i++)
     //do zdebugowania
     int id = i % 100;
     if (!rmvb.czyUrzadzenieIstnieje(id)) { 
-        Urzadzenie testowe1 = new Urzadzenie(id, generator.generujWspolrzedneDeterministycznie(), rmvb.zwrocRepo());
+        Urzadzenie testowe1 = new Urzadzenie(id, generator.generujWspolrzedne(), rmvb.zwrocRepo());
         rmvb.dodajUrzadzenie(testowe1);
     }
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());

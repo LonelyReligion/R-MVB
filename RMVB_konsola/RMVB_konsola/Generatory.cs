@@ -55,6 +55,38 @@ namespace RMVB_konsola
             return (dlugosc, szerokosc);
         }
 
+        public (Decimal, Decimal) generujWspolrzedne() {
+            Decimal szerokosc = (Decimal)(rnd.Next(49, 54) * 10000);
+            if (szerokosc < 540000)
+            {
+                szerokosc += rnd.Next(00, 59) * 100;
+                szerokosc += rnd.Next(00, 59);
+            }
+            else
+            {
+                szerokosc += rnd.Next(00, 50) * 100;
+                if (szerokosc != 545000)
+                    szerokosc += rnd.Next(00, 59);
+            }
+            szerokosc = szerokosc / 10000.0m;
+
+            Decimal dlugosc = (Decimal)(rnd.Next(14, 24) * 10000);
+            if (dlugosc < 240000)
+            {
+                dlugosc += rnd.Next(07, 59) * 100;
+                dlugosc += rnd.Next(00, 59);
+            }
+            else
+            {
+                dlugosc += rnd.Next(00, 09) * 100;
+                if (dlugosc != 240900)
+                    dlugosc += rnd.Next(00, 59);
+            }
+            dlugosc = dlugosc / 10000.0m;
+
+            return (dlugosc, szerokosc);
+        }
+
         public Rectangle generujProstokatDeterministycznie() {
             return new Rectangle(50, 15, 52, 19);
         }
