@@ -7,6 +7,7 @@ using RMVB_konsola.R;
 
 namespace RMVB_konsola
 {
+    //singleton?
     internal class Generatory
     {
         private static Decimal szerokosc = 49.0001m;
@@ -14,6 +15,12 @@ namespace RMVB_konsola
         public static int liczba_urzadzen;
         private static Random rnd = new Random();
         private bool pierwszy = true;
+        private Repo repo;
+        
+        public Generatory (Repo repozytorium)
+        {
+            this.repo = repozytorium;
+        }
 
         private int stopnieNaSekundy(Decimal wejsciowa) {
             int stopnie = ((int)wejsciowa / 1);
@@ -130,5 +137,29 @@ namespace RMVB_konsola
             return new Rectangle(szerokosci.Min(), dlugosci.Min(), szerokosci.Max(), dlugosci.Max());
         }
 
+        public Pomiar generujLosowyPomiar() {
+            Decimal temp = (Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0);
+            Pomiar testowy = new Pomiar(temp, DateTime.Now);
+            return testowy;
+        }
+
+        //losowanie ze zwracaniem
+        public List<Wersja> wylosujWersje(int ile)
+        {
+            List<Wersja> szukane_wersje = new List<Wersja>();
+            for (int i = 0; i < ile; i++)
+            {
+                Wersja losowa_wersja = repo.pobierzWersje().ElementAt(rnd.Next(repo.pobierzWersje().Count - 1));
+                szukane_wersje.Add(losowa_wersja);
+            }
+            return szukane_wersje;
+        }
+
+        //zwraca wspolrzedne losowego urzadzenia
+        public (Decimal, Decimal) wylosujWspolrzedne()
+        {
+            Urzadzenie losowe = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value;
+            return (losowe.Dlugosc, losowe.Szerokosc);
+        }
     }
 }

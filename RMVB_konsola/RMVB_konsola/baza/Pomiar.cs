@@ -22,5 +22,10 @@ namespace RMVB_konsola
         public Pomiar() {
             WersjeUrzadzenia = new HashSet<Wersja>();
         }
+
+        public Pomiar(Decimal temp, DateTime data_pomiaru):this() { 
+            this.dtpomiaru = data_pomiaru;
+            this.Wartosc = temp;
+        }
     }
 }

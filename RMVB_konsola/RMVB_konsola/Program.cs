@@ -5,15 +5,16 @@ using RMVB_konsola.R;
 using System.Diagnostics;
 
 //jak zasymulować szybszy upływ czasu?
-Generatory generator = new Generatory();
 Generatory.liczba_urzadzen = 100;
 
+Random rnd = new Random();
 Kontekst ctx = new Kontekst();
 Wersja.ctx = ctx;
 InDBStorage.ctx = ctx;
 Repo.ctx = ctx;
 
 RMVB rmvb = new RMVB(ctx);
+Generatory generator = new Generatory(rmvb.zwrocRepo());
 
 Urzadzenie.ctx = ctx;
 Korzen.ctx = ctx;
@@ -56,10 +57,24 @@ for (int i = 0; i < 100; i++)
     rmvb.dodajWersje(tmp);
 }
 
+//czemu jak to wkleje do petli wyzej to drzewo jest zdegenerowane i posiada tylko wersje urzadzenia o id = 0?
+for (int j = 0; j < 12; j++)
+{
+    Pomiar losowy = generator.generujLosowyPomiar();
+
+    int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
+    Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
+    losowa.UrzadzenieID = id_losowe; //nadmiarowe
+    rmvb.dodajWersje(losowa);
+
+    losowa.dodajPomiar(losowy);
+    rmvb.dodajPomiar(losowa.UrzadzenieID, losowy);
+}
+
 rmvb.wypiszMVB();
 
 
-Test jednostka_testujaca = new Test(rmvb.zwrocRepo(), ctx, rmvb);
+Test jednostka_testujaca = new Test(rmvb.zwrocRepo(), ctx, rmvb, generator);
 jednostka_testujaca.wykonajTesty(10);
 
 ctx.Dispose();

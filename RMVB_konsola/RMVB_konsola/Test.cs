@@ -20,15 +20,17 @@ namespace RMVB_konsola
         private Repo repo;
         private Kontekst ctx;
         private RMVB rmvb;
+        private Generatory generator;
 
         internal Stopwatch sw;
         internal Random rnd = new Random();
 
-        public Test(Repo r, Kontekst c, RMVB rmvb)
+        public Test(Repo r, Kontekst c, RMVB rmvb, Generatory gen)
         {
             repo = r;
             ctx = c;
             this.rmvb = rmvb;
+            this.generator = gen;
         }
 
         public void wykonajTesty(int ileRazy) {
@@ -54,7 +56,7 @@ namespace RMVB_konsola
             Console.WriteLine("Sekcja druga: zapytania realizowane przez R");
             Console.WriteLine("# Wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie");
             testProstokat(ileRazy); //przerobic na rozne granice
-            testAgregatyCzasowe(ileRazy); //nieskonczone, czy przerobic na ileRazy?
+            testAgregatyCzasowe(ileRazy);
             testAgregatyPowierzchniowe(); //niezaimplementowane
         }
 
@@ -172,29 +174,12 @@ namespace RMVB_konsola
         }*/
     }
 
-        //losowanie ze zwracaniem
-        private List<Wersja> wylosujWersje(int ile) {
-            List<Wersja> szukane_wersje = new List<Wersja>();
-            for (int i = 0; i < ile; i++)
-            {
-                Wersja losowa_wersja = repo.pobierzWersje().ElementAt(rnd.Next(repo.pobierzWersje().Count - 1));
-                szukane_wersje.Add(losowa_wersja);
-            }
-            return szukane_wersje;
-        }
-
-        //zwraca wspolrzedne losowego urzadzenia
-        private (Decimal, Decimal) wylosujWspolrzedne() { 
-            Urzadzenie losowe = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value;
-            return (losowe.Dlugosc, losowe.Szerokosc);
-        }
-
         //wyszukuje agregat czasowy 
         private void testAgregatyCzasowe(int ileRazy)
         {
             //losowanie ze zwracaniem
             //for(int i = 0; i < ileRazy; i++)
-                (Decimal x, Decimal y) = wylosujWspolrzedne();
+                (Decimal x, Decimal y) = generator.wylosujWspolrzedne();
 
             decimal wynikBD = 0;
             decimal wynikR = 0;
@@ -257,11 +242,9 @@ namespace RMVB_konsola
         //wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie x ileRazy
 
         private void testProstokat(int ileRazy) {
-            Generatory generator_granic = new Generatory();
-
             List<Rectangle> searchRect = new List<Rectangle>();
             for(int i = 0; i < ileRazy; i++)
-                searchRect.Add(generator_granic.generujProstokat()); //powinno wyjsc 2 przy det. 7 urzadzeniach
+                searchRect.Add(generator.generujProstokat()); //powinno wyjsc 2 przy det. 7 urzadzeniach
 
             Stopwatch sw;
             sw = Stopwatch.StartNew();
@@ -315,7 +298,7 @@ namespace RMVB_konsola
         //wyszukiwanie losowego urządzenia po dacie i id x ileRazy
         public void testDataId(int ileRazy)
         {
-            List<Wersja> szukane_wersje = wylosujWersje(ileRazy);
+            List<Wersja> szukane_wersje = generator.wylosujWersje(ileRazy);
 
             Wersja? szukana = null;
             sw = Stopwatch.StartNew();
@@ -325,11 +308,11 @@ namespace RMVB_konsola
                 szukana = ctx.Wersje
                     .AsNoTracking()
                     .Where(u => u.dataOstatniejModyfikacji <= dt)
-                    .Where(u => u.dataWygasniecia > dt)
+                    .Where(u => u.dataWygasniecia >= dt)
                     .Where(u => u.UrzadzenieID == id)
                     .FirstOrDefault(); //czasami nie dziala:/
                 if (szukana == null)
-                    Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
+                     Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
             }
             long czas_baza = sw.ElapsedMilliseconds;
             Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
@@ -393,9 +376,9 @@ namespace RMVB_konsola
             List<(int, int)> szukane_id_v = new List<(int, int)>();
             for (int i = 0; i < ileRazy; i++)
             {
-                int lodowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
-                int losowa_wersja_id = repo.pobierzUrzadzeniaWersje().ElementAt(lodowe_urzadzenie_id).Value.ElementAt(rnd.Next(repo.pobierzUrzadzeniaWersje().ElementAt(lodowe_urzadzenie_id).Value.Count - 1)).WersjaID;
-                szukane_id_v.Add((lodowe_urzadzenie_id, losowa_wersja_id));
+                int losowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
+                int losowa_wersja_id = repo.pobierzUrzadzeniaWersje().ElementAt(losowe_urzadzenie_id).Value.ElementAt(rnd.Next(repo.pobierzUrzadzeniaWersje().ElementAt(losowe_urzadzenie_id).Value.Count - 1)).WersjaID;
+                szukane_id_v.Add((losowe_urzadzenie_id, losowa_wersja_id));
             }
             //>
             Wersja? szukana = null;

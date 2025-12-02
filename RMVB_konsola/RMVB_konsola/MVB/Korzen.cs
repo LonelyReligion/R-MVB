@@ -135,41 +135,47 @@ namespace RMVB_konsola.MVB
                 //the weak version condition is violated.
                 if (strongVersionUnderflow(posortowanaLista.Count())) //po version split w wezle 1 są same żywe czyli jest miejsce
                 {
+                    var posortowaneZywe = Enumerable.Empty<Wersja>();
+
                     //a merge is attempted with the copy of a sibling node using only its live entries
 
                     //dodalismy na koniec, wiec sąsiad to przedostatni węzeł
                     //dodajemy same zywe wpisy z przedostatniego i zmieniamy daty obowiazywania wersji aż nie przedobrzymy, ale tym sie zajmuje .dodaj() ;)
-                    List<Wersja> dzieci_sasiada = wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia();
-
-                    List<Wersja> zywe = new List<Wersja>(); //zawiera zywe
-                    foreach (var urzadzenie in dzieci_sasiada.Concat(kopie))
+                    if (wpisy.Count >= 2)
                     {
-                        if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
-                        { //kopiujemy zywe
-                            Wersja kopia = new Wersja(urzadzenie, (Repo)repo);
-                            urzadzenie.dataWygasniecia = DateTime.Now;
-                            kopia.dataOstatniejModyfikacji = DateTime.Now;
-                            kopie.Add(kopia);
+                        List<Wersja> dzieci_sasiada = wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia() != null ? wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia() : new List<Wersja>();
 
-                            repo.saveVersion(kopia);
+                        List<Wersja> zywe = new List<Wersja>(); //zawiera zywe
+                        foreach (var urzadzenie in dzieci_sasiada.Concat(kopie))
+                        {
+                            if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
+                            { 
+                                //kopiujemy zywe
+                                Wersja kopia = new Wersja(urzadzenie, (Repo)repo);
+                                urzadzenie.dataWygasniecia = DateTime.Now;
+                                kopia.dataOstatniejModyfikacji = DateTime.Now;
+                                kopie.Add(kopia);
 
-                            ctx.Wersje.Add(kopia);
-                            repo.saveVersion(kopia);
+                                repo.saveVersion(kopia);
 
+                                ctx.Wersje.Add(kopia);
+                                repo.saveVersion(kopia);
+
+                            }
                         }
+
+                        //posortuj liste po id 
+                        posortowaneZywe = zywe.OrderBy(q => q.UrzadzenieID);
+
+                        this.wpisy[wpisy.Count - 2].Item2.maxData = DateTime.Now;
                     }
-
-                    //posortuj liste po id 
-                    var posortowaneZywe = zywe.OrderBy(q => q.UrzadzenieID);
-
-                    this.wpisy[wpisy.Count - 2].Item2.maxData = DateTime.Now;
 
                     //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
                     if (strongVersionOverflow(posortowaneZywe.ToList().Count))
                     {
                         keySplit(posortowaneZywe);
                     }
-                    else
+                    else if(posortowaneZywe.Count() != 0)
                     {
                         //a jezeli dalej underflow no to chyba juz trudno? innego sasiada nie ma
                         dodajZlisty(posortowaneZywe);
