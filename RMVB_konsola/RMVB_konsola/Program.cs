@@ -4,28 +4,31 @@ using RMVB_konsola.R;
 
 using System.Diagnostics;
 
-//jak zasymulować szybszy upływ czasu?
+//Setup
 Generatory.liczba_urzadzen = 100;
 
 Random rnd = new Random();
+
 Kontekst ctx = new Kontekst();
 Wersja.ctx = ctx;
 InDBStorage.ctx = ctx;
 Repo.ctx = ctx;
-
-RMVB rmvb = new RMVB(ctx);
-Generatory generator = new Generatory(rmvb.zwrocRepo());
-
+Test.ctx = ctx;
 Urzadzenie.ctx = ctx;
 Korzen.ctx = ctx;
 
+RMVB rmvb = new RMVB(ctx);
+Test.repo = rmvb.zwrocRepo();
+Test.rmvb = rmvb;
+
+Generatory generator = new Generatory(rmvb.zwrocRepo());
+Test.generator = generator;
+
 // Urzadzenie 0v0
-Urzadzenie testowe = new Urzadzenie(0, generator.generujWspolrzedne(), rmvb.zwrocRepo());
+Urzadzenie testowe = new Urzadzenie(0, generator.generujWspolrzedne());
 rmvb.dodajUrzadzenie(testowe);
 
-Pomiar testowy = new Pomiar();
-testowy.Wartosc = 0;
-testowy.dtpomiaru = DateTime.Now;
+Pomiar testowy = new Pomiar(0, DateTime.Now);
 
 Wersja alfa = new Wersja(rmvb.zwrocRepo());
 alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
@@ -49,7 +52,7 @@ for (int i = 0; i < 100; i++)
     //do zdebugowania
     int id = i % 100;
     if (!rmvb.czyUrzadzenieIstnieje(id)) { 
-        Urzadzenie testowe1 = new Urzadzenie(id, generator.generujWspolrzedne(), rmvb.zwrocRepo());
+        Urzadzenie testowe1 = new Urzadzenie(id, generator.generujWspolrzedne());
         rmvb.dodajUrzadzenie(testowe1);
     }
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
@@ -73,8 +76,7 @@ for (int j = 0; j < 12; j++)
 
 rmvb.wypiszMVB();
 
-
-Test jednostka_testujaca = new Test(rmvb.zwrocRepo(), ctx, rmvb, generator);
+Test jednostka_testujaca = Test.pobierzInstancje();
 jednostka_testujaca.wykonajTesty(10);
 
 ctx.Dispose();

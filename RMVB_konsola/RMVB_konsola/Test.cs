@@ -11,26 +11,29 @@ using System.Collections;
 using RMVB_konsola.R;
 using System.Diagnostics.Metrics;
 
-//singleton?
+//singleton, test bedzie wykonywany jednowatkowo stąd brak dodatkowego zabezpieczenia
 namespace RMVB_konsola
 {
-    //singleton?
     internal class Test
     {
-        private Repo repo;
-        private Kontekst ctx;
-        private RMVB rmvb;
-        private Generatory generator;
+        public static Repo repo;
+        public static Kontekst ctx;
+        public static RMVB rmvb;
+        public static Generatory generator;
+        public static Test instancja;
 
         internal Stopwatch sw;
         internal Random rnd = new Random();
 
-        public Test(Repo r, Kontekst c, RMVB rmvb, Generatory gen)
+        public static Test pobierzInstancje() {
+            if (instancja == null)
+                return new Test();
+            else
+                return instancja;
+        }
+
+        private Test()
         {
-            repo = r;
-            ctx = c;
-            this.rmvb = rmvb;
-            this.generator = gen;
         }
 
         public void wykonajTesty(int ileRazy) {
