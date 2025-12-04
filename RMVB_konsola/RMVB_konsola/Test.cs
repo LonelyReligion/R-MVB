@@ -65,9 +65,13 @@ namespace RMVB_konsola
 
         private void testAgregatyPowierzchniowe()
         {
-/*            decimal resultDB = 0;
-            decimal resultQt = 0;
-            decimal resultDBRTree = 0;
+            Rectangle szukany = generator.generujProstokat();
+            decimal x1 = szukany.XMin;
+            decimal y1 = szukany.YMin;
+            decimal x2 = szukany.XMax;
+            decimal y2 = szukany.YMax;
+
+            decimal resultDB = 0;
             decimal resultRTree = 0;
 
             Stopwatch sw;
@@ -93,10 +97,10 @@ namespace RMVB_konsola
                     else
                         ids.Add(u.UrzadzenieID);
                 }
-                String Out = "(";
+                System.String Out = "(";
                 foreach (Pomiar p in ctx.Pomiary)
                 {
-                    if (p.UrzadzenieID != null && ids.Contains((int)p.UrzadzenieID) && p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0))
+                    if (p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID != null && ids.Contains((int)p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID) && p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0))
                     {
                         ile++;
                         resultDB += p.Wartosc;
@@ -112,69 +116,22 @@ namespace RMVB_konsola
                 Console.WriteLine("===========");
             }
             long wynik = sw.ElapsedMilliseconds;
-            Console.WriteLine("(recznie) Policzona na podstawie " + ile.ToString() + " elementow")
-                ;
-            sw = Stopwatch.StartNew();
-            int cnt_4 = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                resultQt = qt.zwrocSrednia(y1, y2, x1, x2);
-            }
-            long wynik2 = sw.ElapsedMilliseconds;
-
-            sw = Stopwatch.StartNew();
-            int cnt_1R = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                resultDBRTree = 0;
-                int ilosc = 0;
-
-                int cntR = 0;
-                List<int> idiki = new List<int>();
-                foreach (Device u in ctx.Devices)
-                {
-                    bool a = u.y < y1;
-                    bool b = u.y >= y2;
-                    bool c = u.x <= x1;
-                    bool d = u.x > x2;
-
-                    if (a | b | c | d)
-                        ;
-                    else
-                        idiki.Add(u.DeviceId);
-                }
-
-                foreach (Measurement p in ctx.Measurements)
-                {
-                    if (p.DeviceId != null && idiki.Contains((int)p.DeviceId))
-                    {
-                        ilosc++;
-                        resultDBRTree += p.rvalue;
-                    }
-                }
-                if (ilosc != 0)
-                    resultDBRTree /= ilosc;
-                else
-                    resultDBRTree = 0;
-                cnt_1R = cntR;
-            }
-            long wynikDBRTree = sw.ElapsedMilliseconds;
+            Console.WriteLine("(recznie) Policzona na podstawie " + ile.ToString() + " elementow");
 
             sw = Stopwatch.StartNew();
             Rectangle searchRect = new Rectangle(x1, y1, x2, y2);
             int cnt_r = 0;
             for (int i = 0; i < 10; i++)
             {
-                resultRTree = rtree.FindSpaceAggregate(searchRect);
+                resultRTree = rmvb.szukajAgregatu(szukany).Item2;
             }
             long wynik3 = sw.ElapsedMilliseconds;
 
             Console.WriteLine("");
             Console.WriteLine("Szukanie agregatu przestrzennego dla obszaru: xMin(" + x1 + "), " + "yMin(" + y1 + "), " + "xMax(" + x2 + "), " + "yMax(" + y2 + "), ");
-            Console.WriteLine("WARTOŚCI: Recznie Qt: " + resultDB + " vs " + "Quadtree: " + resultQt + " vs " + " RTree DB: " + resultDBRTree + " vs " + "Rtree: " + resultRTree);
-            Console.WriteLine("CZASY:    Recznie Qt: " + wynik + " vs " + "Quadtree: " + wynik2 + " vs " + "RTree DB " + wynikDBRTree + " vs " + "Rtree: " + wynik3);
-            Console.WriteLine(qt.licz_elementy().ToString() + " " + ctx.Urzadzenia.Count().ToString());
-        }*/
+            Console.WriteLine("WARTOŚCI: Recznie: " + resultDB + " vs " + "RMVB: " + resultRTree);
+            Console.WriteLine("CZASY:    Recznie: " + wynik +  " vs " + "RMVB: " + wynik3);
+        
     }
 
         //wyszukuje agregat czasowy 
