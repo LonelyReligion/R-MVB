@@ -59,8 +59,10 @@ namespace RMVB_konsola
             Console.WriteLine("Sekcja druga: zapytania realizowane przez R");
             Console.WriteLine("# Wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie");
             testProstokat(ileRazy); //przerobic na rozne granice
+            Console.WriteLine("# Wyszukiwanie agregatow czasowych");
             testAgregatyCzasowe(ileRazy);
-            testAgregatyPowierzchniowe(); //niezaimplementowane
+            Console.WriteLine("# Wyszukiwanie agregatów powierzchniowych");
+            testAgregatyPowierzchniowe(); //przerobic na ileRa
         }
 
         private void testAgregatyPowierzchniowe()
@@ -100,7 +102,7 @@ namespace RMVB_konsola
                 System.String Out = "(";
                 foreach (Pomiar p in ctx.Pomiary)
                 {
-                    if (p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID != null && ids.Contains((int)p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID) && p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0))
+                    if (p.WersjeUrzadzenia.FirstOrDefault() != null && ids.Contains((int)p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID) && p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0))
                     {
                         ile++;
                         resultDB += p.Wartosc;

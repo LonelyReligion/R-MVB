@@ -87,7 +87,7 @@ namespace RMVB_konsola
             }
             else
             {
-                var ostatni_element = wersje.LastOrDefault();
+                var ostatni_element = wersje.Last();
                 this.WersjaID = ostatni_element.WersjaID + 1;
 
                 ctx.Wersje.Attach(ostatni_element);

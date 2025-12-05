@@ -32,10 +32,10 @@ Pomiar testowy = new Pomiar(0, DateTime.Now);
 
 Wersja alfa = new Wersja(rmvb.zwrocRepo());
 alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
-rmvb.dodajWersje(alfa);
 
 alfa.dodajPomiar(testowy);
 rmvb.dodajPomiar(testowe.UrzadzenieID, testowy);
+rmvb.dodajWersje(alfa);
 ///
 
 // Urzadzenie 0v1
@@ -58,10 +58,19 @@ for (int i = 0; i < 100; i++)
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
 
     rmvb.dodajWersje(tmp);
+
+    Pomiar losowy = new Pomiar();
+    int id_losowe = 0;
+    Wersja losowa = new Wersja(0, rmvb.zwrocRepo());
+    losowa.UrzadzenieID = id_losowe; //nadmiarowe
+    losowa.dodajPomiar(losowy);
+
+    rmvb.dodajPomiar(losowa.UrzadzenieID, losowy);
+    rmvb.dodajWersje(losowa);
 }
 
 //czemu jak to wkleje do petli wyzej to drzewo jest zdegenerowane i posiada tylko wersje urzadzenia o id = 0?
-for (int j = 0; j < 12; j++)
+/*for (int j = 0; j < 12; j++)
 {
     Pomiar losowy = generator.generujLosowyPomiar();
 
@@ -72,7 +81,7 @@ for (int j = 0; j < 12; j++)
 
     losowa.dodajPomiar(losowy);
     rmvb.dodajPomiar(losowa.UrzadzenieID, losowy);
-}
+}*/
 
 rmvb.wypiszMVB();
 

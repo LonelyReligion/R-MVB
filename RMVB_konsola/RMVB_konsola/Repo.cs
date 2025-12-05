@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace RMVB_konsola
         public override void saveVersion(Wersja v) {
             urzadzenia_wersje[v.UrzadzenieID].Add(v);
             wersje.Add(v);
-            ctx.Wersje.Add(v);
+            ctx.Wersje.AddOrUpdate(v);
             base.saveVersion(v);
         }
 

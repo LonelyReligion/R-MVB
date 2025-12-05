@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
@@ -26,39 +27,32 @@ namespace RMVB_konsola
 
         public void saveMeasurement(Pomiar measure)
         {
-            using (var ctx = new Kontekst())
-            {
-                ctx.Pomiary.Add(measure);
-                ctx.SaveChanges();
-            }
+            ctx.Pomiary.Add(measure);
+            ctx.SaveChanges();
         }
 
         public void saveTimeAggregate(TimeAggregate timeAggregate)
         {
-
-            using (var ctx = new Kontekst())
+            //brzydkie rozwiazanie dzieki niemu nie ma bledu
+            foreach (var entry in ctx.ChangeTracker.Entries())
             {
-                ctx.TimeAggregates.Add(timeAggregate);
-                ctx.SaveChanges();
+                entry.State = EntityState.Detached;
             }
+
+            ctx.TimeAggregates.Add(timeAggregate);
+            ctx.SaveChanges();
         }
 
         public void saveSpaceAggregate(SpaceAggregate spaceAggregate)
         {
-            using (var ctx = new Kontekst())
-            {
-                ctx.SpaceAggregates.Add(spaceAggregate);
-                ctx.SaveChanges();
-            }
+            ctx.SpaceAggregates.Add(spaceAggregate);
+            ctx.SaveChanges();
         }
 
         public void saveSrednia(Srednia srednia)
         {
-            using (var ctx = new Kontekst())
-            {
-                ctx.Srednie.Add(srednia);
-                ctx.SaveChanges();
-            }
+            ctx.Srednie.Add(srednia);
+            ctx.SaveChanges();
         }    
 
     }

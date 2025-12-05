@@ -78,7 +78,7 @@ namespace RMVB_konsola.R
                 liczba_pomiarow += device.get_liczba_suma().Item1;
             }
 
-            if (devicesInRect.Count > 0)
+            if (liczba_pomiarow != 0)
                 return (liczba_pomiarow, sum / liczba_pomiarow);
             else
                 return (0m, 0m);

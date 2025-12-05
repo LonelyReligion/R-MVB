@@ -146,7 +146,8 @@ namespace RMVB_konsola.MVB
                         List<Wersja> dzieci_sasiada = wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia() != null ? wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia() : new List<Wersja>();
 
                         List<Wersja> zywe = new List<Wersja>(); //zawiera zywe
-                        foreach (var urzadzenie in dzieci_sasiada.Concat(kopie))
+                        List<Wersja> lista_zmaterializowana = dzieci_sasiada.Concat(kopie).ToList();
+                        foreach (var urzadzenie in lista_zmaterializowana)
                         {
                             if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
                             { 
@@ -158,8 +159,7 @@ namespace RMVB_konsola.MVB
 
                                 repo.saveVersion(kopia);
 
-                                ctx.Wersje.Add(kopia);
-                                repo.saveVersion(kopia);
+                                //ctx.Wersje.Add(kopia);
 
                             }
                         }
