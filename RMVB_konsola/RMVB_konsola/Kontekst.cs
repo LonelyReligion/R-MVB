@@ -29,6 +29,10 @@ namespace RMVB_konsola
             .Property(u => u.dataWygasniecia)
             .HasColumnType("datetime2");
 
+            modelBuilder.Entity<Pomiar>()
+            .Property(u => u.dtpomiaru)
+            .HasColumnType("datetime2");
+
             modelBuilder.Entity<Urzadzenie>()
                 .Property(e => e.Szerokosc)
                 .HasColumnType("decimal")

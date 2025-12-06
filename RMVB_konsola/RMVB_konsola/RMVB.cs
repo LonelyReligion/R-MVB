@@ -36,10 +36,15 @@ namespace RMVB_konsola
             repo.saveVersion(w);
         }
 
-        internal void dodajPomiar(int UrzadzenieID, Pomiar p) {
+        internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa) {
             ctx.Pomiary.Add(p);
             R.dodajPomiar(UrzadzenieID, p);
-            ctx.SaveChanges();//?
+
+            ctx.Wersje.Attach(alfa); 
+            ctx.Entry(alfa).Reload();
+            ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
+
+            ctx.SaveChanges();
         }
 
         //usun

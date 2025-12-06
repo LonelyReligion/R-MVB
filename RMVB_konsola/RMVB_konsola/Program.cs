@@ -34,8 +34,8 @@ Wersja alfa = new Wersja(rmvb.zwrocRepo());
 alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
 
 alfa.dodajPomiar(testowy);
-rmvb.dodajPomiar(testowe.UrzadzenieID, testowy);
 rmvb.dodajWersje(alfa);
+rmvb.dodajPomiar(testowe.UrzadzenieID, testowy, alfa);
 ///
 
 // Urzadzenie 0v1
@@ -65,8 +65,8 @@ for (int i = 0; i < 100; i++)
     losowa.UrzadzenieID = id_losowe; //nadmiarowe
     losowa.dodajPomiar(losowy);
 
-    rmvb.dodajPomiar(losowa.UrzadzenieID, losowy);
     rmvb.dodajWersje(losowa);
+    rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
 }
 
 //czemu jak to wkleje do petli wyzej to drzewo jest zdegenerowane i posiada tylko wersje urzadzenia o id = 0?
