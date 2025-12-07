@@ -63,11 +63,13 @@ namespace RMVB_konsola
         //konstruktor kopiujący
         public Wersja(Wersja w, Repo r) : this(r) {
             this.UrzadzenieID = w.UrzadzenieID;
+            
+            ustalWersje(this.UrzadzenieID, repo);
+
             foreach (var element in w.Pomiary)
                 this.Pomiary.Add(element);
             dataOstatniejModyfikacji = w.dataWygasniecia;
             dataWygasniecia = DateTime.MaxValue;
-            ustalWersje(this.UrzadzenieID, repo);
         }
 
         //przetestowac, ograniczyc

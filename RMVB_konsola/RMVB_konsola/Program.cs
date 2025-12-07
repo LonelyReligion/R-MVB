@@ -47,7 +47,7 @@ rmvb.usunWersje(beta);
 
 
 
-for (int i = 0; i < 100; i++)
+for (int i = 0; i < 15; i++)
 {
     //do zdebugowania
     int id = i % 100;
