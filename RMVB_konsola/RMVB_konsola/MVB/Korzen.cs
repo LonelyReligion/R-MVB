@@ -87,6 +87,7 @@ namespace RMVB_konsola.MVB
                         wpisy[numer_wezla].Item2.maxData = u.dataWygasniecia;
                 }
             }
+            //return dodano
         }
 
         //dla POTENCJALNEGO węzła
@@ -146,7 +147,7 @@ namespace RMVB_konsola.MVB
                         List<Wersja> dzieci_sasiada = wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia() != null ? wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia() : new List<Wersja>();
 
                         List<Wersja> zywe = new List<Wersja>(); //zawiera zywe
-                        List<Wersja> lista_zmaterializowana = dzieci_sasiada.Concat(kopie).ToList();
+                        List<Wersja> lista_zmaterializowana = dzieci_sasiada.ToList();
                         foreach (var urzadzenie in lista_zmaterializowana)
                         {
                             if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
@@ -155,15 +156,12 @@ namespace RMVB_konsola.MVB
                                 Wersja kopia = new Wersja(urzadzenie, (Repo)repo);
                                 urzadzenie.dataWygasniecia = DateTime.Now;
                                 kopia.dataOstatniejModyfikacji = DateTime.Now;
-                                kopie.Add(kopia);
-
+                                zywe.Add(kopia);
                                 repo.saveVersion(kopia);
-
-                                //ctx.Wersje.Add(kopia);
 
                             }
                         }
-
+                        zywe.AddRange(kopie);//byly kopiowane wyzej juz, nie dodawane
                         //posortuj liste po id 
                         posortowaneZywe = zywe.OrderBy(q => q.UrzadzenieID);
 
@@ -184,7 +182,7 @@ namespace RMVB_konsola.MVB
                 else
                 {
                     dodajZlisty(posortowanaLista);
-                }; ;
+                };
             }
         }
         

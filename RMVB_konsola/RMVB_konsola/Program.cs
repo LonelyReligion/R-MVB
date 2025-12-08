@@ -47,7 +47,7 @@ rmvb.usunWersje(beta);
 
 
 
-for (int i = 0; i < 15; i++)
+for (int i = 0; i < 100; i++)
 {
     //do zdebugowania
     int id = i % 100;
@@ -59,14 +59,15 @@ for (int i = 0; i < 15; i++)
 
     rmvb.dodajWersje(tmp);
 
+    //10v10 np nie zadzialalo
     Pomiar losowy = new Pomiar();
-    int id_losowe = 0;
-    Wersja losowa = new Wersja(0, rmvb.zwrocRepo());
-    losowa.UrzadzenieID = id_losowe; //nadmiarowe
+    int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
+    Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
     losowa.dodajPomiar(losowy);
 
     rmvb.dodajWersje(losowa);
     rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
+
 }
 
 //czemu jak to wkleje do petli wyzej to drzewo jest zdegenerowane i posiada tylko wersje urzadzenia o id = 0?
