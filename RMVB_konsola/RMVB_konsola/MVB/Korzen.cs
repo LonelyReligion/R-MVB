@@ -29,6 +29,9 @@ namespace RMVB_konsola.MVB
 
             Pversion = pversion;
         }
+        internal int zwrocLiczbeWpisow() {
+            return wpisy.Count();
+        }
 
         internal void dodaj(Wersja u)
         {
@@ -100,7 +103,7 @@ namespace RMVB_konsola.MVB
             return count < Wezel.pojemnoscWezla * Wezel.Psvu;
         }
 
-        internal void versionSplit(int numer_wezla, Wersja u)
+        internal int versionSplit(int numer_wezla, Wersja u)
         {
             //version split
             List<Wersja> kopie = new List<Wersja>();
@@ -167,23 +170,30 @@ namespace RMVB_konsola.MVB
 
                         this.wpisy[wpisy.Count - 2].Item2.maxData = DateTime.Now;
                     }
+                    else //nie ma sasiada
+                    {
+                        dodajZlisty(kopie);
+                        return 0;
+                    };
 
                     //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
                     if (strongVersionOverflow(posortowaneZywe.ToList().Count))
                     {
                         keySplit(posortowaneZywe);
                     }
-                    else if(posortowaneZywe.Count() != 0)
+                    else if (posortowaneZywe.Count() != 0)
                     {
                         //a jezeli dalej underflow no to chyba juz trudno? innego sasiada nie ma
                         dodajZlisty(posortowaneZywe);
-                    };
+                    }
+                    
                 }
                 else
                 {
                     dodajZlisty(posortowanaLista);
                 };
             }
+            return 0;
         }
         
         //nietestowane

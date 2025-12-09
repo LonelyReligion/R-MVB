@@ -25,7 +25,7 @@ Generatory generator = new Generatory(rmvb.zwrocRepo());
 Test.generator = generator;
 
 // Urzadzenie 0v0
-Urzadzenie testowe = new Urzadzenie(0, generator.generujWspolrzedne());
+Urzadzenie testowe = new Urzadzenie(0, generator.generujWspolrzedneDeterministycznie()); // new Urzadzenie(0, generator.generujWspolrzedne());
 rmvb.dodajUrzadzenie(testowe);
 
 Pomiar testowy = new Pomiar(0, DateTime.Now);
@@ -52,37 +52,41 @@ for (int i = 0; i < 100; i++)
     //do zdebugowania
     int id = i % 100;
     if (!rmvb.czyUrzadzenieIstnieje(id)) { 
-        Urzadzenie testowe1 = new Urzadzenie(id, generator.generujWspolrzedne());
+        Urzadzenie testowe1 = new Urzadzenie(id, generator.generujWspolrzedneDeterministycznie()); // new Urzadzenie(0, generator.generujWspolrzedne());
         rmvb.dodajUrzadzenie(testowe1);
     }
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
 
     rmvb.dodajWersje(tmp);
 
-    //10v10 np nie zadzialalo
-    Pomiar losowy = new Pomiar();
-    int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
-    Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
-    losowa.dodajPomiar(losowy);
+    for (int j = 0; j < 7; j++)
+    {
+        //6v24, ale tylko czasami (kiedy?)
+        Pomiar losowy = new Pomiar();
+        int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
+        Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
+        losowa.dodajPomiar(losowy);
 
-    rmvb.dodajWersje(losowa);
-    rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
+        rmvb.dodajWersje(losowa);
+        rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa); 
+    }
 
+    Console.WriteLine(rmvb.zwrocMVB().zwrocLiczbeWpisowKorzenia(0));
 }
 
-//czemu jak to wkleje do petli wyzej to drzewo jest zdegenerowane i posiada tylko wersje urzadzenia o id = 0?
-/*for (int j = 0; j < 12; j++)
+//DEBUG 10V10
+//przy wstawianiu 100 wersji z obecnym algorytmem powstają 3 wersje urządzenia o id = 10
+
+/*for (int i = 0; i < 7; i++)
 {
-    Pomiar losowy = generator.generujLosowyPomiar();
-
-    int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
+    Pomiar losowy = new Pomiar();
+    int id_losowe = 10; // = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
     Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
-    losowa.UrzadzenieID = id_losowe; //nadmiarowe
-    rmvb.dodajWersje(losowa);
-
     losowa.dodajPomiar(losowy);
-    rmvb.dodajPomiar(losowa.UrzadzenieID, losowy);
+    rmvb.dodajWersje(losowa);
+    rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
 }*/
+
 
 rmvb.wypiszMVB();
 

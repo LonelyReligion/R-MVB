@@ -39,6 +39,10 @@ namespace RMVB_konsola.MVB
             }
         }
 
+        internal int zwrocLiczbeWpisowKorzenia(int nr) {
+            return desk[nr].korzen.zwrocLiczbeWpisow();
+        }
+
         internal void dodajUrzadzenie(Wersja u) {
             //w jakis sposob (na podstawie dat) wybieramy korzen
             var dk = desk[0].korzen;
