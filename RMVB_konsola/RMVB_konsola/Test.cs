@@ -336,21 +336,21 @@ namespace RMVB_konsola
         public void testIdV(int ileRazy) {
             
             List<(int, int)> szukane_id_v = new List<(int, int)>();
-            /*            for (int i = 0; i < ileRazy; i++)
-                        {
-                            int losowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
-                            int losowa_wersja_id = repo.pobierzUrzadzeniaWersje().ElementAt(losowe_urzadzenie_id).Value.ElementAt(rnd.Next(repo.pobierzUrzadzeniaWersje().ElementAt(losowe_urzadzenie_id).Value.Count - 1)).WersjaID;
-                            szukane_id_v.Add((losowe_urzadzenie_id, losowa_wersja_id));
-                        }*/
+            for (int i = 0; i < ileRazy; i++)
+            {
+                int losowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
+                int losowa_wersja_id = repo.pobierzUrzadzeniaWersje().ElementAt(losowe_urzadzenie_id).Value.ElementAt(rnd.Next(repo.pobierzUrzadzeniaWersje().ElementAt(losowe_urzadzenie_id).Value.Count - 1)).WersjaID;
+                szukane_id_v.Add((losowe_urzadzenie_id, losowa_wersja_id));
+            }
 
-            int losowe_urzadzenie_id = 6;
+            /*int losowe_urzadzenie_id = 6;
             int losowa_wersja_id = 24;
             szukane_id_v.Add((losowe_urzadzenie_id, losowa_wersja_id));
-
+*/
             //>
             Wersja? szukana = null;
             sw = Stopwatch.StartNew();
-            for (int i = 0; i < 1/*ileRazy*/; i++)
+            for (int i = 0; i < ileRazy; i++)
             {
                 int id = szukane_id_v[i].Item1;
                 int v = szukane_id_v[i].Item2;
@@ -368,13 +368,17 @@ namespace RMVB_konsola
                 Console.WriteLine("Baza: " + szukana.UrzadzenieID + "v" + szukana.WersjaID + " w czasie: " + czas_baza + " ms.");
 
             sw = Stopwatch.StartNew();
-            for (int i = 0; i < 1/*ileRazy*/; i++)
+            for (int i = 0; i < ileRazy; i++)
             {
                 int id = szukane_id_v[i].Item1;
                 int v = szukane_id_v[i].Item2;
                 szukana = rmvb.szukaj(id, v);
                 if (szukana == null)
+                {
                     Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
+                    //do debuggowania
+                    szukana = rmvb.szukaj(id, v);
+                }
             }
             long czas_mvb = sw.ElapsedMilliseconds;
             if (szukana != null)

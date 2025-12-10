@@ -47,7 +47,7 @@ rmvb.usunWersje(beta);
 
 
 
-for (int i = 0; i < 100; i++)
+for (int i = 0; i < 10; i++)
 {
     //do zdebugowania
     int id = i % 100;
@@ -61,9 +61,8 @@ for (int i = 0; i < 100; i++)
 
     for (int j = 0; j < 7; j++)
     {
-        //6v24, ale tylko czasami (kiedy?)
         Pomiar losowy = new Pomiar();
-        int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
+        int id_losowe = j;// rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
         Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
         losowa.dodajPomiar(losowy);
 
@@ -74,8 +73,6 @@ for (int i = 0; i < 100; i++)
     Console.WriteLine(rmvb.zwrocMVB().zwrocLiczbeWpisowKorzenia(0));
 }
 
-//DEBUG 10V10
-//przy wstawianiu 100 wersji z obecnym algorytmem powstają 3 wersje urządzenia o id = 10
 
 /*for (int i = 0; i < 7; i++)
 {

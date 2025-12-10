@@ -69,6 +69,7 @@ namespace RMVB_konsola.MVB
                             dodano = true;
                             break;
                         }
+                        
                     }
                 }
 
