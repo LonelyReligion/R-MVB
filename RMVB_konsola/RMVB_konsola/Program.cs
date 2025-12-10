@@ -45,7 +45,21 @@ beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, 
 rmvb.usunWersje(beta);
 //
 
-
+//spreparowna kolejność wywołująca błąd ;)
+int[][] debug_ids =
+[
+ [0,0,0,0,0,0,0],
+ [0,1,0,1,0,1,0],
+ [0,1,2,0,1,2,0],
+ [0,1,2,3,0,1,2],
+ [0,1,2,3,4,0,1],
+ [0,1,2,3,4,5,0],
+ [0,1,2,3,4,5,6],
+ [0,1,2,3,4,5,6],
+ [0,1,2,3,4,5,6],
+ [0,1,2,3,4,5,6],
+ [4,5,6,0,1,2,3]
+];
 
 for (int i = 0; i < 10; i++)
 {
@@ -62,7 +76,7 @@ for (int i = 0; i < 10; i++)
     for (int j = 0; j < 7; j++)
     {
         Pomiar losowy = new Pomiar();
-        int id_losowe = j;// rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
+        int id_losowe = debug_ids[i][j];// rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
         Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
         losowa.dodajPomiar(losowy);
 
