@@ -44,13 +44,14 @@ namespace RMVB_konsola.MVB
             else
             {
                 bool dodano = false;
+                bool znalezlismy = false;
                 int numer_wezla = wpisy.Count - 1; //do tego powinnismy wstawic jezeli nie nalezy
                 //do zadnego przedzialu
 
                 for (int i = wpisy.Count - 1; i >= 0 ; i--) //szukamy od najnowszych do najstarszych
                 {
                     //czy nalezy do odp przedzialu kluczy
-                    if (wpisy[i].Item2.maxKlucz >= u.UrzadzenieID && wpisy[i].Item2.minKlucz <= u.UrzadzenieID) //uwzglednic tez daty?
+                    if (!znalezlismy && wpisy[i].Item2.maxKlucz >= u.UrzadzenieID && wpisy[i].Item2.minKlucz <= u.UrzadzenieID) //uwzglednic tez daty?
                     {
                         numer_wezla = i;
                         if (wpisy[i].Item2.wezel.dodaj(u)) //czy jest miejsce
@@ -69,7 +70,7 @@ namespace RMVB_konsola.MVB
                             dodano = true;
                             break;
                         }
-                        
+                        znalezlismy = true;
                     }
                 }
 

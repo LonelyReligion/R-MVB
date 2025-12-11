@@ -334,8 +334,8 @@ namespace RMVB_konsola
 
         //wyszukiwanie po id i wersji
         public void testIdV(int ileRazy) {
-            
             List<(int, int)> szukane_id_v = new List<(int, int)>();
+            szukane_id_v = [(2,7), (3,9), (3,8), (4,8), (1,10)];
             for (int i = 0; i < ileRazy; i++)
             {
                 int losowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
