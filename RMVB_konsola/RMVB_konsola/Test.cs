@@ -57,12 +57,18 @@ namespace RMVB_konsola
             Console.WriteLine("\n");
 
             Console.WriteLine("Sekcja druga: zapytania realizowane przez R");
+            
             Console.WriteLine("# Wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie");
             testProstokat(ileRazy); //przerobic na rozne granice
+            Console.WriteLine("\n");
+
             Console.WriteLine("# Wyszukiwanie agregatow czasowych");
             testAgregatyCzasowe(ileRazy);
+            Console.WriteLine("\n");
+
             Console.WriteLine("# Wyszukiwanie agregatów powierzchniowych");
             testAgregatyPowierzchniowe(); //przerobic na ileRa
+            Console.WriteLine("\n");
         }
 
         private void testAgregatyPowierzchniowe()
@@ -89,10 +95,10 @@ namespace RMVB_konsola
                 List<int> ids = new List<int>();
                 foreach (Urzadzenie u in ctx.Urzadzenia)
                 {
-                    bool a = u.Dlugosc < y1;
-                    bool b = u.Dlugosc >= y2;
-                    bool c = u.Szerokosc <= x1;
-                    bool d = u.Szerokosc > x2;
+                    bool a = u.Szerokosc < y1;
+                    bool b = u.Szerokosc >= y2;
+                    bool c = u.Dlugosc <= x1;
+                    bool d = u.Dlugosc > x2;
 
                     if (a | b | c | d)
                         ;
@@ -102,7 +108,11 @@ namespace RMVB_konsola
                 System.String Out = "(";
                 foreach (Pomiar p in ctx.Pomiary)
                 {
-                    if (p.WersjeUrzadzenia.FirstOrDefault() != null && ids.Contains((int)p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID) && p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0))
+                    //przerobic na zapytanie
+                    bool ma_wersje_przypisana = p.WersjeUrzadzenia.FirstOrDefault() != null;
+                    bool nalezy_do_przedzialu = ids.Contains((int)p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID);
+                    bool nie_jest_stary = p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0);
+                    if (ma_wersje_przypisana && nalezy_do_przedzialu && nie_jest_stary)
                     {
                         ile++;
                         resultDB += p.Wartosc;
@@ -129,7 +139,6 @@ namespace RMVB_konsola
             }
             long wynik3 = sw.ElapsedMilliseconds;
 
-            Console.WriteLine("");
             Console.WriteLine("Szukanie agregatu przestrzennego dla obszaru: xMin(" + x1 + "), " + "yMin(" + y1 + "), " + "xMax(" + x2 + "), " + "yMax(" + y2 + "), ");
             Console.WriteLine("WARTOŚCI: Recznie: " + resultDB + " vs " + "RMVB: " + resultRTree);
             Console.WriteLine("CZASY:    Recznie: " + wynik +  " vs " + "RMVB: " + wynik3);
@@ -194,7 +203,6 @@ namespace RMVB_konsola
             }
             long czas = sw.ElapsedMilliseconds;
 
-            Console.WriteLine("");
             Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id.ToString());
             Console.WriteLine("WARTOŚCI: Baza: " + wynikBD + " vs " + "Rtree: " + wynikR);
             Console.WriteLine("CZASY: Baza: " + czasBD + " vs " + "Rtree: " + czas);

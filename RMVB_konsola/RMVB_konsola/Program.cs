@@ -59,7 +59,9 @@ for (int i = 0; i < 100; i++)
 
     for (int j = 0; j < 20; j++)
     {
-        Pomiar losowy = new Pomiar();
+        Decimal losowaTemp = (Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0);
+        Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
+
         int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
         Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
         losowa.dodajPomiar(losowy);
@@ -72,16 +74,17 @@ for (int i = 0; i < 100; i++)
 }
 
 
-/*for (int i = 0; i < 7; i++)
+for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
 {
-    Pomiar losowy = new Pomiar();
-    int id_losowe = 10; // = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
-    Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
+    Decimal losowaTemp = (Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0);
+    Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
+
+    Wersja losowa = new Wersja(i, rmvb.zwrocRepo());
     losowa.dodajPomiar(losowy);
     rmvb.dodajWersje(losowa);
     rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
-}*/
-
+}
+rmvb.obliczAgregaty();
 
 rmvb.wypiszMVB();
 
