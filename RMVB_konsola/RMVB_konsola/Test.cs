@@ -59,39 +59,43 @@ namespace RMVB_konsola
             Console.WriteLine("Sekcja druga: zapytania realizowane przez R");
             
             Console.WriteLine("# Wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie");
-            testProstokat(ileRazy); //przerobic na rozne granice
+            testProstokat(ileRazy); 
             Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatow czasowych");
-            testAgregatyCzasowe(ileRazy);
+            testAgregatyCzasowe(ileRazy); //poprawic
             Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatów powierzchniowych");
-            testAgregatyPowierzchniowe(); //przerobic na ileRa
+            testAgregatyPowierzchniowe(ileRazy); //przerobic na ileRa
             Console.WriteLine("\n");
         }
 
-        private void testAgregatyPowierzchniowe()
+        private void testAgregatyPowierzchniowe(int ileRazy)
         {
-            Rectangle szukany = generator.generujProstokat();
-            decimal x1 = szukany.XMin;
-            decimal y1 = szukany.YMin;
-            decimal x2 = szukany.XMax;
-            decimal y2 = szukany.YMax;
+            List<Rectangle> szukane = new List<Rectangle>();
+            for(int i = 0; i < ileRazy; i++)
+                szukane.Add(generator.generujProstokat());
 
-            decimal resultDB = 0;
-            decimal resultRTree = 0;
+            List<decimal> resultDB = new List<decimal>();
+            List<decimal> resultRTree = new List<decimal>();
 
             Stopwatch sw;
             sw = Stopwatch.StartNew();
             int ile = 0;
             int cnt_1 = 0;
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < ileRazy; i++)
             {
-                resultDB = 0;
+                decimal x1 = szukane[i].XMin;
+                decimal y1 = szukane[i].YMin;
+                decimal x2 = szukane[i].XMax;
+                decimal y2 = szukane[i].YMax;
+
                 ile = 0;
 
                 int cnt = 0;
+                resultDB.Add(0);
+
                 List<int> ids = new List<int>();
                 foreach (Urzadzenie u in ctx.Urzadzenia)
                 {
@@ -115,15 +119,15 @@ namespace RMVB_konsola
                     if (ma_wersje_przypisana && nalezy_do_przedzialu && nie_jest_stary)
                     {
                         ile++;
-                        resultDB += p.Wartosc;
+                        resultDB[i] += p.Wartosc;
                         Out += p.Wartosc + "+";
                     }
                 }
                 Console.WriteLine(Out + ")/" + ile);
                 if (ile != 0)
-                    resultDB /= ile;
+                    resultDB[i] /= ile;
                 else
-                    resultDB = 0;
+                    resultDB[i] = 0;
                 cnt_1 = cnt;
                 Console.WriteLine("===========");
             }
@@ -131,19 +135,21 @@ namespace RMVB_konsola
             Console.WriteLine("(recznie) Policzona na podstawie " + ile.ToString() + " elementow");
 
             sw = Stopwatch.StartNew();
-            Rectangle searchRect = new Rectangle(x1, y1, x2, y2);
             int cnt_r = 0;
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < ileRazy; i++)
             {
-                resultRTree = rmvb.szukajAgregatu(szukany).Item2;
+                resultRTree.Add(rmvb.szukajAgregatu(szukane[i]).Item2);
             }
             long wynik3 = sw.ElapsedMilliseconds;
 
-            Console.WriteLine("Szukanie agregatu przestrzennego dla obszaru: xMin(" + x1 + "), " + "yMin(" + y1 + "), " + "xMax(" + x2 + "), " + "yMax(" + y2 + "), ");
-            Console.WriteLine("WARTOŚCI: Recznie: " + resultDB + " vs " + "RMVB: " + resultRTree);
-            Console.WriteLine("CZASY:    Recznie: " + wynik +  " vs " + "RMVB: " + wynik3);
-        
-    }
+            for (int i = 0; i < ileRazy; i++)
+            {
+                Console.WriteLine("Szukanie agregatu przestrzennego dla obszaru: xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
+                    "xMax(" + szukane[i].YMin + "), " + "yMax(" + szukane[i].YMax + "), ");
+                Console.WriteLine("WARTOŚCI: Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i]);
+            }
+            Console.WriteLine("CZASY:    Recznie: " + wynik + " vs " + "RMVB: " + wynik3);
+        }
 
         //wyszukuje agregat czasowy 
         private void testAgregatyCzasowe(int ileRazy)
@@ -214,7 +220,7 @@ namespace RMVB_konsola
         private void testProstokat(int ileRazy) {
             List<Rectangle> searchRect = new List<Rectangle>();
             for(int i = 0; i < ileRazy; i++)
-                searchRect.Add(generator.generujProstokat()); //powinno wyjsc 2 przy det. 7 urzadzeniach
+                searchRect.Add(generator.generujProstokat()); 
 
             Stopwatch sw;
             sw = Stopwatch.StartNew();
