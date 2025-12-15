@@ -67,7 +67,7 @@ namespace RMVB_konsola
             Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatów powierzchniowych");
-            testAgregatyPowierzchniowe(ileRazy); //przerobic na ileRa
+            testAgregatyPowierzchniowe(ileRazy);
             Console.WriteLine("\n");
         }
 
@@ -79,10 +79,11 @@ namespace RMVB_konsola
 
             List<decimal> resultDB = new List<decimal>();
             List<decimal> resultRTree = new List<decimal>();
+            List<string> Out = new List<string>();
 
             Stopwatch sw;
             sw = Stopwatch.StartNew();
-            int ile = 0;
+            List<int> ile = new List<int>();
             int cnt_1 = 0;
             for (int i = 0; i < ileRazy; i++)
             {
@@ -91,7 +92,7 @@ namespace RMVB_konsola
                 decimal x2 = szukane[i].XMax;
                 decimal y2 = szukane[i].YMax;
 
-                ile = 0;
+                ile.Add(0);
 
                 int cnt = 0;
                 resultDB.Add(0);
@@ -109,7 +110,7 @@ namespace RMVB_konsola
                     else
                         ids.Add(u.UrzadzenieID);
                 }
-                System.String Out = "(";
+                Out.Add("(");
                 foreach (Pomiar p in ctx.Pomiary)
                 {
                     //przerobic na zapytanie
@@ -118,35 +119,47 @@ namespace RMVB_konsola
                     bool nie_jest_stary = p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0);
                     if (ma_wersje_przypisana && nalezy_do_przedzialu && nie_jest_stary)
                     {
-                        ile++;
+                        ile[i]++;
                         resultDB[i] += p.Wartosc;
-                        Out += p.Wartosc + "+";
+                        Out[i] += p.Wartosc + "+";
                     }
                 }
-                Console.WriteLine(Out + ")/" + ile);
-                if (ile != 0)
-                    resultDB[i] /= ile;
+                if (ile[i] != 0)
+                    resultDB[i] /= ile[i];
                 else
                     resultDB[i] = 0;
                 cnt_1 = cnt;
-                Console.WriteLine("===========");
             }
             long wynik = sw.ElapsedMilliseconds;
-            Console.WriteLine("(recznie) Policzona na podstawie " + ile.ToString() + " elementow");
 
             sw = Stopwatch.StartNew();
             int cnt_r = 0;
+            List<decimal> ile_r = new List<decimal>();
             for (int i = 0; i < ileRazy; i++)
             {
-                resultRTree.Add(rmvb.szukajAgregatu(szukane[i]).Item2);
+                (decimal liczba_elementow, decimal srednia) = rmvb.szukajAgregatu(szukane[i]);
+                resultRTree.Add(srednia);
+                ile_r.Add(liczba_elementow);
+                
             }
             long wynik3 = sw.ElapsedMilliseconds;
 
+            Console.WriteLine("========================================");
             for (int i = 0; i < ileRazy; i++)
             {
                 Console.WriteLine("Szukanie agregatu przestrzennego dla obszaru: xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
                     "xMax(" + szukane[i].YMin + "), " + "yMax(" + szukane[i].YMax + "), ");
-                Console.WriteLine("WARTOŚCI: Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i]);
+                Console.WriteLine("WARTOŚCI: Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
+                Console.WriteLine(Out[i] + ")/" + ile[i]);
+
+
+                if (ile[i] != ile_r[i])
+                {
+                    Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
+                        ile_r[i] + " (r)");
+                    rmvb.szukajAgregatu(szukane[i]);
+                }
+                Console.WriteLine("========================================");
             }
             Console.WriteLine("CZASY:    Recznie: " + wynik + " vs " + "RMVB: " + wynik3);
         }

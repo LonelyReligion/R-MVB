@@ -45,10 +45,10 @@ namespace RMVB_konsola
 
         private int liczba_uwzglednionych = 0;
         private decimal rTimeAggregate { get; set; }
-
+        DateTime granica = new DateTime(2024, 7, 18, 0, 0, 0);
         public void AddMeasure(Pomiar p, TreeRepository repository)
         {
-            //if (p.dtpomiaru > granica)
+            if (p.dtpomiaru > granica)
             {
                 suma += p.Wartosc;
                 liczba_uwzglednionych++;
@@ -61,7 +61,7 @@ namespace RMVB_konsola
 
         public void AddMeasure(DateTime t, decimal v, TreeRepository repository)
         {
-            //if (t > granica)
+            if (t > granica)
             {
                 suma += v;
                 liczba_uwzglednionych++;

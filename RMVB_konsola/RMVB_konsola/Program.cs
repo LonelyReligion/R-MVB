@@ -59,7 +59,7 @@ for (int i = 0; i < 100; i++)
 
     for (int j = 0; j < 20; j++)
     {
-        Decimal losowaTemp = (Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0);
+        Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0) * 100) / 100;
         Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
 
         int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
@@ -76,7 +76,7 @@ for (int i = 0; i < 100; i++)
 
 for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
 {
-    Decimal losowaTemp = (Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0);
+    Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0)) / 100;
     Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
 
     Wersja losowa = new Wersja(i, rmvb.zwrocRepo());
