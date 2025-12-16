@@ -99,7 +99,7 @@ namespace RMVB_konsola
         }
 
         public Rectangle generujProstokat() {
-            List<decimal> szerokosci = new List<decimal>();
+            List<Decimal> szerokosci = new List<Decimal>();
             for (int i = 0; i < 2; i++) {
                 Decimal szerokosc = (Decimal)(rnd.Next(49, 54) * 10000);
                 if (szerokosc < 540000)
@@ -117,7 +117,7 @@ namespace RMVB_konsola
                 szerokosci.Add(szerokosc);
             }
 
-            List<decimal> dlugosci = new List<decimal>();
+            List<Decimal> dlugosci = new List<Decimal>();
             for (int i = 0; i < 2; i++) {
                 Decimal dlugosc = (Decimal)(rnd.Next(14, 24) * 10000);
                 if (dlugosc < 240000)

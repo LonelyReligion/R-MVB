@@ -14,11 +14,11 @@ namespace RMVB_konsola
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int UrzadzenieID { get; set; }
 
-        [Column(TypeName = "decimal")]
-        public decimal Szerokosc { get; set; }
+        [Column(TypeName = "Decimal")]
+        public Decimal Szerokosc { get; set; }
 
-        [Column(TypeName = "decimal")]
-        public decimal Dlugosc { get; set; }
+        [Column(TypeName = "Decimal")]
+        public Decimal Dlugosc { get; set; }
         
         //wlasnosc nawigacyjna
         public virtual ICollection<Wersja> Wersje { get; set; }
@@ -27,7 +27,7 @@ namespace RMVB_konsola
         protected Urzadzenie() { 
             Wersje = new HashSet<Wersja>();
         }
-        public Urzadzenie(int UrzadzenieID, (decimal, decimal) dlugosc_szerokosc) : this()
+        public Urzadzenie(int UrzadzenieID, (Decimal, Decimal) dlugosc_szerokosc) : this()
         {
  
             Dlugosc = dlugosc_szerokosc.Item1;
@@ -41,10 +41,10 @@ namespace RMVB_konsola
         }
 
         //rtree
-        public decimal suma = 0;
+        public Decimal suma = 0;
 
         private int liczba_uwzglednionych = 0;
-        private decimal rTimeAggregate { get; set; }
+        private Decimal rTimeAggregate { get; set; }
         DateTime granica = new DateTime(2024, 7, 18, 0, 0, 0);
         public void AddMeasure(Pomiar p, TreeRepository repository)
         {
@@ -59,7 +59,7 @@ namespace RMVB_konsola
             }
         }
 
-        public void AddMeasure(DateTime t, decimal v, TreeRepository repository)
+        public void AddMeasure(DateTime t, Decimal v, TreeRepository repository)
         {
             if (t > granica)
             {
@@ -72,12 +72,12 @@ namespace RMVB_konsola
             }
         }
 
-        public decimal GetTimeAggregate()
+        public Decimal GetTimeAggregate()
         {
             return rTimeAggregate;
         }
 
-        public (int, decimal) get_liczba_suma()
+        public (int, Decimal) get_liczba_suma()
         {
             return (liczba_uwzglednionych, suma);
         }

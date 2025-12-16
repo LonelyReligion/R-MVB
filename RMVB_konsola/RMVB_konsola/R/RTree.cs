@@ -61,16 +61,16 @@ namespace RMVB_konsola.R
             return root.SearchBy(rect);
         }
 
-        public Urzadzenie SearchBy(decimal x, decimal y)
+        public Urzadzenie SearchBy(Decimal x, Decimal y)
         {
             return root.SearchBy(x, y);
         }
 
-        public (decimal, decimal) FindSpaceAggregate(Rectangle rect)
+        public (Decimal, Decimal) FindSpaceAggregate(Rectangle rect)
         {
             List<Urzadzenie> devicesInRect = SearchBy(rect);
-            decimal sum = 0;
-            decimal liczba_pomiarow = 0;
+            Decimal sum = 0;
+            Decimal liczba_pomiarow = 0;
 
             foreach (Urzadzenie device in devicesInRect)
             {
@@ -100,10 +100,10 @@ namespace RMVB_konsola.R
             }
         }
 
-        public decimal GetTimeAggregate(decimal x, decimal y)
+        public Decimal GetTimeAggregate(Decimal x, Decimal y)
         {
             Urzadzenie dev = SearchBy(x, y);
-            decimal result = dev.GetTimeAggregate();
+            Decimal result = dev.GetTimeAggregate();
             return result;
         }
 

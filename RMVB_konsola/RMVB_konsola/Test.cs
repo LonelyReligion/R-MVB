@@ -63,7 +63,7 @@ namespace RMVB_konsola
             Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatow czasowych");
-            testAgregatyCzasowe(ileRazy); //poprawic
+            testAgregatyCzasowe(ileRazy); 
             Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatów powierzchniowych");
@@ -77,8 +77,8 @@ namespace RMVB_konsola
             for(int i = 0; i < ileRazy; i++)
                 szukane.Add(generator.generujProstokat());
 
-            List<decimal> resultDB = new List<decimal>();
-            List<decimal> resultRTree = new List<decimal>();
+            List<Decimal> resultDB = new List<Decimal>();
+            List<Decimal> resultRTree = new List<Decimal>();
             List<string> Out = new List<string>();
 
             Stopwatch sw;
@@ -87,10 +87,10 @@ namespace RMVB_konsola
             int cnt_1 = 0;
             for (int i = 0; i < ileRazy; i++)
             {
-                decimal x1 = szukane[i].XMin;
-                decimal y1 = szukane[i].YMin;
-                decimal x2 = szukane[i].XMax;
-                decimal y2 = szukane[i].YMax;
+                Decimal x1 = szukane[i].XMin;
+                Decimal y1 = szukane[i].YMin;
+                Decimal x2 = szukane[i].XMax;
+                Decimal y2 = szukane[i].YMax;
 
                 ile.Add(0);
 
@@ -134,20 +134,20 @@ namespace RMVB_konsola
 
             sw = Stopwatch.StartNew();
             int cnt_r = 0;
-            List<decimal> ile_r = new List<decimal>();
+            List<Decimal> ile_r = new List<Decimal>();
             for (int i = 0; i < ileRazy; i++)
             {
-                (decimal liczba_elementow, decimal srednia) = rmvb.szukajAgregatu(szukane[i]);
+                (Decimal liczba_elementow, Decimal srednia) = rmvb.szukajAgregatu(szukane[i]);
                 resultRTree.Add(srednia);
                 ile_r.Add(liczba_elementow);
                 
             }
             long wynik3 = sw.ElapsedMilliseconds;
 
-            Console.WriteLine("========================================");
+            Console.WriteLine("**********************************");
             for (int i = 0; i < ileRazy; i++)
             {
-                Console.WriteLine("Szukanie agregatu przestrzennego dla obszaru: xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
+                Console.WriteLine("Szukanie agregatu powierzchniowego dla obszaru: xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
                     "xMax(" + szukane[i].YMin + "), " + "yMax(" + szukane[i].YMax + "), ");
                 Console.WriteLine("WARTOŚCI: Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
                 Console.WriteLine(Out[i] + ")/" + ile[i]);
@@ -159,7 +159,7 @@ namespace RMVB_konsola
                         ile_r[i] + " (r)");
                     rmvb.szukajAgregatu(szukane[i]);
                 }
-                Console.WriteLine("========================================");
+                Console.WriteLine("**********************************");
             }
             Console.WriteLine("CZASY:    Recznie: " + wynik + " vs " + "RMVB: " + wynik3);
         }
@@ -168,11 +168,12 @@ namespace RMVB_konsola
         private void testAgregatyCzasowe(int ileRazy)
         {
             //losowanie ze zwracaniem
-            //for(int i = 0; i < ileRazy; i++)
-                (Decimal x, Decimal y) = generator.wylosujWspolrzedne();
+            List<(Decimal, Decimal)> wspolrzedne = new List<(Decimal, Decimal)>();
+            for(int i = 0; i < ileRazy; i++)
+                wspolrzedne.Add(generator.wylosujWspolrzedne());
 
-            decimal wynikBD = 0;
-            decimal wynikR = 0;
+            List<Decimal> wynikBD = new List<Decimal>();
+            List<Decimal> wynikR = new List<Decimal>();
 
             Stopwatch sw;
             int cnt_1 = 0;
@@ -182,7 +183,8 @@ namespace RMVB_konsola
             int id = -1;
             for (int i = 0; i < ileRazy; i++)
             {
-                wynikBD = 0;
+                (Decimal x, Decimal y) = wspolrzedne[i];
+                wynikBD.Add(0);
                 liczba = 0;
 
                 id = ctx.Urzadzenia
@@ -200,12 +202,12 @@ namespace RMVB_konsola
                                             .Where(p => p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0)) //zparametryzowac
                                             .ToList();
                     liczba += pomiary.Count;
-                    foreach (Pomiar p in pomiary)  wynikBD += p.Wartosc;
+                    foreach (Pomiar p in pomiary) wynikBD[i] += p.Wartosc;
 
                     if (liczba != 0)
-                        wynikBD /= liczba;
+                        wynikBD[i] /= liczba;
                     else
-                        wynikBD = 0;
+                        wynikBD[i] = 0;
                 }
                 else
                     Console.WriteLine("Urzadzenie o wsp. " + x + " " + y + " nie istnieje w bazie");
@@ -218,12 +220,18 @@ namespace RMVB_konsola
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++)
             {
-                wynikR = rmvb.szukajAgregatuCzasowego(x, y);
+                (Decimal x, Decimal y) = wspolrzedne[i];
+                wynikR.Add(rmvb.szukajAgregatuCzasowego(x, y));
             }
             long czas = sw.ElapsedMilliseconds;
-
-            Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id.ToString());
-            Console.WriteLine("WARTOŚCI: Baza: " + wynikBD + " vs " + "Rtree: " + wynikR);
+            Console.WriteLine("**********************************");
+            for (int i = 0; i < ileRazy; i++)
+            {
+                (Decimal x, Decimal y) = wspolrzedne[i];
+                Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id.ToString());
+                Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
+                Console.WriteLine("**********************************");
+            }
             Console.WriteLine("CZASY: Baza: " + czasBD + " vs " + "Rtree: " + czas);
 
         }

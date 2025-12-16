@@ -40,17 +40,17 @@ namespace RMVB_konsola.R
         }
 
         //zwraca urządzenie w podanym punkcie
-        internal Urzadzenie szukaj(decimal x, decimal y) { 
+        internal Urzadzenie szukaj(Decimal x, Decimal y) { 
             return drzewo.SearchBy(x, y);
         }
 
         //zwraca liczbę pomiarów i agregat powierzchniowy (z czego?)
-        internal (decimal, decimal) szukajAgregatuPowierzchniowego(Rectangle rect) { 
+        internal (Decimal, Decimal) szukajAgregatuPowierzchniowego(Rectangle rect) { 
             return drzewo.FindSpaceAggregate(rect);
         }
 
         //zwraca agregat czasowy
-        public decimal szukajAgregatuCzasowego(decimal x, decimal y) {
+        public Decimal szukajAgregatuCzasowego(Decimal x, Decimal y) {
             return drzewo.GetTimeAggregate(x, y);
         }
 

@@ -14,7 +14,7 @@ namespace RMVB_konsola
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PomiarID { get; set; }
-        public decimal Wartosc { get; set; }
+        public Decimal Wartosc { get; set; }
         public DateTime dtpomiaru { get; set; }
 
         //relacja wiele do wielu wynika z dodania wersji

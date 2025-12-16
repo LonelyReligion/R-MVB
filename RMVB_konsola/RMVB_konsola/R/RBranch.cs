@@ -15,7 +15,7 @@ namespace RMVB_konsola.R
         public override int zwrocLiczbeDzieci() { 
             return children.Count;
         }
-        public RBranch(decimal xmin, decimal ymin, decimal xmax, decimal ymax) : base(xmin, ymin, xmax, ymax)
+        public RBranch(Decimal xmin, Decimal ymin, Decimal xmax, Decimal ymax) : base(xmin, ymin, xmax, ymax)
         {
 
         }
@@ -69,12 +69,12 @@ namespace RMVB_konsola.R
                     return;
                 }
             }
-            decimal minEnlargement = decimal.MaxValue;
+            Decimal minEnlargement = Decimal.MaxValue;
             RNode minimal = null;
 
             foreach (var ch in children)
             {
-                decimal enlargement = Math.Abs(ch.mbr.EnlargedBy(dev.Szerokosc, dev.Dlugosc).Area() - ch.mbr.Area());
+                Decimal enlargement = Math.Abs(ch.mbr.EnlargedBy(dev.Szerokosc, dev.Dlugosc).Area() - ch.mbr.Area());
 
                 if (enlargement < minEnlargement)
                 {
@@ -86,7 +86,7 @@ namespace RMVB_konsola.R
             minimal.Insert(dev, adaptor);
         }
 
-        public override decimal Distance(int i, int j)
+        public override Decimal Distance(int i, int j)
         {
             return children[i].mbr.Distance(children[j].mbr);
         }
@@ -116,16 +116,16 @@ namespace RMVB_konsola.R
 
         public override void SplitEntries(RNode pNode, RNode kNode)
         {
-            decimal maxDiff = decimal.MinValue;
+            Decimal maxDiff = Decimal.MinValue;
             RNode chToAdd = null;
             RBranch destination = (RBranch)pNode;
 
             foreach (RNode ch in children)
             {
 
-                decimal distP = pNode.mbr.EnlargedBy(ch.mbr).Area() - pNode.mbr.Area();
-                decimal distK = kNode.mbr.EnlargedBy(ch.mbr).Area() - kNode.mbr.Area();
-                decimal diff = Math.Abs(distP - distK);
+                Decimal distP = pNode.mbr.EnlargedBy(ch.mbr).Area() - pNode.mbr.Area();
+                Decimal distK = kNode.mbr.EnlargedBy(ch.mbr).Area() - kNode.mbr.Area();
+                Decimal diff = Math.Abs(distP - distK);
 
                 if (diff > maxDiff)
                 {
@@ -147,10 +147,10 @@ namespace RMVB_konsola.R
 
         public override void UpdateMBR()
         {
-            mbr.XMin = decimal.MaxValue;
-            mbr.YMin = decimal.MaxValue;
-            mbr.XMax = decimal.MinValue;
-            mbr.YMax = decimal.MinValue;
+            mbr.XMin = Decimal.MaxValue;
+            mbr.YMin = Decimal.MaxValue;
+            mbr.XMax = Decimal.MinValue;
+            mbr.YMax = Decimal.MinValue;
 
             foreach (RNode ch in children)
             {
@@ -199,7 +199,7 @@ namespace RMVB_konsola.R
             return result;
         }
 
-        public override Urzadzenie SearchBy(decimal x, decimal y)
+        public override Urzadzenie SearchBy(Decimal x, Decimal y)
         {
             if (mbr.Contains(x, y))
             {

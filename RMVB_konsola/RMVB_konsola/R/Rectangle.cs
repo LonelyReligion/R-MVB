@@ -8,15 +8,15 @@ namespace RMVB_konsola.R
 {
     public class Rectangle
     {
-        public decimal XMin;
+        public Decimal XMin;
 
-        public decimal YMin;
+        public Decimal YMin;
 
-        public decimal XMax;
+        public Decimal XMax;
 
-        public decimal YMax;
+        public Decimal YMax;
 
-        public Rectangle(decimal yMin, decimal xMin, decimal yMax, decimal xMax)
+        public Rectangle(Decimal yMin, Decimal xMin, Decimal yMax, Decimal xMax)
         {
             if ((xMin > xMax) || (yMin > yMax)) {
                 throw new ArgumentException("\"min\" coordinates must be less than the \"max\" ones");
@@ -43,10 +43,10 @@ namespace RMVB_konsola.R
         }
 
 
-        public decimal Distance(Rectangle r)
+        public Decimal Distance(Rectangle r)
         {
-            decimal xDistance = Math.Max(0, Math.Max(XMin, r.XMin) - Math.Min(XMax, r.XMax));
-            decimal yDistance = Math.Max(0, Math.Max(YMin, r.YMin) - Math.Min(YMax, r.YMax));
+            Decimal xDistance = Math.Max(0, Math.Max(XMin, r.XMin) - Math.Min(XMax, r.XMax));
+            Decimal yDistance = Math.Max(0, Math.Max(YMin, r.YMin) - Math.Min(YMax, r.YMax));
             return xDistance + yDistance;
         }
 
@@ -85,7 +85,7 @@ namespace RMVB_konsola.R
             YMax = Math.Max(YMax, y);
         }
 
-        public decimal Area()
+        public Decimal Area()
         {
             return (XMax - XMin) * (YMax - YMin);
         }

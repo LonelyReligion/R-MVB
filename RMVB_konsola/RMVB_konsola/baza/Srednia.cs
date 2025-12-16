@@ -13,11 +13,11 @@ namespace RMVB_konsola
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SredniaID { get; set; }
-        public decimal wartosc { get; set; }
-        public decimal x1 { get; set; }
-        public decimal x2 { get; set; }
-        public decimal y1 { get; set; }
-        public decimal y2 { get; set; }
+        public Decimal wartosc { get; set; }
+        public Decimal x1 { get; set; }
+        public Decimal x2 { get; set; }
+        public Decimal y1 { get; set; }
+        public Decimal y2 { get; set; }
         public DateTime utworzona { get; set; }
     }
 }

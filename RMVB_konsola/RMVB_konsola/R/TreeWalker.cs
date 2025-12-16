@@ -43,13 +43,13 @@ namespace RMVB_konsola.R
 
         protected (RNode, RNode) QuadraticReproduce (RNode node)
         {
-            decimal maxD = decimal.MinValue;
+            Decimal maxD = Decimal.MinValue;
             int p0 = 0;
             int k0 = 0;
             int count = node.EntriesCount();
             for (int p = 0; p < count - 1; p++)   {
                 for (int k = p + 1; k < count; k++) {
-                    decimal d = node.Distance(p, k);
+                    Decimal d = node.Distance(p, k);
                     if (d > maxD)  {
                         maxD = d;
                         p0 = p;

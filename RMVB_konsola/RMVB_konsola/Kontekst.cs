@@ -35,12 +35,12 @@ namespace RMVB_konsola
 
             modelBuilder.Entity<Urzadzenie>()
                 .Property(e => e.Szerokosc)
-                .HasColumnType("decimal")
+                .HasColumnType("Decimal")
                 .HasPrecision(18, 4);
 
             modelBuilder.Entity<Urzadzenie>()
                 .Property(e => e.Dlugosc)
-                .HasColumnType("decimal")
+                .HasColumnType("Decimal")
                 .HasPrecision(18, 4);
 
             //potrzebne żeby się skompilowało, i tak nie będziemy usuwać ¯\_(ツ)_/¯

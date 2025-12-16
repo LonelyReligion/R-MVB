@@ -14,10 +14,10 @@ namespace RMVB_konsola.R
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int spaceAggregateId { get; set; }
 
-        public decimal xMin { get; set; }
-        public decimal yMin { get; set; }
-        public decimal xMax { get; set; }
-        public decimal yMax { get; set; }
+        public Decimal xMin { get; set; }
+        public Decimal yMin { get; set; }
+        public Decimal xMax { get; set; }
+        public Decimal yMax { get; set; }
 
         private Rectangle mbr {  get; set; }
         public DateTime sATime { get; set; }

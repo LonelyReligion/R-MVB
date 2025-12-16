@@ -87,19 +87,19 @@ namespace RMVB_konsola
         }
 
         //zwraca urządzenie w podanym punkcie
-        internal Urzadzenie szukaj(decimal x, decimal y)
+        internal Urzadzenie szukaj(Decimal x, Decimal y)
         {
-            return R.szukaj((decimal)x, (decimal)y);
+            return R.szukaj((Decimal)x, (Decimal)y);
         }
 
         //zwraca liczbę pomiarów i agregat czasowy (z czego?)
-        internal (decimal, decimal) szukajAgregatu(Rectangle rect)
+        internal (Decimal, Decimal) szukajAgregatu(Rectangle rect)
         {
             return R.szukajAgregatuPowierzchniowego(rect);
         }
 
         //zwraca agregat czasowy urzadzenia
-        internal decimal szukajAgregatuCzasowego(decimal x, decimal y) {
+        internal Decimal szukajAgregatuCzasowego(Decimal x, Decimal y) {
             return R.szukajAgregatuCzasowego(x, y);
         }
 
