@@ -35,48 +35,54 @@ namespace RMVB_konsola.MVB
         internal void wypiszDrzewo() {
             foreach (DeskryptorKorzenia dk in desk)
             {
-                dk.korzen.wypisz();
+                dk.zwrocKorzen().wypisz();
             }
+
+            Console.WriteLine("Liczba korzeni MVB: " + desk.Count);
         }
 
         internal int zwrocLiczbeWpisowKorzenia(int nr) {
-            return desk[nr].korzen.zwrocLiczbeWpisow();
+            return desk[nr].zwrocKorzen().zwrocLiczbeWpisow();
         }
 
         internal void dodajUrzadzenie(Wersja u) {
-            //w jakis sposob (na podstawie dat) wybieramy korzen
-            var dk = desk[0].korzen;
-            dk.dodaj(u);
+            if (!desk.Last().zwrocKorzen().dodaj(u))
+            {
+                DateTime czas_zmiany = DateTime.Now;
+                desk.Last().ustawKoniec(czas_zmiany);
+                Korzen nowy = new Korzen(Repo, Pversion);
+                desk.Add(new DeskryptorKorzenia(czas_zmiany, DateTime.MaxValue, nowy));
+            }; 
         }
 
         internal void usunUrzadzenie(Wersja testowe2)
         {
-            var dk = desk[0].korzen;
+            var dk = desk[0].zwrocKorzen();
             dk.usun(testowe2);
         }
 
         //szukaj id i wersji
         internal Wersja szukaj(int id, int v)
         {
-            var dk = desk[0].korzen;
+            var dk = desk[0].zwrocKorzen();
             return dk.szukaj(id, v).Item2;
         }
 
         //szukaj wersji aktualnej w danym momencie
         internal Wersja szukaj(int id, DateTime dt) {
-            var dk = desk[0].korzen;
+            var dk = desk[0].zwrocKorzen();
             return dk.szukaj(id, dt);
         }
 
         //szukaj ostatniej wersji
         internal Wersja szukaj(int id) {
-            var dk = desk[0].korzen;
+            var dk = desk[0].zwrocKorzen();
             return dk.szukaj(id);
         }
 
         //zwraca wersje z danego skonczonego przedzialu czasowego
         internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) {
-            var dk = desk[0].korzen;
+            var dk = desk[0].zwrocKorzen();
             return dk.szukaj(poczatek, koniec); 
         }
     }

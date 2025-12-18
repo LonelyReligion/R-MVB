@@ -33,17 +33,18 @@ namespace RMVB_konsola.MVB
             return wpisy.Count();
         }
 
-        internal void dodaj(Wersja u)
+        internal bool dodaj(Wersja u)
         {
+            bool dodano = false;
             if (wpisy.Count() == 0)
             {
                 Wezel nowy = new Wezel();
                 nowy.dodaj(u);
                 wpisy.Add((wpisy.Count, new Wpis(u.UrzadzenieID, u.UrzadzenieID, u.dataOstatniejModyfikacji, u.dataWygasniecia, nowy)));
+                return true;
             }
             else
             {
-                bool dodano = false;
                 bool znalezlismy = false;
                 int numer_wezla = wpisy.Count - 1; //do tego powinnismy wstawic jezeli nie nalezy
                 //do zadnego przedzialu
@@ -78,7 +79,7 @@ namespace RMVB_konsola.MVB
                 if (!dodano && !(numer_wezla == wpisy.Count - 1 && wpisy[numer_wezla].Item2.wezel.dodaj(u)))
                 {
                     //wezel jest pelny
-                    versionSplit(numer_wezla, u);
+                    return versionSplit(numer_wezla, u);
                 }
                 else {
                     if (wpisy[numer_wezla].Item2.minKlucz > u.UrzadzenieID)
@@ -92,7 +93,7 @@ namespace RMVB_konsola.MVB
                         wpisy[numer_wezla].Item2.maxData = u.dataWygasniecia;
                 }
             }
-            //return dodano
+            return dodano;
         }
 
         //dla POTENCJALNEGO węzła
@@ -105,7 +106,7 @@ namespace RMVB_konsola.MVB
             return count < Wezel.pojemnoscWezla * Wezel.Psvu;
         }
 
-        internal int versionSplit(int numer_wezla, Wersja u)
+        internal bool versionSplit(int numer_wezla, Wersja u)
         {
             //version split
             List<Wersja> kopie = new List<Wersja>();
@@ -175,27 +176,30 @@ namespace RMVB_konsola.MVB
                     else //nie ma sasiada
                     {
                         dodajZlisty(kopie);
-                        return 0;
+                        return true;
                     };
 
                     //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
                     if (strongVersionOverflow(posortowaneZywe.ToList().Count))
                     {
                         keySplit(posortowaneZywe);
+                        return true;
                     }
                     else if (posortowaneZywe.Count() != 0)
                     {
                         //a jezeli dalej underflow no to chyba juz trudno? innego sasiada nie ma
                         dodajZlisty(posortowaneZywe);
+                        return true;
                     }
                     
                 }
                 else
                 {
                     dodajZlisty(posortowanaLista);
+                    return true;
                 };
             }
-            return 0;
+            return false;
         }
         
         //nietestowane

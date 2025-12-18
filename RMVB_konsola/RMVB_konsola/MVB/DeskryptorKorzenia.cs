@@ -13,13 +13,25 @@ namespace RMVB_konsola.MVB
         DateTime poczatek;
         DateTime koniec;
 
-        public Korzen korzen;
+        private Korzen korzen;
 
         public DeskryptorKorzenia(DateTime poczatek, DateTime koniec, Korzen korzen)
         {
             this.poczatek = poczatek;
             this.koniec = koniec;
             this.korzen = korzen;
+        }
+
+        public Korzen zwrocKorzen() { 
+            return korzen;
+        }
+
+        public void ustawPoczatek(DateTime dt) { 
+            poczatek = dt;
+        }
+
+        public void ustawKoniec(DateTime dt) { 
+            koniec = dt;
         }
     }
 }
