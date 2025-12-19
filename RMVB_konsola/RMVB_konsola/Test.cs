@@ -369,8 +369,9 @@ namespace RMVB_konsola
 
         //wyszukiwanie po id i wersji
         public void testIdV(int ileRazy) {
+
+            //doprowadzic spowrotem do porzadku (losowe)
             List<(int, int)> szukane_id_v = new List<(int, int)>();
-            szukane_id_v = [(2,7), (3,9), (3,8), (4,8), (1,10)];
             for (int i = 0; i < ileRazy; i++)
             {
                 int losowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
@@ -378,10 +379,6 @@ namespace RMVB_konsola
                 szukane_id_v.Add((losowe_urzadzenie_id, losowa_wersja_id));
             }
 
-            /*int losowe_urzadzenie_id = 6;
-            int losowa_wersja_id = 24;
-            szukane_id_v.Add((losowe_urzadzenie_id, losowa_wersja_id));
-*/
             //>
             Wersja? szukana = null;
             sw = Stopwatch.StartNew();

@@ -47,7 +47,6 @@ rmvb.usunWersje(beta);
 
 for (int i = 0; i < 100; i++)
 {
-    //do zdebugowania
     int id = i % 100;
     if (!rmvb.czyUrzadzenieIstnieje(id)) { 
         Urzadzenie testowe1 =  new Urzadzenie(id, generator.generujWspolrzedne());
@@ -57,7 +56,7 @@ for (int i = 0; i < 100; i++)
 
     rmvb.dodajWersje(tmp);
 
-    for (int j = 0; j < 20; j++)
+/*    for (int j = 0; j < 20; j++)
     {
         Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0) * 100) / 100;
         Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
@@ -68,13 +67,14 @@ for (int i = 0; i < 100; i++)
 
         rmvb.dodajWersje(losowa);
         rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa); 
-    }
+    }*/
 
     Console.WriteLine(rmvb.zwrocMVB().zwrocLiczbeWpisowKorzenia(0));
+    //rmvb.wypiszMVB();
 }
 
 
-for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
+/*for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
 {
     Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0)) / 100;
     Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
@@ -83,7 +83,7 @@ for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
     losowa.dodajPomiar(losowy);
     rmvb.dodajWersje(losowa);
     rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
-}
+}*/
 rmvb.obliczAgregaty();
 
 rmvb.wypiszMVB();

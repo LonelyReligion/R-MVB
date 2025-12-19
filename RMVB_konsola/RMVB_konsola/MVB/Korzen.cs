@@ -76,7 +76,7 @@ namespace RMVB_konsola.MVB
                 }
 
                 //jezeli nie dodano i id nie jest wieksze niz maxId ostatniego wezla lub on sam nie ma miejsca do wstawienia
-                if (!dodano && !(numer_wezla == wpisy.Count - 1 && wpisy[numer_wezla].Item2.wezel.dodaj(u)))
+                if (!dodano && !(numer_wezla == wpisy.Count - 1 && (dodano = wpisy[numer_wezla].Item2.wezel.dodaj(u))))
                 {
                     //wezel jest pelny
                     return versionSplit(numer_wezla, u);
@@ -133,6 +133,7 @@ namespace RMVB_konsola.MVB
             if (strongVersionOverflow(posortowanaLista.ToList().Count))
             {
                 keySplit(posortowanaLista);
+                return true;
             }
             else
             {

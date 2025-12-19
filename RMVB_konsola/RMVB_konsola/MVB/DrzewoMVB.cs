@@ -32,7 +32,8 @@ namespace RMVB_konsola.MVB
             this.ctx = ctx;
         }
 
-        internal void wypiszDrzewo() {
+        internal void wypiszDrzewo() 
+        {
             foreach (DeskryptorKorzenia dk in desk)
             {
                 dk.zwrocKorzen().wypisz();
@@ -45,14 +46,21 @@ namespace RMVB_konsola.MVB
             return desk[nr].zwrocKorzen().zwrocLiczbeWpisow();
         }
 
-        internal void dodajUrzadzenie(Wersja u) {
+        internal void dodajUrzadzenie(Wersja u) 
+        {
+           /* var dk = desk[0].zwrocKorzen();
+            bool zwrocna = dk.dodaj(u);*/
+
+            
             if (!desk.Last().zwrocKorzen().dodaj(u))
             {
+                wypiszDrzewo(); //debug
                 DateTime czas_zmiany = DateTime.Now;
                 desk.Last().ustawKoniec(czas_zmiany);
                 Korzen nowy = new Korzen(Repo, Pversion);
                 desk.Add(new DeskryptorKorzenia(czas_zmiany, DateTime.MaxValue, nowy));
             }; 
+            
         }
 
         internal void usunUrzadzenie(Wersja testowe2)
@@ -69,19 +77,22 @@ namespace RMVB_konsola.MVB
         }
 
         //szukaj wersji aktualnej w danym momencie
-        internal Wersja szukaj(int id, DateTime dt) {
+        internal Wersja szukaj(int id, DateTime dt) 
+        {
             var dk = desk[0].zwrocKorzen();
             return dk.szukaj(id, dt);
         }
 
         //szukaj ostatniej wersji
-        internal Wersja szukaj(int id) {
+        internal Wersja szukaj(int id) 
+        {
             var dk = desk[0].zwrocKorzen();
             return dk.szukaj(id);
         }
 
         //zwraca wersje z danego skonczonego przedzialu czasowego
-        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) {
+        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) 
+        {
             var dk = desk[0].zwrocKorzen();
             return dk.szukaj(poczatek, koniec); 
         }
