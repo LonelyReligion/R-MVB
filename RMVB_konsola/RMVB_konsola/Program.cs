@@ -54,9 +54,10 @@ for (int i = 0; i < 100; i++)
     }
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
 
+    //najpierw sie dodaja normlnie pozniej cos sie psuje i zostaja tylko 1-6/1-7
     rmvb.dodajWersje(tmp);
 
-/*    for (int j = 0; j < 20; j++)
+    for (int j = 0; j < 20; j++)
     {
         Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0) * 100) / 100;
         Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
@@ -67,9 +68,9 @@ for (int i = 0; i < 100; i++)
 
         rmvb.dodajWersje(losowa);
         rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa); 
-    }*/
+    }
 
-    Console.WriteLine(rmvb.zwrocMVB().zwrocLiczbeWpisowKorzenia(0));
+    Console.WriteLine(id + ": " + rmvb.zwrocMVB().zwrocLiczbeWpisowKorzenia(0));
     //rmvb.wypiszMVB();
 }
 

@@ -24,15 +24,15 @@ namespace RMVB_konsola
         //"Modyfikator override jest wymagany do rozszerzenia lub zmodyfikowania abstrakcyjnej lub wirtualnej implementacji dziedziczonej metody, właściwości, indeksatora lub zdarzenia."
         public override void saveDevice(Urzadzenie device) {
             ctx.Urzadzenia.Add(device);
-            urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>()); //System.ArgumentException: „An item with the same key has already been added. Key: 0”
+            urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
             urzadzenia.Add(device.UrzadzenieID, device);
             base.saveDevice(device);
         }
 
         public override void saveVersion(Wersja v) {
+            ctx.Wersje.Add(v);
             urzadzenia_wersje[v.UrzadzenieID].Add(v);
             wersje.Add(v);
-            ctx.Wersje.Add(v);
             base.saveVersion(v);
         }
 
