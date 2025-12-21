@@ -84,11 +84,17 @@ namespace RMVB_konsola
 
         public Pomiar LastMeasurement()
         {
-            return Wersje.Last().Pomiary.Count > 0 ? Wersje.Last().Pomiary.Last() : null;
+            // test
+            return IsMeasurementValid() ? ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First().Wersje.Last().Pomiary.Last() : null;
+            //
+            //return Wersje.Last().Pomiary.Count > 0 ? Wersje.Last().Pomiary.Last() : null;
         }
         public bool IsMeasurementValid()
         {
-            return Wersje.Last().Pomiary.Count > 0;
+            // test
+            return ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First().Wersje.Last().Pomiary.Count > 0;
+            //
+            //return Wersje.Last().Pomiary.Count > 0;
         }
 
         public bool IsTimeAggregateValid()

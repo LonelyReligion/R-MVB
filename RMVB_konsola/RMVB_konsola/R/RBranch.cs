@@ -165,15 +165,20 @@ namespace RMVB_konsola.R
         {
             double sum = 0;
             int counter = 0;
-            Parallel.ForEach(children, ch =>
+            foreach (RNode ch in children)
             {
+                // test
+                //Parallel.ForEach(children, ch =>
+                //{
+                //
                 (double, int) res = ch.SpaceAggregate(repository);
                 if (res.Item2 > 0)
                 {
                     sum += res.Item1;
                     counter += res.Item2;
                 }
-            });
+            }
+            //});
 
             if (counter > 0)
             {

@@ -27,8 +27,12 @@ namespace RMVB_konsola
         internal void wypiszMVB() { MVB.wypiszDrzewo(); }
         //dodaj
         internal void dodajUrzadzenie(Urzadzenie u) {
-            R.dodajUrzadzenie(u);
+            // test
             repo.saveDevice(u);
+            var tracked = repo.pobierzUrzadzenia()[u.UrzadzenieID];
+            R.dodajUrzadzenie(tracked);
+            //
+            //R.dodajUrzadzenie(u);
         }
 
         internal void dodajWersje(Wersja w) {

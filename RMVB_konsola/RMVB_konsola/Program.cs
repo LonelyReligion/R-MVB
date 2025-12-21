@@ -54,7 +54,6 @@ for (int i = 0; i < 100; i++)
     }
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
 
-    //najpierw sie dodaja normlnie pozniej cos sie psuje i zostaja tylko 1-6/1-7
     rmvb.dodajWersje(tmp);
 
     for (int j = 0; j < 20; j++)

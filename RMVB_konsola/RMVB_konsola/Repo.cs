@@ -32,6 +32,11 @@ namespace RMVB_konsola
         public override void saveVersion(Wersja v) {
             ctx.Wersje.Add(v);
             urzadzenia_wersje[v.UrzadzenieID].Add(v);
+            
+            //test
+            urzadzenia[v.UrzadzenieID].Wersje.Add(v);
+            //
+            
             wersje.Add(v);
             base.saveVersion(v);
         }
