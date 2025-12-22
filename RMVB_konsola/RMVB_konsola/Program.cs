@@ -63,10 +63,9 @@ for (int i = 0; i < 100; i++)
 
         int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
         Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
-        losowa.dodajPomiar(losowy);
-
         rmvb.dodajWersje(losowa);
-        rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa); 
+        /*losowa.dodajPomiar(losowy);*/
+        rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
     }
 
     Console.WriteLine(id + ": " + rmvb.zwrocMVB().zwrocLiczbeWpisowKorzenia(0));

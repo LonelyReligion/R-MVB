@@ -29,8 +29,7 @@ namespace RMVB_konsola
         internal void dodajUrzadzenie(Urzadzenie u) {
             // test
             repo.saveDevice(u);
-            var tracked = repo.pobierzUrzadzenia()[u.UrzadzenieID];
-            R.dodajUrzadzenie(tracked);
+            R.dodajUrzadzenie(repo.pobierzUrzadzenia()[u.UrzadzenieID]);
             //
             //R.dodajUrzadzenie(u);
         }
@@ -44,14 +43,15 @@ namespace RMVB_konsola
         }
 
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa) {
-            ctx.Pomiary.Add(p);
-            R.dodajPomiar(UrzadzenieID, p);
-
-            ctx.Wersje.Attach(alfa); 
-            ctx.Entry(alfa).Reload();
+            
+            ctx.Wersje.Attach(alfa);
             ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
 
+            alfa.Pomiary.Add(p);
+            ctx.Pomiary.Add(p);
             ctx.SaveChanges();
+
+            R.dodajPomiar(UrzadzenieID, p);
         }
 
         //usun

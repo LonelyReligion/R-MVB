@@ -45,15 +45,8 @@ namespace RMVB_konsola
 
         public void saveSpaceAggregate(SpaceAggregate spaceAggregate)
         {
-            //
-            using (var kontekst = new Kontekst())
-            {
-            //
-                kontekst.SpaceAggregates.Add(spaceAggregate);
-                kontekst.SaveChanges();
-            //
-            }
-            //
+            ctx.SpaceAggregates.Add(spaceAggregate);
+            ctx.SaveChanges();
         }
 
         public void saveSrednia(Srednia srednia)
