@@ -44,6 +44,7 @@ beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, 
 
 rmvb.usunWersje(beta);
 //
+List<Wersja> losowe = new List<Wersja>(); //do debuggowania, potrzebne nam do odtworzenia scenariusza
 
 for (int i = 0; i < 100; i++)
 {
@@ -66,6 +67,7 @@ for (int i = 0; i < 100; i++)
         rmvb.dodajWersje(losowa);
         /*losowa.dodajPomiar(losowy);*/
         rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
+        losowe.Add(losowa);
     }
 
     Console.WriteLine(id + ": " + rmvb.zwrocMVB().zwrocLiczbeWpisowKorzenia(0));
@@ -88,6 +90,17 @@ rmvb.obliczAgregaty();
 rmvb.wypiszMVB();
 
 Test jednostka_testujaca = Test.pobierzInstancje();
-jednostka_testujaca.wykonajTesty(10);
+if (jednostka_testujaca.wykonajTesty(10)) {
+    Console.WriteLine("W czasie wykonywania testów wystąpiły błędy. Szczegóły wyżej.");
+    Console.WriteLine("Scenariusz testowy zakładał dodanie urządzeń o podanych id w poniższej kolejności:");
+
+    String wynikowa = "[";
+    foreach (Wersja w in losowe) {
+        wynikowa += w.UrzadzenieID + ",";
+    };
+    wynikowa.Substring(0,wynikowa.Length-1);
+    wynikowa += "]";
+    Console.WriteLine(wynikowa);
+}
 
 ctx.Dispose();

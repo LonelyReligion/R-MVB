@@ -36,43 +36,47 @@ namespace RMVB_konsola
         {
         }
 
-        public void wykonajTesty(int ileRazy) {
+        public bool wykonajTesty(int ileRazy) {
+            bool blad = false;
+
             Console.WriteLine("Poniżej zaprezentowano wyniki przeprowadzonych testów");
             
             Console.WriteLine("Sekcja pierwsza: zapytania realizowane przez MVB");
             Console.WriteLine("# Wyszukiwanie po dacie i id");
-            testDataId(ileRazy);
+            blad = (blad == true) ? true : testDataId(ileRazy);
 
 
             Console.WriteLine("\n# Wyszukiwanie po id");
-            testId(ileRazy);
+            blad = (blad == true) ? true : testId(ileRazy);
 
 
             Console.WriteLine("\n# Wyszukiwanie po id i wersji");
-            testIdV(ileRazy);
+            blad = (blad == true) ? true : testIdV(ileRazy);
 
 
             Console.WriteLine("\n# Wyszukiwanie po dacie i dacie");
-            testDataData(ileRazy);
+            blad = (blad == true) ? true : testDataData(ileRazy);
             Console.WriteLine("\n");
 
             Console.WriteLine("Sekcja druga: zapytania realizowane przez R");
             
             Console.WriteLine("# Wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie");
-            testProstokat(ileRazy); 
+            blad = (blad == true) ? true : testProstokat(ileRazy); 
             Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatow czasowych");
-            testAgregatyCzasowe(ileRazy); 
+            blad = (blad == true) ? true : testAgregatyCzasowe(ileRazy); 
             Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatów powierzchniowych");
-            testAgregatyPowierzchniowe(ileRazy);
+            blad = (blad == true) ? true : testAgregatyPowierzchniowe(ileRazy);
             Console.WriteLine("\n");
+            return blad;
         }
 
-        private void testAgregatyPowierzchniowe(int ileRazy)
+        private bool testAgregatyPowierzchniowe(int ileRazy)
         {
+            bool blad = false;
             List<Rectangle> szukane = new List<Rectangle>();
             for(int i = 0; i < ileRazy; i++)
                 szukane.Add(generator.generujProstokat());
@@ -158,15 +162,18 @@ namespace RMVB_konsola
                     Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
                         ile_r[i] + " (r)");
                     rmvb.szukajAgregatu(szukane[i]);
+                    blad = true;
                 }
                 Console.WriteLine("**********************************");
             }
             Console.WriteLine("CZASY:    Recznie: " + wynik + " vs " + "RMVB: " + wynik3);
+            return blad;
         }
 
         //wyszukuje agregat czasowy 
-        private void testAgregatyCzasowe(int ileRazy)
+        private bool testAgregatyCzasowe(int ileRazy)
         {
+            bool blad = false;
             //losowanie ze zwracaniem
             List<(Decimal, Decimal)> wspolrzedne = new List<(Decimal, Decimal)>();
             for(int i = 0; i < ileRazy; i++)
@@ -196,7 +203,7 @@ namespace RMVB_konsola
 
                 if (id != -1)
                 {
-                    List<Pomiar> pomiary =  ctx.Pomiary
+                    List<Pomiar> pomiary = ctx.Pomiary
                                             .AsNoTracking()
                                             .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == id)
                                             .Where(p => p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0)) //zparametryzowac
@@ -210,7 +217,10 @@ namespace RMVB_konsola
                         wynikBD[i] = 0;
                 }
                 else
+                {
                     Console.WriteLine("Urzadzenie o wsp. " + x + " " + y + " nie istnieje w bazie");
+                    blad = true;
+                }
             }
             long czasBD = sw.ElapsedMilliseconds;
 
@@ -230,15 +240,20 @@ namespace RMVB_konsola
                 (Decimal x, Decimal y) = wspolrzedne[i];
                 Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id.ToString());
                 Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
+                if (wynikBD[i] != wynikR[i]) {
+                    blad = true;
+                }
                 Console.WriteLine("**********************************");
             }
             Console.WriteLine("CZASY: Baza: " + czasBD + " vs " + "Rtree: " + czas);
+            return blad;
 
         }
 
         //wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie x ileRazy
 
-        private void testProstokat(int ileRazy) {
+        private bool testProstokat(int ileRazy) {
+            bool blad = false;
             List<Rectangle> searchRect = new List<Rectangle>();
             for(int i = 0; i < ileRazy; i++)
                 searchRect.Add(generator.generujProstokat()); 
@@ -280,10 +295,15 @@ namespace RMVB_konsola
             {
                 Console.WriteLine("Prostokat: " + searchRect[i].XMin + " " + searchRect[i].XMax + "(x) " + searchRect[i].YMin + " " + searchRect[i].YMax + "(y)");
                 Console.WriteLine("Znaleziono " + cnt_r[i].ToString() + "(rt) " + cnt_1[i].ToString() + "(zapytanie w bazie)");
+                if (cnt_r[i] != cnt_1[i])
+                {
+                    blad = true;
+                }
                 Console.WriteLine("**********************************");
             }
 
             Console.WriteLine("RMVB: " + wynik3 + " vs " + "Recznie: " + wynik);
+            return blad;
         }
 
 
@@ -293,8 +313,9 @@ namespace RMVB_konsola
         }
 
         //wyszukiwanie losowego urządzenia po dacie i id x ileRazy
-        public void testDataId(int ileRazy)
+        public bool testDataId(int ileRazy)
         {
+            bool blad = false;
             List<Wersja> szukane_wersje = generator.wylosujWersje(ileRazy);
 
             Wersja? szukana = null;
@@ -309,7 +330,10 @@ namespace RMVB_konsola
                     .Where(u => u.UrzadzenieID == id)
                     .FirstOrDefault(); //czasami nie dziala:/
                 if (szukana == null)
-                     Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
+                {
+                    Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
+                    blad = true;
+                }
             }
             long czas_baza = sw.ElapsedMilliseconds;
             Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
@@ -321,10 +345,15 @@ namespace RMVB_konsola
                 DateTime dt =  szukane_wersje[i].dataOstatniejModyfikacji;
                 szukana = rmvb.szukaj(id, dt);
                 if (szukana == null)
+                {
                     Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
+                    rmvb.szukaj(id, dt);
+                    blad = true;
+                }
             }
             long czas_mvb = sw.ElapsedMilliseconds;
             Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
+            return blad;
         }
 
         private List<int> wylosujIdUrzadzen(int ile) {
@@ -338,7 +367,8 @@ namespace RMVB_konsola
         }
 
         //wyszukiwanie ostatniej wersji po id
-        public void testId(int ileRazy) {
+        public bool testId(int ileRazy) {
+            bool blad = false;
             List<int> szukane_id = wylosujIdUrzadzen(ileRazy);
 
             Wersja? szukana = null;
@@ -351,7 +381,10 @@ namespace RMVB_konsola
                     .OrderByDescending(u => u.WersjaID)
                     .FirstOrDefault();
                 if (szukana == null)
+                {
                     Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
+                    blad = true;
+                }
             }
             long czas_baza = sw.ElapsedMilliseconds;
             Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
@@ -360,15 +393,19 @@ namespace RMVB_konsola
             {
                 szukana = rmvb.szukaj(szukane_id[i]);
                 if (szukana == null)
+                {
                     Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
+                    blad = true;
+                }
             }
             long czas_mvb = sw.ElapsedMilliseconds;
             Console.WriteLine("MVB w czasie: " + czas_mvb + " ms.");
-            
+            return blad;
         }
 
         //wyszukiwanie po id i wersji
-        public void testIdV(int ileRazy) {
+        public bool testIdV(int ileRazy) {
+            bool blad = false;
 
             //doprowadzic spowrotem do porzadku (losowe)
             List<(int, int)> szukane_id_v = new List<(int, int)>();
@@ -392,7 +429,10 @@ namespace RMVB_konsola
                 .FirstOrDefault(u => u.UrzadzenieID == id && u.WersjaID == v);
 
                 if (szukana == null)
+                {
                     Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
+                    blad = true;
+                }
             }
 
             long czas_baza = sw.ElapsedMilliseconds;
@@ -410,14 +450,17 @@ namespace RMVB_konsola
                     Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
                     //do debuggowania
                     szukana = rmvb.szukaj(id, v);
+                    blad = true;
                 }
             }
             long czas_mvb = sw.ElapsedMilliseconds;
-            if (szukana != null)
+            if (!blad)
                 Console.WriteLine("RMVB: " + szukana.UrzadzenieID + "v" + szukana.WersjaID + " w czasie: " + czas_mvb + " ms.");
+            return blad;
         }
 
-        public void testDataData(int ileRazy) {
+        public bool testDataData(int ileRazy) {
+            bool blad = false;
             DateTime poczatek = ctx.Wersje.OrderBy(u=>u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji.AddTicks(-10);
             DateTime koniec = ctx.Wersje
                                 .OrderByDescending(u => u.dataWygasniecia)
@@ -452,7 +495,9 @@ namespace RMVB_konsola
                                     .ToList();
                 foreach(var u in nieznalezione)
                     Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                blad = true;
             }
+            return blad;
         }
     }
 }
