@@ -47,29 +47,34 @@ namespace RMVB_konsola
 
 
             Console.WriteLine("\n# Wyszukiwanie po id");
-            blad = (blad == true) ? true : testId(ileRazy);
+            bool blad1 = testId(ileRazy);
+            blad = (blad == true) ? true : blad1;
 
 
             Console.WriteLine("\n# Wyszukiwanie po id i wersji");
-            blad = (blad == true) ? true : testIdV(ileRazy);
-
+            bool blad2 = testIdV(ileRazy);
+            blad = (blad == true) ? true : blad2;
 
             Console.WriteLine("\n# Wyszukiwanie po dacie i dacie");
-            blad = (blad == true) ? true : testDataData(ileRazy);
+            bool blad3 = testDataData(ileRazy);
+            blad = (blad == true) ? true : blad3;
             Console.WriteLine("\n");
 
             Console.WriteLine("Sekcja druga: zapytania realizowane przez R");
             
             Console.WriteLine("# Wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie");
-            blad = (blad == true) ? true : testProstokat(ileRazy); 
+            bool blad4 = testProstokat(ileRazy);
+            blad = (blad == true) ? true : blad4; 
             Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatow czasowych");
-            blad = (blad == true) ? true : testAgregatyCzasowe(ileRazy); 
+            bool blad5 = testAgregatyCzasowe(ileRazy);
+            blad = (blad == true) ? true : blad5; 
             Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatów powierzchniowych");
-            blad = (blad == true) ? true : testAgregatyPowierzchniowe(ileRazy);
+            bool blad6 = testAgregatyPowierzchniowe(ileRazy);
+            blad = (blad == true) ? true : blad6;
             Console.WriteLine("\n");
             return blad;
         }
