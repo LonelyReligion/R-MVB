@@ -29,7 +29,7 @@ namespace RMVB_konsola
         internal void dodajUrzadzenie(Urzadzenie u) {
             // test
             repo.saveDevice(u);
-            R.dodajUrzadzenie(repo.pobierzUrzadzenia()[u.UrzadzenieID]);
+            R.dodajUrzadzenie(u);
             //
             //R.dodajUrzadzenie(u);
         }
@@ -38,8 +38,6 @@ namespace RMVB_konsola
             repo.saveVersion(w);
             MVB.dodajUrzadzenie(w);
 
-            //
-            repo.pobierzUrzadzenia()[w.UrzadzenieID].Wersje.Add(w);
         }
 
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa) {

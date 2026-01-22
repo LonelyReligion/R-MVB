@@ -20,6 +20,8 @@ Korzen.ctx = ctx;
 RMVB rmvb = new RMVB(ctx);
 Test.repo = rmvb.zwrocRepo();
 Test.rmvb = rmvb;
+Urzadzenie.repo = rmvb.zwrocRepo();
+
 
 Generatory generator = new Generatory(rmvb.zwrocRepo());
 Test.generator = generator;
