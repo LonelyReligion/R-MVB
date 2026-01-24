@@ -46,8 +46,12 @@ namespace RMVB_konsola
                 Wersja w = r.pobierzUrzadzeniaWersje()[UrzadzenieID].Last();
                 foreach (var element in w.Pomiary)
                     this.Pomiary.Add(element);
-                dataOstatniejModyfikacji = w.dataWygasniecia;
+
+                DateTime data_wprowadzenia_zmiany = DateTime.Now;
+                dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
+                w.dataWygasniecia = data_wprowadzenia_zmiany;
                 dataWygasniecia = DateTime.MaxValue;
+
                 ustalWersje(this.UrzadzenieID, r);
             }
         }
@@ -68,8 +72,12 @@ namespace RMVB_konsola
 
             foreach (var element in w.Pomiary)
                 this.Pomiary.Add(element);
-            dataOstatniejModyfikacji = w.dataWygasniecia;
+
+            DateTime data_wprowadzenia_zmiany = DateTime.Now;
+            dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
+            w.dataWygasniecia = data_wprowadzenia_zmiany;
             dataWygasniecia = DateTime.MaxValue;
+            
         }
 
         //przetestowac, ograniczyc
