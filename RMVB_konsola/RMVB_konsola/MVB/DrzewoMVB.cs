@@ -36,7 +36,9 @@ namespace RMVB_konsola.MVB
         {
             foreach (DeskryptorKorzenia dk in desk)
             {
+                Console.WriteLine("Okres obowiazywania od " + dk.zwrocPoczatek().ToString() + " do " + dk.zwrocKoniec().ToString());
                 dk.zwrocKorzen().wypisz();
+                Console.WriteLine("\n");
             }
 
             Console.WriteLine("Liczba korzeni MVB: " + desk.Count);
@@ -47,16 +49,14 @@ namespace RMVB_konsola.MVB
         }
 
         internal void dodajUrzadzenie(Wersja u) 
-        {
-           /* var dk = desk[0].zwrocKorzen();
-            bool zwrocna = dk.dodaj(u);*/
-
-            
+        {            
             if (!desk.Last().zwrocKorzen().dodaj(u))
             {
-                wypiszDrzewo(); //debug
                 DateTime czas_zmiany = DateTime.Now;
                 desk.Last().ustawKoniec(czas_zmiany);
+                //zczytac zywe
+                //zabic te w starym korzeniu z data wyzej
+                //zywe maja miec to jako date ostatniej modyfikacji w nowym korzeniu
                 Korzen nowy = new Korzen(Repo, Pversion);
                 desk.Add(new DeskryptorKorzenia(czas_zmiany, DateTime.MaxValue, nowy));
             }; 

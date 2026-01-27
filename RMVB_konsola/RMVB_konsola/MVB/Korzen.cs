@@ -14,6 +14,7 @@ namespace RMVB_konsola.MVB
 {
     internal class Korzen
     {
+        public static decimal granica_przezywalnosci;
         public static Kontekst ctx;
         TreeRepository repo;
 
@@ -29,12 +30,25 @@ namespace RMVB_konsola.MVB
 
             Pversion = pversion;
         }
+        public decimal zwrocPrzezywalnosc() {
+            int liczba_zywych = 0;
+            int liczba = 0;
+            for (int i = 0; i < wpisy.Count; i++)
+            {
+                liczba_zywych += wpisy[i].Item2.wezel.liczbaZywych();
+                liczba += wpisy[i].Item2.wezel.urzadzenia.Count();
+            }
+            return liczba_zywych / liczba;
+        }
         internal int zwrocLiczbeWpisow() {
             return wpisy.Count();
         }
 
         internal bool dodaj(Wersja u)
         {
+            if(zwrocPrzezywalnosc() < granica_przezywalnosci)
+                return false;
+
             bool dodano = false;
             if (wpisy.Count() == 0)
             {
@@ -261,6 +275,8 @@ namespace RMVB_konsola.MVB
             {
                 wpis.Item2.wezel.wypisz();
             }
+
+            Console.WriteLine("Przezywalnosc: " + zwrocPrzezywalnosc());
         }
 
         //potrzebne sprawdzenie weakVersionUnderflow

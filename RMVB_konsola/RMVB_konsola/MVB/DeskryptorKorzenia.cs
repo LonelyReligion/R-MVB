@@ -33,5 +33,8 @@ namespace RMVB_konsola.MVB
         public void ustawKoniec(DateTime dt) { 
             koniec = dt;
         }
+
+        public DateTime zwrocPoczatek() { return poczatek; }
+        public DateTime zwrocKoniec() { return koniec; }
     }
 }

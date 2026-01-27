@@ -89,7 +89,7 @@ namespace RMVB_konsola.MVB
             }
             return output;
         }
-
+        
         public List<Wersja> zwrocUrzadzenia() { 
             List<Wersja> output = new List<Wersja>();
             foreach (var wpis in urzadzenia)

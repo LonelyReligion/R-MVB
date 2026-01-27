@@ -6,7 +6,9 @@ using System.Diagnostics;
 
 //Setup
 Generatory.liczba_urzadzen = 100;
+decimal granica_przezywalnosci = 0.2m;
 
+Korzen.granica_przezywalnosci = granica_przezywalnosci;
 Random rnd = new Random();
 
 Kontekst ctx = new Kontekst();
