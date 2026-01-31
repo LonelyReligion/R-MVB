@@ -20,6 +20,7 @@ namespace RMVB_konsola.MVB
 
         List<(int, Wpis)> wpisy; //po to zeby mozna bylo znalezc ostatni wezel szybko np.
 
+        int liczba_urzadzen = 0;
         //parametry drzewa, sa zdefiniowane w klasie drzewa
         static double Pversion;
 
@@ -30,7 +31,7 @@ namespace RMVB_konsola.MVB
 
             Pversion = pversion;
         }
-        public decimal zwrocPrzezywalnosc() {
+        public decimal zwrocPrzezywalnosc() { 
             int liczba_zywych = 0;
             int liczba = 0;
             for (int i = 0; i < wpisy.Count; i++)
@@ -38,7 +39,16 @@ namespace RMVB_konsola.MVB
                 liczba_zywych += wpisy[i].Item2.wezel.liczbaZywych();
                 liczba += wpisy[i].Item2.wezel.urzadzenia.Count();
             }
-            return liczba_zywych / liczba;
+            return Decimal.Divide(liczba_zywych, liczba);
+        }
+        public List<Wersja> zwrocZywe() {
+            List<Wersja> zywe = new List<Wersja>();
+            for (int i = 0; i < wpisy.Count; i++)
+            {
+                zywe.AddRange(wpisy[i].Item2.wezel.pobierzZyweUrzadzenia());
+            }
+            return zywe;
+
         }
         internal int zwrocLiczbeWpisow() {
             return wpisy.Count();
@@ -46,7 +56,7 @@ namespace RMVB_konsola.MVB
 
         internal bool dodaj(Wersja u)
         {
-            if(zwrocPrzezywalnosc() < granica_przezywalnosci)
+            if(liczba_urzadzen > 0 && zwrocPrzezywalnosc() < granica_przezywalnosci)
                 return false;
 
             bool dodano = false;
@@ -55,6 +65,7 @@ namespace RMVB_konsola.MVB
                 Wezel nowy = new Wezel();
                 nowy.dodaj(u);
                 wpisy.Add((wpisy.Count, new Wpis(u.UrzadzenieID, u.UrzadzenieID, u.dataOstatniejModyfikacji, u.dataWygasniecia, nowy)));
+                liczba_urzadzen++;
                 return true;
             }
             else
@@ -93,7 +104,9 @@ namespace RMVB_konsola.MVB
                 if (!dodano && !(/*numer_wezla == wpisy.Count - 1 &&*/ (dodano = wpisy[numer_wezla].Item2.wezel.dodaj(u))))
                 {
                     //wezel jest pelny
-                    return versionSplit(numer_wezla, u);
+                    bool wynik = versionSplit(numer_wezla, u);
+                    if (wynik) liczba_urzadzen++;
+                    return wynik;
                 }
                 else {
                     if (wpisy[numer_wezla].Item2.minKlucz > u.UrzadzenieID)
@@ -107,6 +120,7 @@ namespace RMVB_konsola.MVB
                         wpisy[numer_wezla].Item2.maxData = u.dataWygasniecia;
                 }
             }
+            if (dodano) liczba_urzadzen++;
             return dodano;
         }
 
@@ -287,8 +301,9 @@ namespace RMVB_konsola.MVB
 
             //znajdz wersje
             Wezel wezel_zawierający = szukaj(u.UrzadzenieID, u.WersjaID).Item1;
+
             //sprawdz warunek
-            if (wezel_zawierający.weakVersionUnderFlow() && this.wpisy.Count != 1 /*musi miec sasiada*/)
+            if (wezel_zawierający != null && wezel_zawierający.weakVersionUnderFlow() && this.wpisy.Count != 1 /*musi miec sasiada*/)
             {
                 //In both cases, a
                 //merge is attempted with the copy of a sibling node using

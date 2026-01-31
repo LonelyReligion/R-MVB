@@ -49,16 +49,20 @@ namespace RMVB_konsola.MVB
         }
 
         internal void dodajUrzadzenie(Wersja u) 
-        {            
-            if (!desk.Last().zwrocKorzen().dodaj(u))
+        {
+            Korzen ostatni_korzen = desk.Last().zwrocKorzen();
+            if (!ostatni_korzen.dodaj(u))
             {
                 DateTime czas_zmiany = DateTime.Now;
                 desk.Last().ustawKoniec(czas_zmiany);
                 //zczytac zywe
+                List<Wersja> do_dodania = ostatni_korzen.zwrocZywe();
                 //zabic te w starym korzeniu z data wyzej
                 //zywe maja miec to jako date ostatniej modyfikacji w nowym korzeniu
                 Korzen nowy = new Korzen(Repo, Pversion);
                 desk.Add(new DeskryptorKorzenia(czas_zmiany, DateTime.MaxValue, nowy));
+                foreach(Wersja w in do_dodania)
+                    dodajUrzadzenie(w); //rekurencja ups.
             }; 
             
         }
