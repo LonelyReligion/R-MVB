@@ -76,8 +76,21 @@ namespace RMVB_konsola.MVB
         //szukaj id i wersji
         internal Wersja szukaj(int id, int v)
         {
-            var dk = desk[0].zwrocKorzen();
-            return dk.szukaj(id, v).Item2;
+            //prawdopodobnie jest gdzieś na początku
+            if (v == 1)
+            {
+                for (int i = 0; i < desk.Count(); i++)
+                {
+                    Wersja wartosc = desk[i].zwrocKorzen().szukaj(id, v).Item2;
+                    if(wartosc != null)
+                        return wartosc;
+                }
+            }
+            //wyszukiwanie binarne
+            else { 
+            
+            }
+            return null;
         }
 
         //szukaj wersji aktualnej w danym momencie

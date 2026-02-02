@@ -351,8 +351,15 @@ namespace RMVB_konsola.MVB
         }
 
         //szukaj id i wersji
-        internal (Wezel, Wersja) szukaj(int id, int v)
+        //pierwszy bajt to flaga:
+        //wartosc 0 oznacza ze odnaleziono, 
+        //1 ze znaleziona wersja jest mniejsza,
+        //2 ze znaleziona wersja jest wieksza,
+        //3 ze nie odnaleziono wcale
+        internal (byte, Wezel, Wersja) szukaj(int id, int v)
         {
+            byte status = 3;
+
             //binarysearch
             int dlugosc_listy = wpisy.Count;
             int poczatkowy_indeks = dlugosc_listy / 2;
@@ -370,7 +377,7 @@ namespace RMVB_konsola.MVB
                         {
                             int wersja = wpisy_wezla[i].Item2.WersjaID;
                             if (wersja == v) {
-                                return (w.wezel, wpisy_wezla[i].Item2);
+                                return (0,w.wezel, wpisy_wezla[i].Item2);
                             }
                             najwyzsza_wersja = wersja;
                         }
@@ -378,6 +385,7 @@ namespace RMVB_konsola.MVB
                             break;
                     }
                 }
+                //nie odnaleziono
                 if (najwyzsza_wersja == -1) 
                 {
                     if (indeks + 1 < wpisy.Count && !odwiedzone.Contains(indeks + 1))
@@ -392,21 +400,26 @@ namespace RMVB_konsola.MVB
                     }
                 }
                 else {
+                    //mniejsza niz szukana, ale rozna niz -1
                     if (najwyzsza_wersja < v && indeks + 1 < wpisy.Count)
                     {
                         do_przejrzenia.Push(wpisy[indeks + 1]);
                         odwiedzone.Add(indeks + 1);
+
+                        status = 1;
                     }
+                    //else, czyli większa
                     else if (indeks - 1 >= 0 && !odwiedzone.Contains(indeks - 1))
                     {
                         do_przejrzenia.Push(wpisy[indeks - 1]);
                         odwiedzone.Add(indeks - 1);
+                        status = 2;
                     }
                 }
             }
 
             Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
-            return (null, null); //nie znaleziono
+            return (status, null, null); //nie znaleziono
         }
 
         //szukaj wersji aktualnej w danym momencie
