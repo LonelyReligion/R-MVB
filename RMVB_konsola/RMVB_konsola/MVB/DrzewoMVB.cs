@@ -96,8 +96,14 @@ namespace RMVB_konsola.MVB
         //szukaj ostatniej wersji
         internal Wersja szukaj(int id) 
         {
-            var dk = desk[0].zwrocKorzen();
-            return dk.szukaj(id);
+            for (int i = desk.Count() - 1; i >= 0;  i--)
+            {
+                Wersja? wartosc = desk[i].zwrocKorzen().szukaj(id);
+                if (wartosc != null)
+                    return wartosc;
+            }
+            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
+            return null;
         }
 
         //zwraca wersje z danego skonczonego przedzialu czasowego

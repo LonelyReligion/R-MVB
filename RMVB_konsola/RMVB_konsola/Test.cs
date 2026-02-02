@@ -331,7 +331,7 @@ namespace RMVB_konsola
                 szukana = ctx.Wersje
                     .AsNoTracking()
                     .Where(u => u.dataOstatniejModyfikacji <= dt)
-                    .Where(u => u.dataWygasniecia >= dt)
+                    .Where(u => u.dataWygasniecia > dt)
                     .Where(u => u.UrzadzenieID == id)
                     .FirstOrDefault(); //czasami nie dziala:/
                 if (szukana == null)

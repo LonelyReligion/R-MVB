@@ -442,8 +442,6 @@ namespace RMVB_konsola.MVB
                     }
                 }
             }
-
-            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
             return null;
         }
 
