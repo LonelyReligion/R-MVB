@@ -83,8 +83,14 @@ namespace RMVB_konsola.MVB
         //szukaj wersji aktualnej w danym momencie
         internal Wersja szukaj(int id, DateTime dt) 
         {
-            var dk = desk[0].zwrocKorzen();
-            return dk.szukaj(id, dt);
+            for (int i = 0; i < desk.Count(); i++)
+            {
+                if(desk[i].zwrocPoczatek() <= dt && dt < desk[i].zwrocKoniec())
+                    return desk[i].zwrocKorzen().szukaj(id, dt);
+
+            }
+            Console.WriteLine("Uwaga: Nie znaleziono odpowiedniego korzenia");
+            return null;
         }
 
         //szukaj ostatniej wersji
