@@ -81,14 +81,35 @@ namespace RMVB_konsola.MVB
             {
                 for (int i = 0; i < desk.Count(); i++)
                 {
-                    Wersja wartosc = desk[i].zwrocKorzen().szukaj(id, v).Item2;
+                    Wersja wartosc = desk[i].zwrocKorzen().szukaj(id, v).Item3;
                     if(wartosc != null)
                         return wartosc;
                 }
             }
             //wyszukiwanie binarne
             else { 
-            
+                int poczatkowy_indeks = desk.Count() / 2;
+                Stack<DeskryptorKorzenia> do_przejrzenia = new Stack<DeskryptorKorzenia>();
+                int aktualny_indeks = poczatkowy_indeks;
+                do_przejrzenia.Push(desk[poczatkowy_indeks]);
+                HashSet<int> odwiedzone = new HashSet<int>();
+                bool kierunek = true; //domyslnie idziemy w gore, kierunek poszukiwan
+                while (do_przejrzenia.Count != 0) {
+                    DeskryptorKorzenia analizowany = do_przejrzenia.Pop();
+                    (byte, Wezel, Wersja) wartosc = analizowany.zwrocKorzen().szukaj(id, v);
+                    if (wartosc.Item1 == 1)
+                    {
+                        //szukamy nizej
+                    }
+                    else if (wartosc.Item1 == 2)
+                    {
+                        //szukamy wyszej
+                    }
+                    else { 
+                        //nie znaleziono
+                    };
+                }
+
             }
             return null;
         }
