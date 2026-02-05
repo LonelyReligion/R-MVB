@@ -5,7 +5,8 @@ using RMVB_konsola.R;
 using System.Diagnostics;
 
 //Setup
-Generatory.liczba_urzadzen = 100;
+int liczba_urzadzen = 10;
+Generatory.liczba_urzadzen = liczba_urzadzen;
 decimal granica_przezywalnosci = 0.2m;
 
 Korzen.granica_przezywalnosci = granica_przezywalnosci;
@@ -50,9 +51,9 @@ rmvb.usunWersje(beta);
 //
 List<Wersja> losowe = new List<Wersja>(); //do debuggowania, potrzebne nam do odtworzenia scenariusza
 
-for (int i = 0; i < 100; i++)
+for (int i = 0; i < liczba_urzadzen; i++)
 {
-    int id = i % 100;
+    int id = i % liczba_urzadzen;
     if (!rmvb.czyUrzadzenieIstnieje(id)) { 
         Urzadzenie testowe1 =  new Urzadzenie(id, generator.generujWspolrzedne());
         rmvb.dodajUrzadzenie(testowe1);
@@ -61,7 +62,7 @@ for (int i = 0; i < 100; i++)
 
     rmvb.dodajWersje(tmp);
 
-    for (int j = 0; j < 20; j++)
+    for (int j = 0; j < liczba_urzadzen * 2/10; j++)
     {
         Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0) * 100) / 100;
         Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);

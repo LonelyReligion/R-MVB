@@ -300,7 +300,7 @@ namespace RMVB_konsola.MVB
             u.dezaktywuj();
 
             //znajdz wersje
-            Wezel wezel_zawierający = szukaj(u.UrzadzenieID, u.WersjaID).Item1;
+            Wezel wezel_zawierający = szukaj(u.UrzadzenieID, u.WersjaID).Item2;
 
             //sprawdz warunek
             if (wezel_zawierający != null && wezel_zawierający.weakVersionUnderFlow() && this.wpisy.Count != 1 /*musi miec sasiada*/)
@@ -360,7 +360,7 @@ namespace RMVB_konsola.MVB
         {
             byte status = 3;
 
-            //binarysearch
+            
             int dlugosc_listy = wpisy.Count;
             int poczatkowy_indeks = dlugosc_listy / 2;
             Stack<(int, Wpis)> do_przejrzenia = new Stack<(int, Wpis)>();
@@ -418,7 +418,6 @@ namespace RMVB_konsola.MVB
                 }
             }
 
-            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
             return (status, null, null); //nie znaleziono
         }
 

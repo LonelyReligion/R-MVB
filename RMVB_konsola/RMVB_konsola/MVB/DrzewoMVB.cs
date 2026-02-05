@@ -86,7 +86,7 @@ namespace RMVB_konsola.MVB
                         return wartosc;
                 }
             }
-            //wyszukiwanie binarne
+            
             else { 
                 int poczatkowy_indeks = desk.Count() / 2;
                 Stack<DeskryptorKorzenia> do_przejrzenia = new Stack<DeskryptorKorzenia>();
@@ -94,23 +94,77 @@ namespace RMVB_konsola.MVB
                 do_przejrzenia.Push(desk[poczatkowy_indeks]);
                 HashSet<int> odwiedzone = new HashSet<int>();
                 bool kierunek = true; //domyslnie idziemy w gore, kierunek poszukiwan
+
                 while (do_przejrzenia.Count != 0) {
                     DeskryptorKorzenia analizowany = do_przejrzenia.Pop();
                     (byte, Wezel, Wersja) wartosc = analizowany.zwrocKorzen().szukaj(id, v);
-                    if (wartosc.Item1 == 1)
+                    odwiedzone.Add(aktualny_indeks);
+                    if (wartosc.Item1 == 2)
                     {
                         //szukamy nizej
+                        kierunek = false;
+                        if (aktualny_indeks != 0) {
+                            aktualny_indeks = aktualny_indeks - 1;
+                            do_przejrzenia.Push(desk[aktualny_indeks]);
+                        }
+                        else {
+                            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
+                            return null;
+                        }
                     }
-                    else if (wartosc.Item1 == 2)
+                    else if (wartosc.Item1 == 1)
                     {
                         //szukamy wyszej
+                        kierunek = true;
+                        if (aktualny_indeks != desk.Count()-1)
+                        {
+                            aktualny_indeks = aktualny_indeks + 1;
+                            do_przejrzenia.Push(desk[aktualny_indeks]);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
+                            return null;
+                        }
                     }
-                    else { 
+                    else {
                         //nie znaleziono
+                        //szukamy zgodnie z kierunkiem
+                        if (!(aktualny_indeks == desk.Count() - 1 && kierunek) && !(!kierunek && aktualny_indeks == 0))
+                        {
+                            int jeden = kierunek ? 1 : -1;
+                            if (!odwiedzone.Contains(aktualny_indeks + jeden))
+                            {
+                                aktualny_indeks += jeden;
+                                do_przejrzenia.Push(desk[aktualny_indeks]);
+                            }
+                        }
+                        //uwzglednic co jak nam sie skoncza w jednym kierunku a nie znaleziono zadnego
+                        else 
+                        {
+                            if (odwiedzone.Count == desk.Count)
+                            {
+                                Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
+                                return null;
+                            }
+                            else if (aktualny_indeks == desk.Count() - 1)
+                            {
+                                kierunek = true;
+                                aktualny_indeks = 0;
+                                do_przejrzenia.Push(desk[aktualny_indeks]);
+                            }
+                            else
+                            {
+                                kierunek = false;
+                                aktualny_indeks = desk.Count() - 1;
+                                do_przejrzenia.Push(desk[aktualny_indeks]);
+                            }
+                        }
                     };
                 }
 
             }
+            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
             return null;
         }
 
