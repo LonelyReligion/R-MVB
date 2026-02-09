@@ -60,6 +60,7 @@ namespace RMVB_konsola.MVB
                 //zabic te w starym korzeniu z data wyzej
                 //zywe maja miec to jako date ostatniej modyfikacji w nowym korzeniu
                 Korzen nowy = new Korzen(Repo, Pversion);
+                Wezel.aktualne_id = 'A';
                 desk.Add(new DeskryptorKorzenia(czas_zmiany, DateTime.MaxValue, nowy));
                 foreach(Wersja w in do_dodania)
                     dodajUrzadzenie(w); //rekurencja ups.
@@ -200,8 +201,16 @@ namespace RMVB_konsola.MVB
         //zwraca wersje z danego skonczonego przedzialu czasowego
         internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) 
         {
-            var dk = desk[0].zwrocKorzen();
-            return dk.szukaj(poczatek, koniec); 
+            List<Wersja> wyjsciowa =  new List<Wersja>();
+            for (int i = 0; i < desk.Count - 1; i++) {
+                if (!(desk[i].zwrocKoniec() < koniec)) {
+                    return wyjsciowa; //przejrzelismy wszystko co pasowalo do przedzialu
+                }
+                else if (desk[i].zwrocPoczatek() >= poczatek) {
+                    wyjsciowa.AddRange(desk[i].zwrocKorzen().szukaj(poczatek, koniec));
+                }
+            }
+            return wyjsciowa; 
         }
     }
 }
