@@ -99,7 +99,25 @@ namespace RMVB_konsola.MVB
                     DeskryptorKorzenia analizowany = do_przejrzenia.Pop();
                     (byte, Wezel, Wersja) wartosc = analizowany.zwrocKorzen().szukaj(id, v);
                     odwiedzone.Add(aktualny_indeks);
-                    if (wartosc.Item1 == 2)
+                    if (wartosc.Item1 == 0) { //znalezliśmy 
+                        return wartosc.Item3;
+                    }
+                    else if (wartosc.Item1 == 1) //znaleziona wersja jest mniejsza
+                    {
+                        //szukamy wyszej
+                        kierunek = true;
+                        if (aktualny_indeks != desk.Count() - 1)
+                        {
+                            aktualny_indeks = aktualny_indeks + 1;
+                            do_przejrzenia.Push(desk[aktualny_indeks]);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
+                            return null;
+                        }
+                    }
+                    else if (wartosc.Item1 == 2) //znaleziona wersja jest większa
                     {
                         //szukamy nizej
                         kierunek = false;
@@ -112,23 +130,8 @@ namespace RMVB_konsola.MVB
                             return null;
                         }
                     }
-                    else if (wartosc.Item1 == 1)
-                    {
-                        //szukamy wyszej
-                        kierunek = true;
-                        if (aktualny_indeks != desk.Count()-1)
-                        {
-                            aktualny_indeks = aktualny_indeks + 1;
-                            do_przejrzenia.Push(desk[aktualny_indeks]);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
-                            return null;
-                        }
-                    }
-                    else {
-                        //nie znaleziono
+                    else if(wartosc.Item1 == 3)//nie znaleziono
+                    {                        
                         //szukamy zgodnie z kierunkiem
                         if (!(aktualny_indeks == desk.Count() - 1 && kierunek) && !(!kierunek && aktualny_indeks == 0))
                         {
