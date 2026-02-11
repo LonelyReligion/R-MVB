@@ -465,6 +465,7 @@ namespace RMVB_konsola.MVB
             List<Wersja> wynikowa = new List<Wersja>();
             for (int i = 0; i < wpisy.Count; i++) {
                 Wpis wpis = wpisy[i].Item2;
+                //do sprawdzenia
                 if ((wpis.minData < poczatek && wpis.maxData < poczatek)||(wpis.minData >= koniec && wpis.maxData >= koniec))
                     ;
                 else if (wpis.minData == poczatek && wpis.maxData < koniec)

@@ -204,12 +204,16 @@ namespace RMVB_konsola.MVB
         {
             List<Wersja> wyjsciowa =  new List<Wersja>();
             for (int i = 0; i < desk.Count; i++) {
-                if (!(desk[i].zwrocKoniec() < koniec)) {
+                //zupelnie inne warunki powinny byc
+                if (desk[i].zwrocKoniec() <= poczatek)
+                {
                     return wyjsciowa; //przejrzelismy wszystko co pasowalo do przedzialu
                 }
-                else if (desk[i].zwrocPoczatek() >= poczatek) {
+                else if (!(desk[i].zwrocPoczatek() > koniec)) 
+                {
                     wyjsciowa.AddRange(desk[i].zwrocKorzen().szukaj(poczatek, koniec));
                 }
+                
             }
             return wyjsciowa; 
         }

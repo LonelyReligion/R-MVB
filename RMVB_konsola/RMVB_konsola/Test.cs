@@ -513,6 +513,8 @@ namespace RMVB_konsola
 
         public bool testDataData(int ileRazy) {
             bool blad = false;
+
+            //tu wybieranie granic wgl nie jest losowe chyba!
             DateTime poczatek = ctx.Wersje.OrderBy(u=>u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji.AddTicks(-10);
             DateTime koniec = ctx.Wersje
                                 .OrderByDescending(u => u.dataWygasniecia)
@@ -539,16 +541,31 @@ namespace RMVB_konsola
 
             if (szukane_wersje.Count != szukane_wersje_mvb.Count)
             {
+/*                var duplicates = szukane_wersje_mvb
+                .GroupBy(i => i)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key).ToList();*/
                 //except nie zadziala
                 var nieznalezione = szukane_wersje
                                     .Where(d => !szukane_wersje_mvb.Any(mvb =>
                                         mvb.UrzadzenieID == d.UrzadzenieID &&
                                         mvb.WersjaID == d.WersjaID))
                                     .ToList();
+                if(nieznalezione.Count != 0)
+                    Console.WriteLine("Nie znaleziono następujących urządzeń: ");
                 foreach(var u in nieznalezione)
                     Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                rmvb.szukaj(poczatek, koniec);
-                blad = true;
+
+                var nadmiarowe = szukane_wersje_mvb
+                    .Where(mvb => !szukane_wersje.Any(w =>
+                        w.UrzadzenieID == mvb.UrzadzenieID &&
+                        w.WersjaID == mvb.WersjaID))
+                    .ToList();
+                if (nadmiarowe.Count != 0)
+                    Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
+                foreach (var u in nadmiarowe)
+                    Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                 blad = true;
             }
             return blad;
         }
