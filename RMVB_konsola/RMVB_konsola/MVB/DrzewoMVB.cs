@@ -57,6 +57,7 @@ namespace RMVB_konsola.MVB
                 desk.Last().ustawKoniec(czas_zmiany);
                 //zczytac zywe
                 List<Wersja> do_dodania = ostatni_korzen.zwrocZywe();
+                do_dodania.Add(u);
                 //zabic te w starym korzeniu z data wyzej
                 //zywe maja miec to jako date ostatniej modyfikacji w nowym korzeniu
                 Korzen nowy = new Korzen(Repo, Pversion);
@@ -202,7 +203,7 @@ namespace RMVB_konsola.MVB
         internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) 
         {
             List<Wersja> wyjsciowa =  new List<Wersja>();
-            for (int i = 0; i < desk.Count - 1; i++) {
+            for (int i = 0; i < desk.Count; i++) {
                 if (!(desk[i].zwrocKoniec() < koniec)) {
                     return wyjsciowa; //przejrzelismy wszystko co pasowalo do przedzialu
                 }

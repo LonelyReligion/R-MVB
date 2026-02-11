@@ -69,6 +69,7 @@ for (int i = 0; i < liczba_urzadzen; i++)
 
         int id_losowe = scenariusz_3[i * liczba_urzadzen * 2 / 10 + j];//rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
         Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
+
         rmvb.dodajWersje(losowa);
         rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
         losowe.Add(losowa);
