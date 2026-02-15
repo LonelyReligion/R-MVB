@@ -556,12 +556,11 @@ namespace RMVB_konsola
                 foreach(var u in nieznalezione)
                     Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
 
-                var nadmiarowe = szukane_wersje_mvb
-                    .Where(mvb => !szukane_wersje.Any(w =>
-                        w.UrzadzenieID == mvb.UrzadzenieID &&
-                        w.WersjaID == mvb.WersjaID))
-                    .ToList();
-                if (nadmiarowe.Count != 0)
+                List<Wersja> nadmiarowe = new List<Wersja>(szukane_wersje_mvb);
+                foreach (var elem in szukane_wersje_mvb.Distinct())
+                    nadmiarowe.Remove(elem);
+                
+                if (szukane_wersje_mvb.Distinct().Count() !=  szukane_wersje_mvb.Count())
                     Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
                 foreach (var u in nadmiarowe)
                     Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
