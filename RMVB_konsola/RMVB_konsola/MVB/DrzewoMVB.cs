@@ -57,14 +57,25 @@ namespace RMVB_konsola.MVB
                 desk.Last().ustawKoniec(czas_zmiany);
                 //zczytac zywe
                 List<Wersja> do_dodania = ostatni_korzen.zwrocZywe();
-                do_dodania.Add(u);
+                
                 //zabic te w starym korzeniu z data wyzej
                 //zywe maja miec to jako date ostatniej modyfikacji w nowym korzeniu
                 Korzen nowy = new Korzen(Repo, Pversion);
                 Wezel.aktualne_id = 'A';
                 desk.Add(new DeskryptorKorzenia(czas_zmiany, DateTime.MaxValue, nowy));
-                foreach(Wersja w in do_dodania)
-                    dodajUrzadzenie(w); //rekurencja ups.
+                foreach (Wersja w in do_dodania)
+                {
+                    w.dezaktywuj();
+                    
+                    Wersja kopia = new Wersja(w, (Repo)Repo);
+                    kopia.dataOstatniejModyfikacji = czas_zmiany;
+                    Repo.saveVersion(kopia);
+
+                }
+                do_dodania.Add(u);//tego nie musimy kopiowac;)
+                foreach (Wersja w in do_dodania) {
+                    dodajUrzadzenie(w);
+                }
             }; 
             
         }
