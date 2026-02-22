@@ -460,18 +460,18 @@ namespace RMVB_konsola
             bool blad = false;
 
             //doprowadzic spowrotem do porzadku (losowe)
-            List<(int, int)> szukane_id_v = new List<(int, int)>();
+/*            List<(int, int)> szukane_id_v = new List<(int, int)>();
             for (int i = 0; i < ileRazy; i++)
             {
                 int losowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
                 int losowa_wersja_id = repo.pobierzUrzadzeniaWersje().ElementAt(losowe_urzadzenie_id).Value.ElementAt(rnd.Next(repo.pobierzUrzadzeniaWersje().ElementAt(losowe_urzadzenie_id).Value.Count - 1)).WersjaID;
                 szukane_id_v.Add((losowe_urzadzenie_id, losowa_wersja_id));
-            }
-
+            }*/
+            List<(int, int)> szukane_id_v = new List<(int, int)>([(5,0),(0,6),(4,3),(1,5),(0,5),(4,0)]);
             //>
             Wersja? szukana = null;
             sw = Stopwatch.StartNew();
-            for (int i = 0; i < ileRazy; i++)
+            for (int i = 0; i < szukane_id_v.Count(); i++)
             {
                 int id = szukane_id_v[i].Item1;
                 int v = szukane_id_v[i].Item2;
@@ -492,7 +492,7 @@ namespace RMVB_konsola
                 Console.WriteLine("Baza: " + szukana.UrzadzenieID + "v" + szukana.WersjaID + " w czasie: " + czas_baza + " ms.");
 
             sw = Stopwatch.StartNew();
-            for (int i = 0; i < ileRazy; i++)
+            for (int i = 0; i < szukane_id_v.Count(); i++)
             {
                 int id = szukane_id_v[i].Item1;
                 int v = szukane_id_v[i].Item2;
