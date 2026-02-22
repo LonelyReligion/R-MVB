@@ -90,7 +90,7 @@ namespace RMVB_konsola.MVB
         internal Wersja szukaj(int id, int v)
         {
             //prawdopodobnie jest gdzieś na początku
-            if (v == 1)
+            if (v == 0)
             {
                 for (int i = 0; i < desk.Count(); i++)
                 {
@@ -149,11 +149,14 @@ namespace RMVB_konsola.MVB
                         if (!(aktualny_indeks == desk.Count() - 1 && kierunek) && !(!kierunek && aktualny_indeks == 0))
                         {
                             int jeden = kierunek ? 1 : -1;
-                            if (!odwiedzone.Contains(aktualny_indeks + jeden))
+                            aktualny_indeks += jeden;
+                            while (odwiedzone.Contains(aktualny_indeks) &&
+                                !(aktualny_indeks == desk.Count() - 1 && kierunek) && 
+                                !(!kierunek && aktualny_indeks == 0)) //nie uwzgl. przyp granicznych
                             {
                                 aktualny_indeks += jeden;
-                                do_przejrzenia.Push(desk[aktualny_indeks]);
                             }
+                            do_przejrzenia.Push(desk[aktualny_indeks]);
                         }
                         //uwzglednic co jak nam sie skoncza w jednym kierunku a nie znaleziono zadnego
                         else 
