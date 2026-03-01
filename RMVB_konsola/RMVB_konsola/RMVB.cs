@@ -37,7 +37,6 @@ namespace RMVB_konsola
         internal void dodajWersje(Wersja w) {
             repo.saveVersion(w);
             MVB.dodajUrzadzenie(w);
-
         }
 
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa) {

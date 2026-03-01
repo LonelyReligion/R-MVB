@@ -63,17 +63,23 @@ namespace RMVB_konsola.MVB
                 Korzen nowy = new Korzen(Repo, Pversion);
                 Wezel.aktualne_id = 'A';
                 desk.Add(new DeskryptorKorzenia(czas_zmiany, DateTime.MaxValue, nowy));
+
+                
+                List<Wersja> kopie = new List<Wersja>();
                 foreach (Wersja w in do_dodania)
                 {
                     w.dezaktywuj();
                     
-                    Wersja kopia = new Wersja(w, (Repo)Repo);
+                    Wersja kopia = new Wersja(w.UrzadzenieID, (Repo)Repo);
                     kopia.dataOstatniejModyfikacji = czas_zmiany;
                     Repo.saveVersion(kopia);
+                    kopie.Add(kopia);
 
                 }
-                do_dodania.Add(u);//tego nie musimy kopiowac;)
-                foreach (Wersja w in do_dodania) {
+
+                kopie.Add(u);//tego nie musimy kopiowac;)
+                
+                foreach (Wersja w in kopie) {
                     dodajUrzadzenie(w);
                 }
             }; 
