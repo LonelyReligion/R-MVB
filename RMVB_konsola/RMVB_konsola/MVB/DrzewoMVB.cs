@@ -56,7 +56,7 @@ namespace RMVB_konsola.MVB
                 DateTime czas_zmiany = DateTime.Now;
                 desk.Last().ustawKoniec(czas_zmiany);
                 //zczytac zywe
-                List<Wersja> do_dodania = ostatni_korzen.zwrocZywe();
+                List<Wersja> zywe = ostatni_korzen.zwrocZywe();
                 
                 //zabic te w starym korzeniu z data wyzej
                 //zywe maja miec to jako date ostatniej modyfikacji w nowym korzeniu
@@ -65,21 +65,21 @@ namespace RMVB_konsola.MVB
                 desk.Add(new DeskryptorKorzenia(czas_zmiany, DateTime.MaxValue, nowy));
 
                 
-                List<Wersja> kopie = new List<Wersja>();
-                foreach (Wersja w in do_dodania)
+                List<Wersja> do_dodania = new List<Wersja>();
+                foreach (Wersja w in zywe)
                 {
                     w.dezaktywuj();
                     
                     Wersja kopia = new Wersja(w.UrzadzenieID, (Repo)Repo);
                     kopia.dataOstatniejModyfikacji = czas_zmiany;
                     Repo.saveVersion(kopia);
-                    kopie.Add(kopia);
+                    do_dodania.Add(kopia);
 
                 }
 
-                kopie.Add(u);//tego nie musimy kopiowac;)
+                do_dodania.Add(u);//tego nie musimy kopiowac;)
                 
-                foreach (Wersja w in kopie) {
+                foreach (Wersja w in do_dodania) {
                     dodajUrzadzenie(w);
                 }
             }; 

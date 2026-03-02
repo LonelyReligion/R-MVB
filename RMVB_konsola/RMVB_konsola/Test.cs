@@ -191,13 +191,13 @@ namespace RMVB_konsola
             int cnt_1 = 0;
 
             sw = Stopwatch.StartNew();
-            int liczba = 0;
+            List<int> liczby = new List<int>();
             int id = -1;
             for (int i = 0; i < ileRazy; i++)
             {
                 (Decimal x, Decimal y) = wspolrzedne[i];
                 wynikBD.Add(0);
-                liczba = 0;
+                liczby.Add(0);
 
                 id = ctx.Urzadzenia
                     .AsNoTracking()
@@ -213,11 +213,11 @@ namespace RMVB_konsola
                                             .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == id)
                                             .Where(p => p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0)) //zparametryzowac
                                             .ToList();
-                    liczba += pomiary.Count;
+                    liczby[i] += pomiary.Count;
                     foreach (Pomiar p in pomiary) wynikBD[i] += p.Wartosc;
 
-                    if (liczba != 0)
-                        wynikBD[i] /= liczba;
+                    if (liczby[i] != 0)
+                        wynikBD[i] /= liczby[i];
                     else
                         wynikBD[i] = 0;
                 }
@@ -247,6 +247,7 @@ namespace RMVB_konsola
                 Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
                 if (wynikBD[i] != wynikR[i]) {
                     blad = true;
+                    Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id].get_liczba_suma().Item2 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
                 }
                 Console.WriteLine("**********************************");
             }
