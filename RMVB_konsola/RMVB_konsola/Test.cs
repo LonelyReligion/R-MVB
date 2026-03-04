@@ -181,7 +181,7 @@ namespace RMVB_konsola
             bool blad = false;
             //losowanie ze zwracaniem
             List<(Decimal, Decimal)> wspolrzedne = new List<(Decimal, Decimal)>();
-            for(int i = 0; i < ileRazy; i++)
+            for (int i = 0; i < ileRazy; i++)
                 wspolrzedne.Add(generator.wylosujWspolrzedne());
 
             List<Decimal> wynikBD = new List<Decimal>();
@@ -248,7 +248,7 @@ namespace RMVB_konsola
                 Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
                 if (wynikBD[i] != wynikR[i]) {
                     blad = true;
-                    Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item2 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
+                    Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
                 }
                 Console.WriteLine("**********************************");
             }

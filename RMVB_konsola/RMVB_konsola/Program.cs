@@ -38,7 +38,7 @@ Pomiar testowy = new Pomiar(0, DateTime.Now);
 Wersja alfa = new Wersja(rmvb.zwrocRepo());
 alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
 
-alfa.dodajPomiar(testowy);
+//alfa.dodajPomiar(testowy);
 rmvb.dodajWersje(alfa);
 rmvb.dodajPomiar(testowe.UrzadzenieID, testowy, alfa);
 ///
