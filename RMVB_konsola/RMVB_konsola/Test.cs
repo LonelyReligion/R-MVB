@@ -471,18 +471,19 @@ namespace RMVB_konsola
             }
             
             //>
-            Wersja? szukana = null;
+            List<Wersja?> znalezione_baza = new List<Wersja>();
             sw = Stopwatch.StartNew();
             for (int i = 0; i < szukane_id_v.Count(); i++)
             {
+                znalezione_baza.Add(null);
                 int id = szukane_id_v[i].Item1;
                 int v = szukane_id_v[i].Item2;
 
-                szukana = ctx.Wersje
+                znalezione_baza[i] = ctx.Wersje
                 .AsNoTracking()
                 .FirstOrDefault(u => u.UrzadzenieID == id && u.WersjaID == v);
 
-                if (szukana == null)
+                if (znalezione_baza[i] == null)
                 {
                     Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
                     blad = true;
@@ -490,26 +491,44 @@ namespace RMVB_konsola
             }
 
             long czas_baza = sw.ElapsedMilliseconds;
-            if (szukana != null)
-                Console.WriteLine("Baza: " + szukana.UrzadzenieID + "v" + szukana.WersjaID + " w czasie: " + czas_baza + " ms.");
+                
 
             sw = Stopwatch.StartNew();
+            List<Wersja?> znalezione_rmvb =  new List<Wersja?>();
             for (int i = 0; i < szukane_id_v.Count(); i++)
             {
+                znalezione_rmvb.Add(null);
                 int id = szukane_id_v[i].Item1;
                 int v = szukane_id_v[i].Item2;
-                szukana = rmvb.szukaj(id, v);
-                if (szukana == null)
+                znalezione_rmvb[i] = rmvb.szukaj(id, v);
+                if (znalezione_rmvb[i] == null)
                 {
                     Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
                     //do debuggowania
-                    szukana = rmvb.szukaj(id, v);
+                    znalezione_rmvb[i] = rmvb.szukaj(id, v);
                     blad = true;
                 }
             }
             long czas_mvb = sw.ElapsedMilliseconds;
             if (!blad)
-                Console.WriteLine("RMVB: " + szukana.UrzadzenieID + "v" + szukana.WersjaID + " w czasie: " + czas_mvb + " ms.");
+            {
+                Console.WriteLine("CZAS WYKONANIA: baza: " + czas_baza + " rmvb: " + czas_mvb);
+            }
+            else {
+                for (int i = 0; i < ileRazy; i++)
+                {
+                    if (znalezione_baza[i] == null && znalezione_rmvb[i] == null)
+                    {
+                        Console.WriteLine("Nie odnaleziono urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                    }
+                    else if (znalezione_baza[i] == null) {
+                        Console.WriteLine("Baza nie odnalazła urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                    }
+                    if (znalezione_rmvb[i] == null) {
+                        Console.WriteLine("RMVB nie odnalazło urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                    }
+                }
+            }
             return blad;
         }
 
