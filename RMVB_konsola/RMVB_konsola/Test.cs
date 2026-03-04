@@ -192,25 +192,26 @@ namespace RMVB_konsola
 
             sw = Stopwatch.StartNew();
             List<int> liczby = new List<int>();
-            int id = -1;
+            List<int> id = new List<int>();
             for (int i = 0; i < ileRazy; i++)
             {
                 (Decimal x, Decimal y) = wspolrzedne[i];
                 wynikBD.Add(0);
                 liczby.Add(0);
-
-                id = ctx.Urzadzenia
+                id.Add(-1);
+                id[i] = ctx.Urzadzenia
                     .AsNoTracking()
                     .Where(u => u.Szerokosc == y)
                     .Where(u => u.Dlugosc == x)
                     .First()
                     .UrzadzenieID;
 
-                if (id != -1)
+                if (id[i] != -1)
                 {
+                    int aktualne_id = id[i];
                     List<Pomiar> pomiary = ctx.Pomiary
                                             .AsNoTracking()
-                                            .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == id)
+                                            .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == aktualne_id)
                                             .Where(p => p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0)) //zparametryzowac
                                             .ToList();
                     liczby[i] += pomiary.Count;
@@ -243,11 +244,11 @@ namespace RMVB_konsola
             for (int i = 0; i < ileRazy; i++)
             {
                 (Decimal x, Decimal y) = wspolrzedne[i];
-                Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id.ToString());
+                Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id[i].ToString());
                 Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
                 if (wynikBD[i] != wynikR[i]) {
                     blad = true;
-                    Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id].get_liczba_suma().Item2 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
+                    Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item2 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
                 }
                 Console.WriteLine("**********************************");
             }
