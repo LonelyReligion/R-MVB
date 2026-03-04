@@ -5,7 +5,7 @@ using RMVB_konsola.R;
 using System.Diagnostics;
 
 //Setup
-int liczba_urzadzen = 10;
+int liczba_urzadzen = 100;
 Generatory.liczba_urzadzen = liczba_urzadzen;
 decimal granica_przezywalnosci = 0.2m;
 
@@ -50,7 +50,6 @@ beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, 
 rmvb.usunWersje(beta);
 //
 List<Wersja> losowe = new List<Wersja>(); //do debuggowania, potrzebne nam do odtworzenia scenariusza
-List<int> scenariusz_3 = [0, 0, 0, 0, 1, 0, 0, 2, 1, 2, 3, 3, 4, 0, 2, 3, 5, 1, 4, 4];
 for (int i = 0; i < liczba_urzadzen; i++)
 {
     int id = i % liczba_urzadzen;
@@ -67,15 +66,13 @@ for (int i = 0; i < liczba_urzadzen; i++)
         Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0) * 100) / 100;
         Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
 
-        int id_losowe = scenariusz_3[i * liczba_urzadzen * 2 / 10 + j];//rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
+        int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
         Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
 
         rmvb.dodajWersje(losowa);
         rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
         losowe.Add(losowa);
     }
-
-    Console.WriteLine(id + ": " + rmvb.zwrocMVB().zwrocLiczbeWpisowKorzenia(0));
 }
 
 
