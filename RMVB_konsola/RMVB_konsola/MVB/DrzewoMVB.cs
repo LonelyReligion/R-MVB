@@ -86,10 +86,24 @@ namespace RMVB_konsola.MVB
             
         }
 
-        internal void usunUrzadzenie(Wersja testowe2)
+        internal bool usunUrzadzenie(Wersja testowe2)
         {
-            var dk = desk[0].zwrocKorzen();
-            dk.usun(testowe2);
+            if (testowe2.dataWygasniecia != DateTime.MaxValue) {
+                Console.WriteLine("To urzadzenie zostało juz usuniete (zdezaktywowane).");
+                return false;
+            }
+            for (int i = 0; i < desk.Count(); i++)
+            {
+                /* data wygasniecia przy nieusunietym dotychczas urzadzeniu zawsze bedzie DateTimeMax */
+                if (desk[i].zwrocPoczatek() <= testowe2.dataOstatniejModyfikacji)
+                {
+                    desk[i].zwrocKorzen().usun(testowe2);
+                    return true;
+                }
+
+            }
+            Console.WriteLine("Uwaga: Nie znaleziono odpowiedniego korzenia");
+            return false;
         }
 
         //szukaj id i wersji
