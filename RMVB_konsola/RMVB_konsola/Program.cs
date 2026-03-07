@@ -91,7 +91,7 @@ rmvb.obliczAgregaty();
 rmvb.wypiszMVB();
 
 Test jednostka_testujaca = Test.pobierzInstancje();
-if (jednostka_testujaca.wykonajTesty(10)) {
+if (jednostka_testujaca.wykonajTesty(100)) {
     Console.WriteLine("W czasie wykonywania testów wystąpiły błędy. Szczegóły wyżej.");
     Console.WriteLine("Scenariusz testowy zakładał dodanie urządzeń o podanych id w poniższej kolejności:");
 

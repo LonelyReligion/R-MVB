@@ -532,31 +532,52 @@ namespace RMVB_konsola
             return blad;
         }
 
-        public bool testDataData(int ileRazy) {
-            bool blad = false;
+        public List<(DateTime, DateTime)> wylosujPrzedzialy(DateTime poczatek, DateTime koniec, int liczba_przedzialow) {
+            List<(DateTime, DateTime)> wyjsciowa = new List<(DateTime, DateTime)>();
+            long range = (koniec - poczatek).Ticks; //ile czasu miedzy poczatkiem a koncem
 
-            //tu wybieranie granic wgl nie jest losowe chyba!
-            DateTime poczatek = ctx.Wersje.OrderBy(u=>u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji.AddTicks(-10);
-            DateTime koniec = ctx.Wersje
-                                .OrderByDescending(u => u.dataWygasniecia)
-                                .Select(u => u.dataWygasniecia)
-                                .First();
-            int range = ((TimeSpan)(koniec - poczatek)).Milliseconds;
-            List<DateTime> randos = new List<DateTime>();
-            randos.Add(poczatek.AddTicks(rnd.Next(range)));
+            for (int i = 0; i < liczba_przedzialow; i++) {
+                DateTime losowa1 = poczatek.AddTicks((long)(rnd.NextDouble() * range));
+                DateTime losowa2 = poczatek.AddTicks((long)(rnd.NextDouble() * range));
+
+                if (losowa1 > losowa2)
+                    wyjsciowa.Add((losowa2, losowa1));
+                else
+                    wyjsciowa.Add((losowa1, losowa2));
+            }
+            return wyjsciowa;
+        }
+        public bool testDataData(int ileRazy) {
+            bool blad = false;            
+            //najwczesniejsza data poczatku
+            DateTime poczatek = ctx.Wersje.OrderBy(u=>u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji;
+            //najpozniejsza data konca, wyszukujemy tylko z martwych urzadzen
+            DateTime koniec_nie_9999 = ctx.Wersje.Where(u=>u.dataWygasniecia != DateTime.MaxValue).OrderByDescending(u => u.dataWygasniecia).Select(u => u.dataWygasniecia).First();
+
+            List<(DateTime, DateTime)> losowe_przedzialy = wylosujPrzedzialy(poczatek, koniec_nie_9999, ileRazy);
+            
 
             var szukane_wersje = new List<Wersja>();
             var szukane_wersje_mvb = new List<Wersja>();
 
             //Console.WriteLine(poczatek.Ticks + "-" + koniec.Ticks);
             sw = Stopwatch.StartNew();
-            for(int i = 0; i < ileRazy; i++)
-                szukane_wersje = ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList();
+            for (int i = 0; i < ileRazy; i++)
+            {
+                DateTime start = losowe_przedzialy[i].Item1;
+                DateTime end = losowe_przedzialy[i].Item2;
+                szukane_wersje.AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= start).Where(u => u.dataWygasniecia < end).ToList());
+            }
             long czas_baza = sw.ElapsedMilliseconds;
             Console.WriteLine("Baza: " + szukane_wersje.Count + " w czasie: " + czas_baza + " ms.");
             
             sw = Stopwatch.StartNew();
-            szukane_wersje_mvb = rmvb.szukaj(poczatek, koniec);
+            for (int i = 0; i < ileRazy; i++)
+            {
+                DateTime start = losowe_przedzialy[i].Item1;
+                DateTime end = losowe_przedzialy[i].Item2; 
+                szukane_wersje_mvb.AddRange(rmvb.szukaj(start, end));
+            }
             long czas_mvb = sw.ElapsedMilliseconds;
             Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
 

@@ -237,7 +237,8 @@ namespace RMVB_konsola.MVB
         internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) 
         {
             List<Wersja> wyjsciowa =  new List<Wersja>();
-            for (int i = 0; i < desk.Count; i++) {
+            //musi byc od konca, przez ten warunek nizej
+            for (int i = desk.Count - 1; i >= 0; i--) {
                 //zupelnie inne warunki powinny byc
                 if (desk[i].zwrocKoniec() <= poczatek)
                 {
