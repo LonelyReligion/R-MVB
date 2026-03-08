@@ -89,6 +89,7 @@ for (int i = 0; i < liczba_urzadzen; i++)
 rmvb.obliczAgregaty();
 
 rmvb.wypiszMVB();
+rmvb.zapiszMVB("../../../Pliki wynikowe/MVB.txt");
 
 Test jednostka_testujaca = Test.pobierzInstancje();
 if (jednostka_testujaca.wykonajTesty(100)) {

@@ -33,14 +33,15 @@ namespace RMVB_konsola.MVB
             }
             return false;
         }
-        internal void wypisz()
+        internal List<String> drukuj()
         {
-            Console.WriteLine(id);
+            List<String> wyjsciowa =  new List<string> ();
+            wyjsciowa.Add(id.ToString());
             if (urzadzenia.Count == 0)
             {
-                Console.WriteLine("******");
-                Console.WriteLine("*    *");
-                Console.WriteLine("******");
+                wyjsciowa.Add("******");
+                wyjsciowa.Add("*    *");
+                wyjsciowa.Add("******");
             }
             else
             {
@@ -55,13 +56,14 @@ namespace RMVB_konsola.MVB
                 {
                     pozioma += "*";
                 }
-                Console.WriteLine(pozioma);
+                wyjsciowa.Add(pozioma);
                 for (int i = 0; i < wynikowy.Count; i++)
                 {
-                    Console.WriteLine("*" + wynikowy[i] + "*");
+                    wyjsciowa.Add("*" + wynikowy[i] + "*");
                 }
-                Console.WriteLine(pozioma);
+                wyjsciowa.Add(pozioma);
             }
+            return wyjsciowa;
         }
 
         internal bool strongVersionOverflow()

@@ -123,7 +123,7 @@ namespace RMVB_konsola
                 foreach (Pomiar p in ctx.Pomiary)
                 {
                     //przerobic na zapytanie
-                    bool ma_wersje_przypisana = p.WersjeUrzadzenia.FirstOrDefault() != null;
+                    bool ma_wersje_przypisana = true;// p.WersjeUrzadzenia.FirstOrDefault() != null;
                     bool nalezy_do_przedzialu = ids.Contains((int)p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID);
                     bool nie_jest_stary = p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0);
                     if (ma_wersje_przypisana && nalezy_do_przedzialu && nie_jest_stary)
@@ -309,11 +309,11 @@ namespace RMVB_konsola
                     if (cnt_r[i].Count > cnt_1[i].Count)
                     {
                         Console.WriteLine("R-drzewo dodatkowo znalazło następujące urządzenia: ");
-                        nadmiarowe = (cnt_r[i].Where(u => !cnt_1[i].Any(u1 => (u1.UrzadzenieID == u1.UrzadzenieID))).ToList());
+                        nadmiarowe = (cnt_r[i].Where(u => !cnt_1[i].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
                     }
                     else {
                         Console.WriteLine("Baza dodatkowo znalazła następujące urządzenia: ");
-                        nadmiarowe = (cnt_1[i].Where(u => !cnt_r[i].Any(u1 => (u1.UrzadzenieID == u1.UrzadzenieID))).ToList());
+                        nadmiarowe = (cnt_1[i].Where(u => !cnt_r[i].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
                     }
 
                     foreach (Urzadzenie u in nadmiarowe)

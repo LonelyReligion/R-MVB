@@ -255,14 +255,15 @@ namespace RMVB_konsola.MVB
             return nowy;
         }
 
-        internal void wypisz()
+        internal List<String> drukuj()
         {
-            Console.WriteLine("Korzen");
+            List<String> wyjsciowa = new List<string>();
+            wyjsciowa.Add("Korzen");
             if (wpisy.Count == 0)
             {
-                Console.WriteLine("******");
-                Console.WriteLine("*    *");
-                Console.WriteLine("******");
+                wyjsciowa.Add("******");
+                wyjsciowa.Add("*    *");
+                wyjsciowa.Add("******");
             }
             else
             {
@@ -277,20 +278,21 @@ namespace RMVB_konsola.MVB
                 {
                     pozioma += "*";
                 }
-                Console.WriteLine(pozioma);
+                wyjsciowa.Add(pozioma);
                 for (int i = 0; i < wynikowy.Count; i++)
                 {
-                    Console.WriteLine("*" + wynikowy[i] + "*");
+                    wyjsciowa.Add("*" + wynikowy[i] + "*");
                 }
-                Console.WriteLine(pozioma);
+                wyjsciowa.Add(pozioma);
             }
 
             foreach (var wpis in wpisy)
             {
-                wpis.Item2.wezel.wypisz();
+                wpis.Item2.wezel.drukuj();
             }
 
-            Console.WriteLine("Przezywalnosc: " + zwrocPrzezywalnosc());
+            wyjsciowa.Add("Przezywalnosc: " + zwrocPrzezywalnosc());
+            return wyjsciowa;
         }
 
         //potrzebne sprawdzenie weakVersionUnderflow

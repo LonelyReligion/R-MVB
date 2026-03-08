@@ -32,16 +32,18 @@ namespace RMVB_konsola.MVB
             this.ctx = ctx;
         }
 
-        internal void wypiszDrzewo() 
+        internal List<String> drukujDrzewo() 
         {
+            List<String> wyjsciowa = new List<String>();
             foreach (DeskryptorKorzenia dk in desk)
             {
-                Console.WriteLine("Okres obowiazywania od " + dk.zwrocPoczatek().ToString() + " do " + dk.zwrocKoniec().ToString());
-                dk.zwrocKorzen().wypisz();
-                Console.WriteLine("\n");
+                wyjsciowa.Add("Okres obowiazywania od " + dk.zwrocPoczatek().ToString() + " do " + dk.zwrocKoniec().ToString());
+                wyjsciowa.AddRange(dk.zwrocKorzen().drukuj());
+                wyjsciowa.Add("\n");
             }
 
-            Console.WriteLine("Liczba korzeni MVB: " + desk.Count);
+            wyjsciowa.Add("Liczba korzeni MVB: " + desk.Count);
+            return wyjsciowa;
         }
 
         internal int zwrocLiczbeWpisowKorzenia(int nr) {

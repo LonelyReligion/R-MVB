@@ -24,14 +24,15 @@ namespace RMVB_konsola
         internal Repo zwrocRepo() { return repo; }
         internal bool czyUrzadzenieIstnieje(int id) { return repo.czyUrzadzenieIstnieje(id); }
         internal DrzewoMVB zwrocMVB() { return MVB; }
-        internal void wypiszMVB() { MVB.wypiszDrzewo(); }
+        internal void wypiszMVB() 
+        { 
+            foreach(String linijka in MVB.drukujDrzewo())
+                Console.WriteLine(linijka);
+        }
         //dodaj
         internal void dodajUrzadzenie(Urzadzenie u) {
-            // test
             repo.saveDevice(u);
             R.dodajUrzadzenie(u);
-            //
-            //R.dodajUrzadzenie(u);
         }
 
         internal void dodajWersje(Wersja w) {
@@ -107,6 +108,11 @@ namespace RMVB_konsola
         //oblicza agregaty powierzchniowe
         internal void obliczAgregaty() { 
             R.obliczAgregaty();
+        }
+
+        internal void zapiszMVB(string v)
+        {
+            throw new NotImplementedException();
         }
     }
 }
