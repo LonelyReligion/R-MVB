@@ -267,7 +267,7 @@ namespace RMVB_konsola
 
             Stopwatch sw;
             sw = Stopwatch.StartNew();
-            List<int> cnt_1 = new List<int>();
+            List<List<Urzadzenie>> cnt_1 = new List<List<Urzadzenie>>();
             for (int i = 0; i < ileRazy; i++)
             {
                 Rectangle rect = searchRect[i];
@@ -283,17 +283,17 @@ namespace RMVB_konsola
                 .Where(u => rect.YMin <= u.Szerokosc)
                 .Where(u => rect.XMax >= u.Dlugosc)
                 .Where(u => rect.YMax >= u.Szerokosc)
-                .Count());
+                .ToList());
             }
             long wynik = sw.ElapsedMilliseconds;
 
             sw = Stopwatch.StartNew();
                 
 
-            List<int> cnt_r = new List<int>();
+            List<List<Urzadzenie>> cnt_r = new List<List<Urzadzenie>>();
             for (int i = 0; i < ileRazy; i++)
             {
-                cnt_r.Add(rmvb.szukaj(searchRect[i]).Count());
+                cnt_r.Add(rmvb.szukaj(searchRect[i]));
             }
             long wynik3 = sw.ElapsedMilliseconds;
 
@@ -301,10 +301,28 @@ namespace RMVB_konsola
             for (int i = 0; i < ileRazy; i++)
             {
                 Console.WriteLine("Prostokat: " + searchRect[i].XMin + " " + searchRect[i].XMax + "(x) " + searchRect[i].YMin + " " + searchRect[i].YMax + "(y)");
-                Console.WriteLine("Znaleziono " + cnt_r[i].ToString() + "(rt) " + cnt_1[i].ToString() + "(zapytanie w bazie)");
-                if (cnt_r[i] != cnt_1[i])
+                Console.WriteLine("Znaleziono " + cnt_r[i].Count.ToString() + "(rt) " + cnt_1[i].Count.ToString() + "(zapytanie w bazie)");
+                if (cnt_r[i].Count != cnt_1[i].Count)
                 {
                     blad = true;
+                    List<Urzadzenie> nadmiarowe = new List<Urzadzenie>();
+                    if (cnt_r[i].Count > cnt_1[i].Count)
+                    {
+                        Console.WriteLine("R-drzewo dodatkowo znalazło następujące urządzenia: ");
+                        nadmiarowe = (cnt_r[i].Where(u => !cnt_1[i].Any(u1 => (u1.UrzadzenieID == u1.UrzadzenieID))).ToList());
+                    }
+                    else {
+                        Console.WriteLine("Baza dodatkowo znalazła następujące urządzenia: ");
+                        nadmiarowe = (cnt_1[i].Where(u => !cnt_r[i].Any(u1 => (u1.UrzadzenieID == u1.UrzadzenieID))).ToList());
+                    }
+
+                    foreach (Urzadzenie u in nadmiarowe)
+                    {
+                        Console.WriteLine("UrzadzenieID: " + u.UrzadzenieID + " x: " + u.Dlugosc + " y: " + u.Szerokosc);
+                    }
+
+                    rmvb.szukaj(searchRect[i]);
+
                 }
                 Console.WriteLine("**********************************");
             }
