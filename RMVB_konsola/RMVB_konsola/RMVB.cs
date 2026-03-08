@@ -112,7 +112,12 @@ namespace RMVB_konsola
 
         internal void zapiszMVB(string v)
         {
-            throw new NotImplementedException();
+            List<String> linijki = MVB.drukujDrzewo();
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "MVB.txt")))
+            {
+                foreach (string linijka in linijki)
+                    outputFile.WriteLine(linijka);
+            }
         }
     }
 }
