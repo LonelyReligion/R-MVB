@@ -86,6 +86,7 @@ for (int i = 0; i < liczba_urzadzen; i++)
     rmvb.dodajWersje(losowa);
     rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
 }*/
+
 rmvb.obliczAgregaty();
 
 rmvb.wypiszMVB();
@@ -93,6 +94,10 @@ rmvb.zapiszMVB("../../../Pliki wynikowe/");
 
 Test jednostka_testujaca = Test.pobierzInstancje();
 if (jednostka_testujaca.wykonajTesty(100)) {
+    
+    //jednostka_testujaca.drukujWyniki();
+    //jednostka_testujaca.zapiszWyniki();
+
     Console.WriteLine("W czasie wykonywania testów wystąpiły błędy. Szczegóły wyżej.");
     Console.WriteLine("Scenariusz testowy zakładał dodanie urządzeń o podanych id w poniższej kolejności:");
 

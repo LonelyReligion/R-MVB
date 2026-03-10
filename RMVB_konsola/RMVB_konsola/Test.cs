@@ -83,8 +83,8 @@ namespace RMVB_konsola
         {
             bool blad = false;
             List<Rectangle> szukane = new List<Rectangle>();
-            for(int i = 0; i < ileRazy; i++)
-                szukane.Add(generator.generujProstokat());
+            for (int i = 0; i < ileRazy; i++)
+                szukane.Add(new Rectangle(50.4847m, 14.2603m, 52.3628m, 17.5326m));//szukane.Add(generator.generujProstokat());
 
             List<Decimal> resultDB = new List<Decimal>();
             List<Decimal> resultRTree = new List<Decimal>();
@@ -273,12 +273,14 @@ namespace RMVB_konsola
                 Rectangle rect = searchRect[i];
                 cnt_1.Add(ctx.Urzadzenia
                 .AsNoTracking()
-                //intersects
-                .Where(u => rect.XMin < u.Dlugosc)
-                .Where(u => rect.XMax > u.Dlugosc)
-                .Where(u => rect.YMin < u.Szerokosc)
-                .Where(u => rect.YMax > u.Szerokosc)
-                //contains
+                //contain zawiera intrsects, wyszukujemy punkty, a nie tylko porstokaty
+                /* //intersects
+                 .Where(u => rect.XMin < u.Dlugosc)
+                 .Where(u => rect.XMax > u.Dlugosc)
+                 .Where(u => rect.YMin < u.Szerokosc)
+                 .Where(u => rect.YMax > u.Szerokosc)
+                 */
+                 //contains
                 .Where(u => rect.XMin <= u.Dlugosc)
                 .Where(u => rect.YMin <= u.Szerokosc)
                 .Where(u => rect.XMax >= u.Dlugosc)
