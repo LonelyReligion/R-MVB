@@ -93,21 +93,25 @@ rmvb.wypiszMVB();
 rmvb.zapiszMVB("../../../Pliki wynikowe/");
 
 Test jednostka_testujaca = Test.pobierzInstancje();
-if (jednostka_testujaca.wykonajTesty(100)) {
-    
-    //jednostka_testujaca.drukujWyniki();
-    //jednostka_testujaca.zapiszWyniki();
-
+if (jednostka_testujaca.wykonajTesty(100))
+{
     Console.WriteLine("W czasie wykonywania testów wystąpiły błędy. Szczegóły wyżej.");
     Console.WriteLine("Scenariusz testowy zakładał dodanie urządzeń o podanych id w poniższej kolejności:");
 
     String wynikowa = "[";
-    foreach (Wersja w in losowe) {
+    foreach (Wersja w in losowe)
+    {
         wynikowa += w.UrzadzenieID + ",";
     };
-    wynikowa.Substring(0,wynikowa.Length-1);
+    wynikowa.Substring(0, wynikowa.Length - 1);
     wynikowa += "]";
     Console.WriteLine(wynikowa);
+
+    //jednostka testująca.zapiszBledy("../../../Pliki wynikowe/");
+}
+else
+{
+    jednostka_testujaca.zapiszWyniki("../../../Pliki wynikowe/"); //osobne logowanie błędów do innego pliku wyżej powinno nastąpić
 }
 
 ctx.Dispose();

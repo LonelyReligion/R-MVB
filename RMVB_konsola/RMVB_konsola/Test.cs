@@ -22,6 +22,8 @@ namespace RMVB_konsola
         public static Generatory generator;
         public static Test instancja;
 
+        private static List<string> wyniki;
+        
         internal Stopwatch sw;
         internal Random rnd = new Random();
 
@@ -38,17 +40,21 @@ namespace RMVB_konsola
 
         public bool wykonajTesty(int ileRazy) {
             bool blad = false;
+            
+            wyniki = new List<string>();
+            wyniki.Add("MVB");
 
             Console.WriteLine("Poniżej zaprezentowano wyniki przeprowadzonych testów");
             
             Console.WriteLine("Sekcja pierwsza: zapytania realizowane przez MVB");
             Console.WriteLine("# Wyszukiwanie po dacie i id");
             blad = (blad == true) ? true : testDataId(ileRazy);
-
+            wyniki.Add("\n");
 
             Console.WriteLine("\n# Wyszukiwanie po id");
             bool blad1 = testId(ileRazy);
             blad = (blad == true) ? true : blad1;
+            wyniki.Add("\n");
 
 
             Console.WriteLine("\n# Wyszukiwanie po id i wersji");
@@ -76,6 +82,7 @@ namespace RMVB_konsola
             bool blad6 = testAgregatyPowierzchniowe(ileRazy);
             blad = (blad == true) ? true : blad6;
             Console.WriteLine("\n");
+
             return blad;
         }
 
@@ -342,6 +349,8 @@ namespace RMVB_konsola
         //wyszukiwanie losowego urządzenia po dacie i id x ileRazy
         public bool testDataId(int ileRazy)
         {
+            wyniki.Add("wyszukiwanie losowego urządzenia po dacie i id " + ileRazy + " razy");
+
             bool blad = false;
             List<Wersja> szukane_wersje = generator.wylosujWersje(ileRazy);
             
@@ -368,7 +377,11 @@ namespace RMVB_konsola
                 }
             }
             long czas_baza = sw.ElapsedMilliseconds;
-            Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
+            if (!blad)
+            {
+                Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
+                wyniki.Add("Baza w czasie: " + czas_baza + "ms.");
+            }
 
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++)
@@ -388,14 +401,19 @@ namespace RMVB_konsola
             }
             long czas_mvb = sw.ElapsedMilliseconds;
             if (!blad)
+            {
                 Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
-            else {
+                wyniki.Add("MVB w czasie: " + czas_mvb + "ms.");
+            }
+            else
+            {
                 //except nie zadziala
                 int index_baza = 0;
                 int index_rmvb = 0;
-                for(int index = 0; index < szukane_wersje.Count; index++) {
+                for (int index = 0; index < szukane_wersje.Count; index++)
+                {
                     Wersja wersja = szukane_wersje[index];
-                    int id_urzadzenia =  wersja.UrzadzenieID;
+                    int id_urzadzenia = wersja.UrzadzenieID;
                     int id_wersji = wersja.WersjaID;
 
                     bool odnaleziono_baza = false;
@@ -407,7 +425,8 @@ namespace RMVB_konsola
                         odnaleziono_baza = true;
                         index_baza++;
                     }
-                    else { 
+                    else
+                    {
                         //nieodnaleziono
                     }
 
@@ -422,10 +441,10 @@ namespace RMVB_konsola
                         //nieodnaleziono
                     }
 
-                    Console.WriteLine("id: " + id_urzadzenia + " ver: " + id_wersji 
+                    Console.WriteLine("id: " + id_urzadzenia + " ver: " + id_wersji
                         + " baza: " + odnaleziono_baza.ToString() + " rmvb: " + odnaleziono_rmvb.ToString());
                 }
-            
+
             }
             return blad;
         }
@@ -442,6 +461,7 @@ namespace RMVB_konsola
 
         //wyszukiwanie ostatniej wersji po id
         public bool testId(int ileRazy) {
+            wyniki.Add("wyszukiwanie ostatniej wersji po id");
             bool blad = false;
             List<int> szukane_id = wylosujIdUrzadzen(ileRazy);
 
@@ -456,12 +476,17 @@ namespace RMVB_konsola
                     .FirstOrDefault();
                 if (szukana == null)
                 {
-                    Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
+                    Console.WriteLine("Uwaga: Baza nie odnalazla rekordu o id " + id + ".");
                     blad = true;
                 }
             }
             long czas_baza = sw.ElapsedMilliseconds;
-            Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
+            if (!blad)
+            {
+                Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
+                wyniki.Add("Baza w czasie: " + czas_baza + " ms.");
+            }
+
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++)
             {
@@ -472,8 +497,13 @@ namespace RMVB_konsola
                     blad = true;
                 }
             }
+
             long czas_mvb = sw.ElapsedMilliseconds;
-            Console.WriteLine("MVB w czasie: " + czas_mvb + " ms.");
+            if (!blad)
+            {
+                Console.WriteLine("MVB w czasie: " + czas_mvb + " ms.");
+                wyniki.Add("MVB w czasie: " + czas_mvb + " ms.");
+            }
             return blad;
         }
 
@@ -629,6 +659,15 @@ namespace RMVB_konsola
                  blad = true;
             }
             return blad;
+        }
+
+        internal void zapiszWyniki(string v)
+        {
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "Testy.txt")))
+            {
+                foreach (string linijka in wyniki)
+                    outputFile.WriteLine(linijka);
+            }
         }
     }
 }

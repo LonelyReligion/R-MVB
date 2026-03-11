@@ -32,9 +32,9 @@ namespace RMVB_konsola.MVB
             this.ctx = ctx;
         }
 
-        internal List<String> drukujDrzewo() 
+        internal List<string> drukujDrzewo() 
         {
-            List<String> wyjsciowa = new List<String>();
+            List<string> wyjsciowa = new List<String>();
             foreach (DeskryptorKorzenia dk in desk)
             {
                 wyjsciowa.Add("Okres obowiazywania od " + dk.zwrocPoczatek().ToString() + " do " + dk.zwrocKoniec().ToString());
