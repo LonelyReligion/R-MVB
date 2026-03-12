@@ -76,16 +76,17 @@ for (int i = 0; i < liczba_urzadzen; i++)
 }
 
 
-/*for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
+for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
 {
     Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0)) / 100;
     Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
 
     Wersja losowa = new Wersja(i, rmvb.zwrocRepo());
-    //losowa.dodajPomiar(losowy);
+
     rmvb.dodajWersje(losowa);
     rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
-}*/
+    losowe.Add(losowa);
+}
 
 rmvb.obliczAgregaty();
 

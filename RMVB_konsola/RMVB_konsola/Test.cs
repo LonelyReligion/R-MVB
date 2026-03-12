@@ -90,7 +90,7 @@ namespace RMVB_konsola
             bool blad = false;
             List<Rectangle> szukane = new List<Rectangle>();
             for (int i = 0; i < ileRazy; i++)
-                szukane.Add(new Rectangle(50.4847m, 14.2603m, 52.3628m, 17.5326m)); //szukane.Add(generator.generujProstokat());
+                szukane.Add(generator.generujProstokat());
 
             List<Decimal> resultDB = new List<Decimal>();
             List<Decimal> resultRTree = new List<Decimal>();
