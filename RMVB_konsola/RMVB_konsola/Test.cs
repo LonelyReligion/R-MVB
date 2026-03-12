@@ -39,22 +39,22 @@ namespace RMVB_konsola
         }
 
         public bool wykonajTesty(int ileRazy) {
+            wyniki = new List<string>();
+            wyniki.Add("Liczba powtórzeń każdego zapytania: " + ileRazy);
+            wyniki.Add("Drzewo realizujące zapytanie | Rodzaj zapytania | Czas wykonania w bazie (ms.) | Czas wykonania za pomocą drzewa (ms.)");
+            
             bool blad = false;
             
-            wyniki = new List<string>();
-            wyniki.Add("MVB");
-
+            
             Console.WriteLine("Poniżej zaprezentowano wyniki przeprowadzonych testów");
             
             Console.WriteLine("Sekcja pierwsza: zapytania realizowane przez MVB");
             Console.WriteLine("# Wyszukiwanie po dacie i id");
             blad = (blad == true) ? true : testDataId(ileRazy);
-            wyniki.Add("\n");
 
             Console.WriteLine("\n# Wyszukiwanie po id");
             bool blad1 = testId(ileRazy);
             blad = (blad == true) ? true : blad1;
-            wyniki.Add("\n");
 
 
             Console.WriteLine("\n# Wyszukiwanie po id i wersji");
@@ -67,11 +67,10 @@ namespace RMVB_konsola
             Console.WriteLine("\n");
 
             Console.WriteLine("Sekcja druga: zapytania realizowane przez R");
-            
+
             Console.WriteLine("# Wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie");
             bool blad4 = testProstokat(ileRazy);
             blad = (blad == true) ? true : blad4; 
-            Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatow czasowych");
             bool blad5 = testAgregatyCzasowe(ileRazy);
@@ -91,7 +90,7 @@ namespace RMVB_konsola
             bool blad = false;
             List<Rectangle> szukane = new List<Rectangle>();
             for (int i = 0; i < ileRazy; i++)
-                szukane.Add(new Rectangle(50.4847m, 14.2603m, 52.3628m, 17.5326m));//szukane.Add(generator.generujProstokat());
+                szukane.Add(new Rectangle(50.4847m, 14.2603m, 52.3628m, 17.5326m)); //szukane.Add(generator.generujProstokat());
 
             List<Decimal> resultDB = new List<Decimal>();
             List<Decimal> resultRTree = new List<Decimal>();
@@ -178,7 +177,12 @@ namespace RMVB_konsola
                 }
                 Console.WriteLine("**********************************");
             }
-            Console.WriteLine("CZASY:    Recznie: " + wynik + " vs " + "RMVB: " + wynik3);
+            if (!blad)
+            {
+                Console.WriteLine("CZASY:    Recznie: " + wynik + " vs " + "RMVB: " + wynik3);
+                wyniki.Add("R | wyszukuje agregaty powierzchniowe losowego prostokata | " + wynik + " | " + wynik3);
+            }
+
             return blad;
         }
 
@@ -253,13 +257,15 @@ namespace RMVB_konsola
                 (Decimal x, Decimal y) = wspolrzedne[i];
                 Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id[i].ToString());
                 Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
-                if (wynikBD[i] != wynikR[i]) {
+                if (wynikBD[i] != wynikR[i])
+                {
                     blad = true;
                     Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
                 }
                 Console.WriteLine("**********************************");
             }
             Console.WriteLine("CZASY: Baza: " + czasBD + " vs " + "Rtree: " + czas);
+            wyniki.Add("R | wyszukuje agregat czasowy losowego urządzenia | " + czasBD + " | " + czas);
             return blad;
 
         }
@@ -320,7 +326,8 @@ namespace RMVB_konsola
                         Console.WriteLine("R-drzewo dodatkowo znalazło następujące urządzenia: ");
                         nadmiarowe = (cnt_r[i].Where(u => !cnt_1[i].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
                     }
-                    else {
+                    else
+                    {
                         Console.WriteLine("Baza dodatkowo znalazła następujące urządzenia: ");
                         nadmiarowe = (cnt_1[i].Where(u => !cnt_r[i].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
                     }
@@ -337,6 +344,7 @@ namespace RMVB_konsola
             }
 
             Console.WriteLine("RMVB: " + wynik3 + " vs " + "Recznie: " + wynik);
+            wyniki.Add("R | wyszukuje urzadzenia znajdujace sie w losowym prostokacie |" + wynik +  " | " + wynik3);
             return blad;
         }
 
@@ -349,7 +357,6 @@ namespace RMVB_konsola
         //wyszukiwanie losowego urządzenia po dacie i id x ileRazy
         public bool testDataId(int ileRazy)
         {
-            wyniki.Add("wyszukiwanie losowego urządzenia po dacie i id " + ileRazy + " razy");
 
             bool blad = false;
             List<Wersja> szukane_wersje = generator.wylosujWersje(ileRazy);
@@ -380,7 +387,6 @@ namespace RMVB_konsola
             if (!blad)
             {
                 Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
-                wyniki.Add("Baza w czasie: " + czas_baza + "ms.");
             }
 
             sw = Stopwatch.StartNew();
@@ -403,7 +409,7 @@ namespace RMVB_konsola
             if (!blad)
             {
                 Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
-                wyniki.Add("MVB w czasie: " + czas_mvb + "ms.");
+                wyniki.Add("MVB | wyszukiwanie losowego urządzenia po dacie i id | " + czas_baza + " | " + czas_mvb );
             }
             else
             {
@@ -461,7 +467,6 @@ namespace RMVB_konsola
 
         //wyszukiwanie ostatniej wersji po id
         public bool testId(int ileRazy) {
-            wyniki.Add("wyszukiwanie ostatniej wersji po id");
             bool blad = false;
             List<int> szukane_id = wylosujIdUrzadzen(ileRazy);
 
@@ -484,7 +489,6 @@ namespace RMVB_konsola
             if (!blad)
             {
                 Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
-                wyniki.Add("Baza w czasie: " + czas_baza + " ms.");
             }
 
             sw = Stopwatch.StartNew();
@@ -502,7 +506,7 @@ namespace RMVB_konsola
             if (!blad)
             {
                 Console.WriteLine("MVB w czasie: " + czas_mvb + " ms.");
-                wyniki.Add("MVB w czasie: " + czas_mvb + " ms.");
+                wyniki.Add("MVB | wyszukiwanie ostatniej wersji po id | " + czas_baza + " | " + czas_mvb );
             }
             return blad;
         }
@@ -563,6 +567,7 @@ namespace RMVB_konsola
             if (!blad)
             {
                 Console.WriteLine("CZAS WYKONANIA: baza: " + czas_baza + " rmvb: " + czas_mvb);
+                wyniki.Add("MVB | wyszukiwanie losowych urządzeń po id i wersji | " + czas_baza + " | " + czas_mvb);
             }
             else {
                 for (int i = 0; i < ileRazy; i++)
@@ -597,6 +602,8 @@ namespace RMVB_konsola
             }
             return wyjsciowa;
         }
+
+        //wyszukiwanie wersji urządzeń aktywnych w losowym oknie czasowym
         public bool testDataData(int ileRazy) {
             bool blad = false;            
             //najwczesniejsza data poczatku
@@ -629,34 +636,37 @@ namespace RMVB_konsola
                 szukane_wersje_mvb.AddRange(rmvb.szukaj(start, end));
             }
             long czas_mvb = sw.ElapsedMilliseconds;
-            Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
 
             if (szukane_wersje.Count != szukane_wersje_mvb.Count)
             {
-/*                var duplicates = szukane_wersje_mvb
-                .GroupBy(i => i)
-                .Where(g => g.Count() > 1)
-                .Select(g => g.Key).ToList();*/
+                /*                var duplicates = szukane_wersje_mvb
+                                .GroupBy(i => i)
+                                .Where(g => g.Count() > 1)
+                                .Select(g => g.Key).ToList();*/
                 //except nie zadziala
                 var nieznalezione = szukane_wersje
                                     .Where(d => !szukane_wersje_mvb.Any(mvb =>
                                         mvb.UrzadzenieID == d.UrzadzenieID &&
                                         mvb.WersjaID == d.WersjaID))
                                     .ToList();
-                if(nieznalezione.Count != 0)
+                if (nieznalezione.Count != 0)
                     Console.WriteLine("Nie znaleziono następujących urządzeń: ");
-                foreach(var u in nieznalezione)
+                foreach (var u in nieznalezione)
                     Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
 
                 List<Wersja> nadmiarowe = new List<Wersja>(szukane_wersje_mvb);
                 foreach (var elem in szukane_wersje_mvb.Distinct())
                     nadmiarowe.Remove(elem);
-                
-                if (szukane_wersje_mvb.Distinct().Count() !=  szukane_wersje_mvb.Count())
+
+                if (szukane_wersje_mvb.Distinct().Count() != szukane_wersje_mvb.Count())
                     Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
                 foreach (var u in nadmiarowe)
                     Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                 blad = true;
+                blad = true;
+            }
+            else {
+                Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
+                wyniki.Add("MVB | wyszukiwanie wersji urządzeń aktywnych w losowym oknie czasowym | " + czas_baza + " | " + czas_mvb );
             }
             return blad;
         }
