@@ -23,10 +23,11 @@ namespace RMVB_konsola
         public static Test instancja;
 
         private static List<string> wyniki;
-        
+        private static List<string> bledy;
+
         internal Stopwatch sw;
         internal Random rnd = new Random();
-
+        
         public static Test pobierzInstancje() {
             if (instancja == null)
                 return new Test();
@@ -40,6 +41,8 @@ namespace RMVB_konsola
 
         public bool wykonajTesty(int ileRazy) {
             wyniki = new List<string>();
+            bledy = new List<string>();
+
             wyniki.Add("Liczba powtórzeń każdego zapytania: " + ileRazy);
             wyniki.Add("Drzewo realizujące zapytanie | Rodzaj zapytania | Czas wykonania w bazie (ms.) | Czas wykonania za pomocą drzewa (ms.)");
             
@@ -154,8 +157,8 @@ namespace RMVB_konsola
             {
                 (Decimal liczba_elementow, Decimal srednia) = rmvb.szukajAgregatu(szukane[i]);
                 resultRTree.Add(srednia);
-                ile_r.Add(liczba_elementow);
-                
+                ile_r.Add(liczba_elementow);//ile_r.Add(liczba_elementow);
+
             }
             long wynik3 = sw.ElapsedMilliseconds;
 
@@ -170,10 +173,21 @@ namespace RMVB_konsola
 
                 if (ile[i] != ile_r[i])
                 {
+                    if (blad == false) //powinno wykonać się tylko raz :)
+                    {
+                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu agregatu powierzchniowego. Poprzednie testy przebiegły pomyślnie, kolejne nie zostały zrealizowane.");
+                        bledy.Add("Komunikat(y) błędu(ów): \n");
+                    }
                     Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
                         ile_r[i] + " (r)");
-                    rmvb.szukajAgregatu(szukane[i]);
+                    //rmvb.szukajAgregatu(szukane[i]);
                     blad = true;
+
+                    bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
+                        ile_r[i] + " (r)");
+                    bledy.Add("Współrzędne prostokąta: " + "xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
+                    "xMax(" + szukane[i].YMin + "), " + "yMax(" + szukane[i].YMax + ")");
+                    bledy.Add("Obliczone wartości: " + "Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
                 }
                 Console.WriteLine("**********************************");
             }
@@ -676,6 +690,15 @@ namespace RMVB_konsola
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "Testy.txt")))
             {
                 foreach (string linijka in wyniki)
+                    outputFile.WriteLine(linijka);
+            }
+        }
+
+        internal void zapiszBledy(string v)
+        {
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "Bledy.txt")))
+            {
+                foreach (string linijka in bledy)
                     outputFile.WriteLine(linijka);
             }
         }

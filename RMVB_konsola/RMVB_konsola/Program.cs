@@ -96,7 +96,7 @@ rmvb.zapiszMVB("../../../Pliki wynikowe/");
 Test jednostka_testujaca = Test.pobierzInstancje();
 if (jednostka_testujaca.wykonajTesty(100))
 {
-    Console.WriteLine("W czasie wykonywania testów wystąpiły błędy. Szczegóły wyżej.");
+    Console.WriteLine("W czasie wykonywania testów wystąpiły błędy. Szczegóły wyżej."); //dopisać oraz w pliku (ścieżka i nazwa z pliku konfiguracyjnego)
     Console.WriteLine("Scenariusz testowy zakładał dodanie urządzeń o podanych id w poniższej kolejności:");
 
     String wynikowa = "[";
@@ -108,7 +108,7 @@ if (jednostka_testujaca.wykonajTesty(100))
     wynikowa += "]";
     Console.WriteLine(wynikowa);
 
-    //jednostka testująca.zapiszBledy("../../../Pliki wynikowe/");
+    jednostka_testujaca.zapiszBledy("../../../Pliki wynikowe/");
 }
 else
 {
