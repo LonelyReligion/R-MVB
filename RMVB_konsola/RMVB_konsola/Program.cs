@@ -5,6 +5,7 @@ using RMVB_konsola.R;
 using System.Diagnostics;
 
 //Setup
+string sciezkaFolderuWyjsciowego = "../../../Pliki wynikowe/";
 int liczba_urzadzen = 100;
 Generatory.liczba_urzadzen = liczba_urzadzen;
 decimal granica_przezywalnosci = 0.2m;
@@ -28,6 +29,15 @@ Urzadzenie.repo = rmvb.zwrocRepo();
 
 Generatory generator = new Generatory(rmvb.zwrocRepo());
 Test.generator = generator;
+
+
+Console.WriteLine("Uwaga, wszystkie pliki znajdujące się w folderze " + sciezkaFolderuWyjsciowego + " zostaną trwale usunięte.");
+string[] sciezkiPlikow = Directory.GetFiles(sciezkaFolderuWyjsciowego);
+foreach (var plik in sciezkiPlikow) 
+{
+    File.Delete(plik);
+}
+//
 
 // Urzadzenie 0v0
 Urzadzenie testowe = new Urzadzenie(0, generator.generujWspolrzedneDeterministycznie()); // new Urzadzenie(0, generator.generujWspolrzedne());
@@ -108,11 +118,11 @@ if (jednostka_testujaca.wykonajTesty(100))
     wynikowa += "]";
     Console.WriteLine(wynikowa);
 
-    jednostka_testujaca.zapiszBledy("../../../Pliki wynikowe/");
+    jednostka_testujaca.zapiszBledy(sciezkaFolderuWyjsciowego);
 }
 else
 {
-    jednostka_testujaca.zapiszWyniki("../../../Pliki wynikowe/"); //osobne logowanie błędów do innego pliku wyżej powinno nastąpić
+    jednostka_testujaca.zapiszWyniki(sciezkaFolderuWyjsciowego); //osobne logowanie błędów do innego pliku wyżej powinno nastąpić
 }
 
 ctx.Dispose();
