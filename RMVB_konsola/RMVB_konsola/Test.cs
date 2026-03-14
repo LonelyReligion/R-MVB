@@ -129,19 +129,17 @@ namespace RMVB_konsola
 
 
                 Out.Add("(");
-                foreach (Pomiar p in ctx.Pomiary)
+
+                List<Pomiar> aktualne_pomiary = ctx.Pomiary.AsNoTracking().Where(p => ids.Contains(p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID))
+                    .Where(p => p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0)).ToList();
+
+                foreach (Pomiar p in aktualne_pomiary)
                 {
-                    //przerobic na zapytanie
-                    bool ma_wersje_przypisana = true;// p.WersjeUrzadzenia.FirstOrDefault() != null;
-                    bool nalezy_do_przedzialu = ids.Contains((int)p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID);
-                    bool nie_jest_stary = p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0);
-                    if (ma_wersje_przypisana && nalezy_do_przedzialu && nie_jest_stary)
-                    {
-                        ile[i]++;
-                        resultDB[i] += p.Wartosc;
-                        Out[i] += p.Wartosc + "+";
-                    }
+                    ile[i]++;
+                    resultDB[i] += p.Wartosc;
+                    Out[i] += p.Wartosc + "+";
                 }
+                
                 if (ile[i] != 0)
                     resultDB[i] /= ile[i];
                 else
@@ -450,11 +448,6 @@ namespace RMVB_konsola
                 }
             }
             long czas_mvb = sw.ElapsedMilliseconds;
-
-            //
-            blad = true;
-
-            //
 
             if (!blad)
             {
