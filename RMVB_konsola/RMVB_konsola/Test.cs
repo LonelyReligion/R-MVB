@@ -398,12 +398,6 @@ namespace RMVB_konsola
             return blad;
         }
 
-
-        //wyszukuje urządzenie w podanym punkcie x ileRazy
-        private void testPunkt(int ileRazy) { 
-            throw new NotImplementedException();
-        }
-
         //wyszukiwanie losowego urządzenia po dacie i id x ileRazy
         public bool testDataId(int ileRazy)
         {
@@ -456,6 +450,12 @@ namespace RMVB_konsola
                 }
             }
             long czas_mvb = sw.ElapsedMilliseconds;
+
+            //
+            blad = true;
+
+            //
+
             if (!blad)
             {
                 Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
@@ -463,6 +463,8 @@ namespace RMVB_konsola
             }
             else
             {
+                bledy.Add("Działanie testów zakończyło się na wyszukiwaniu urządzenia aktualnego w zadanym momencie o określonym id. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
+                bledy.Add("Komunikat(y) błędu(ów): \n");
                 //except nie zadziala
                 int index_baza = 0;
                 int index_rmvb = 0;
@@ -473,7 +475,7 @@ namespace RMVB_konsola
                     int id_wersji = wersja.WersjaID;
 
                     bool odnaleziono_baza = false;
-                    bool odnaleziono_rmvb = false;
+                    bool odnaleziono_rmvb = true;
 
                     if (odnalezione_baza[index_baza].UrzadzenieID == id_urzadzenia &&
                         odnalezione_baza[index_baza].WersjaID == id_wersji)
@@ -499,6 +501,12 @@ namespace RMVB_konsola
 
                     Console.WriteLine("id: " + id_urzadzenia + " ver: " + id_wersji
                         + " baza: " + odnaleziono_baza.ToString() + " rmvb: " + odnaleziono_rmvb.ToString());
+
+                    string wynikowa = "Urządzenie o id=" + id_urzadzenia;
+                    wynikowa += odnaleziono_baza ? ", baza odnalazła urządzenie" : ", baza nie odnalazła urządzenia";
+                    wynikowa += odnaleziono_rmvb ? ", MVB odnalazło urządzenie." : ", MVB nie odnalazło urządzenia.";
+                    bledy.Add(wynikowa);
+                    bledy.Add("");
                 }
 
             }
