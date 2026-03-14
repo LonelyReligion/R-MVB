@@ -271,10 +271,31 @@ namespace RMVB_konsola
                 (Decimal x, Decimal y) = wspolrzedne[i];
                 Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id[i].ToString());
                 Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
-                if (wynikBD[i] != wynikR[i])
+                if (wynikBD[i] != wynikR[i] || repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 != liczby[i])
                 {
+                    if (!blad) {
+                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu agregatu czasowego. Poprzednie testy przebiegły pomyślnie, kolejne nie zostały zrealizowane.");
+                        bledy.Add("Komunikat(y) błędu(ów): \n");
+                    }
                     blad = true;
-                    Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
+
+                    if (wynikBD[i] != wynikR[i])
+                    {
+                        bledy.Add("Mamy rozbieznosc miedzy obliczonymi wartościami: " + wynikR[i] + "(R) " + wynikBD[i] + "(ręcznie)");
+                        Console.WriteLine("Mamy rozbieznosc miedzy obliczonymi wartościami.");
+                    }
+
+                    if (repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 != liczby[i])
+                    {
+                        bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + liczby[i] + " (baza) " +
+                            repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (r)");
+
+                        Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu czasowego urządzenia o współrzędnych: (" +
+                            wspolrzedne[i].Item1 + "," + wspolrzedne[i].Item2 + ") i id: " + id[i]);
+                        Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
+                    }
+                    bledy.Add("");
+
                 }
                 Console.WriteLine("**********************************");
             }
