@@ -6,3 +6,12 @@ Aplikacja umożliwia porównanie czasów realizacji typowych zapytań w bazie da
 * EF6
 * C#
 * LINQ
+
+## Instrukcja obsługi
+### Pliki wynikowe
+Efektem działania programu są następujące pliki:
+* Test.txt -- wyniki przeprowadzonych pomiarów czasowych
+* MVB.txt -- wynikowe drzewo MVB
+* Bledy.txt -- komunikaty błędów ostatniego zrealizowanego testu
+  
+</br>W zależności od tego, czy testy się powiodły pojawi się plik Bledy.txt lub Test.txt.
