@@ -116,18 +116,18 @@ namespace RMVB_konsola
                 resultDB.Add(0);
 
                 List<int> ids = new List<int>();
-                foreach (Urzadzenie u in ctx.Urzadzenia)
-                {
-                    bool a = u.Szerokosc < y1;
-                    bool b = u.Szerokosc >= y2;
-                    bool c = u.Dlugosc <= x1;
-                    bool d = u.Dlugosc > x2;
 
-                    if (a | b | c | d)
-                        ;
-                    else
-                        ids.Add(u.UrzadzenieID);
-                }
+                ids.AddRange(ctx.Urzadzenia
+                .AsNoTracking()
+                //contains
+                .Where(u => x1 <= u.Dlugosc)
+                .Where(u => y1 <= u.Szerokosc)
+                .Where(u => x2 >= u.Dlugosc)
+                .Where(u => y2 >= u.Szerokosc)
+                .Select(o => o.UrzadzenieID)
+                .ToList());
+
+
                 Out.Add("(");
                 foreach (Pomiar p in ctx.Pomiary)
                 {
@@ -157,7 +157,7 @@ namespace RMVB_konsola
             {
                 (Decimal liczba_elementow, Decimal srednia) = rmvb.szukajAgregatu(szukane[i]);
                 resultRTree.Add(srednia);
-                ile_r.Add(liczba_elementow);//ile_r.Add(liczba_elementow);
+                ile_r.Add(liczba_elementow);
 
             }
             long wynik3 = sw.ElapsedMilliseconds;
@@ -182,6 +182,7 @@ namespace RMVB_konsola
                         ile_r[i] + " (r)");
                     //rmvb.szukajAgregatu(szukane[i]);
                     blad = true;
+                    rmvb.szukajAgregatu(szukane[i]);
 
                     bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
                         ile_r[i] + " (r)");
@@ -352,27 +353,41 @@ namespace RMVB_konsola
             {
                 Console.WriteLine("Prostokat: " + searchRect[i].XMin + " " + searchRect[i].XMax + "(x) " + searchRect[i].YMin + " " + searchRect[i].YMax + "(y)");
                 Console.WriteLine("Znaleziono " + cnt_r[i].Count.ToString() + "(rt) " + cnt_1[i].Count.ToString() + "(zapytanie w bazie)");
-                if (cnt_r[i].Count != cnt_1[i].Count)
+                
+                if (cnt_r[i].Count != cnt_1[i].Count) //a co jezeli znalazla inne, ale liczba się zgadza?
                 {
+                    if (!blad)
+                    {
+                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu urządzeń znajdujących się w prostokącie " + 
+                            "(" + +searchRect[i].XMin + " " + searchRect[i].XMax + "(x) " + searchRect[i].YMin + " " + searchRect[i].YMax + "(y)" + ")" + "." +
+                            " Poprzednie testy przebiegły pomyślnie, kolejne nie zostały zrealizowane.");
+                        bledy.Add("Komunikat(y) błędu(ów): \n");
+                    }
+
                     blad = true;
                     List<Urzadzenie> nadmiarowe = new List<Urzadzenie>();
                     if (cnt_r[i].Count > cnt_1[i].Count)
                     {
+                        bledy.Add("R-drzewo znalazło dodatkowo poniższe urządzenia: ");
                         Console.WriteLine("R-drzewo dodatkowo znalazło następujące urządzenia: ");
                         nadmiarowe = (cnt_r[i].Where(u => !cnt_1[i].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
                     }
                     else
                     {
+
+                        bledy.Add("Baza danych znalazła dodatkowo poniższe urządzenia: ");
                         Console.WriteLine("Baza dodatkowo znalazła następujące urządzenia: ");
                         nadmiarowe = (cnt_1[i].Where(u => !cnt_r[i].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
                     }
 
                     foreach (Urzadzenie u in nadmiarowe)
                     {
+                        bledy.Add("UrzadzenieID: " + u.UrzadzenieID + " x: " + u.Dlugosc + " y: " + u.Szerokosc);
                         Console.WriteLine("UrzadzenieID: " + u.UrzadzenieID + " x: " + u.Dlugosc + " y: " + u.Szerokosc);
                     }
 
-                    rmvb.szukaj(searchRect[i]);
+                    //rmvb.szukaj(searchRect[i]);
+                    bledy.Add("");
 
                 }
                 Console.WriteLine("**********************************");
