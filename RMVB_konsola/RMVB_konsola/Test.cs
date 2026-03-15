@@ -742,6 +742,7 @@ namespace RMVB_konsola
 
                 if (szukane_wersje_mvb.Distinct().Count() != szukane_wersje_mvb.Count())
                 {
+                    bledy.Add("Baza nie znalazła następujących urządzeń: ");
                     Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
                     List<Wersja> nadmiarowe = new List<Wersja>(szukane_wersje_mvb);
                     foreach (var elem in szukane_wersje_mvb.Distinct())
