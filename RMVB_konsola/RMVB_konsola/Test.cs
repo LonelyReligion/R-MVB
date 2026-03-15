@@ -518,7 +518,10 @@ namespace RMVB_konsola
 
         //wyszukiwanie ostatniej wersji po id
         public bool testId(int ileRazy) {
-            bool blad = false;
+            bool blad_baza = false;
+            bool blad_mvb = false;
+            List<string> komunikaty_bledow = new List<string>();
+
             List<int> szukane_id = wylosujIdUrzadzen(ileRazy);
 
             Wersja? szukana = null;
@@ -533,15 +536,18 @@ namespace RMVB_konsola
                 if (szukana == null)
                 {
                     Console.WriteLine("Uwaga: Baza nie odnalazla rekordu o id " + id + ".");
-                    blad = true;
+                    komunikaty_bledow.Add("Baza nie odnalazla rekordu o id " + id + ".");
+                    komunikaty_bledow.Add("");
+                    blad_baza = true;
                 }
             }
             long czas_baza = sw.ElapsedMilliseconds;
-            if (!blad)
+            if (!blad_baza)
             {
                 Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
             }
 
+            
             sw = Stopwatch.StartNew();
             for (int i = 0; i < ileRazy; i++)
             {
@@ -549,17 +555,28 @@ namespace RMVB_konsola
                 if (szukana == null)
                 {
                     Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
-                    blad = true;
+                    komunikaty_bledow.Add("MVB nie odnalazlo urzadzenia o id " + szukane_id[i] + ".");
+                    komunikaty_bledow.Add("");
+                    blad_mvb = true;
                 }
             }
 
             long czas_mvb = sw.ElapsedMilliseconds;
-            if (!blad)
+            if (!blad_mvb)
             {
                 Console.WriteLine("MVB w czasie: " + czas_mvb + " ms.");
                 wyniki.Add("MVB | wyszukiwanie ostatniej wersji po id | " + czas_baza + " | " + czas_mvb );
             }
-            return blad;
+
+            if (blad_baza || blad_mvb)
+            {
+                bledy.Add("Działanie testów zakończyło się na wyszukiwaniu najnowszej wersji urządzenia o określonym id. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
+                bledy.Add("Komunikat(y) błędu(ów): \n");
+                bledy.AddRange(komunikaty_bledow);
+
+            }
+
+            return (blad_baza || blad_mvb);
         }
 
         //wyszukiwanie po id i wersji
