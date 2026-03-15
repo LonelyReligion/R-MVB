@@ -715,6 +715,9 @@ namespace RMVB_konsola
 
             if (szukane_wersje.Count != szukane_wersje_mvb.Count)
             {
+                bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji aktualnych w zadany przedziale czasu. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
+                bledy.Add("Komunikat(y) błędu(ów): \n");
+
                 /*                var duplicates = szukane_wersje_mvb
                                 .GroupBy(i => i)
                                 .Where(g => g.Count() > 1)
@@ -725,20 +728,32 @@ namespace RMVB_konsola
                                         mvb.UrzadzenieID == d.UrzadzenieID &&
                                         mvb.WersjaID == d.WersjaID))
                                     .ToList();
-                if (nieznalezione.Count != 0)
-                    Console.WriteLine("Nie znaleziono następujących urządzeń: ");
-                foreach (var u in nieznalezione)
-                    Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
 
-                List<Wersja> nadmiarowe = new List<Wersja>(szukane_wersje_mvb);
-                foreach (var elem in szukane_wersje_mvb.Distinct())
-                    nadmiarowe.Remove(elem);
+                if (nieznalezione.Count != 0)
+                {
+                    bledy.Add("MVB znalazlo następujących urządzeń: ");
+                    Console.WriteLine("Nie znaleziono następujących urządzeń: ");
+                    foreach (var u in nieznalezione)
+                    {
+                        Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                        bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                    }
+                }
 
                 if (szukane_wersje_mvb.Distinct().Count() != szukane_wersje_mvb.Count())
+                {
                     Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
-                foreach (var u in nadmiarowe)
-                    Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                blad = true;
+                    List<Wersja> nadmiarowe = new List<Wersja>(szukane_wersje_mvb);
+                    foreach (var elem in szukane_wersje_mvb.Distinct())
+                        nadmiarowe.Remove(elem);
+                    foreach (var u in nadmiarowe)
+                    {
+                        Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                        bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                    }
+                }
+
+                    blad = true;
             }
             else {
                 Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
