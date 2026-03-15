@@ -9,10 +9,9 @@ string sciezkaFolderuWyjsciowego = "../../../Pliki wynikowe/";
 int liczba_urzadzen = 100;
 Generatory.liczba_urzadzen = liczba_urzadzen;
 decimal granica_przezywalnosci = 0.2m;
-
 Korzen.granica_przezywalnosci = granica_przezywalnosci;
-Random rnd = new Random();
 
+Random rnd = new Random();
 Kontekst ctx = new Kontekst();
 Wersja.ctx = ctx;
 InDBStorage.ctx = ctx;
@@ -101,7 +100,7 @@ for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
 rmvb.obliczAgregaty();
 
 rmvb.wypiszMVB();
-rmvb.zapiszMVB("../../../Pliki wynikowe/");
+rmvb.zapiszMVB(sciezkaFolderuWyjsciowego);
 
 Test jednostka_testujaca = Test.pobierzInstancje();
 if (jednostka_testujaca.wykonajTesty(100))
