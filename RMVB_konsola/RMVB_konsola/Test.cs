@@ -623,11 +623,12 @@ namespace RMVB_konsola
                 int id = szukane_id_v[i].Item1;
                 int v = szukane_id_v[i].Item2;
                 znalezione_rmvb[i] = rmvb.szukaj(id, v);
+
                 if (znalezione_rmvb[i] == null)
                 {
                     Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
                     //do debuggowania
-                    znalezione_rmvb[i] = rmvb.szukaj(id, v);
+                    //znalezione_rmvb[i] = rmvb.szukaj(id, v);
                     blad = true;
                 }
             }
@@ -638,18 +639,25 @@ namespace RMVB_konsola
                 wyniki.Add("MVB | wyszukiwanie losowych urządzeń po id i wersji | " + czas_baza + " | " + czas_mvb);
             }
             else {
+                bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji urządzenia o określonym id oraz numerze wersji. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
+                bledy.Add("Komunikat(y) błędu(ów): \n");
+
                 for (int i = 0; i < ileRazy; i++)
                 {
                     if (znalezione_baza[i] == null && znalezione_rmvb[i] == null)
                     {
                         Console.WriteLine("Nie odnaleziono urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                        bledy.Add("Nie odnaleziono urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
                     }
                     else if (znalezione_baza[i] == null) {
                         Console.WriteLine("Baza nie odnalazła urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                        bledy.Add("Baza nie odnalazła urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
                     }
-                    if (znalezione_rmvb[i] == null) {
+                    else if (znalezione_rmvb[i] == null) {
                         Console.WriteLine("RMVB nie odnalazło urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                        bledy.Add("MVB nie odnalazło urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
                     }
+                    bledy.Add("");
                 }
             }
             return blad;
