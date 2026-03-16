@@ -1,15 +1,55 @@
-﻿using RMVB_konsola;
+﻿//xml
+using System.Xml;
+//
+
+using RMVB_konsola;
 using RMVB_konsola.MVB; //aby nie przejmować się folderami
 using RMVB_konsola.R;
 
 using System.Diagnostics;
+using System.Configuration;
+using System.Globalization;
 
 //Setup
-string sciezkaFolderuWyjsciowego = "../../../Pliki wynikowe/";
-int liczba_urzadzen = 100;
-Generatory.liczba_urzadzen = liczba_urzadzen;
-decimal granica_przezywalnosci = 0.2m;
-Korzen.granica_przezywalnosci = granica_przezywalnosci;
+string sciezkaFolderuWyjsciowego;
+sciezkaFolderuWyjsciowego = ConfigurationManager.AppSettings.Get("sciezka_folderu_wyjsciowego");
+if (!Directory.Exists(sciezkaFolderuWyjsciowego)) {
+    Console.WriteLine("Podana ścieżka folderu plików wyjściowych nie jest poprawna lub folder nie istnieje");
+    Console.WriteLine("Podaj poprawną ścieżkę i spróbuj ponownie.");
+    return 0;
+}
+
+string liczbaUrzadzenStr = ConfigurationManager.AppSettings.Get("liczba_urzadzen");
+int liczbaUrzadzen = 0;
+try
+{
+    liczbaUrzadzen = int.Parse(liczbaUrzadzenStr);
+}
+catch {
+    Console.WriteLine("Podana liczba urządzeń nie jest liczbą całkowitą.");
+    Console.WriteLine("Podaj poprawną liczbę urządzeń i spróbuj ponownie.");
+    return 0;
+}
+
+string granicaPrzezywalnosciStr = ConfigurationManager.AppSettings.Get("granica_przezywalnosci");
+double granicaPrzezywalnosci = 0;
+CultureInfo kultura = CultureInfo.CreateSpecificCulture("pl-PL");
+try
+{
+    granicaPrzezywalnosci = Double.Parse(granicaPrzezywalnosciStr, kultura);
+}
+catch
+{
+    Console.WriteLine("Podana granica przeżywalności urządzeń nie jest poprawna.");
+    Console.WriteLine("Czy użyłeś/aś kropki (.) zamiast przecinka (,)?");
+    Console.WriteLine("Podaj poprawną granicę przeżywalności i spróbuj ponownie.");
+    return 0;
+}
+
+//
+Generatory.liczba_urzadzen = liczbaUrzadzen;
+Korzen.granica_przezywalnosci = (decimal)granicaPrzezywalnosci;
+//
 
 Random rnd = new Random();
 Kontekst ctx = new Kontekst();
@@ -59,9 +99,9 @@ beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, 
 rmvb.usunWersje(beta);
 //
 List<Wersja> losowe = new List<Wersja>(); //do debuggowania, potrzebne nam do odtworzenia scenariusza
-for (int i = 0; i < liczba_urzadzen; i++)
+for (int i = 0; i < liczbaUrzadzen; i++)
 {
-    int id = i % liczba_urzadzen;
+    int id = i % liczbaUrzadzen;
     if (!rmvb.czyUrzadzenieIstnieje(id)) { 
         Urzadzenie testowe1 =  new Urzadzenie(id, generator.generujWspolrzedne());
         rmvb.dodajUrzadzenie(testowe1);
@@ -70,7 +110,7 @@ for (int i = 0; i < liczba_urzadzen; i++)
 
     rmvb.dodajWersje(tmp);
 
-    for (int j = 0; j < liczba_urzadzen * 2/10; j++)
+    for (int j = 0; j < liczbaUrzadzen * 2/10; j++)
     {
         Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0) * 100) / 100;
         Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
@@ -125,3 +165,4 @@ else
 }
 
 ctx.Dispose();
+return 0;
