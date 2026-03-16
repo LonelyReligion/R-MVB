@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrzadzeniaSim", "UrzadzeniaSim\UrzadzeniaSim.csproj", "{497C5BF8-D86B-4297-98A5-1679E8897AFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{497C5BF8-D86B-4297-98A5-1679E8897AFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{497C5BF8-D86B-4297-98A5-1679E8897AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{497C5BF8-D86B-4297-98A5-1679E8897AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{497C5BF8-D86B-4297-98A5-1679E8897AFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EC61EC03-60D8-4B5B-A74C-54BD2FDF49B3}
+	EndGlobalSection
+EndGlobal
