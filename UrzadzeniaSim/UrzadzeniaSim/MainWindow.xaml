@@ -5,11 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UrzadzeniaSim"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Name="okno">
     <Grid Margin="2,0,-2,0">
-        <TextBlock Name="tekst" HorizontalAlignment="Center" TextWrapping="Wrap" Text=":)" FontSize ="32" VerticalAlignment="Center"/>
-        <Button Name="przycisk" Width="100" Height="50" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="przycisk_click" Margin="20"/>
-        <Grid HorizontalAlignment="Left" Height="0" Margin="214,110,0,0" VerticalAlignment="Top" Width="34"/>
-
+        <Canvas Name="siatka" ClipToBounds="True" Width="800" Height="400"/>
     </Grid>
 </Window>
