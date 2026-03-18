@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -7,24 +8,30 @@ namespace UrzadzeniaSim
 {
     public partial class MainWindow : Window
     {
-        int wysokosc_okna = 450;
-        int szerokosc_okna = 800;
+        double wysokosc_okna = 450;
+        double szerokosc_okna = 800;
 
-        int wysokosc_plotna = 400;
-        int szerokosc_plotna = 800;
+        double wysokosc_plotna;
+        double szerokosc_plotna;
 
         bool klik = false;
         public MainWindow()
         {
             InitializeComponent();
 
-            okno.Height = wysokosc_okna;
-            okno.Width = szerokosc_okna;
-            
-            rysujSiatke();
+            plotno.SizeChanged += (s, e) =>
+            {
+                wysokosc_plotna = plotno.ActualHeight;
+                szerokosc_plotna = plotno.ActualWidth;
+
+                plotno.Children.Clear();
+                rysujSiatkeGeograficzna();
+            };
+
         }
 
-        private void rysujSiatke() {
+        private void rysujSiatkeGeograficzna() {
+            
             int margines = 50;
 
             int liczba_poludnikow = 10;
@@ -44,7 +51,7 @@ namespace UrzadzeniaSim
                     Y1 = margines,
                     Y2 = wysokosc_plotna - margines
                 };
-                siatka.Children.Add(poludnik);
+                plotno.Children.Add(poludnik);
             }
 
             for (int i = 0; i < liczba_równoleżników; i++)
@@ -58,7 +65,7 @@ namespace UrzadzeniaSim
                     Y1 = margines + i * krokY,
                     Y2 = margines + i * krokY
                 };
-                siatka.Children.Add(rownoleznik);
+                plotno.Children.Add(rownoleznik);
             }
         }
     }
