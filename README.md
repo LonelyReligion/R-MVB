@@ -19,5 +19,5 @@ Efektem działania programu są następujące pliki:
 ### Pliki wejściowe
 * App.config &mdash; domyślne wartości konfiguracyjne
 
-#UrzadzeniaSim
+# UrzadzeniaSim
 (ta część jest obecnie w budowie)
