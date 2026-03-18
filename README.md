@@ -10,8 +10,14 @@ Aplikacja umożliwia porównanie czasów realizacji typowych zapytań w bazie da
 ## Instrukcja obsługi
 ### Pliki wynikowe
 Efektem działania programu są następujące pliki:
-* Test.txt -- wyniki przeprowadzonych pomiarów czasowych
-* MVB.txt -- wynikowe drzewo MVB
-* Bledy.txt -- komunikaty błędów ostatniego zrealizowanego testu
+* Test.txt &mdash; wyniki przeprowadzonych pomiarów czasowych
+* MVB.txt &mdash; wynikowe drzewo MVB
+* Bledy.txt &mdash; komunikaty błędów ostatniego zrealizowanego testu
   
 </br>W zależności od tego, czy testy się powiodły pojawi się plik Bledy.txt lub Test.txt.
+
+### Pliki wejściowe
+* App.config &mdash; domyślne wartości konfiguracyjne
+
+#UrzadzeniaSim
+(ta część jest obecnie w budowie)
