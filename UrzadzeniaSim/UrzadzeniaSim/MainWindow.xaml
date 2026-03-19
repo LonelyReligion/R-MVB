@@ -12,10 +12,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Canvas Grid.Row="1"
-        Name="plotno"
-        Background="White"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"/>
+        <Canvas Grid.Row="1" Name="plotno" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Canvas.RenderTransform>
+                <ScaleTransform CenterX="{Binding srodekX}" CenterY="{Binding srodekY}" ScaleX="{Binding skalaX}" ScaleY="{Binding skalaY}" />
+            </Canvas.RenderTransform>
+        </Canvas>
     </Grid>
 </Window>

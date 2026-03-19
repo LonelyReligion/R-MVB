@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -8,6 +9,7 @@ namespace UrzadzeniaSim
 {
     public partial class MainWindow : Window
     {
+       
         double wysokosc_okna = 450;
         double szerokosc_okna = 800;
 
@@ -45,6 +47,12 @@ namespace UrzadzeniaSim
             double ostatni_poludnik_x = margines + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0;
             double ostatni_rownoleznik_y = margines + (liczba_równoleżników_grubych - 1) * krokY + 5 / 60.0 * krokY;
 
+            /* czy da sie jakos zrobic zeby bylo rowno?
+            double margines_lewo = 100 - pierwszy_poludnik_x;
+            double margines_prawo = 100 - ostatni_poludnik_x;
+            double margines_dol = 100 - ostatni_rownoleznik_y;
+            */
+            
             Line pierwszy_poludnik = new Line
             {
                 Visibility = Visibility.Visible,
@@ -116,6 +124,24 @@ namespace UrzadzeniaSim
             };//ten 54 st. 5 min.
             plotno.Children.Add(ostatni_rownoleznik);
         }
+        public string srodekX
+        {
+            get { return srodekX;  }
+            set { srodekX = value; }
+        }
+        public string srodekY
+        {
+
+            get { return srodekY; }
+            set { srodekY = value; }
+        }
+        public string skalaY 
+        {
+
+            get { return skalaY; }
+            set { skalaY = value; }
+        }
+
     }
     
 }
