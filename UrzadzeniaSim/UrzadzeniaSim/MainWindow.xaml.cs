@@ -30,42 +30,74 @@ namespace UrzadzeniaSim
 
         }
 
+        //Właściwie to siatka walcowa?
         private void rysujSiatkeGeograficzna() {
             
-            int margines = 50;
+            int margines = 100;
 
-            int liczba_poludnikow = 10;
-            int liczba_równoleżników = 5;
+            int liczba_poludnikow_grubych = 10;
+            int liczba_równoleżników_grubych = 5;
 
-            double krokX = (szerokosc_plotna - 2 * margines) / (double)(liczba_poludnikow - 1);
-            double krokY = (wysokosc_plotna - 2 * margines) / (double)(liczba_równoleżników - 1);
+            double krokX = (szerokosc_plotna - 2 * margines) / (double)(liczba_poludnikow_grubych - 1);
+            double krokY = (wysokosc_plotna - 2 * margines) / (double)(liczba_równoleżników_grubych - 1);
 
-            for (int i = 0; i < liczba_poludnikow; i++)
+            Line pierwszy_poludnik = new Line
+            {
+                Visibility = Visibility.Visible,
+                Stroke = Brushes.Black,
+                StrokeThickness = 0.5,
+                X1 = margines - 53 * krokX / 60.0,
+                X2 = margines - 53 * krokX / 60.0,
+                Y1 = margines,
+                Y2 = wysokosc_plotna - margines
+            }; //ten 14 st. 7 min.
+            plotno.Children.Add(pierwszy_poludnik);
+
+            for (int i = 0; i < liczba_poludnikow_grubych; i++)
             {
                 Line poludnik = new Line
                 {
                     Visibility = Visibility.Visible,
                     Stroke = Brushes.Black,
+                    StrokeThickness = 1,
                     X1 = margines + i * krokX,
                     X2 = margines + i * krokX,
                     Y1 = margines,
                     Y2 = wysokosc_plotna - margines
                 };
                 plotno.Children.Add(poludnik);
+
+                //umiescic generowanie poludnikow przy przyblizeniu tych mniejszych
             }
 
-            for (int i = 0; i < liczba_równoleżników; i++)
+            Line ostatni_poludnik = new Line
+            {
+                Visibility = Visibility.Visible,
+                Stroke = Brushes.Black,
+                StrokeThickness = 0.5,
+                X1 = margines + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
+                X2 = margines + (liczba_poludnikow_grubych - 1)  * krokX + 9 * krokX / 60.0,
+                Y1 = margines,
+                Y2 = wysokosc_plotna - margines
+            };
+            plotno.Children.Add(ostatni_poludnik);
+            //ten 24 st. 09 min.
+
+            for (int i = 0; i < liczba_równoleżników_grubych; i++)
             {
                 Line rownoleznik = new Line
                 {
                     Visibility = Visibility.Visible,
                     Stroke = Brushes.Black,
-                    X1 = margines,
-                    X2 = szerokosc_plotna - margines,
+                    StrokeThickness = 1,
+                    X1 = pierwszy_poludnik.X1,
+                    X2 = ostatni_poludnik.X1,
                     Y1 = margines + i * krokY,
                     Y2 = margines + i * krokY
                 };
                 plotno.Children.Add(rownoleznik);
+
+                //umiescic generowanie rownoleznikow przy przyblizeniu tych mniejszych
             }
         }
     }
