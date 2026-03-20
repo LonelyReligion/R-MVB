@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Ribbon.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -35,13 +36,13 @@ namespace UrzadzeniaSim
         //Właściwie to siatka walcowa?
         private void rysujSiatkeGeograficzna() {
 
-            int margines = 100;
+            double margines = szerokosc_plotna/8;
 
             int liczba_poludnikow_grubych = 10;
             int liczba_równoleżników_grubych = 5;
 
-            double krokX = (szerokosc_plotna - 2 * margines) / (double)(liczba_poludnikow_grubych - 1);
-            double krokY = (wysokosc_plotna - 2 * margines) / (double)(liczba_równoleżników_grubych - 1);
+            double krokX = Math.Abs((szerokosc_plotna - 2 * margines)) / (double)(liczba_poludnikow_grubych - 1);
+            double krokY = Math.Abs((wysokosc_plotna - 2 * margines)) / (double)(liczba_równoleżników_grubych - 1);
 
             double pierwszy_poludnik_x = margines - 53 * krokX / 60.0;
             double ostatni_poludnik_x = margines + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0;

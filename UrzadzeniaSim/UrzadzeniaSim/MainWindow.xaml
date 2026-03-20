@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:UrzadzeniaSim"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
+        MinHeight="225" MinWidth="400"
         Name="okno">
     <Grid Name="siatka" Background="Red">
         <Grid.RowDefinitions>
