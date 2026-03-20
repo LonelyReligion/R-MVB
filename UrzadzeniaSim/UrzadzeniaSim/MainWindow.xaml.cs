@@ -36,17 +36,19 @@ namespace UrzadzeniaSim
         //Właściwie to siatka walcowa?
         private void rysujSiatkeGeograficzna() {
 
-            double margines = szerokosc_plotna/8;
+
+            double marginesX = szerokosc_plotna/8;
+            double marginesY = wysokosc_plotna / 4.5;
 
             int liczba_poludnikow_grubych = 10;
             int liczba_równoleżników_grubych = 5;
 
-            double krokX = Math.Abs((szerokosc_plotna - 2 * margines)) / (double)(liczba_poludnikow_grubych - 1);
-            double krokY = Math.Abs((wysokosc_plotna - 2 * margines)) / (double)(liczba_równoleżników_grubych - 1);
+            double krokX = Math.Abs((szerokosc_plotna - 2 * marginesX)) / (double)(liczba_poludnikow_grubych - 1);
+            double krokY = Math.Abs((wysokosc_plotna - 2 * marginesY)) / (double)(liczba_równoleżników_grubych - 1);
 
-            double pierwszy_poludnik_x = margines - 53 * krokX / 60.0;
-            double ostatni_poludnik_x = margines + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0;
-            double ostatni_rownoleznik_y = margines + (liczba_równoleżników_grubych - 1) * krokY + 5 / 60.0 * krokY;
+            double pierwszy_poludnik_x = marginesX - 53 * krokX / 60.0;
+            double ostatni_poludnik_x = marginesX + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0;
+            double ostatni_rownoleznik_y = marginesY + (liczba_równoleżników_grubych - 1) * krokY + 5 / 60.0 * krokY;
 
             /* czy da sie jakos zrobic zeby bylo rowno?
             double margines_lewo = 100 - pierwszy_poludnik_x;
@@ -61,7 +63,7 @@ namespace UrzadzeniaSim
                 StrokeThickness = 0.5,
                 X1 = pierwszy_poludnik_x,
                 X2 = pierwszy_poludnik_x,
-                Y1 = margines,
+                Y1 = marginesY,
                 Y2 = ostatni_rownoleznik_y
             }; //ten 14 st. 7 min.
             plotno.Children.Add(pierwszy_poludnik);
@@ -73,9 +75,9 @@ namespace UrzadzeniaSim
                     Visibility = Visibility.Visible,
                     Stroke = Brushes.Black,
                     StrokeThickness = 1,
-                    X1 = margines + i * krokX,
-                    X2 = margines + i * krokX,
-                    Y1 = margines,
+                    X1 = marginesX + i * krokX,
+                    X2 = marginesX + i * krokX,
+                    Y1 = marginesY,
                     Y2 = ostatni_rownoleznik_y
                 };
                 plotno.Children.Add(poludnik);
@@ -88,9 +90,9 @@ namespace UrzadzeniaSim
                 Visibility = Visibility.Visible,
                 Stroke = Brushes.Black,
                 StrokeThickness = 0.5,
-                X1 = margines + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
-                X2 = margines + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
-                Y1 = margines,
+                X1 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
+                X2 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
+                Y1 = marginesY,
                 Y2 = ostatni_rownoleznik_y
             };
             plotno.Children.Add(ostatni_poludnik);
@@ -105,8 +107,8 @@ namespace UrzadzeniaSim
                     StrokeThickness = 1,
                     X1 = pierwszy_poludnik_x,
                     X2 = ostatni_poludnik_x,
-                    Y1 = margines + i * krokY,
-                    Y2 = margines + i * krokY
+                    Y1 = marginesY + i * krokY,
+                    Y2 = marginesY + i * krokY
                 };
                 plotno.Children.Add(rownoleznik);
 
