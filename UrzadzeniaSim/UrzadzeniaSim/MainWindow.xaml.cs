@@ -11,8 +11,8 @@ namespace UrzadzeniaSim
     public partial class MainWindow : Window
     {
        
-        double wysokosc_okna = 450;
-        double szerokosc_okna = 800;
+        double wysokosc_okna;
+        double szerokosc_okna;
 
         double wysokosc_plotna;
         double szerokosc_plotna;
@@ -21,6 +21,12 @@ namespace UrzadzeniaSim
         public MainWindow()
         {
             InitializeComponent();
+
+            okno.SizeChanged += (s, e) =>
+            {
+                wysokosc_okna = okno.ActualHeight;
+                wysokosc_plotna = okno.ActualWidth;
+            };
 
             plotno.SizeChanged += (s, e) =>
             {
