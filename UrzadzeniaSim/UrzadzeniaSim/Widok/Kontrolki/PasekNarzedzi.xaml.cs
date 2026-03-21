@@ -23,6 +23,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public PasekNarzedzi()
         {
             InitializeComponent();
+            Powiekszenie.ItemsSource = new List<string> { "100%", "150%", "200%" };
+            Powiekszenie.SelectedIndex = 0;
         }
+
     }
 }
