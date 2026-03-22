@@ -14,11 +14,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <kontrolki:PasekNarzedzi/>
-        <Canvas Grid.Row="1" Name="plotno" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Canvas.RenderTransform>
-                <ScaleTransform CenterX="{Binding srodekX}" CenterY="{Binding srodekY}" ScaleX="{Binding skalaX}" ScaleY="{Binding skalaY}" />
-            </Canvas.RenderTransform>
-        </Canvas>
+        <kontrolki:PasekNarzedzi Grid.Row="0"/>
+        <kontrolki:Siatka Grid.Row="1"/>
     </Grid>
 </Window>
