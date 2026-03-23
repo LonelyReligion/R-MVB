@@ -11,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -136,35 +137,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void powiekszSiatke(double powiekszenie) {
             Trace.WriteLine("Tu siatka. Juz ogarniam.");
-        }
-
-        private double srodekX_;
-        public double srodekX
-        {
-            get { return srodekX_; }
-            set { srodekX_ = value; }
-        }
-        private double srodekY_;
-        public double srodekY
-        {
-
-            get { return srodekY_; }
-            set { srodekY_ = value; }
-        }
-        private double skalaY_ = 1;
-        public double skalaY
-        {
-
-            get { return skalaY_; }
-            set { skalaY_ = value; }
-        }
-
-        private double skalaX_ = 1;
-        public double skalaX
-        {
-
-            get { return skalaX_; }
-            set { skalaX_ = value; }
+            skalowanie.ScaleX = powiekszenie;
+            skalowanie.ScaleY = powiekszenie;
         }
     }
 }
