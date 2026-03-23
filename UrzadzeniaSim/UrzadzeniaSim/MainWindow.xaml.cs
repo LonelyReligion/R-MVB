@@ -5,6 +5,7 @@ using System.Windows.Controls.Ribbon.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using UrzadzeniaSim.Widok.Kontrolki;
 
 namespace UrzadzeniaSim
 {
@@ -14,7 +15,6 @@ namespace UrzadzeniaSim
         double wysokosc_okna;
         double szerokosc_okna;
 
-        bool klik = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -25,8 +25,13 @@ namespace UrzadzeniaSim
                 wysokosc_okna = okno.ActualWidth;
             };
 
+            
+
         }
 
+        private void powiedzOtymSiatce(double powiekszenie) {
+            Trace.WriteLine("Tu okno, wiem o wszystkim.");
+        }
     }
     
 }

@@ -14,7 +14,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <kontrolki:PasekNarzedzi Grid.Row="0"/>
+        <kontrolki:PasekNarzedzi x:Name="pasekNarzedzi" Grid.Row="0" zmienionoPowiekszenie="powiedzOtymSiatce"/>
         <kontrolki:Siatka Grid.Row="1"/>
     </Grid>
 </Window>

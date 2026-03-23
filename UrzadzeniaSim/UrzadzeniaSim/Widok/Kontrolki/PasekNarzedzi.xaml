@@ -30,7 +30,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Powiększenie" Width="auto" Height="auto" Margin="5"/>
-            <ComboBox Name="Powiekszenie" Grid.Column="1" Width="auto" Margin="5" ItemsSource="{Binding MyDataSource}"/>
+            <ComboBox Name="Powiekszenie" Grid.Column="1" Width="auto" Margin="5" ItemsSource="{Binding MyDataSource}" SelectionChanged="zmianaPowiekszenia"/>
         </Grid>
     </Grid>
 </UserControl>
