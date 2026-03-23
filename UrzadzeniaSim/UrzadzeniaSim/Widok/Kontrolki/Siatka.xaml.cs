@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -131,6 +132,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 Y2 = ostatni_rownoleznik_y
             };//ten 54 st. 5 min.
             plotno.Children.Add(ostatni_rownoleznik);
+        }
+
+        public void powiekszSiatke(double powiekszenie) {
+            Trace.WriteLine("Tu siatka. Juz ogarniam.");
         }
 
         private double srodekX_;

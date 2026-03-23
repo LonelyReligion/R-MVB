@@ -31,6 +31,7 @@ namespace UrzadzeniaSim
 
         private void powiedzOtymSiatce(double powiekszenie) {
             Trace.WriteLine("Tu okno, wiem o wszystkim.");
+            siatkaWalcowa.powiekszSiatke(powiekszenie);
         }
     }
     
