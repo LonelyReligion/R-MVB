@@ -25,9 +25,12 @@
                 </Canvas.RenderTransform>
             </Canvas>
 
-            <ScrollBar Grid.Column="1"
+            <ScrollBar Name="pionowy_scroll"
+                       Grid.Column="1"
                        Orientation="Vertical"
-                       VerticalAlignment="Stretch"/>
+                       VerticalAlignment="Stretch"
+                       Scroll="przewijanie_pionowe"
+                       Visibility="Collapsed"/>
         </Grid>
 
         <ScrollBar Grid.Row="1"

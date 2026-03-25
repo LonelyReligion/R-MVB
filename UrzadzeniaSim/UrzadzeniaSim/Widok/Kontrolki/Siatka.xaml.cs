@@ -137,8 +137,24 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void powiekszSiatke(double powiekszenie) {
             Trace.WriteLine("Tu siatka. Juz ogarniam.");
+
+            if (powiekszenie != 1.0)
+            {
+                pionowy_scroll.Visibility = Visibility.Visible;
+            }
+            else {
+                pionowy_scroll.Visibility = Visibility.Collapsed;
+            }
+
             skalowanie.ScaleX = powiekszenie;
             skalowanie.ScaleY = powiekszenie;
+        }
+
+        public void przewijanie_pionowe(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e) {
+            double min = pionowy_scroll.Minimum;
+            double max = pionowy_scroll.Maximum;
+            double wartosc = pionowy_scroll.Value;
+            skalowanie.CenterY = wysokosc_plotna * (wartosc - min) / (max - min);
         }
     }
 }
