@@ -126,7 +126,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 Visibility = Visibility.Visible,
                 Stroke = Brushes.Black,
-                StrokeThickness = 1,
+                StrokeThickness = 0.5,
                 X1 = pierwszy_poludnik_x,
                 X2 = ostatni_poludnik_x,
                 Y1 = ostatni_rownoleznik_y,
@@ -141,9 +141,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             if (powiekszenie != 1.0)
             {
                 pionowy_scroll.Visibility = Visibility.Visible;
+                poziomy_scroll.Visibility = Visibility.Visible;
             }
             else {
-                pionowy_scroll.Visibility = Visibility.Collapsed;
+                pionowy_scroll.Visibility = Visibility.Collapsed; 
+                poziomy_scroll.Visibility = Visibility.Collapsed;
             }
 
             skalowanie.ScaleX = powiekszenie;
@@ -154,7 +156,16 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             double min = pionowy_scroll.Minimum;
             double max = pionowy_scroll.Maximum;
             double wartosc = pionowy_scroll.Value;
+
             skalowanie.CenterY = wysokosc_plotna * (wartosc - min) / (max - min);
+        }
+
+        public void przewijanie_poziome(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e) {
+            double min = poziomy_scroll.Minimum;
+            double max = poziomy_scroll.Maximum;
+            double wartosc = poziomy_scroll.Value;
+
+            skalowanie.CenterX = szerokosc_plotna * (wartosc - min) / (max - min);
         }
     }
 }

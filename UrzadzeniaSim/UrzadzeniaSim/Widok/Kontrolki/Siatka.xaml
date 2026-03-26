@@ -13,13 +13,13 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" ClipToBounds="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Canvas Name="plotno" Background="White" Grid.Column="0">
+            <Canvas Name="plotno" Background="White" Grid.Column="0" >
                 <Canvas.RenderTransform>
                     <ScaleTransform x:Name="skalowanie"/>
                 </Canvas.RenderTransform>
@@ -30,11 +30,19 @@
                        Orientation="Vertical"
                        VerticalAlignment="Stretch"
                        Scroll="przewijanie_pionowe"
-                       Visibility="Collapsed"/>
+                       Visibility="Collapsed"
+                       ViewportSize="1"
+                       />
+
         </Grid>
 
-        <ScrollBar Grid.Row="1"
+        <ScrollBar Name="poziomy_scroll"
+                   Grid.Row="1"
                    Orientation="Horizontal"
-                   HorizontalAlignment="Stretch"/>
+                   HorizontalAlignment="Stretch"
+                   Scroll="przewijanie_poziome"
+                   Visibility="Collapsed"
+                   ViewportSize="1"
+                   />
     </Grid>
 </UserControl>
