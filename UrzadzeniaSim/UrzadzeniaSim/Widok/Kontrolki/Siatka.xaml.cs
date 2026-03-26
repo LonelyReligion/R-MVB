@@ -34,15 +34,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 szerokosc_plotna = plotno.ActualWidth;
 
                 plotno.Children.Clear();
-                rysujSiatkeGeograficzna();
+                rysujSiatkeGeograficzna(true, true);
             };
 
         }
 
         //Właściwie to siatka walcowa?
-        private void rysujSiatkeGeograficzna()
+        private void rysujSiatkeGeograficzna(bool minuty_dlugosc, bool minuty_szerokosc)
         {
-
 
             double marginesX = szerokosc_plotna / 8;
             double marginesY = wysokosc_plotna / 4.5;
@@ -75,6 +74,23 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }; //ten 14 st. 7 min.
             plotno.Children.Add(pierwszy_poludnik);
 
+            if (minuty_dlugosc) {
+                for (int i = 0; i < 52; i++) //51 minut? 
+                {
+                    Line minutka = new Line
+                    {
+                        Visibility = Visibility.Visible,
+                        Stroke = Brushes.Black,
+                        StrokeThickness = 0.5,
+                        X1 = pierwszy_poludnik_x + (52 - i) * krokX / 60.0,
+                        X2 = pierwszy_poludnik_x + (52 - i) * krokX / 60.0,
+                        Y1 = marginesY,
+                        Y2 = ostatni_rownoleznik_y
+                    };
+                    plotno.Children.Add(minutka);
+                }
+            }
+
             for (int i = 0; i < liczba_poludnikow_grubych; i++)
             {
                 Line poludnik = new Line
@@ -88,6 +104,24 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     Y2 = ostatni_rownoleznik_y
                 };
                 plotno.Children.Add(poludnik);
+
+                if (minuty_dlugosc && i != liczba_poludnikow_grubych - 1)
+                {
+                    for (int j = 0; j < 59; j++)
+                    {
+                        Line minutka = new Line
+                        {
+                            Visibility = Visibility.Visible,
+                            Stroke = Brushes.Black,
+                            StrokeThickness = 0.5,
+                            X1 = poludnik.X1 + ((j+1) * krokX / 60.0),
+                            X2 = poludnik.X2 + ((j+1) * krokX / 60.0),
+                            Y1 = marginesY,
+                            Y2 = ostatni_rownoleznik_y
+                        };
+                        plotno.Children.Add(minutka);
+                    }
+                }
 
                 //umiescic generowanie poludnikow przy przyblizeniu tych mniejszych
             }

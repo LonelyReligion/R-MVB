@@ -28,13 +28,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public PasekNarzedzi()
         {
             InitializeComponent();
-            Powiekszenie.ItemsSource = new List<string> { "100%", "150%", "200%" };
+            Powiekszenie.ItemsSource = new List<string> { "100%", "150%", "250%", "500%", "1000%" };
             Powiekszenie.SelectedIndex = 0;
         }
 
         private void zmianaPowiekszenia(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
             string procenty = Powiekszenie.SelectedItem?.ToString();
-            int procenty_i = int.Parse(procenty.Substring(0, 3));
+            int procenty_i = int.Parse(procenty.Substring(0, procenty.Length-1));
             Trace.WriteLine("Zmieniono powiekszenie na " + procenty_i);
             powiekszenie = (double) procenty_i / 100;
             zmienionoPowiekszenie?.Invoke(powiekszenie);
