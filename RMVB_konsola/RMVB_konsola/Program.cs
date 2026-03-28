@@ -13,11 +13,17 @@ using System.Globalization;
 //Setup
 string sciezkaFolderuWyjsciowego;
 sciezkaFolderuWyjsciowego = ConfigurationManager.AppSettings.Get("sciezka_folderu_wyjsciowego");
-if (!Directory.Exists(sciezkaFolderuWyjsciowego)) {
-    Console.WriteLine("Podana ścieżka folderu plików wyjściowych nie jest poprawna lub folder nie istnieje");
-    Console.WriteLine("Podaj poprawną ścieżkę i spróbuj ponownie.");
+
+
+Directory.CreateDirectory(sciezkaFolderuWyjsciowego);
+
+if (!Directory.Exists(sciezkaFolderuWyjsciowego))
+{
+    Console.WriteLine("Podana ścieżka jest niepoprawna.");
     return 0;
 }
+Console.WriteLine("Pliki wyjściowe znajdziesz pod adresem: " + Path.GetFullPath(sciezkaFolderuWyjsciowego));
+
 
 string liczbaUrzadzenStr = ConfigurationManager.AppSettings.Get("liczba_urzadzen");
 int liczbaUrzadzen = 0;
