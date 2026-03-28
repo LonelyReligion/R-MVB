@@ -38,6 +38,16 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             Trace.WriteLine("Zmieniono powiekszenie na " + procenty_i);
             powiekszenie = (double) procenty_i / 100;
             zmienionoPowiekszenie?.Invoke(powiekszenie);
+
+            if (procenty_i >= 500)
+            {
+                poludniki_minuta.IsEnabled = true;
+                rownolezniki_minuta.IsEnabled = true;
+            }
+            else {
+                poludniki_minuta.IsEnabled = false;
+                rownolezniki_minuta.IsEnabled = false;
+            }
         }
 
     }

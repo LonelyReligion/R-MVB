@@ -125,6 +125,24 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 //umiescic generowanie poludnikow przy przyblizeniu tych mniejszych
             }
+            
+            if (minuty_dlugosc)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    Line minutka = new Line
+                    {
+                        Visibility = Visibility.Visible,
+                        Stroke = Brushes.Black,
+                        StrokeThickness = 0.5,
+                        X1 = marginesX + (liczba_poludnikow_grubych-1) * krokX + ((j + 1) * krokX / 60.0),
+                        X2 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + ((j + 1) * krokX / 60.0),
+                        Y1 = marginesY,
+                        Y2 = ostatni_rownoleznik_y
+                    };
+                    plotno.Children.Add(minutka);
+                }
+            }
 
             Line ostatni_poludnik = new Line
             {

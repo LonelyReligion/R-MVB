@@ -22,6 +22,10 @@
                 <MenuItem Header="Usuń"/>
             </MenuItem>
             <MenuItem Header="Widok" FontSize="12">
+                <MenuItem Header="Wyświetl siatkę z dokładnością do minuty">
+                    <MenuItem Name="poludniki_minuta" Header="Południki" IsEnabled="False"/>
+                    <MenuItem Name="rownolezniki_minuta" Header="Równoleżniki" IsEnabled="False"/>
+                </MenuItem>
             </MenuItem>
         </Menu>
         <Grid Grid.Row="1">
