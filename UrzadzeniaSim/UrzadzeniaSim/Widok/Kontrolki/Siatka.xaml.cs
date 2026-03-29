@@ -24,6 +24,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     {
         double wysokosc_plotna;
         double szerokosc_plotna;
+
+        bool minuty_dlugosc = false;
+        bool minuty_szerokosc = false;
+
         public Siatka()
         {
             InitializeComponent();
@@ -34,13 +38,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 szerokosc_plotna = plotno.ActualWidth;
 
                 plotno.Children.Clear();
-                rysujSiatkeGeograficzna(true, true);
+                rysujSiatkeGeograficzna();
             };
 
         }
 
         //Właściwie to siatka walcowa?
-        private void rysujSiatkeGeograficzna(bool minuty_dlugosc, bool minuty_szerokosc)
+        private void rysujSiatkeGeograficzna()
         {
 
             double marginesX = szerokosc_plotna / 8;
@@ -202,9 +206,17 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             skalowanie.ScaleX = powiekszenie;
             skalowanie.ScaleY = powiekszenie;
+
+            if (powiekszenie < 5) {
+                minuty_dlugosc = false;
+                minuty_szerokosc = false;
+
+                plotno.Children.Clear();
+                rysujSiatkeGeograficzna();
+            }
         }
 
-        public void przewijanie_pionowe(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e) {
+        private void przewijanie_pionowe(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e) {
             double min = pionowy_scroll.Minimum;
             double max = pionowy_scroll.Maximum;
             double wartosc = pionowy_scroll.Value;
@@ -212,12 +224,25 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             skalowanie.CenterY = wysokosc_plotna * (wartosc - min) / (max - min);
         }
 
-        public void przewijanie_poziome(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e) {
+        private void przewijanie_poziome(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e) {
             double min = poziomy_scroll.Minimum;
             double max = poziomy_scroll.Maximum;
             double wartosc = poziomy_scroll.Value;
 
             skalowanie.CenterX = szerokosc_plotna * (wartosc - min) / (max - min);
+        }
+
+        public void zmienDokladnoscPoludniki(bool taknie) { 
+            minuty_dlugosc = taknie;
+            plotno.Children.Clear();
+            rysujSiatkeGeograficzna();
+
+        }
+
+        public void zmienDokladnoscRownolezniki(bool taknie) { 
+            minuty_szerokosc = taknie;
+            plotno.Children.Clear();
+            rysujSiatkeGeograficzna();
         }
     }
 }

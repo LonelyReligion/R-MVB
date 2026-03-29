@@ -33,6 +33,14 @@ namespace UrzadzeniaSim
             Trace.WriteLine("Tu okno, wiem o wszystkim.");
             siatkaWalcowa.powiekszSiatke(powiekszenie);
         }
+
+        private void siatkaZmienPoludniki(bool onoff) { 
+            siatkaWalcowa.zmienDokladnoscPoludniki(onoff);
+        }
+
+        private void siatkaZmienRownolezniki(bool onoff) {
+            siatkaWalcowa.zmienDokladnoscRownolezniki(onoff);
+        }
     }
     
 }

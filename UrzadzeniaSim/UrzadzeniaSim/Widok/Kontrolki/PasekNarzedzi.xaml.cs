@@ -24,6 +24,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     {
         public double powiekszenie;
         public event Action<double> zmienionoPowiekszenie;
+        public event Action<bool> zmienionoDokladnoscPoludniki;
+        public event Action<bool> zmienionoDokladnoscRownolezniki;
 
         public PasekNarzedzi()
         {
@@ -37,8 +39,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             int procenty_i = int.Parse(procenty.Substring(0, procenty.Length-1));
             Trace.WriteLine("Zmieniono powiekszenie na " + procenty_i);
             powiekszenie = (double) procenty_i / 100;
-            zmienionoPowiekszenie?.Invoke(powiekszenie);
-
+            
             if (procenty_i >= 500)
             {
                 poludniki_minuta.IsEnabled = true;
@@ -48,7 +49,18 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 poludniki_minuta.IsEnabled = false;
                 rownolezniki_minuta.IsEnabled = false;
             }
+
+            zmienionoPowiekszenie?.Invoke(powiekszenie);
         }
 
+        private void przycisnieto_poludniki_minuta(object sender, RoutedEventArgs e)
+        {
+            zmienionoDokladnoscPoludniki?.Invoke(poludniki_minuta.IsChecked);
+        }
+
+        private void przycisnieto_rownolezniki_minuta(object sender, RoutedEventArgs e)
+        {
+            zmienionoDokladnoscRownolezniki?.Invoke(rownolezniki_minuta.IsChecked);
+        }
     }
 }
