@@ -85,8 +85,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 StrokeThickness = grubosc_minuty,
                 X1 = pierwszy_poludnik_x,
                 X2 = pierwszy_poludnik_x,
-                Y1 = marginesY - 10,
-                Y2 = ostatni_rownoleznik_y + 10
+                Y1 = marginesY ,
+                Y2 = ostatni_rownoleznik_y
             }; //ten 14 st. 7 min.
             plotno.Children.Add(pierwszy_poludnik);
 
@@ -109,6 +109,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             for (int i = 0; i < liczba_poludnikow_grubych; i++)
             {
+
                 Line poludnik = new Line
                 {
                     Visibility = Visibility.Visible,
@@ -119,7 +120,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     Y1 = marginesY - 10,
                     Y2 = ostatni_rownoleznik_y + 10
                 };
+
                 plotno.Children.Add(poludnik);
+
+                TextBlock opis = new TextBlock();
+                opis.Text = (15 + i).ToString() + "\u00B0";
+                opis.FontSize = 12;
+                opis.Margin = new Thickness(poludnik.X1 - 10, poludnik.Y1 - 20, 0, 0);
+                plotno.Children.Add(opis);
 
                 if (minuty_dlugosc && i != liczba_poludnikow_grubych - 1)
                 {
@@ -167,8 +175,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 StrokeThickness = grubosc_minuty,
                 X1 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
                 X2 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
-                Y1 = marginesY - 10,
-                Y2 = ostatni_rownoleznik_y + 10
+                Y1 = marginesY,
+                Y2 = ostatni_rownoleznik_y
             };
             plotno.Children.Add(ostatni_poludnik);
             //ten 24 st. 09 min.
@@ -186,6 +194,12 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     Y2 = marginesY + i * krokY
                 };
                 plotno.Children.Add(rownoleznik);
+
+                TextBlock opis = new TextBlock();
+                opis.Text = (49 + i).ToString() + "\u00B0";
+                opis.FontSize = 12;
+                opis.Margin = new Thickness(ostatni_poludnik_x + 20, rownoleznik.Y1 - 10, 0, 0);
+                plotno.Children.Add(opis);
 
                 if (minuty_szerokosc && i != liczba_równoleżników_grubych - 1) {
                     for (int j = 0; j < 59; j++)
@@ -227,8 +241,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 Visibility = Visibility.Visible,
                 Stroke = Brushes.Black,
                 StrokeThickness = grubosc_minuty,
-                X1 = pierwszy_poludnik_x - 10,
-                X2 = ostatni_poludnik_x + 10,
+                X1 = pierwszy_poludnik_x,
+                X2 = ostatni_poludnik_x,
                 Y1 = ostatni_rownoleznik_y,
                 Y2 = ostatni_rownoleznik_y
             };//ten 54 st. 5 min.
