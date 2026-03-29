@@ -40,7 +40,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             Trace.WriteLine("Zmieniono powiekszenie na " + procenty_i);
             powiekszenie = (double) procenty_i / 100;
             
-            if (procenty_i >= 500)
+            if (procenty_i >= 250)
             {
                 poludniki_minuta.IsEnabled = true;
                 rownolezniki_minuta.IsEnabled = true;

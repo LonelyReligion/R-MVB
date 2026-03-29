@@ -28,12 +28,24 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         bool minuty_dlugosc = false;
         bool minuty_szerokosc = false;
 
+        const double grubosc_stopnie = 0.8;
+        const double grubosc_minuty = 0.2;
+
         public Siatka()
         {
             InitializeComponent();
 
             plotno.SizeChanged += (s, e) =>
             {
+                // 
+                pionowy_scroll.Value = pionowy_scroll.Minimum + ( pionowy_scroll.Maximum - pionowy_scroll.Minimum ) / 5;
+                double min = pionowy_scroll.Minimum;
+                double max = pionowy_scroll.Maximum;
+                double wartosc = pionowy_scroll.Value;
+
+                skalowanie.CenterY = wysokosc_plotna * (wartosc - min) / (max - min);
+                //
+
                 wysokosc_plotna = plotno.ActualHeight;
                 szerokosc_plotna = plotno.ActualWidth;
 
@@ -70,11 +82,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 Visibility = Visibility.Visible,
                 Stroke = Brushes.Black,
-                StrokeThickness = 0.5,
+                StrokeThickness = grubosc_minuty,
                 X1 = pierwszy_poludnik_x,
                 X2 = pierwszy_poludnik_x,
-                Y1 = marginesY,
-                Y2 = ostatni_rownoleznik_y
+                Y1 = marginesY - 10,
+                Y2 = ostatni_rownoleznik_y + 10
             }; //ten 14 st. 7 min.
             plotno.Children.Add(pierwszy_poludnik);
 
@@ -85,7 +97,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     {
                         Visibility = Visibility.Visible,
                         Stroke = Brushes.Black,
-                        StrokeThickness = 0.5,
+                        StrokeThickness = grubosc_minuty,
                         X1 = pierwszy_poludnik_x + (52 - i) * krokX / 60.0,
                         X2 = pierwszy_poludnik_x + (52 - i) * krokX / 60.0,
                         Y1 = marginesY,
@@ -101,11 +113,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 {
                     Visibility = Visibility.Visible,
                     Stroke = Brushes.Black,
-                    StrokeThickness = 1,
+                    StrokeThickness = grubosc_stopnie,
                     X1 = marginesX + i * krokX,
                     X2 = marginesX + i * krokX,
-                    Y1 = marginesY,
-                    Y2 = ostatni_rownoleznik_y
+                    Y1 = marginesY - 10,
+                    Y2 = ostatni_rownoleznik_y + 10
                 };
                 plotno.Children.Add(poludnik);
 
@@ -117,7 +129,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                         {
                             Visibility = Visibility.Visible,
                             Stroke = Brushes.Black,
-                            StrokeThickness = 0.5,
+                            StrokeThickness = grubosc_minuty,
                             X1 = poludnik.X1 + ((j+1) * krokX / 60.0),
                             X2 = poludnik.X2 + ((j+1) * krokX / 60.0),
                             Y1 = marginesY,
@@ -138,7 +150,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     {
                         Visibility = Visibility.Visible,
                         Stroke = Brushes.Black,
-                        StrokeThickness = 0.5,
+                        StrokeThickness = grubosc_minuty,
                         X1 = marginesX + (liczba_poludnikow_grubych-1) * krokX + ((j + 1) * krokX / 60.0),
                         X2 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + ((j + 1) * krokX / 60.0),
                         Y1 = marginesY,
@@ -152,11 +164,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 Visibility = Visibility.Visible,
                 Stroke = Brushes.Black,
-                StrokeThickness = 0.5,
+                StrokeThickness = grubosc_minuty,
                 X1 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
                 X2 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
-                Y1 = marginesY,
-                Y2 = ostatni_rownoleznik_y
+                Y1 = marginesY - 10,
+                Y2 = ostatni_rownoleznik_y + 10
             };
             plotno.Children.Add(ostatni_poludnik);
             //ten 24 st. 09 min.
@@ -167,24 +179,56 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 {
                     Visibility = Visibility.Visible,
                     Stroke = Brushes.Black,
-                    StrokeThickness = 1,
-                    X1 = pierwszy_poludnik_x,
-                    X2 = ostatni_poludnik_x,
+                    StrokeThickness = grubosc_stopnie,
+                    X1 = pierwszy_poludnik_x - 10,
+                    X2 = ostatni_poludnik_x + 10,
                     Y1 = marginesY + i * krokY,
                     Y2 = marginesY + i * krokY
                 };
                 plotno.Children.Add(rownoleznik);
 
-                //umiescic generowanie rownoleznikow przy przyblizeniu tych mniejszych
+                if (minuty_szerokosc && i != liczba_równoleżników_grubych - 1) {
+                    for (int j = 0; j < 59; j++)
+                    {
+                        Line minutka = new Line
+                        {
+                            Visibility = Visibility.Visible,
+                            Stroke = Brushes.Black,
+                            StrokeThickness = grubosc_minuty,
+                            X1 = pierwszy_poludnik_x,
+                            X2 = ostatni_poludnik_x,
+                            Y1 = rownoleznik.Y1 + ((j+1) * krokY/60.0),
+                            Y2 = rownoleznik.Y1 + ((j+1) * krokY/60.0)
+                        };
+                        plotno.Children.Add(minutka);
+                    }
+                }
+            }
+            
+            if (minuty_szerokosc) {
+                for (int j = 0; j < 5; j++)
+                {
+                    Line minutka = new Line
+                    {
+                        Visibility = Visibility.Visible,
+                        Stroke = Brushes.Black,
+                        StrokeThickness = grubosc_minuty,
+                        X1 = pierwszy_poludnik_x,
+                        X2 = ostatni_poludnik_x,
+                        Y1 = ostatni_rownoleznik_y - ((j + 1) * krokY / 60.0),
+                        Y2 = ostatni_rownoleznik_y - ((j + 1) * krokY / 60.0)
+                    };
+                    plotno.Children.Add(minutka);
+                }
             }
 
             Line ostatni_rownoleznik = new Line
             {
                 Visibility = Visibility.Visible,
                 Stroke = Brushes.Black,
-                StrokeThickness = 0.5,
-                X1 = pierwszy_poludnik_x,
-                X2 = ostatni_poludnik_x,
+                StrokeThickness = grubosc_minuty,
+                X1 = pierwszy_poludnik_x - 10,
+                X2 = ostatni_poludnik_x + 10,
                 Y1 = ostatni_rownoleznik_y,
                 Y2 = ostatni_rownoleznik_y
             };//ten 54 st. 5 min.
@@ -207,7 +251,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             skalowanie.ScaleX = powiekszenie;
             skalowanie.ScaleY = powiekszenie;
 
-            if (powiekszenie < 5) {
+            if (powiekszenie < 2.5) {
                 minuty_dlugosc = false;
                 minuty_szerokosc = false;
 
