@@ -31,9 +31,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         const double grubosc_stopnie = 0.8;
         const double grubosc_minuty = 0.2;
 
+        const int bazowa_wielkosc_czcionki = 12;
+        int wielkosc_czcionki;
         public Siatka()
         {
             InitializeComponent();
+         
+            const double oryginalna_wysokosc = 361; //nwm czy beda takie same na kazdym pc, pewnie to wina suwaków
+            const double oryginalna_szerokosc = 784;
 
             plotno.SizeChanged += (s, e) =>
             {
@@ -45,9 +50,15 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 skalowanie.CenterY = wysokosc_plotna * (wartosc - min) / (max - min);
                 //
-
                 wysokosc_plotna = plotno.ActualHeight;
                 szerokosc_plotna = plotno.ActualWidth;
+
+
+                double skala_x = szerokosc_plotna / oryginalna_szerokosc;
+                double skala_y = wysokosc_plotna / oryginalna_wysokosc;
+                double skala = Math.Min(skala_x, skala_y);
+                
+                wielkosc_czcionki = (int)skala * bazowa_wielkosc_czcionki;
 
                 plotno.Children.Clear();
                 rysujSiatkeGeograficzna();
@@ -125,8 +136,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 TextBlock opis = new TextBlock();
                 opis.Text = (15 + i).ToString() + "\u00B0";
-                opis.FontSize = 12;
-                opis.Margin = new Thickness(poludnik.X1 - 10, poludnik.Y1 - 20, 0, 0);
+                opis.FontSize = wielkosc_czcionki;
+                opis.Margin = new Thickness(poludnik.X1 + 1 - (wielkosc_czcionki/2), poludnik.Y1 - 15 - wielkosc_czcionki, 0, 0);
                 plotno.Children.Add(opis);
 
                 if (minuty_dlugosc && i != liczba_poludnikow_grubych - 1)
@@ -197,8 +208,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 TextBlock opis = new TextBlock();
                 opis.Text = (49 + i).ToString() + "\u00B0";
-                opis.FontSize = 12;
-                opis.Margin = new Thickness(ostatni_poludnik_x + 20, rownoleznik.Y1 - 10, 0, 0);
+                opis.FontSize = wielkosc_czcionki;
+                opis.Margin = new Thickness(ostatni_poludnik_x + 20, rownoleznik.Y1 + 2 - wielkosc_czcionki, 0, 0);
                 plotno.Children.Add(opis);
 
                 if (minuty_szerokosc && i != liczba_równoleżników_grubych - 1) {
