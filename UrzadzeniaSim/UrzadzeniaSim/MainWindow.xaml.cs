@@ -6,7 +6,8 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using UrzadzeniaSim.Widok.Kontrolki;
-
+using UrzadzeniaSim.Narzędzia;
+using UrzadzeniaSim.Model;
 namespace UrzadzeniaSim
 {
     public partial class MainWindow : Window
@@ -14,6 +15,7 @@ namespace UrzadzeniaSim
        
         double wysokosc_okna;
         double szerokosc_okna;
+        Generatory generator = new Generatory();
 
         public MainWindow()
         {
@@ -40,6 +42,16 @@ namespace UrzadzeniaSim
 
         private void siatkaZmienRownolezniki(bool onoff) {
             siatkaWalcowa.zmienDokladnoscRownolezniki(onoff);
+        }
+
+        private void GenerujLosoweUrzadzenie(object sender, RoutedEventArgs e)
+        {
+            (decimal x, decimal y) = generator.generujWspolrzedne();
+            Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
+
+            Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(0, (x,y));
+            siatkaWalcowa.urządzenia.Add(nowe_urzadzenie.punkt); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
+
         }
     }
     

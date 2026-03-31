@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UrzadzeniaSim.Model;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
@@ -22,6 +23,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     /// </summary>
     public partial class Siatka : UserControl
     {
+        public List<Urządzenie> urządzenia = new List<Urządzenie>();
+
         double wysokosc_plotna;
         double szerokosc_plotna;
 
@@ -63,8 +66,15 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 plotno.Children.Clear();
                 rysujSiatkeGeograficzna();
+                rysujUrządzenia(); //tylko widoczne urządzenia?
             };
 
+        }
+
+        private void rysujUrządzenia() {
+            foreach (Urządzenie u in urządzenia) {
+                plotno.Children.Add(u);
+            }
         }
 
         //Właściwie to siatka walcowa?

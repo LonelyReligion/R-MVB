@@ -7,12 +7,13 @@
         xmlns:kontrolki="clr-namespace:UrzadzeniaSim.Widok.Kontrolki"
         mc:Ignorable="d"
         Title="Symulacja urządzeń" Height="450" Width="800"
-        MinHeight="225" MinWidth="400"
+        MinHeight="275" MinWidth="400"
         Name="okno">
-    <Grid Name="siatka" Background="Red">
+    <Grid Name="siatka" Background="LightSteelBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <kontrolki:PasekNarzedzi x:Name="pasekNarzedzi" Grid.Row="0" 
                                  zmienionoPowiekszenie="powiedzOtymSiatce" 
@@ -20,5 +21,6 @@
                                  zmienionoDokladnoscRownolezniki="siatkaZmienRownolezniki"
                                  />
         <kontrolki:Siatka x:Name="siatkaWalcowa" Grid.Row="1" />
+        <Button Name="przycisk_generuj" Content="Zaskocz mnie!"  Height="30" Width="100" Background="AliceBlue" Grid.Row="2" Click="GenerujLosoweUrzadzenie"/>
     </Grid>
 </Window>
