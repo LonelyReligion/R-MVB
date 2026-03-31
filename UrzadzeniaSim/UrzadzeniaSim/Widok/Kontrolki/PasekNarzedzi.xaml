@@ -23,8 +23,8 @@
             </MenuItem>
             <MenuItem Header="Widok" FontSize="12">
                 <MenuItem Header="Wyświetl siatkę z dokładnością do minuty">
-                    <MenuItem Name="poludniki_minuta" Header="Południki" IsEnabled="False" IsCheckable="True" Click="przycisnieto_poludniki_minuta"/>
-                    <MenuItem Name="rownolezniki_minuta" Header="Równoleżniki" IsEnabled="False" IsCheckable="True" Click="przycisnieto_rownolezniki_minuta"/>
+                    <MenuItem Name="poludniki_minuta" Header="Południki" IsEnabled="False" IsCheckable="True" Click="przycisnieto_poludniki_minuta" ToolTipService.ShowOnDisabled="True"/>
+                    <MenuItem Name="rownolezniki_minuta" Header="Równoleżniki" IsEnabled="False" IsCheckable="True" Click="przycisnieto_rownolezniki_minuta" ToolTipService.ShowOnDisabled="True"/>
                 </MenuItem>
             </MenuItem>
         </Menu>

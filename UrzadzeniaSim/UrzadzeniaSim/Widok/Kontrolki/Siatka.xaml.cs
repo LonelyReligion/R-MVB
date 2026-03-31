@@ -32,13 +32,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         const double grubosc_minuty = 0.2;
 
         const int bazowa_wielkosc_czcionki = 12;
-        int wielkosc_czcionki;
+        int wielkosc_czcionki = 12;
         public Siatka()
         {
             InitializeComponent();
          
-            const double oryginalna_wysokosc = 361; //nwm czy beda takie same na kazdym pc, pewnie to wina suwaków
-            const double oryginalna_szerokosc = 784;
+            double oryginalna_wysokosc = 361; //nwm czy beda takie same na kazdym pc, pewnie to wina suwaków
+            double oryginalna_szerokosc = 784;
 
             plotno.SizeChanged += (s, e) =>
             {
@@ -50,6 +50,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 skalowanie.CenterY = wysokosc_plotna * (wartosc - min) / (max - min);
                 //
+            
                 wysokosc_plotna = plotno.ActualHeight;
                 szerokosc_plotna = plotno.ActualWidth;
 
@@ -58,7 +59,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 double skala_y = wysokosc_plotna / oryginalna_wysokosc;
                 double skala = Math.Min(skala_x, skala_y);
                 
-                wielkosc_czcionki = (int)skala * bazowa_wielkosc_czcionki;
+                wielkosc_czcionki = (int)(skala * (double)bazowa_wielkosc_czcionki);
 
                 plotno.Children.Clear();
                 rysujSiatkeGeograficzna();
