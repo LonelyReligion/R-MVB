@@ -324,5 +324,17 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             plotno.Children.Clear();
             rysujSiatkeGeograficzna();
         }
+
+        public void dodajUrzadzenie(Urzadzenie_Model u) {
+            urządzenia.Add(u.punkt);
+            plotno.Children.Add(u.punkt);
+        }
+
+        public void dodajUrzadzenia(List<Urzadzenie_Model> urzadzenia) {
+            foreach (Urzadzenie_Model u in urzadzenia) {
+                urządzenia.Add(u.punkt);
+                plotno.Children.Add(u.punkt);
+            }
+        }
     }
 }

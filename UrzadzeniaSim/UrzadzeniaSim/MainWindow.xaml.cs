@@ -50,7 +50,7 @@ namespace UrzadzeniaSim
             Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
 
             Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(0, (x,y));
-            siatkaWalcowa.urządzenia.Add(nowe_urzadzenie.punkt); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
+            siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
 
         }
     }

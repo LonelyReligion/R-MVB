@@ -33,6 +33,8 @@ namespace UrzadzeniaSim.Model
             Dlugosc = dlugosc_szerokosc.Item1;
             Szerokosc = dlugosc_szerokosc.Item2;
 
+            punkt.Margin = new System.Windows.Thickness((double)Dlugosc, (double)Szerokosc, 0, 0); //zdecydowanie nie ma tak byc 
+
             this.UrzadzenieID = UrzadzenieID;
         }
 
