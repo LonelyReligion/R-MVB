@@ -36,12 +36,19 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         const int bazowa_wielkosc_czcionki = 12;
         int wielkosc_czcionki = 12;
+
+        double marginesX;
+        double marginesY;
+        double krokX;
+        double krokY;
+
         public Siatka()
         {
             InitializeComponent();
          
             double oryginalna_wysokosc = 361; //nwm czy beda takie same na kazdym pc, pewnie to wina suwaków
             double oryginalna_szerokosc = 784;
+
 
             plotno.SizeChanged += (s, e) =>
             {
@@ -73,6 +80,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private void rysujUrządzenia() {
             foreach (Urządzenie u in urządzenia) {
+                //tu dac ustawianie marginesu kazdego punktu tez
                 plotno.Children.Add(u);
             }
         }
@@ -80,19 +88,21 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         //Właściwie to siatka walcowa?
         private void rysujSiatkeGeograficzna()
         {
-
-            double marginesX = szerokosc_plotna / 8;
-            double marginesY = wysokosc_plotna / 4.5;
+            marginesX = szerokosc_plotna / 6;
+            marginesY = wysokosc_plotna / 4.5;
 
             int liczba_poludnikow_grubych = 10;
             int liczba_równoleżników_grubych = 5;
 
-            double krokX = Math.Abs((szerokosc_plotna - 2 * marginesX)) / (double)(liczba_poludnikow_grubych - 1);
-            double krokY = Math.Abs((wysokosc_plotna - 2 * marginesY)) / (double)(liczba_równoleżników_grubych - 1);
+            double minutyX = (liczba_poludnikow_grubych - 1) * 60.0 + 2.0;
+            krokX = 60 * (szerokosc_plotna - 2 * marginesX) / minutyX;
 
-            double pierwszy_poludnik_x = marginesX - 53 * krokX / 60.0;
-            double ostatni_poludnik_x = marginesX + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0;
-            double ostatni_rownoleznik_y = marginesY + (liczba_równoleżników_grubych - 1) * krokY + 5 / 60.0 * krokY;
+            double minutyY = (liczba_równoleżników_grubych - 1) * 60.0 + 5.0;
+            krokY = 60 * (wysokosc_plotna - 2 * marginesY) / minutyY;
+
+            double pierwszy_poludnik_x = marginesX;
+            double ostatni_poludnik_x = marginesX + (liczba_poludnikow_grubych) * krokX + 2.0 * (krokX / 60.0); // bo 53 min. + 9 min. =  1 st. 2 min.
+            double ostatni_rownoleznik_y = marginesY + (liczba_równoleżników_grubych - 1) * krokY + 5.0 / 60.0 * krokY;
 
             /* czy da sie jakos zrobic zeby bylo rowno?
             double margines_lewo = 100 - pierwszy_poludnik_x;
@@ -137,10 +147,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     Visibility = Visibility.Visible,
                     Stroke = Brushes.Black,
                     StrokeThickness = grubosc_stopnie,
-                    X1 = marginesX + i * krokX,
-                    X2 = marginesX + i * krokX,
+                    X1 = marginesX + (53 * krokX / 60.0) + i * krokX,
+                    X2 = marginesX + (53 * krokX / 60.0) + i * krokX,
                     Y1 = marginesY - 10,
-                    Y2 = ostatni_rownoleznik_y + 10
+                    Y2 = ostatni_rownoleznik_y
                 };
 
                 plotno.Children.Add(poludnik);
@@ -181,8 +191,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                         Visibility = Visibility.Visible,
                         Stroke = Brushes.Black,
                         StrokeThickness = grubosc_minuty,
-                        X1 = marginesX + (liczba_poludnikow_grubych-1) * krokX + ((j + 1) * krokX / 60.0),
-                        X2 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + ((j + 1) * krokX / 60.0),
+                        X1 = marginesX + (53 * krokX / 60.0) + (liczba_poludnikow_grubych - 1) * krokX + ((j + 1) * krokX / 60.0),
+                        X2 = marginesX + (53 * krokX / 60.0) + (liczba_poludnikow_grubych - 1) * krokX + ((j + 1) * krokX / 60.0),
                         Y1 = marginesY,
                         Y2 = ostatni_rownoleznik_y
                     };
@@ -195,8 +205,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 Visibility = Visibility.Visible,
                 Stroke = Brushes.Black,
                 StrokeThickness = grubosc_minuty,
-                X1 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
-                X2 = marginesX + (liczba_poludnikow_grubych - 1) * krokX + 9 * krokX / 60.0,
+                X1 = ostatni_poludnik_x,
+                X2 = ostatni_poludnik_x,
                 Y1 = marginesY,
                 Y2 = ostatni_rownoleznik_y
             };
@@ -210,8 +220,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     Visibility = Visibility.Visible,
                     Stroke = Brushes.Black,
                     StrokeThickness = grubosc_stopnie,
-                    X1 = pierwszy_poludnik_x - 10,
-                    X2 = ostatni_poludnik_x + 10,
+                    X1 = pierwszy_poludnik.X1,
+                    X2 = ostatni_poludnik.X1,
                     Y1 = marginesY + i * krokY,
                     Y2 = marginesY + i * krokY
                 };
@@ -249,8 +259,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                         Visibility = Visibility.Visible,
                         Stroke = Brushes.Black,
                         StrokeThickness = grubosc_minuty,
-                        X1 = pierwszy_poludnik_x,
-                        X2 = ostatni_poludnik_x,
+                        X1 = pierwszy_poludnik.X1,
+                        X2 = ostatni_poludnik.X1,
                         Y1 = ostatni_rownoleznik_y - ((j + 1) * krokY / 60.0),
                         Y2 = ostatni_rownoleznik_y - ((j + 1) * krokY / 60.0)
                     };
@@ -327,6 +337,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void dodajUrzadzenie(Urzadzenie_Model u) {
             urządzenia.Add(u.punkt);
+
+            u.punkt.Margin = new System.Windows.Thickness(/*(double)u.Dlugosc + */marginesX, /*(double)u.Szerokosc +*/ marginesY, 0, 0); //zdecydowanie nie ma tak byc 
             plotno.Children.Add(u.punkt);
         }
 
