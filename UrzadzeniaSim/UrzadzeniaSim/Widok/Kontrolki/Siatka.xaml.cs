@@ -78,7 +78,20 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         }
 
         private void obliczPozycjePunktu(Urządzenie u) {
-            u.Margin = new System.Windows.Thickness(/*(double)u.Dlugosc + */marginesX, /*(double)u.Szerokosc +*/ marginesY, 0, 0); //zdecydowanie nie ma tak byc 
+            int dlugosc_minuty = (int)((u.dlugosc % 1) * 100);
+            int dlugosc_stopnie = (int)(u.dlugosc / 1);
+            double dlugosc_przesuniecie = 0;
+            if (dlugosc_stopnie == 14)
+            {
+                dlugosc_przesuniecie += ((double)(dlugosc_minuty - 7)) * krokX / 60.0;
+            }
+            else 
+            { 
+                dlugosc_przesuniecie += 53 * krokX / 60.0;
+                dlugosc_przesuniecie += (dlugosc_stopnie-15) * krokX + ((double)(dlugosc_minuty)) * krokX / 60.0;
+            }
+
+            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie, /*(double)u.Szerokosc +*/ marginesY, 0, 0); //zdecydowanie nie ma tak byc 
         }
         private void rysujUrządzenia() {
             foreach (Urządzenie u in urządzenia) {

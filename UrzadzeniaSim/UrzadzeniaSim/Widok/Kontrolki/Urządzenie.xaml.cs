@@ -20,8 +20,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     /// </summary>
     public partial class Urządzenie : UserControl
     {
-        decimal dlugosc;
-        decimal szerokosc;
+        public decimal dlugosc;
+        public decimal szerokosc;
         public Urządzenie(decimal dlugosc, decimal szerokosc)
         {
             InitializeComponent();
