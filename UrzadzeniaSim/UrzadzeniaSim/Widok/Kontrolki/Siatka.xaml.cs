@@ -52,6 +52,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             plotno.SizeChanged += (s, e) =>
             {
+                wysokosc_plotna = plotno.ActualHeight;
+                szerokosc_plotna = plotno.ActualWidth;
+
                 // 
                 pionowy_scroll.Value = pionowy_scroll.Minimum + ( pionowy_scroll.Maximum - pionowy_scroll.Minimum ) / 5;
                 double min = pionowy_scroll.Minimum;
@@ -61,10 +64,6 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 skalowanie.CenterY = wysokosc_plotna * (wartosc - min) / (max - min);
                 //
             
-                wysokosc_plotna = plotno.ActualHeight;
-                szerokosc_plotna = plotno.ActualWidth;
-
-
                 double skala_x = szerokosc_plotna / oryginalna_szerokosc;
                 double skala_y = wysokosc_plotna / oryginalna_wysokosc;
                 double skala = Math.Min(skala_x, skala_y);
@@ -78,9 +77,12 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         }
 
+        private void obliczPozycjePunktu(Urządzenie u) {
+            u.Margin = new System.Windows.Thickness(/*(double)u.Dlugosc + */marginesX, /*(double)u.Szerokosc +*/ marginesY, 0, 0); //zdecydowanie nie ma tak byc 
+        }
         private void rysujUrządzenia() {
             foreach (Urządzenie u in urządzenia) {
-                //tu dac ustawianie marginesu kazdego punktu tez
+                obliczPozycjePunktu(u);
                 plotno.Children.Add(u);
             }
         }
@@ -337,14 +339,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void dodajUrzadzenie(Urzadzenie_Model u) {
             urządzenia.Add(u.punkt);
-
-            u.punkt.Margin = new System.Windows.Thickness(/*(double)u.Dlugosc + */marginesX, /*(double)u.Szerokosc +*/ marginesY, 0, 0); //zdecydowanie nie ma tak byc 
+            obliczPozycjePunktu(u.punkt); 
             plotno.Children.Add(u.punkt);
         }
 
         public void dodajUrzadzenia(List<Urzadzenie_Model> urzadzenia) {
             foreach (Urzadzenie_Model u in urzadzenia) {
                 urządzenia.Add(u.punkt);
+                obliczPozycjePunktu(u.punkt); 
                 plotno.Children.Add(u.punkt);
             }
         }

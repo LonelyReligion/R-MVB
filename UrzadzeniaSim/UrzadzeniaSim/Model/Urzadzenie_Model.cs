@@ -6,7 +6,7 @@ namespace UrzadzeniaSim.Model
 {
     public class Urzadzenie_Model
     {
-        public Urządzenie punkt =  new Urządzenie(); //reprezentacja na ekranie
+        public Urządzenie punkt; //reprezentacja na ekranie
 
         //public static Repo repo;
         //public static Kontekst ctx;
@@ -24,8 +24,9 @@ namespace UrzadzeniaSim.Model
         //public virtual ICollection<Wersja> Wersje { get; set; }
 
         //metody
-        protected Urzadzenie_Model() { 
+        protected Urzadzenie_Model() {
             //Wersje = new HashSet<Wersja>();
+            punkt = new Urządzenie(0, 0);
         }
         public Urzadzenie_Model(int UrzadzenieID, (Decimal, Decimal) dlugosc_szerokosc) : this()
         {
@@ -33,11 +34,14 @@ namespace UrzadzeniaSim.Model
             Dlugosc = dlugosc_szerokosc.Item1;
             Szerokosc = dlugosc_szerokosc.Item2;
 
+            punkt = new Urządzenie(Dlugosc, Szerokosc);
+
             this.UrzadzenieID = UrzadzenieID;
         }
 
         public Urzadzenie_Model(int UrzadzenieID) : this() {
             this.UrzadzenieID = UrzadzenieID;
+            punkt = new Urządzenie(0, 0);
         }
 
         //rtree
