@@ -64,8 +64,15 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 double wartosc = pionowy_scroll.Value;
 
                 skalowanie.CenterY = wysokosc_plotna * (wartosc - min) / (max - min);
+
+                poziomy_scroll.Value = poziomy_scroll.Minimum + (poziomy_scroll.Maximum - poziomy_scroll.Minimum) / 5;
+                double min_h = poziomy_scroll.Minimum;
+                double max_h = poziomy_scroll.Maximum;
+                double wartosc_h = poziomy_scroll.Value;
+
+                skalowanie.CenterX = szerokosc_plotna * (wartosc_h - min_h) / (max_h - min_h);
                 //
-            
+
                 double skala_x = szerokosc_plotna / oryginalna_szerokosc;
                 double skala_y = wysokosc_plotna / oryginalna_wysokosc;
                 double skala = Math.Min(skala_x, skala_y);
@@ -101,7 +108,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             int szerokosc_stopnie = (int)(u.szerokosc / 1);
             double szerokosc_przesuniecie = (szerokosc_stopnie - 49) * krokY + ((double)(szerokosc_minuty)) * krokY / 60.0;
 
-            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - r/2, szerokosc_przesuniecie + marginesY - r/2, 0, 0); 
+            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - r/2, szerokosc_przesuniecie + wysokosc_plotna - marginesY - r/2, 0, 0); 
         }
         private void rysujUrządzenia() {
             foreach (Urządzenie u in urządzenia) {
@@ -186,9 +193,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 plotno.Children.Add(poludnik);
 
                 TextBlock opis = new TextBlock();
-                opis.Text = (15 + i).ToString() + "\u00B0";
+                opis.Text = (15 + i).ToString() + "\u00B0" + " E";
                 opis.FontSize = wielkosc_czcionki;
-                opis.Margin = new Thickness(poludnik.X1 + 1 - (wielkosc_czcionki/2), poludnik.Y1 - 15 - wielkosc_czcionki, 0, 0);
+                opis.Margin = new Thickness(poludnik.X1 - 8 - (wielkosc_czcionki/2), poludnik.Y1 - 15 - wielkosc_czcionki, 0, 0);
                 plotno.Children.Add(opis);
 
                 if (minuty_dlugosc && i != liczba_poludnikow_grubych - 1)
@@ -258,7 +265,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 plotno.Children.Add(rownoleznik);
 
                 TextBlock opis = new TextBlock();
-                opis.Text = (49 + i).ToString() + "\u00B0";
+                opis.Text = (49 + i).ToString() + "\u00B0" + " N";
                 opis.FontSize = wielkosc_czcionki;
                 opis.Margin = new Thickness(ostatni_poludnik_x + 20, rownoleznik.Y1 + 2 - wielkosc_czcionki, 0, 0);
                 plotno.Children.Add(opis);
