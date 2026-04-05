@@ -63,7 +63,7 @@ namespace RMVB_konsola
         }
 
         public (Decimal, Decimal) generujWspolrzedne() {
-            Decimal szerokosc = (Decimal)(rnd.Next(49, 54) * 10000);
+            Decimal szerokosc = (Decimal)(rnd.Next(49, 55) * 10000);
             if (szerokosc < 540000)
             {
                 szerokosc += rnd.Next(00, 59) * 100;
