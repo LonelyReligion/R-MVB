@@ -42,6 +42,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         double krokX;
         double krokY;
 
+        double r = 5; // domyslna szerokosc kola reprezentujacego urzadzenie 
+
         public Siatka()
         {
             InitializeComponent();
@@ -78,6 +80,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         }
 
         private void obliczPozycjePunktu(Urządzenie u) {
+            
+            if(u.ActualWidth != 0)
+                r = u.ActualWidth;
+
             int dlugosc_minuty = (int)((u.dlugosc % 1) * 100);
             int dlugosc_stopnie = (int)(u.dlugosc / 1);
             double dlugosc_przesuniecie = 0;
@@ -91,7 +97,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 dlugosc_przesuniecie += (dlugosc_stopnie-15) * krokX + ((double)(dlugosc_minuty)) * krokX / 60.0;
             }
 
-            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie, /*(double)u.Szerokosc +*/ marginesY, 0, 0); //zdecydowanie nie ma tak byc 
+            int szerokosc_minuty = (int)((u.szerokosc % 1) * 100);
+            int szerokosc_stopnie = (int)(u.szerokosc / 1);
+            double szerokosc_przesuniecie = (szerokosc_stopnie - 49) * krokY + ((double)(szerokosc_minuty)) * krokY / 60.0;
+
+            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - r/2, szerokosc_przesuniecie + marginesY - r/2, 0, 0); 
         }
         private void rysujUrządzenia() {
             foreach (Urządzenie u in urządzenia) {
@@ -107,7 +117,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             marginesY = wysokosc_plotna / 4.5;
 
             int liczba_poludnikow_grubych = 10;
-            int liczba_równoleżników_grubych = 5;
+            int liczba_równoleżników_grubych = 6;
+
+            //int liczba_minut_poludnik_pierwszy;
+            //int liczba_minut_polunik_ostatni;
+            //int liczba_minut_rownoleznik;
 
             double minutyX = (liczba_poludnikow_grubych - 1) * 60.0 + 2.0;
             krokX = 60 * (szerokosc_plotna - 2 * marginesX) / minutyX;

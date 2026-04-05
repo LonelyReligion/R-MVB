@@ -49,7 +49,7 @@ namespace UrzadzeniaSim
             (decimal x, decimal y) = generator.generujWspolrzedne();
             Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
 
-            Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(0, (15, 49));//new Urzadzenie_Model(0, (x,y));
+            Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(0, (x,y));
             siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
 
         }
