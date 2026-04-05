@@ -121,17 +121,18 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             //int liczba_minut_poludnik_pierwszy;
             //int liczba_minut_polunik_ostatni;
-            //int liczba_minut_rownoleznik;
+            double liczba_minut_rownoleznik = 50;
 
             double minutyX = (liczba_poludnikow_grubych - 1) * 60.0 + 2.0;
             krokX = 60 * (szerokosc_plotna - 2 * marginesX) / minutyX;
 
-            double minutyY = (liczba_równoleżników_grubych - 1) * 60.0 + 5.0;
-            krokY = 60 * (wysokosc_plotna - 2 * marginesY) / minutyY;
+            double minutyY = (liczba_równoleżników_grubych - 1) * 60.0 + liczba_minut_rownoleznik;
+            krokY = -60 * (wysokosc_plotna - 2 * marginesY) / minutyY;
 
             double pierwszy_poludnik_x = marginesX;
             double ostatni_poludnik_x = marginesX + (liczba_poludnikow_grubych) * krokX + 2.0 * (krokX / 60.0); // bo 53 min. + 9 min. =  1 st. 2 min.
-            double ostatni_rownoleznik_y = marginesY + (liczba_równoleżników_grubych - 1) * krokY + 5.0 / 60.0 * krokY;
+            double pierwszy_rownoleznik_y = wysokosc_plotna - marginesY + (liczba_równoleżników_grubych - 1) * krokY + liczba_minut_rownoleznik / 60.0 * krokY;
+            double ostatni_rownoleznik_y = wysokosc_plotna - marginesY;
 
             /* czy da sie jakos zrobic zeby bylo rowno?
             double margines_lewo = 100 - pierwszy_poludnik_x;
@@ -251,8 +252,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     StrokeThickness = grubosc_stopnie,
                     X1 = pierwszy_poludnik.X1,
                     X2 = ostatni_poludnik.X1,
-                    Y1 = marginesY + i * krokY,
-                    Y2 = marginesY + i * krokY
+                    Y1 = wysokosc_plotna - marginesY + i * krokY,
+                    Y2 = wysokosc_plotna - marginesY + i * krokY
                 };
                 plotno.Children.Add(rownoleznik);
 
@@ -281,7 +282,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
             
             if (minuty_szerokosc) {
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < liczba_minut_rownoleznik; j++)
                 {
                     Line minutka = new Line
                     {
@@ -290,24 +291,24 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                         StrokeThickness = grubosc_minuty,
                         X1 = pierwszy_poludnik.X1,
                         X2 = ostatni_poludnik.X1,
-                        Y1 = ostatni_rownoleznik_y - ((j + 1) * krokY / 60.0),
-                        Y2 = ostatni_rownoleznik_y - ((j + 1) * krokY / 60.0)
+                        Y1 = pierwszy_rownoleznik_y - ((j + 1) * krokY / 60.0),
+                        Y2 = pierwszy_rownoleznik_y - ((j + 1) * krokY / 60.0)
                     };
                     plotno.Children.Add(minutka);
                 }
             }
 
-            Line ostatni_rownoleznik = new Line
+            Line pierwszy_rownoleznik = new Line
             {
                 Visibility = Visibility.Visible,
                 Stroke = Brushes.Black,
                 StrokeThickness = grubosc_minuty,
                 X1 = pierwszy_poludnik_x,
                 X2 = ostatni_poludnik_x,
-                Y1 = ostatni_rownoleznik_y,
-                Y2 = ostatni_rownoleznik_y
+                Y1 = pierwszy_rownoleznik_y,
+                Y2 = pierwszy_rownoleznik_y
             };//ten 54 st. 5 min.
-            plotno.Children.Add(ostatni_rownoleznik);
+            plotno.Children.Add(pierwszy_rownoleznik);
         }
 
         public void powiekszSiatke(double powiekszenie) {
