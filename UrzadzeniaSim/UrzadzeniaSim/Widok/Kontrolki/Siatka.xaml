@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Canvas Name="plotno" Background="White" Grid.Column="0" >
+            <Canvas Name="plotno" Background="#fffffa" Grid.Column="0" >
                 <Canvas.RenderTransform>
                     <ScaleTransform x:Name="skalowanie"/>
                 </Canvas.RenderTransform>

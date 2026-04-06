@@ -120,7 +120,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         //Właściwie to siatka walcowa?
         private void rysujSiatkeGeograficzna()
         {
-            marginesX = szerokosc_plotna / 6;
+            marginesX = szerokosc_plotna / 16;
             marginesY = wysokosc_plotna / 4.5;
 
             int liczba_poludnikow_grubych = 10;
@@ -131,7 +131,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             double liczba_minut_rownoleznik = 50;
 
             double minutyX = (liczba_poludnikow_grubych - 1) * 60.0 + 2.0;
-            krokX = 60 * (szerokosc_plotna - 2 * marginesX) / minutyX;
+            krokX = 60 * (szerokosc_plotna - 4 * marginesX) / minutyX;
 
             double minutyY = (liczba_równoleżników_grubych - 1) * 60.0 + liczba_minut_rownoleznik;
             krokY = -60 * (wysokosc_plotna - 2 * marginesY) / minutyY;

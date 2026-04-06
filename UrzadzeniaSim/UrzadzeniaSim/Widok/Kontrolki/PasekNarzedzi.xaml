@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:UrzadzeniaSim.Widok.Kontrolki"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="800">
-    <Grid Name="pasek_narzedzi" Background="LightSteelBlue">
+    <Grid Name="pasek_narzedzi" Background="#5d576b">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="30"/>
@@ -16,7 +16,9 @@
             <MenuItem Header="Plik" FontSize="12">
                 <MenuItem Header="Zapisz"/>
                 <MenuItem Header="Wczytaj"/>
+                <MenuItem Header="Wyczyść"/>
             </MenuItem>
+                
             <MenuItem Header="Edytuj" FontSize="12">
                 <MenuItem Header="Dodaj"/>
                 <MenuItem Header="Usuń"/>
