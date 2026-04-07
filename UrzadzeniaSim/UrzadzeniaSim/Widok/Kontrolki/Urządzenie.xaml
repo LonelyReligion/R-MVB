@@ -8,11 +8,14 @@
              d:DesignHeight="10" d:DesignWidth="10">
     <Grid>
         <Ellipse
+            Width="6"
+            Height="6"
+            Fill="Transparent"
+        />
+        <Ellipse
             Width="5"
             Height="5"
             Fill="Blue"
-            Canvas.Left="135"
-            Canvas.Top="25"
         />
     </Grid>
 </UserControl>

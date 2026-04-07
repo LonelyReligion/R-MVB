@@ -20,6 +20,12 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     /// </summary>
     public partial class Urządzenie : UserControl
     {
+        public enum STATUS { 
+            NIEAKTYWNY,//wyszarzony?
+            AKTYWNY,
+            AKTYWNY_NADAJE
+        };
+
         public decimal dlugosc;
         public decimal szerokosc;
         public Urządzenie(decimal dlugosc, decimal szerokosc)

@@ -79,9 +79,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 
                 wielkosc_czcionki = (int)(skala * (double)bazowa_wielkosc_czcionki);
 
-                plotno.Children.Clear();
-                rysujSiatkeGeograficzna();
-                rysujUrządzenia(); //tylko widoczne urządzenia?
+                rysuj(); 
             };
 
         }
@@ -338,8 +336,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 minuty_dlugosc = false;
                 minuty_szerokosc = false;
 
-                plotno.Children.Clear();
-                rysujSiatkeGeograficzna();
+                rysuj();
             }
         }
 
@@ -361,15 +358,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void zmienDokladnoscPoludniki(bool taknie) { 
             minuty_dlugosc = taknie;
-            plotno.Children.Clear();
-            rysujSiatkeGeograficzna();
+            rysuj();
 
         }
 
         public void zmienDokladnoscRownolezniki(bool taknie) { 
             minuty_szerokosc = taknie;
-            plotno.Children.Clear();
-            rysujSiatkeGeograficzna();
+            rysuj();
+
         }
 
         public void dodajUrzadzenie(Urzadzenie_Model u) {
@@ -384,6 +380,12 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 obliczPozycjePunktu(u.punkt); 
                 plotno.Children.Add(u.punkt);
             }
+        }
+
+        private void rysuj() {
+            plotno.Children.Clear();
+            rysujSiatkeGeograficzna();
+            rysujUrządzenia(); //tylko widoczne urządzenia?
         }
     }
 }

@@ -26,6 +26,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public event Action<double> zmienionoPowiekszenie;
         public event Action<bool> zmienionoDokladnoscPoludniki;
         public event Action<bool> zmienionoDokladnoscRownolezniki;
+        
 
         public PasekNarzedzi()
         {
@@ -48,6 +49,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             else {
                 poludniki_minuta.IsEnabled = false;
                 rownolezniki_minuta.IsEnabled = false;
+
+                poludniki_minuta.IsChecked = false;
+                rownolezniki_minuta.IsChecked = false;
 
                 poludniki_minuta.ToolTip = "Aby zwiększyć dokładność ustaw powiększenie większe lub równe 250%";
                 rownolezniki_minuta.ToolTip = "Aby zwiększyć dokładność ustaw powiększenie większe lub równe 250%";
