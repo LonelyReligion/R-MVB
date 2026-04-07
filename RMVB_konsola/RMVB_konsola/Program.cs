@@ -52,6 +52,18 @@ catch
     return 0;
 }
 
+string minimalnaLiczbaUrzadzenWKorzeniu = ConfigurationManager.AppSettings.Get("min_urzadzen_korzen");
+try
+{
+    int minimalnaLiczbaUrzadzenWKorzeniu_int = int.Parse(minimalnaLiczbaUrzadzenWKorzeniu);
+    Korzen.min_urzadzen_korzen = minimalnaLiczbaUrzadzenWKorzeniu_int;
+}
+catch {
+    Console.WriteLine("Minimalna liczba urządzeń w korzeniu nie jest liczbą całkowitą.");
+    Console.WriteLine("Podaj poprawną liczbę urządzeń w korzeniu i spróbuj ponownie.");
+    return 0;
+}
+
 //
 Generatory.liczba_urzadzen = liczbaUrzadzen;
 Korzen.granica_przezywalnosci = (decimal)granicaPrzezywalnosci;

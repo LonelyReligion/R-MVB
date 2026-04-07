@@ -16,6 +16,7 @@ namespace RMVB_konsola.MVB
     {
         public static decimal granica_przezywalnosci;
         public static Kontekst ctx;
+        public static int min_urzadzen_korzen;
         TreeRepository repo;
 
         List<(int, Wpis)> wpisy; //po to zeby mozna bylo znalezc ostatni wezel szybko np.
@@ -56,7 +57,7 @@ namespace RMVB_konsola.MVB
 
         internal bool dodaj(Wersja u)
         {
-            if(liczba_urzadzen > 0 && zwrocPrzezywalnosc() < granica_przezywalnosci)
+            if(liczba_urzadzen > min_urzadzen_korzen && zwrocPrzezywalnosc() < granica_przezywalnosci)
                 return false;
 
             bool dodano = false;
@@ -288,7 +289,7 @@ namespace RMVB_konsola.MVB
 
             foreach (var wpis in wpisy)
             {
-                wpis.Item2.wezel.drukuj();
+                wyjsciowa.AddRange(wpis.Item2.wezel.drukuj());
             }
 
             wyjsciowa.Add("Przezywalnosc: " + zwrocPrzezywalnosc());
