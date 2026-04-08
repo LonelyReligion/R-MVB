@@ -9,7 +9,7 @@
         Title="Symulacja urządzeń" Height="450" Width="950"
         MinHeight="275" MinWidth="550"
         Name="okno">
-    <Grid Name="siatka" Background="#d496a7">
+    <Grid Name="siatka">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>
 
             <kontrolki:Siatka x:Name="siatkaWalcowa" Grid.Column="0"/>
-            <Button Name="przycisk_generuj" Content="Zaskocz mnie!"  Height="30" Width="100" Background="#fffffa" Click="GenerujLosoweUrzadzenie" Grid.Column="1"/>
+            <kontrolki:PanelBoczny DodajUrzadzenie="GenerujLosoweUrzadzenie" Grid.Column="1"/>
         </Grid>
         <kontrolki:PasekNarzedzi x:Name="pasekNarzedzi"  
                                  zmienionoPowiekszenie="powiedzOtymSiatce" 

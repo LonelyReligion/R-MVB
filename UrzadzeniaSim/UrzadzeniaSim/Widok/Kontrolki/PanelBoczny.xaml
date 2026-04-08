@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="UrzadzeniaSim.Widok.Kontrolki.PanelBoczny"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UrzadzeniaSim.Widok.Kontrolki"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="150">
+    <Grid Background="#d496a7">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+
+            <RowDefinition Height="*"/>
+
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Name="Label_ID" Content="UrzadzenieID:" Grid.Row="0" Margin="0,10,0,0"/>
+        <Label Name="Label_Dlugosc" Content="Długość:" Grid.Row="1"/>
+        <Label Name="Label_Szerokosc" Content="Szerokość:" Grid.Row="2"/>
+
+        <Button Name="przycisk_generuj" Content="Zaskocz mnie!"  Height="30" Width="100" Background="#fffffa" Click="ZlecGenerowanie" Grid.Row="4" Margin="0,0,0,10"/>
+    </Grid>
+</UserControl>
