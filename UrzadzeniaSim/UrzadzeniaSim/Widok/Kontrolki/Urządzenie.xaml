@@ -7,15 +7,24 @@
              mc:Ignorable="d" 
              d:DesignHeight="10" d:DesignWidth="10">
     <Grid>
-        <Ellipse
-            Width="6"
-            Height="6"
-            Fill="Transparent"
-        />
-        <Ellipse
-            Width="5"
-            Height="5"
-            Fill="Blue"
-        />
+        <Button Click="Zaznacz">
+            <Button.Template>
+                <ControlTemplate>
+                    <Grid>
+                        <Ellipse
+                            x:Name="zaznaczenie"
+                            Width="6"
+                            Height="6"
+                            Fill="Transparent"
+                        />
+                        <Ellipse
+                            Width="5"
+                            Height="5"
+                            Fill="Blue"
+                        />
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </UserControl>
