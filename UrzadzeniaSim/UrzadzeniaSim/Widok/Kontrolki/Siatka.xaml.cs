@@ -24,6 +24,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     public partial class Siatka : UserControl
     {
         public List<Urządzenie> urządzenia = new List<Urządzenie>();
+        private int numer_porzadkowy_zaznaczonego = -1;//przechowywac w urzadzeniu, niech sie przestawi po zaznaczeniu, wtedy poprzednie bedzie odznaczone, a nowy numer tu wpisany, to inny numer niz ten w bazie
 
         double wysokosc_plotna;
         double szerokosc_plotna;
@@ -264,7 +265,6 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 TextBlock opis = new TextBlock();
                 opis.Text = (49 + i).ToString() + "\u00B0" + " N";
-                opis.FontSize = wielkosc_czcionki;
                 opis.Margin = new Thickness(ostatni_poludnik_x + 20, rownoleznik.Y1 + 2 - wielkosc_czcionki, 0, 0);
                 plotno.Children.Add(opis);
 
