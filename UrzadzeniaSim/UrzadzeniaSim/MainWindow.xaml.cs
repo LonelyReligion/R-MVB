@@ -27,8 +27,6 @@ namespace UrzadzeniaSim
                 szerokosc_okna = okno.ActualWidth;
             };
 
-            
-
         }
 
         private void powiedzOtymSiatce(double powiekszenie) {

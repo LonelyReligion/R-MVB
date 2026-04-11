@@ -80,6 +80,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 
                 wielkosc_czcionki = (int)(skala * (double)bazowa_wielkosc_czcionki);
 
+                //
+                foreach(Urządzenie u in urządzenia) {
+                    u.Width = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+                    u.Height = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+                    obliczPozycjePunktu(u);
+                }
+                //
                 rysuj(); 
             };
 

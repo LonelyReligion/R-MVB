@@ -34,6 +34,8 @@ public partial class Urządzenie : UserControl
 
         private int id_siatka;
 
+        public const int oryg_szerokosc_wysokosc = 6;
+
         public Urządzenie(decimal dlugosc, decimal szerokosc)
         {
             InitializeComponent();

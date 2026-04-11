@@ -13,13 +13,17 @@
                     <Grid>
                         <Ellipse
                             x:Name="zaznaczenie"
-                            Width="6"
-                            Height="6"
+                            MinWidth="6"
+                            MinHeight="6"
+                            Stretch="Fill"
                             Fill="Transparent"
                         />
                         <Ellipse
-                            Width="5"
-                            Height="5"
+                            x:Name="kolko"
+                            Stretch="Fill"
+                            MinHeight="5"
+                            MinWidth="5"
+                            Margin="1,1,1,1"
                             Fill="Blue"
                         />
                     </Grid>
