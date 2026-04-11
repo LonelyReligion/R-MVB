@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="10" d:DesignWidth="10">
     <Grid>
-        <Button Click="Zaznacz">
+        <Button Name="przycisk" Click="Zaznacz">
             <Button.Template>
                 <ControlTemplate>
                     <Grid>

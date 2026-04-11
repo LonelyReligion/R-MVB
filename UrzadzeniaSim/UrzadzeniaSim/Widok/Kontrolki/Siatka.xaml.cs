@@ -370,15 +370,16 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void dodajUrzadzenie(Urzadzenie_Model u) {
             urządzenia.Add(u.punkt);
+            u.punkt.ustaw_id_siatka(urządzenia.Count - 1);
+            u.punkt.zaznaczono += zmianaZaznaczenia;
+
             obliczPozycjePunktu(u.punkt); 
             plotno.Children.Add(u.punkt);
         }
 
         public void dodajUrzadzenia(List<Urzadzenie_Model> urzadzenia) {
             foreach (Urzadzenie_Model u in urzadzenia) {
-                urządzenia.Add(u.punkt);
-                obliczPozycjePunktu(u.punkt); 
-                plotno.Children.Add(u.punkt);
+                dodajUrzadzenie(u);
             }
         }
 
@@ -386,6 +387,23 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             plotno.Children.Clear();
             rysujSiatkeGeograficzna();
             rysujUrządzenia(); //tylko widoczne urządzenia?
+        }
+
+        public void zmianaZaznaczenia(int id)
+        {
+            if (numer_porzadkowy_zaznaczonego == id)//odznaczamy
+            {
+                //tzn. nie potrzeba nic zmieniac w wyswietlaniu
+                numer_porzadkowy_zaznaczonego = -1;
+            }
+            else
+            {
+                if (numer_porzadkowy_zaznaczonego != -1)
+                {
+                    urządzenia[numer_porzadkowy_zaznaczonego].Odznacz();
+                }
+                numer_porzadkowy_zaznaczonego = id;
+            }
         }
     }
 }
