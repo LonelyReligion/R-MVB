@@ -31,7 +31,6 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         private double oryginalna_szerokosc;
 
         private const int bazowa_wielkosc_czcionki = 15;
-
         private string wielkosc_czcionki = "15";
         public string Wielkosc_czcionki 
         {
@@ -45,6 +44,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Wielkosc_czcionki"));
             } 
         }
+
+        private double oryginalna_wysokosc_przycisku = 30;
+        private double oryginalna_szerokosc_przycisku = 120;
 
         private bool mamy_wymiary = false;
         public PanelBoczny()
@@ -69,7 +71,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 double skala = Math.Min(skala_x, skala_y);
 
                 Wielkosc_czcionki = (skala * (double)bazowa_wielkosc_czcionki).ToString();
-                            
+                
+                przycisk_generuj.Height = oryginalna_wysokosc_przycisku * skala;
+                przycisk_generuj.Width = oryginalna_szerokosc_przycisku * skala;
+                przycisk_generuj.Margin = new Thickness(0, 0, 0, 10 * skala );
+
             };
         }
 
