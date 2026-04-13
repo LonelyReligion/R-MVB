@@ -410,6 +410,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     urządzenia[numer_porzadkowy_zaznaczonego].Odznacz();
                 }
                 numer_porzadkowy_zaznaczonego = id;
+
+                //musimy poinformowac panel boczny o id urządzenia, dlugosci i szerokosci
+                //id bierzemy z listy, kolejne elementy z bazy? repo? drzewa?
+
             }
         }
     }

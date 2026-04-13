@@ -21,11 +21,11 @@ namespace UrzadzeniaSim.Model
         public Decimal Dlugosc { get; set; }
         
         //wlasnosc nawigacyjna
-        //public virtual ICollection<Wersja> Wersje { get; set; }
+        public virtual ICollection<Wersja> Wersje { get; set; }
 
         //metody
         protected Urzadzenie_Model() {
-            //Wersje = new HashSet<Wersja>();
+            Wersje = new HashSet<Wersja>();
             punkt = new Urządzenie(0, 0);
         }
         public Urzadzenie_Model(int UrzadzenieID, (Decimal, Decimal) dlugosc_szerokosc) : this()
