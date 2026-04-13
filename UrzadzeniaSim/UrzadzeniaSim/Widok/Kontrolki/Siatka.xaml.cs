@@ -272,6 +272,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 TextBlock opis = new TextBlock();
                 opis.Text = (49 + i).ToString() + "\u00B0" + " N";
+                opis.FontSize = wielkosc_czcionki;
                 opis.Margin = new Thickness(ostatni_poludnik_x + 20, rownoleznik.Y1 + 2 - wielkosc_czcionki, 0, 0);
                 plotno.Children.Add(opis);
 
