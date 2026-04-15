@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using UrzadzeniaSim.Widok.Kontrolki;
+using UrzadzeniaSim.Model.DB;
 
 namespace UrzadzeniaSim.Model
 {
@@ -8,8 +9,9 @@ namespace UrzadzeniaSim.Model
     {
         public Urządzenie punkt; //reprezentacja na ekranie
 
-        //public static Repo repo;
-        //public static Kontekst ctx;
+        public static Repo repo;
+        public static Kontekst ctx;
+
         [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int UrzadzenieID { get; set; }

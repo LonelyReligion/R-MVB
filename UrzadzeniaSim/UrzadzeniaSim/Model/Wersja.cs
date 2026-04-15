@@ -4,12 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UrzadzeniaSim.Model.DB;
 
 namespace UrzadzeniaSim.Model
 {
     public class Wersja
     {
-/*        public static Kontekst ctx;*/
+        public static Kontekst ctx;
         [ForeignKey("UrzadzenieRodzic")]
         public int UrzadzenieID { get; set; }
 
@@ -23,7 +24,7 @@ namespace UrzadzeniaSim.Model
 /*        public virtual ICollection<Pomiar> Pomiary { get; set; }*/
         public virtual Urzadzenie_Model UrzadzenieRodzic { get; set; }
 
-/*        private Repo repo;*/
+        private Repo repo;
 
         //potrzebne do firstordefualt
         public Wersja() 
@@ -33,19 +34,19 @@ namespace UrzadzeniaSim.Model
             dataWygasniecia = DateTime.MaxValue;
             Aktywne = true;
         }
-/*        public Wersja(Repo r) : this()
+        public Wersja(Repo r) : this()
         {
             repo = r;
-        }*/
+        }
 
-/*        public Wersja(int UrzadzenieID, Repo r) : this(r)
+        public Wersja(int UrzadzenieID, Repo r) : this(r)
         {
             this.UrzadzenieID = UrzadzenieID;
             if (r.czyUrzadzenieIstnieje(UrzadzenieID) && r.pobierzUrzadzeniaWersje()[UrzadzenieID].Count() != 0)
             {
                 Wersja w = r.pobierzUrzadzeniaWersje()[UrzadzenieID].Last();
-                foreach (var element in w.Pomiary)
-                    this.Pomiary.Add(element);
+/*                foreach (var element in w.Pomiary)
+                    this.Pomiary.Add(element);*/
 
                 DateTime data_wprowadzenia_zmiany = DateTime.Now;
                 dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
@@ -54,31 +55,31 @@ namespace UrzadzeniaSim.Model
 
                 ustalWersje(this.UrzadzenieID, r);
             }
-        }*/
-
-        //czy istnieje taki przypadek
-/*        protected Wersja(DateTime start, DateTime koniec, Repo r) : this(r)
-        {
-            dataOstatniejModyfikacji = start;
-            dataWygasniecia = koniec;
-            ustalWersje(this.UrzadzenieID, repo);
         }
 
-        //konstruktor kopiujący
-        public Wersja(Wersja w, Repo r) : this(r) {
-            this.UrzadzenieID = w.UrzadzenieID;
-            
-            ustalWersje(this.UrzadzenieID, repo);
+        //czy istnieje taki przypadek
+        /*        protected Wersja(DateTime start, DateTime koniec, Repo r) : this(r)
+                {
+                    dataOstatniejModyfikacji = start;
+                    dataWygasniecia = koniec;
+                    ustalWersje(this.UrzadzenieID, repo);
+                }
 
-            foreach (var element in w.Pomiary)
-                this.Pomiary.Add(element);
+                //konstruktor kopiujący
+                public Wersja(Wersja w, Repo r) : this(r) {
+                    this.UrzadzenieID = w.UrzadzenieID;
 
-            DateTime data_wprowadzenia_zmiany = DateTime.Now;
-            dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
-            w.dataWygasniecia = data_wprowadzenia_zmiany;
-            dataWygasniecia = DateTime.MaxValue;
-            
-        }*/
+                    ustalWersje(this.UrzadzenieID, repo);
+
+                    foreach (var element in w.Pomiary)
+                        this.Pomiary.Add(element);
+
+                    DateTime data_wprowadzenia_zmiany = DateTime.Now;
+                    dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
+                    w.dataWygasniecia = data_wprowadzenia_zmiany;
+                    dataWygasniecia = DateTime.MaxValue;
+
+                }*/
 
         //przetestowac, ograniczyc
         //nie używać bezpośrednio!! tylko poprzez mvb
@@ -88,7 +89,7 @@ namespace UrzadzeniaSim.Model
             dataWygasniecia = DateTime.Now;
         }
 
-/*        private void ustalWersje(int UrzadzenieID, Repo repo)
+        private void ustalWersje(int UrzadzenieID, Repo repo)
         {
             var wersje = repo.pobierzUrzadzeniaWersje()[UrzadzenieID];
             if (!wersje.Any())
@@ -105,7 +106,7 @@ namespace UrzadzeniaSim.Model
             }
         }
 
-        public void dodajPomiar(Pomiar testowy)
+/*        public void dodajPomiar(Pomiar testowy)
         {
             testowy.WersjeUrzadzenia.Add(this);
             this.Pomiary.Add(testowy);
