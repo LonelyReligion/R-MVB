@@ -56,14 +56,6 @@ namespace RMVB_konsola
             }
         }
 
-        //czy istnieje taki przypadek
-        protected Wersja(DateTime start, DateTime koniec, Repo r) : this(r)
-        {
-            dataOstatniejModyfikacji = start;
-            dataWygasniecia = koniec;
-            ustalWersje(this.UrzadzenieID, repo);
-        }
-
         //konstruktor kopiujący
         public Wersja(Wersja w, Repo r) : this(r) {
             this.UrzadzenieID = w.UrzadzenieID;

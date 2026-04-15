@@ -57,29 +57,22 @@ namespace UrzadzeniaSim.Model
             }
         }
 
-        //czy istnieje taki przypadek
-        /*        protected Wersja(DateTime start, DateTime koniec, Repo r) : this(r)
-                {
-                    dataOstatniejModyfikacji = start;
-                    dataWygasniecia = koniec;
-                    ustalWersje(this.UrzadzenieID, repo);
-                }
+        //konstruktor kopiujący
+        public Wersja(Wersja w, Repo r) : this(r)
+        {
+            this.UrzadzenieID = w.UrzadzenieID;
 
-                //konstruktor kopiujący
-                public Wersja(Wersja w, Repo r) : this(r) {
-                    this.UrzadzenieID = w.UrzadzenieID;
+            ustalWersje(this.UrzadzenieID, repo);
 
-                    ustalWersje(this.UrzadzenieID, repo);
+/*            foreach (var element in w.Pomiary)
+                this.Pomiary.Add(element);
+*/
+            DateTime data_wprowadzenia_zmiany = DateTime.Now;
+            dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
+            w.dataWygasniecia = data_wprowadzenia_zmiany;
+            dataWygasniecia = DateTime.MaxValue;
 
-                    foreach (var element in w.Pomiary)
-                        this.Pomiary.Add(element);
-
-                    DateTime data_wprowadzenia_zmiany = DateTime.Now;
-                    dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
-                    w.dataWygasniecia = data_wprowadzenia_zmiany;
-                    dataWygasniecia = DateTime.MaxValue;
-
-                }*/
+        }
 
         //przetestowac, ograniczyc
         //nie używać bezpośrednio!! tylko poprzez mvb

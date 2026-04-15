@@ -34,11 +34,7 @@ namespace RMVB_konsola
             
             ctx.Wersje.AddOrUpdate(v);
             urzadzenia_wersje[v.UrzadzenieID].Add(v);
-            
-            //test
-            urzadzenia[v.UrzadzenieID].Wersje.Add(v);
-            //
-            
+
             wersje.Add(v);
             base.saveVersion(v);
         }
