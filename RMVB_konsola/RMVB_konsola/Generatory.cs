@@ -27,7 +27,7 @@ namespace RMVB_konsola
             int stopnie = ((int)wejsciowa / 1);
             int minuty = (int)(wejsciowa % 1 / 0.01m);
             
-            return stopnie * 3600 + minuty * 60;
+            return stopnie * 60 + minuty;
         }
 
         private Decimal minutyNaStopnie(int wejsciowa) {
@@ -46,7 +46,7 @@ namespace RMVB_konsola
                 //w minutach: 5 * 60 + 50 = 360
                 int szerokosc_w_minutach = stopnieNaMinuty(szerokosc);
                 szerokosc_w_minutach += 360 / liczba_urzadzen;
-                szerokosc = minutyNaStopnie(szerokosc_w_minutach);
+                szerokosc = minutyNaStopnie(szerokosc_w_minutach); 
 
                 //rozciaglosc rownoleznikowa to 10 st. 2 min.
                 //w minutach: 10 * 60 + 2 = 602
