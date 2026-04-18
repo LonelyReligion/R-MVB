@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using RMVB_konsola.R;
@@ -10,8 +11,8 @@ namespace RMVB_konsola
     //singleton?
     internal class Generatory
     {
-        private static Decimal szerokosc = 49.00m; //czy to nalezy do drzewa?
-        private static Decimal dlugosc = 14.07m; //czy to nalezy do drzewa?
+        private const Decimal poczatkowa_szerokosc = 49.00m; //czy to nalezy do drzewa?
+        private const Decimal poczatkowa_dlugosc = 14.07m; //czy to nalezy do drzewa?
 
         public static int liczba_urzadzen;
         private static Random rnd = new Random();
@@ -21,6 +22,7 @@ namespace RMVB_konsola
         public Generatory (Repo repozytorium)
         {
             this.repo = repozytorium;
+            generujWspolrzedneDeterministycznie();
         }
 
         private int stopnieNaMinuty(Decimal wejsciowa) {
@@ -37,26 +39,51 @@ namespace RMVB_konsola
             return stopnie + minuty * 0.01m;
         }
 
-        //rozklad jednostajny (dyskretny?)
-        public (Decimal, Decimal) generujWspolrzedneDeterministycznie()
-        {
-            if (!pierwszy)
-            {
-                //rozciaglosc poludnikowa to 5 st. 50 min.
-                //w minutach: 5 * 60 + 50 = 360
-                int szerokosc_w_minutach = stopnieNaMinuty(szerokosc);
-                szerokosc_w_minutach += 360 / liczba_urzadzen;
-                szerokosc = minutyNaStopnie(szerokosc_w_minutach); 
+        private List<(decimal, decimal)> wspolrzedne = new List<(decimal, decimal)>();
 
-                //rozciaglosc rownoleznikowa to 10 st. 2 min.
-                //w minutach: 10 * 60 + 2 = 602
-                int dlugosc_w_minutach = stopnieNaMinuty(dlugosc);
-                dlugosc_w_minutach += 602 / liczba_urzadzen;
-                dlugosc = minutyNaStopnie(dlugosc_w_minutach);
+        //rozklad jednostajny (dyskretny?)
+        //wiesz co, ztablicujemy to 
+        public void generujWspolrzedneDeterministycznie()
+        {
+            //rozciaglosc poludnikowa to 5 st. 50 min.
+            //w minutach: 5 * 60 + 50 = 360
+            int szerokosc_w_minutach = stopnieNaMinuty(poczatkowa_szerokosc);
+
+            //rozciaglosc rownoleznikowa to 10 st. 2 min.
+            //w minutach: 10 * 60 + 2 = 602
+            int dlugosc_w_minutach = stopnieNaMinuty(poczatkowa_dlugosc);
+                
+            double max_double = Math.Sqrt(liczba_urzadzen);
+            int max_i, max_j;
+
+            if (max_double % 1 == 0)
+            {
+                max_i = (int) max_double;
+                max_j = (int) max_double;
             }
-            pierwszy = false;
-            return (dlugosc, szerokosc);
+            else
+            {
+                double wartosc_poczatkowa = Math.Floor(max_double);
+                while (liczba_urzadzen % wartosc_poczatkowa != 0) {
+                    wartosc_poczatkowa--;
+                }
+                max_i = (int) wartosc_poczatkowa;
+                max_j = (int) (liczba_urzadzen / wartosc_poczatkowa);
+            }
+
+                
+            for (int i = 0; i < max_i; i++) {
+                for (int j = 0; j < max_j; j++) {
+                    wspolrzedne.Add((minutyNaStopnie(dlugosc_w_minutach + j * 602 / max_j), minutyNaStopnie(szerokosc_w_minutach + i * 360 / max_i)));
+                }
+            }
         }
+
+        private int index = 0;
+        public (decimal, decimal) zwrocNoweWspolrzedneDeterministyczne() {
+            return wspolrzedne[index++];
+        }
+
 
         public (Decimal, Decimal) generujWspolrzedne() {
             Decimal szerokosc = (Decimal)(rnd.Next(49, 55) * 100);

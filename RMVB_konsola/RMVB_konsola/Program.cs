@@ -97,7 +97,7 @@ foreach (var plik in sciezkiPlikow)
 //
 
 // Urzadzenie 0v0
-Urzadzenie testowe = new Urzadzenie(0, generator.generujWspolrzedneDeterministycznie());//new Urzadzenie(0, generator.generujWspolrzedne());
+Urzadzenie testowe = new Urzadzenie(0, generator.zwrocNoweWspolrzedneDeterministyczne());//new Urzadzenie(0, generator.generujWspolrzedne());
 rmvb.dodajUrzadzenie(testowe);
 
 Pomiar testowy = new Pomiar(0, DateTime.Now);
@@ -121,7 +121,7 @@ for (int i = 0; i < liczbaUrzadzen; i++)
 {
     int id = i % liczbaUrzadzen;
     if (!rmvb.czyUrzadzenieIstnieje(id)) {
-        Urzadzenie testowe1 =  new Urzadzenie(id, generator.generujWspolrzedneDeterministycznie());//new Urzadzenie(id, generator.generujWspolrzedne());
+        Urzadzenie testowe1 =  new Urzadzenie(id, generator.zwrocNoweWspolrzedneDeterministyczne());//new Urzadzenie(id, generator.generujWspolrzedne());
         rmvb.dodajUrzadzenie(testowe1);
     }
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
