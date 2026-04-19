@@ -20,4 +20,10 @@ Efektem działania programu są następujące pliki:
 * App.config &mdash; domyślne wartości konfiguracyjne
 
 # UrzadzeniaSim
-(ta część jest obecnie w budowie)
+Interfejs graficzny &mdash; w budowie.
+
+## Technologie
+* EF6
+* C#
+* LINQ
+* WPF
