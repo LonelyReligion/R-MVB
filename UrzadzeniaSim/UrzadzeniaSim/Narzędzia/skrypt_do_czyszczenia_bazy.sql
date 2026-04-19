@@ -1,0 +1,5 @@
+﻿USE master;
+
+ALTER DATABASE [UrzadzeniaSim.Kontekst] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+
+DROP DATABASE [UrzadzeniaSim.Kontekst];
