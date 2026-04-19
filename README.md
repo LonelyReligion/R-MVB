@@ -22,7 +22,7 @@ Efektem działania programu są następujące pliki:
 # UrzadzeniaSim
 Interfejs graficzny &mdash w budowie.
 
-##Technologie
+## Technologie
 * EF6
 * C#
 * LINQ
