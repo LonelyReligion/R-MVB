@@ -7,12 +7,15 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using UrzadzeniaSim.Widok.Kontrolki;
 using UrzadzeniaSim.Model;
-using UrzadzeniaSim.Narzędzia;
+using UrzadzeniaSim.Narzedzia;
+using UrzadzeniaSim.Model.DB;
+
 namespace UrzadzeniaSim
 {
     public partial class MainWindow : Window
     {
-        Generatory generator = new Generatory();
+        Repo repozytorium = new Repo();
+        Generatory generator;
 
         double wysokosc_okna;
         double szerokosc_okna;
@@ -20,6 +23,8 @@ namespace UrzadzeniaSim
         public MainWindow()
         {
             InitializeComponent();
+
+            generator = new Generatory(repozytorium);
 
             okno.SizeChanged += (s, e) =>
             {

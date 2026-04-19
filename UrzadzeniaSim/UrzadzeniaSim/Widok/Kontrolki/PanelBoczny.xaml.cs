@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using UrzadzeniaSim.Model;
-using UrzadzeniaSim.Narzędzia;
+using UrzadzeniaSim.Narzedzia;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
