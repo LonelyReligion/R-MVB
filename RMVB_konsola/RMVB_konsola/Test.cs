@@ -10,6 +10,7 @@ using System.Data;
 using System.Collections;
 using RMVB_konsola.R;
 using System.Diagnostics.Metrics;
+using System.Diagnostics.Eventing.Reader;
 
 //singleton, test bedzie wykonywany jednowatkowo stąd brak dodatkowego zabezpieczenia
 namespace RMVB_konsola
@@ -186,10 +187,41 @@ namespace RMVB_konsola
                         ile_r[i] + " (r)");
                     bledy.Add("Współrzędne prostokąta: " + "xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
                     "xMax(" + szukane[i].YMin + "), " + "yMax(" + szukane[i].YMax + ")");
-                    bledy.Add("Obliczone wartości: " + "Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
+
+                    if (resultDB[i] == resultRTree[i])
+                    {
+                        Console.WriteLine("Obliczone wartości SĄ ZBIEŻNE");
+                        bledy.Add("Obliczone wartości SĄ ZBIEŻNE");
+                    }
+                    else
+                    {
+                        bledy.Add("Obliczone wartości: " + "Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
+                    }
                 }
+                else if (resultDB[i] != resultRTree[i])
+                {
+                    if (blad == false) //powinno wykonać się tylko raz :)
+                    {
+                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu agregatu powierzchniowego. Poprzednie testy przebiegły pomyślnie, kolejne nie zostały zrealizowane.");
+                        bledy.Add("Komunikat(y) błędu(ów): \n");
+                    }
+
+                    Console.WriteLine("Mamy rozbieznosc miedzy wartościami agregatu: " + resultDB[i] + " (baza) " +
+                        resultRTree[i] + " (r)");
+                    //rmvb.szukajAgregatu(szukane[i]);
+                    blad = true;
+                    rmvb.szukajAgregatu(szukane[i]);
+
+                    bledy.Add("Mamy rozbieznosc miedzy wartościami agregatu: " + "Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
+                    bledy.Add("Współrzędne prostokąta: " + "xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
+                    "xMax(" + szukane[i].YMin + "), " + "yMax(" + szukane[i].YMax + ")");
+                    bledy.Add("Liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i]);
+
+                }
+
                 Console.WriteLine("**********************************");
             }
+            
             if (!blad)
             {
                 Console.WriteLine("CZASY:    Recznie: " + wynik + " vs " + "RMVB: " + wynik3);

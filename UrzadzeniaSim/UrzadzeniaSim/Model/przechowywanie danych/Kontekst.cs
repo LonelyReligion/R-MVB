@@ -10,10 +10,14 @@ namespace UrzadzeniaSim.Model.DB
 {
     public class Kontekst : DbContext
     {
-        public Kontekst() : base() {}
-/*        public DbSet<Pomiar> Pomiary { get; set; }*/
-/*        public DbSet<Srednia> Srednie { get; set; }
-*/        public DbSet<Urzadzenie_Model> Urzadzenia { get; set; }
+        public Kontekst() : base() {
+            //Database.SetInitializer<Kontekst>(new DropCreateDatabaseAlways<Kontekst>());
+        }
+
+        //public DbSet<Pomiar> Pomiary { get; set; }
+        //public DbSet<Srednia> Srednie { get; set; }
+        
+        public DbSet<Urzadzenie_Model> Urzadzenia { get; set; }
         public DbSet<Wersja> Wersje { get; set; }
         public DbSet<SpaceAggregate> SpaceAggregates { get; set; }
         public DbSet<TimeAggregate> TimeAggregates { get; set; }
@@ -55,5 +59,6 @@ namespace UrzadzeniaSim.Model.DB
 
             base.OnModelCreating(modelBuilder);
         }
+
     }
 }

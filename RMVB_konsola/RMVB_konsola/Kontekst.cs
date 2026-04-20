@@ -10,7 +10,9 @@ namespace RMVB_konsola
 {
     public class Kontekst : DbContext
     {
-        public Kontekst() : base() {}
+        public Kontekst() : base() {
+            Database.SetInitializer<Kontekst>(new DropCreateDatabaseAlways<Kontekst>());
+        }
         public DbSet<Pomiar> Pomiary { get; set; }
         public DbSet<Srednia> Srednie { get; set; }
         public DbSet<Urzadzenie> Urzadzenia { get; set; }
