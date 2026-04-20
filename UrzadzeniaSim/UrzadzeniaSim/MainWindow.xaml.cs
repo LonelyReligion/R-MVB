@@ -9,11 +9,13 @@ using UrzadzeniaSim.Widok.Kontrolki;
 using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Narzedzia;
 using UrzadzeniaSim.Model.DB;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace UrzadzeniaSim
 {
     public partial class MainWindow : Window
     {
+        Kontekst ctx = new Kontekst();
         Repo repozytorium = new Repo();
         Generatory generator;
 
@@ -24,7 +26,13 @@ namespace UrzadzeniaSim
         {
             InitializeComponent();
 
+            // Inicjowanie 
             generator = new Generatory(repozytorium);
+            Wersja.ctx = ctx;
+            InDBStorage.ctx = ctx;
+            Repo.ctx = ctx;
+            Urzadzenie_Model.ctx = ctx;
+            //
 
             okno.SizeChanged += (s, e) =>
             {

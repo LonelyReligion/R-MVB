@@ -87,25 +87,28 @@ namespace UrzadzeniaSim.Model
         {
             return (liczba_uwzglednionych, suma);
         }
-/*
-        public Pomiar LastMeasurement()
-        {
-            // test
-            bool isValid = IsMeasurementValid();
-            //Urzadzenie thisDevice = ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First();
-            //return isValid ? thisDevice.Wersje.Last().Pomiary.Last() : null;
-            //
-            //return isValid ? Wersje.Last().Pomiary.Last() : null;
-            return isValid ? repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Last() : null;
-        }*/
-/*        public bool IsMeasurementValid()
+        /*
+                public Pomiar LastMeasurement()
+                {
+                    // test
+                    bool isValid = IsMeasurementValid();
+                    //Urzadzenie thisDevice = ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First();
+                    //return isValid ? thisDevice.Wersje.Last().Pomiary.Last() : null;
+                    //
+                    //return isValid ? Wersje.Last().Pomiary.Last() : null;
+                    return isValid ? repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Last() : null;
+                }*/
+        public bool IsMeasurementValid()
         {
             // test
             //return ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First().Wersje.Last().Pomiary.Count > 0;
             //
             //return Wersje.Last().Pomiary.Count > 0;
-            return repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Count > 0;
-        }*/
+            
+            return false;
+
+            //return repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Count > 0;
+        }
 
         public bool IsTimeAggregateValid()
         {

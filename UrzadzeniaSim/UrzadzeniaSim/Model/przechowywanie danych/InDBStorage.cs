@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UrzadzeniaSim.Model.DB;
+using UrzadzeniaSim.Model.RMVB.R;
 
 namespace UrzadzeniaSim.Model.DB
 {
@@ -43,12 +44,13 @@ namespace UrzadzeniaSim.Model.DB
             ctx.SaveChanges();
         }*/
 
-/*        public void saveSpaceAggregate(SpaceAggregate spaceAggregate)
+        public void saveSpaceAggregate(SpaceAggregate spaceAggregate)
         {
             ctx.SpaceAggregates.Add(spaceAggregate);
             ctx.SaveChanges();
         }
 
+        /*
         public void saveSrednia(Srednia srednia)
         {
             ctx.Srednie.Add(srednia);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UrzadzeniaSim.Model.RMVB.R;
 
 namespace UrzadzeniaSim.Model.DB
 {
@@ -11,12 +12,12 @@ namespace UrzadzeniaSim.Model.DB
         void saveDevice(Urzadzenie_Model device);
         void saveVersion(Wersja version);
 
-/*        void saveMeasurement(Pomiar measure);
+        //void saveMeasurement(Pomiar measure);
 
-        void saveTimeAggregate(TimeAggregate timeAggregate);
+        //void saveTimeAggregate(TimeAggregate timeAggregate);
 
         void saveSpaceAggregate(SpaceAggregate spaceAggregate);
 
-        void saveSrednia(Srednia srednia);*/
+        //void saveSrednia(Srednia srednia);
     }
 }

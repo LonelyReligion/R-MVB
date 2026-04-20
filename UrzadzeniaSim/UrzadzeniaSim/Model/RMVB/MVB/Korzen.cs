@@ -1,0 +1,487 @@
+﻿using Microsoft.SqlServer.Server;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Diagnostics.Metrics;
+using System.Drawing.Printing;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+using UrzadzeniaSim.Model.DB;
+
+namespace UrzadzeniaSim.Model.RMVB.MVB
+{
+    internal class Korzen
+    {
+        public static decimal granica_przezywalnosci;
+        public static Kontekst ctx;
+        public static int min_urzadzen_korzen;
+        TreeRepository repo;
+
+        List<(int, Wpis)> wpisy; //po to zeby mozna bylo znalezc ostatni wezel szybko np.
+
+        int liczba_urzadzen = 0;
+        //parametry drzewa, sa zdefiniowane w klasie drzewa
+        static double Pversion;
+
+        internal Korzen(TreeRepository repo, double pversion)
+        {
+            wpisy = new List<(int, Wpis)>();
+            this.repo = repo;
+
+            Pversion = pversion;
+        }
+        public decimal zwrocPrzezywalnosc() { 
+            int liczba_zywych = 0;
+            int liczba = 0;
+            for (int i = 0; i < wpisy.Count; i++)
+            {
+                liczba_zywych += wpisy[i].Item2.wezel.liczbaZywych();
+                liczba += wpisy[i].Item2.wezel.urzadzenia.Count();
+            }
+            return Decimal.Divide(liczba_zywych, liczba);
+        }
+        public List<Wersja> zwrocZywe() {
+            List<Wersja> zywe = new List<Wersja>();
+            for (int i = 0; i < wpisy.Count; i++)
+            {
+                zywe.AddRange(wpisy[i].Item2.wezel.pobierzZyweUrzadzenia());
+            }
+            return zywe;
+
+        }
+        internal int zwrocLiczbeWpisow() {
+            return wpisy.Count();
+        }
+
+        internal bool dodaj(Wersja u)
+        {
+            if(liczba_urzadzen > min_urzadzen_korzen && zwrocPrzezywalnosc() < granica_przezywalnosci)
+                return false;
+
+            bool dodano = false;
+            if (wpisy.Count() == 0)
+            {
+                Wezel nowy = new Wezel();
+                nowy.dodaj(u);
+                wpisy.Add((wpisy.Count, new Wpis(u.UrzadzenieID, u.UrzadzenieID, u.dataOstatniejModyfikacji, u.dataWygasniecia, nowy)));
+                liczba_urzadzen++;
+                return true;
+            }
+            else
+            {
+                bool znalezlismy = false;
+                int numer_wezla = wpisy.Count - 1; //do tego powinnismy wstawic jezeli nie nalezy
+                //do zadnego przedzialu
+
+                for (int i = wpisy.Count - 1; i >= 0 ; i--) //szukamy od najnowszych do najstarszych
+                {
+                    //czy nalezy do odp przedzialu kluczy
+                    if (!znalezlismy && wpisy[i].Item2.maxKlucz >= u.UrzadzenieID && wpisy[i].Item2.minKlucz <= u.UrzadzenieID) //uwzglednic tez daty?
+                    {
+                        numer_wezla = i;
+                        if (wpisy[i].Item2.wezel.dodaj(u)) //czy jest miejsce
+                        {
+                            //czy to sie wgl wykona kiedykolwiek?
+                            if (wpisy[i].Item2.minKlucz > u.UrzadzenieID)
+                                wpisy[i].Item2.minKlucz = u.UrzadzenieID;
+                            else if (wpisy[i].Item2.maxKlucz < u.UrzadzenieID)
+                                wpisy[i].Item2.maxKlucz = u.UrzadzenieID;
+
+                            if (wpisy[i].Item2.minData > u.dataOstatniejModyfikacji)
+                                wpisy[i].Item2.minData = u.dataOstatniejModyfikacji;
+                            else if (wpisy[i].Item2.maxData < u.dataWygasniecia)
+                                wpisy[i].Item2.maxData = u.dataWygasniecia;
+
+                            dodano = true;
+                            break;
+                        }
+                        znalezlismy = true;
+                    }
+                }
+
+                //jezeli nie dodano i id nie jest wieksze niz maxId ostatniego wezla lub on sam nie ma miejsca do wstawienia
+                if (!dodano && !(/*numer_wezla == wpisy.Count - 1 &&*/ (dodano = wpisy[numer_wezla].Item2.wezel.dodaj(u))))
+                {
+                    //wezel jest pelny
+                    bool wynik = versionSplit(numer_wezla, u);
+                    if (wynik) liczba_urzadzen++;
+                    return wynik;
+                }
+                else {
+                    if (wpisy[numer_wezla].Item2.minKlucz > u.UrzadzenieID)
+                        wpisy[numer_wezla].Item2.minKlucz = u.UrzadzenieID;
+                    else if (wpisy[numer_wezla].Item2.maxKlucz < u.UrzadzenieID)
+                        wpisy[numer_wezla].Item2.maxKlucz = u.UrzadzenieID;
+
+                    if (wpisy[numer_wezla].Item2.minData > u.dataOstatniejModyfikacji)
+                        wpisy[numer_wezla].Item2.minData = u.dataOstatniejModyfikacji;
+                    else if (wpisy[numer_wezla].Item2.maxData < u.dataWygasniecia)
+                        wpisy[numer_wezla].Item2.maxData = u.dataWygasniecia;
+                }
+            }
+            if (dodano) liczba_urzadzen++;
+            return dodano;
+        }
+
+        //dla POTENCJALNEGO węzła
+        internal bool strongVersionOverflow(int rozm_listy) {
+            return rozm_listy > Wezel.pojemnoscWezla * Wezel.Psvo;
+        }
+        private bool strongVersionUnderflow(int count)
+        {
+            //zalozenie -- w liscie sa same zywe
+            return count < Wezel.pojemnoscWezla * Wezel.Psvu;
+        }
+
+        internal bool versionSplit(int numer_wezla, Wersja u)
+        {
+            //version split
+            List<Wersja> kopie = new List<Wersja>();
+            if (u != null) kopie.Add(u);
+            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.urzadzenia) 
+            {
+                if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
+                { //kopiujemy zywe
+                    Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo); 
+                    urzadzenie.Item2.dataWygasniecia = DateTime.Now;
+                    kopia.dataOstatniejModyfikacji = DateTime.Now;
+                    kopie.Add(kopia);
+
+                    repo.saveVersion(kopia); 
+                }
+            }
+            //posortuj liste po id 
+            var posortowanaLista = kopie.OrderBy(q => q.UrzadzenieID);
+            
+ 
+            wpisy[numer_wezla].Item2.maxData = DateTime.Now;
+
+            //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
+            if (strongVersionOverflow(posortowanaLista.ToList().Count))
+            {
+                keySplit(posortowanaLista);
+                return true;
+            }
+            else
+            {
+                //Strong version underflows are similar to weak version
+                //underflows, the only difference being that the former
+                //happen after a version split, while the latter occur when
+                //the weak version condition is violated.
+                if (strongVersionUnderflow(posortowanaLista.Count())) //po version split w wezle 1 są same żywe czyli jest miejsce
+                {
+                    var posortowaneZywe = Enumerable.Empty<Wersja>();
+
+                    //a merge is attempted with the copy of a sibling node using only its live entries
+
+                    //dodalismy na koniec, wiec sąsiad to przedostatni węzeł
+                    //dodajemy same zywe wpisy z przedostatniego i zmieniamy daty obowiazywania wersji aż nie przedobrzymy, ale tym sie zajmuje .dodaj() ;)
+                    if (wpisy.Count >= 2)
+                    {
+                        List<Wersja> dzieci_sasiada = wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia() != null ? wpisy[wpisy.Count - 2].Item2.wezel.pobierzZyweUrzadzenia() : new List<Wersja>();
+
+                        List<Wersja> zywe = new List<Wersja>(); //zawiera zywe
+                        List<Wersja> lista_zmaterializowana = dzieci_sasiada.ToList();
+                        foreach (var urzadzenie in lista_zmaterializowana)
+                        {
+                            if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
+                            { 
+                                //kopiujemy zywe
+                                Wersja kopia = new Wersja(urzadzenie, (Repo)repo);
+                                urzadzenie.dataWygasniecia = DateTime.Now;
+                                kopia.dataOstatniejModyfikacji = DateTime.Now;
+                                zywe.Add(kopia);
+                                repo.saveVersion(kopia);
+
+                            }
+                        }
+                        zywe.AddRange(kopie);//byly kopiowane wyzej juz, nie dodawane
+                        //posortuj liste po id 
+                        posortowaneZywe = zywe.OrderBy(q => q.UrzadzenieID);
+
+                        this.wpisy[wpisy.Count - 2].Item2.maxData = DateTime.Now;
+                    }
+                    else //nie ma sasiada
+                    {
+                        dodajZlisty(kopie);
+                        return true;
+                    };
+
+                    //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
+                    if (strongVersionOverflow(posortowaneZywe.ToList().Count))
+                    {
+                        keySplit(posortowaneZywe);
+                        return true;
+                    }
+                    else if (posortowaneZywe.Count() != 0)
+                    {
+                        //a jezeli dalej underflow no to chyba juz trudno? innego sasiada nie ma
+                        dodajZlisty(posortowaneZywe);
+                        return true;
+                    }
+                    
+                }
+                else
+                {
+                    dodajZlisty(posortowanaLista);
+                    return true;
+                };
+            }
+            return false;
+        }
+        
+        //nietestowane
+        internal void keySplit(IEnumerable<Wersja> kopie)
+        {
+            var drugi_wezel = kopie.OrderBy(q => q.UrzadzenieID).Skip(kopie.ToList().Count/2);
+            var pierwszy_wezel = kopie.Except(drugi_wezel);
+
+            dodajZlisty(pierwszy_wezel);
+            dodajZlisty(drugi_wezel);
+        }
+
+        //do używania tylko wewnątrz metody .dodaj() i .versionSplit()!
+        //tworzy nowy wezel z datami (data utworzenia, max_data], dodaje do niego urzadzenia z listy, dodaje wezel do drzewa
+        private Wezel dodajZlisty(IEnumerable<Wersja> lista) {
+            Wezel nowy = new Wezel();
+            foreach (Wersja urzadzenie in lista)
+            {
+                nowy.dodaj(urzadzenie);
+            }
+
+            //dodaj wpis
+            wpisy.Add((wpisy.Count, new Wpis(lista.First().UrzadzenieID, lista.Last().UrzadzenieID, lista.OrderBy(q => q.dataOstatniejModyfikacji).First().dataOstatniejModyfikacji, lista.OrderBy(q => q.dataWygasniecia).Last().dataWygasniecia, nowy)));
+            return nowy;
+        }
+
+        internal List<String> drukuj()
+        {
+            List<String> wyjsciowa = new List<string>();
+            wyjsciowa.Add("Korzen");
+            if (wpisy.Count == 0)
+            {
+                wyjsciowa.Add("******");
+                wyjsciowa.Add("*    *");
+                wyjsciowa.Add("******");
+            }
+            else
+            {
+                List<String> wynikowy = new List<String>();
+                for (int i = 0; i < wpisy.Count; i++)
+                {
+                    wynikowy.Add("<" + wpisy[i].Item2.minKlucz.ToString() + "," + wpisy[i].Item2.maxKlucz.ToString() + "," + wpisy[i].Item2.minData.ToString() + "," + wpisy[i].Item2.maxData.ToString() + "," + wpisy[i].Item2.wezel.id + ">");
+                }
+                int max = wynikowy.Max(x => x.Length);
+                String pozioma = "";
+                for (int i = -2; i < max; i++)
+                {
+                    pozioma += "*";
+                }
+                wyjsciowa.Add(pozioma);
+                for (int i = 0; i < wynikowy.Count; i++)
+                {
+                    wyjsciowa.Add("*" + wynikowy[i] + "*");
+                }
+                wyjsciowa.Add(pozioma);
+            }
+
+            foreach (var wpis in wpisy)
+            {
+                wyjsciowa.AddRange(wpis.Item2.wezel.drukuj());
+            }
+
+            wyjsciowa.Add("Przezywalnosc: " + zwrocPrzezywalnosc());
+            return wyjsciowa;
+        }
+
+        //potrzebne sprawdzenie weakVersionUnderflow
+        internal void usun(Wersja u)
+        {
+            //dezaktywuj
+            u.dezaktywuj();
+
+            //znajdz wersje
+            Wezel wezel_zawierający = szukaj(u.UrzadzenieID, u.WersjaID).Item2;
+
+            //sprawdz warunek
+            if (wezel_zawierający != null && wezel_zawierający.weakVersionUnderFlow() && this.wpisy.Count != 1 /*musi miec sasiada*/)
+            {
+                //In both cases, a
+                //merge is attempted with the copy of a sibling node using
+                //only its live entries. 
+                Wezel sasiad;
+                if (this.wpisy.Count > wezel_zawierający.id + 1)
+                    sasiad = this.wpisy[wezel_zawierający.id - 65 + 1].Item2.wezel;
+                else
+                    sasiad = this.wpisy[wezel_zawierający.id - 65 - 1].Item2.wezel;
+
+                List<Wersja> kopie = new List<Wersja>(); //zawiera zywe
+                foreach (var urzadzenie in wezel_zawierający.urzadzenia.Concat(sasiad.urzadzenia))
+                {
+                    if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
+                    { //kopiujemy zywe
+                        Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo);
+                        urzadzenie.Item2.dataWygasniecia = DateTime.Now;
+                        kopia.dataOstatniejModyfikacji = DateTime.Now;
+                        kopie.Add(kopia);
+
+                        repo.saveVersion(kopia);
+
+                        ctx.Wersje.Add(kopia);
+                        repo.saveVersion(kopia);
+
+                    }
+                }
+
+                //posortuj liste po id 
+                var posortowanaLista = kopie.OrderBy(q => q.UrzadzenieID);
+
+                this.wpisy[wezel_zawierający.id - 65].Item2.maxData = DateTime.Now;
+                this.wpisy[sasiad.id - 65].Item2.maxData = DateTime.Now;
+
+                //czy tylko w last cos takiego moze zajsc? przy wstawianiu tez
+                if (strongVersionOverflow(posortowanaLista.ToList().Count))
+                {
+                    keySplit(posortowanaLista);
+                }
+                else
+                {
+                    dodajZlisty(posortowanaLista);
+                };
+            }; 
+        }
+
+        //szukaj id i wersji
+        //pierwszy bajt to flaga:
+        //wartosc 0 oznacza ze odnaleziono, 
+        //1 ze znaleziona wersja jest mniejsza,
+        //2 ze znaleziona wersja jest wieksza,
+        //3 ze nie odnaleziono wcale
+        internal (byte, Wezel, Wersja) szukaj(int id, int v)
+        {
+            byte status = 3;
+
+            
+            int dlugosc_listy = wpisy.Count;
+            int poczatkowy_indeks = dlugosc_listy / 2;
+            Stack<(int, Wpis)> do_przejrzenia = new Stack<(int, Wpis)>();
+            HashSet<int> odwiedzone = new HashSet<int>(); //powinno naprawic nieskonczona petle
+
+            do_przejrzenia.Push(wpisy[poczatkowy_indeks]);
+            int najwyzsza_wersja = -1;
+            while (do_przejrzenia.Count != 0){
+                (int indeks, Wpis w) = do_przejrzenia.Pop();
+                if (w.minKlucz <= id && w.maxKlucz >= id) {
+                    var wpisy_wezla = w.wezel.urzadzenia;
+                    for (int i = 0; i < wpisy_wezla.Count; i++) {
+                        if (wpisy_wezla[i].Item1 == id)
+                        {
+                            int wersja = wpisy_wezla[i].Item2.WersjaID;
+                            if (wersja == v) {
+                                return (0,w.wezel, wpisy_wezla[i].Item2);
+                            }
+                            najwyzsza_wersja = wersja;
+                        }
+                        else if (wpisy_wezla[i].Item1 > id)
+                            break;
+                    }
+                }
+                //nie odnaleziono
+                if (najwyzsza_wersja == -1) 
+                {
+                    if (indeks + 1 < wpisy.Count && !odwiedzone.Contains(indeks + 1))
+                    {
+                        do_przejrzenia.Push(wpisy[indeks + 1]);
+                        odwiedzone.Add(indeks + 1);
+                    }
+                    if (indeks - 1 >= 0 && !odwiedzone.Contains(indeks - 1))
+                    {
+                        do_przejrzenia.Push(wpisy[indeks - 1]);
+                        odwiedzone.Add(indeks - 1);
+                    }
+                }
+                else {
+                    //mniejsza niz szukana, ale rozna niz -1
+                    if (najwyzsza_wersja < v && indeks + 1 < wpisy.Count)
+                    {
+                        do_przejrzenia.Push(wpisy[indeks + 1]);
+                        odwiedzone.Add(indeks + 1);
+
+                        status = 1;
+                    }
+                    //else, czyli większa
+                    else if (indeks - 1 >= 0 && !odwiedzone.Contains(indeks - 1))
+                    {
+                        do_przejrzenia.Push(wpisy[indeks - 1]);
+                        odwiedzone.Add(indeks - 1);
+                        status = 2;
+                    }
+                }
+            }
+
+            return (status, null, null); //nie znaleziono
+        }
+
+        //szukaj wersji aktualnej w danym momencie
+        // [)[)
+        internal Wersja szukaj(int id, DateTime dt)
+        {
+            //zastapic jakas wersja z binary search i stosem?
+            for (int i = wpisy.Count - 1; i >= 0; i--) {
+                var wpis = wpisy[i].Item2;
+                if ((wpis.minData <= dt && wpis.maxData > dt) && (wpis.minKlucz <= id && wpis.maxKlucz >= id)) {
+                    for (int j = 0; j < wpis.wezel.urzadzenia.Count(); j++) {
+                        (int index, Wersja urzadzenie) = wpis.wezel.urzadzenia[j];
+                        if(index == id && urzadzenie.dataOstatniejModyfikacji <= dt && urzadzenie.dataWygasniecia > dt)
+                            return urzadzenie;
+                    }
+                }
+            }
+
+            Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
+            return null;
+        }
+
+        //szukaj ostatniej wersji
+        internal Wersja szukaj(int id)
+        {
+            for (int i = wpisy.Count-1; i >= 0; i--) { //od tylu 
+                (int index, Wpis w) = wpisy[i];
+                if (w.minKlucz <= id && w.maxKlucz >= id) {
+                    for (int j = w.wezel.urzadzenia.Count - 1; j >= 0; j--) {
+                        (int index_urzadzenia, Wersja u) = w.wezel.urzadzenia[j];
+                        if (index_urzadzenia == id)
+                            return u;
+                    }
+                }
+            }
+            return null;
+        }
+
+        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec)
+        {
+            if(poczatek == DateTime.MinValue && koniec==DateTime.MaxValue)
+                return ((Repo)repo).pobierzWersje().ToList();
+
+            List<Wersja> wynikowa = new List<Wersja>();
+            for (int i = 0; i < wpisy.Count; i++) {
+                Wpis wpis = wpisy[i].Item2;
+                //do sprawdzenia
+                if ((wpis.minData < poczatek && wpis.maxData < poczatek)||(wpis.minData >= koniec && wpis.maxData >= koniec))
+                    ;
+                else if (wpis.minData == poczatek && wpis.maxData < koniec)
+                    wynikowa.AddRange(wpis.wezel.zwrocUrzadzenia());
+                else {
+                    var urzadzenia = wpis.wezel.urzadzenia;
+                    for (int j = 0; j < urzadzenia.Count(); j++) {
+                        if (urzadzenia[j].Item2.dataOstatniejModyfikacji >= poczatek && urzadzenia[j].Item2.dataWygasniecia < koniec)
+                            wynikowa.Add(urzadzenia[j].Item2);
+                    }
+                }
+            }
+            return wynikowa; 
+        }
+    }
+    }

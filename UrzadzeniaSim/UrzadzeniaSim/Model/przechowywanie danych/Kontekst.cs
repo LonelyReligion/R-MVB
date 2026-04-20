@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UrzadzeniaSim.Model.RMVB.R;
 
 namespace UrzadzeniaSim.Model.DB
 {
@@ -14,9 +15,9 @@ namespace UrzadzeniaSim.Model.DB
 /*        public DbSet<Srednia> Srednie { get; set; }
 */        public DbSet<Urzadzenie_Model> Urzadzenia { get; set; }
         public DbSet<Wersja> Wersje { get; set; }
-        /*public DbSet<SpaceAggregate> SpaceAggregates { get; set; }
+        public DbSet<SpaceAggregate> SpaceAggregates { get; set; }
         public DbSet<TimeAggregate> TimeAggregates { get; set; }
-*/
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //wieksza precyzja
