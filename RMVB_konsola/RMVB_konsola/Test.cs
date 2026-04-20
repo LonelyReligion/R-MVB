@@ -186,7 +186,7 @@ namespace RMVB_konsola
                     bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
                         ile_r[i] + " (r)");
                     bledy.Add("Współrzędne prostokąta: " + "xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
-                    "xMax(" + szukane[i].YMin + "), " + "yMax(" + szukane[i].YMax + ")");
+                    "xMax(" + szukane[i].XMax + "), " + "yMax(" + szukane[i].YMax + ")");
 
                     if (resultDB[i] == resultRTree[i])
                     {
