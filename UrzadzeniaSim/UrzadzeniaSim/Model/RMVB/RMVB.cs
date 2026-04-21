@@ -1,0 +1,125 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UrzadzeniaSim.Model;
+using UrzadzeniaSim.Model.DB;
+using UrzadzeniaSim.Model.RMVB.R;
+using UrzadzeniaSim.Model.RMVB.MVB;
+using System.IO;
+
+namespace UrzadzeniaSim.Model.RMVB;
+
+internal class RMVB
+{
+    private Kontekst ctx;
+    private DrzewoMVB MVB;
+    private RTreeAdapter R;
+    private Repo repo;
+    internal RMVB(Kontekst ctx) {
+        this.ctx = ctx;
+        repo = new Repo();
+        MVB = new DrzewoMVB(repo, ctx);
+        R = new RTreeAdapter(new RTree(repo, ctx));
+    }
+
+    internal Repo zwrocRepo() { return repo; }
+    internal bool czyUrzadzenieIstnieje(int id) { return repo.czyUrzadzenieIstnieje(id); }
+    internal DrzewoMVB zwrocMVB() { return MVB; }
+    internal void wypiszMVB() 
+    { 
+        foreach(String linijka in MVB.drukujDrzewo())
+            Console.WriteLine(linijka);
+    }
+    //dodaj
+    internal void dodajUrzadzenie(Urzadzenie_Model u) {
+        repo.saveDevice(u);
+        R.dodajUrzadzenie(u);
+    }
+
+    internal void dodajWersje(Wersja w) {
+        repo.saveVersion(w);
+        MVB.dodajUrzadzenie(w);
+    }
+
+    internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa) {
+        
+        ctx.Wersje.Attach(alfa);
+        ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
+
+        alfa.Pomiary.Add(p);
+        ctx.Pomiary.Add(p);
+        ctx.SaveChanges();
+
+        R.dodajPomiar(UrzadzenieID, p);
+    }
+
+    //usun
+    internal void usunWersje(Wersja w) {
+        MVB.dodajUrzadzenie(w); //musi zostac zapisana najpierw
+        MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
+        repo.saveVersion(w);
+    }
+
+    //szukaj
+    //wyszukiwanie wersji o UrządzenieID równym id i WersjaID równym v
+    internal Wersja szukaj(int id, int v) { 
+        return MVB.szukaj(id, v);
+    }
+
+    //wyszukiwanie wersji urządzenia o UrzadzenieID aktualnej w chwili dt
+    internal Wersja szukaj(int id, DateTime dt)
+    {
+        return MVB.szukaj(id, dt);
+    }
+
+    //wyszukiwanie ostatniej wersji o UrzadzenieID równym id
+    internal Wersja szukaj(int id)
+    {
+        return MVB.szukaj(id);
+    }
+
+    //wyszukiwanie wersji aktualnych w podanym przedziale czasowym
+    internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) { 
+        return MVB.szukaj(poczatek, koniec);
+    }
+
+    //zwraca listę urządzeń znajdujących się w zadanym prostokącie
+    internal List<Urzadzenie_Model> szukaj(Rectangle rect)
+    {
+        return R.szukaj(rect);
+    }
+
+    //zwraca urządzenie w podanym punkcie
+    internal Urzadzenie_Model szukaj(Decimal x, Decimal y)
+    {
+        return R.szukaj((Decimal)x, (Decimal)y);
+    }
+
+    //zwraca liczbę pomiarów i agregat czasowy (z czego?)
+    internal (Decimal, Decimal) szukajAgregatu(Rectangle rect)
+    {
+        return R.szukajAgregatuPowierzchniowego(rect);
+    }
+
+    //zwraca agregat czasowy urzadzenia
+    internal Decimal szukajAgregatuCzasowego(Decimal x, Decimal y) {
+        return R.szukajAgregatuCzasowego(x, y);
+    }
+
+    //oblicza agregaty powierzchniowe
+    internal void obliczAgregaty() { 
+        R.obliczAgregaty();
+    }
+
+    internal void zapiszMVB(string v)
+    {
+        List<string> linijki = MVB.drukujDrzewo();
+        using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "MVB.txt")))
+        {
+            foreach (string linijka in linijki)
+                outputFile.WriteLine(linijka);
+        }
+    }
+}

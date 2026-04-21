@@ -106,9 +106,8 @@ namespace UrzadzeniaSim.Model
             //
             //return Wersje.Last().Pomiary.Count > 0;
             
-            return false;
 
-            //return repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Count > 0;
+            return repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Count > 0;
         }
 
         public bool IsTimeAggregateValid()
