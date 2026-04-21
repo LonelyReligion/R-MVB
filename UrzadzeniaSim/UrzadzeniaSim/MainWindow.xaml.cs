@@ -18,7 +18,7 @@ namespace UrzadzeniaSim
         Kontekst ctx = new Kontekst();
         Repo repozytorium = new Repo();
         Generatory generator;
-
+        
         double wysokosc_okna;
         double szerokosc_okna;
 
@@ -59,7 +59,7 @@ namespace UrzadzeniaSim
             (decimal x, decimal y) = generator.generujWspolrzedne();
             Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
 
-            Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(0, (x, y));
+            Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(0, generator.generujWspolrzedne());
             siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
         }
     }

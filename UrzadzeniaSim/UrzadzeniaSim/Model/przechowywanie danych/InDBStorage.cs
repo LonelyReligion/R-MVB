@@ -26,13 +26,13 @@ namespace UrzadzeniaSim.Model.DB
             ctx.SaveChanges();
         }
 
-/*        public void saveMeasurement(Pomiar measure)
+        public void saveMeasurement(Pomiar measure)
         {
             ctx.Pomiary.Add(measure);
             ctx.SaveChanges();
-        }*/
+        }
 
-/*        public void saveTimeAggregate(TimeAggregate timeAggregate)
+        public void saveTimeAggregate(TimeAggregate timeAggregate)
         {
             //brzydkie rozwiazanie dzieki niemu nie ma bledu
             foreach (var entry in ctx.ChangeTracker.Entries())
@@ -42,7 +42,7 @@ namespace UrzadzeniaSim.Model.DB
 
             ctx.TimeAggregates.Add(timeAggregate);
             ctx.SaveChanges();
-        }*/
+        }
 
         public void saveSpaceAggregate(SpaceAggregate spaceAggregate)
         {
@@ -50,12 +50,12 @@ namespace UrzadzeniaSim.Model.DB
             ctx.SaveChanges();
         }
 
-        /*
+
         public void saveSrednia(Srednia srednia)
         {
             ctx.Srednie.Add(srednia);
             ctx.SaveChanges();
-        }  */  
+        }
 
     }
 }

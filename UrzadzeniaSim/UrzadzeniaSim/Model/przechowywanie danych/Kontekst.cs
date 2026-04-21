@@ -14,8 +14,8 @@ namespace UrzadzeniaSim.Model.DB
             //Database.SetInitializer<Kontekst>(new DropCreateDatabaseAlways<Kontekst>());
         }
 
-        //public DbSet<Pomiar> Pomiary { get; set; }
-        //public DbSet<Srednia> Srednie { get; set; }
+        public DbSet<Pomiar> Pomiary { get; set; }
+        public DbSet<Srednia> Srednie { get; set; }
         
         public DbSet<Urzadzenie_Model> Urzadzenia { get; set; }
         public DbSet<Wersja> Wersje { get; set; }
@@ -33,9 +33,9 @@ namespace UrzadzeniaSim.Model.DB
             .Property(u => u.dataWygasniecia)
             .HasColumnType("datetime2");
 
-/*            modelBuilder.Entity<Pomiar>()
+            modelBuilder.Entity<Pomiar>()
             .Property(u => u.dtpomiaru)
-            .HasColumnType("datetime2");*/
+            .HasColumnType("datetime2");
 
             modelBuilder.Entity<Urzadzenie_Model>()
                 .Property(e => e.Szerokosc)

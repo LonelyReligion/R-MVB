@@ -21,7 +21,7 @@ namespace UrzadzeniaSim.Model
         public DateTime dataWygasniecia { get; set; }
 
         //wlasnosc nawigacyjna
-/*        public virtual ICollection<Pomiar> Pomiary { get; set; }*/
+        public virtual ICollection<Pomiar> Pomiary { get; set; }
         public virtual Urzadzenie_Model UrzadzenieRodzic { get; set; }
 
         private Repo repo;
@@ -29,7 +29,7 @@ namespace UrzadzeniaSim.Model
         //potrzebne do firstordefualt
         public Wersja() 
         {
-/*            Pomiary = new HashSet<Pomiar>();*/
+            Pomiary = new HashSet<Pomiar>();
             dataOstatniejModyfikacji = DateTime.Now;
             dataWygasniecia = DateTime.MaxValue;
             Aktywne = true;
@@ -45,8 +45,8 @@ namespace UrzadzeniaSim.Model
             if (r.czyUrzadzenieIstnieje(UrzadzenieID) && r.pobierzUrzadzeniaWersje()[UrzadzenieID].Count() != 0)
             {
                 Wersja w = r.pobierzUrzadzeniaWersje()[UrzadzenieID].Last();
-/*                foreach (var element in w.Pomiary)
-                    this.Pomiary.Add(element);*/
+                foreach (var element in w.Pomiary)
+                    this.Pomiary.Add(element);
 
                 DateTime data_wprowadzenia_zmiany = DateTime.Now;
                 dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
@@ -64,9 +64,9 @@ namespace UrzadzeniaSim.Model
 
             ustalWersje(this.UrzadzenieID, repo);
 
-/*            foreach (var element in w.Pomiary)
+            foreach (var element in w.Pomiary)
                 this.Pomiary.Add(element);
-*/
+
             DateTime data_wprowadzenia_zmiany = DateTime.Now;
             dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
             w.dataWygasniecia = data_wprowadzenia_zmiany;
@@ -99,7 +99,7 @@ namespace UrzadzeniaSim.Model
             }
         }
 
-/*        public void dodajPomiar(Pomiar testowy)
+        public void dodajPomiar(Pomiar testowy)
         {
             testowy.WersjeUrzadzenia.Add(this);
             this.Pomiary.Add(testowy);
@@ -110,6 +110,6 @@ namespace UrzadzeniaSim.Model
         {
             this.Pomiary.Remove(testowy);
             dataOstatniejModyfikacji = DateTime.Now;
-        }*/
+        }
     }
 }

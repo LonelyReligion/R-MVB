@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using UrzadzeniaSim.Widok.Kontrolki;
 using UrzadzeniaSim.Model.DB;
+using UrzadzeniaSim.Model.RMVB.R;
 
 namespace UrzadzeniaSim.Model
 {
@@ -52,7 +53,7 @@ namespace UrzadzeniaSim.Model
         private int liczba_uwzglednionych = 0;
         private Decimal rTimeAggregate { get; set; }
         DateTime granica = new DateTime(2024, 7, 18, 0, 0, 0);
-        /*public void AddMeasure(Pomiar p, TreeRepository repository)
+        public void AddMeasure(Pomiar p, TreeRepository repository)
         {
             if (p.dtpomiaru > granica)
             {
@@ -63,9 +64,9 @@ namespace UrzadzeniaSim.Model
                 TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
                 repository.saveTimeAggregate(timeAggregate);
             }
-        }*/
+        }
 
-/*        public void AddMeasure(DateTime t, Decimal v, TreeRepository repository)
+        public void AddMeasure(DateTime t, Decimal v, TreeRepository repository)
         {
             if (t > granica)
             {
@@ -76,7 +77,7 @@ namespace UrzadzeniaSim.Model
                 TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
                 repository.saveTimeAggregate(timeAggregate);
             }
-        }*/
+        }
 
         public Decimal GetTimeAggregate()
         {
@@ -87,17 +88,17 @@ namespace UrzadzeniaSim.Model
         {
             return (liczba_uwzglednionych, suma);
         }
-        /*
-                public Pomiar LastMeasurement()
-                {
-                    // test
-                    bool isValid = IsMeasurementValid();
-                    //Urzadzenie thisDevice = ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First();
-                    //return isValid ? thisDevice.Wersje.Last().Pomiary.Last() : null;
-                    //
-                    //return isValid ? Wersje.Last().Pomiary.Last() : null;
-                    return isValid ? repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Last() : null;
-                }*/
+
+        public Pomiar LastMeasurement()
+        {
+            // test
+            bool isValid = IsMeasurementValid();
+            //Urzadzenie thisDevice = ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First();
+            //return isValid ? thisDevice.Wersje.Last().Pomiary.Last() : null;
+            //
+            //return isValid ? Wersje.Last().Pomiary.Last() : null;
+            return isValid ? repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Last() : null;
+        }
         public bool IsMeasurementValid()
         {
             // test

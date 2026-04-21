@@ -12,12 +12,12 @@ namespace UrzadzeniaSim.Model.DB
         void saveDevice(Urzadzenie_Model device);
         void saveVersion(Wersja version);
 
-        //void saveMeasurement(Pomiar measure);
+        void saveMeasurement(Pomiar measure);
 
-        //void saveTimeAggregate(TimeAggregate timeAggregate);
+        void saveTimeAggregate(TimeAggregate timeAggregate);
 
         void saveSpaceAggregate(SpaceAggregate spaceAggregate);
 
-        //void saveSrednia(Srednia srednia);
+        void saveSrednia(Srednia srednia);
     }
 }
