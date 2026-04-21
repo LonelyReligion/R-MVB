@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UrzadzeniaSim.Model;
-using UrzadzeniaSim.Model.DB;
+﻿using UrzadzeniaSim.Model.DB;
 using UrzadzeniaSim.Model.RMVB.R;
 using UrzadzeniaSim.Model.RMVB.MVB;
 using System.IO;

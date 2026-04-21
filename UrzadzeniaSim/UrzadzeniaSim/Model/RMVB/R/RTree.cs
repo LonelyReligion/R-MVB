@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using UrzadzeniaSim.Model.DB;
-using UrzadzeniaSim.Model;
+﻿using UrzadzeniaSim.Model.DB;
 
 namespace UrzadzeniaSim.Model.RMVB.R
 {

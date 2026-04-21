@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace UrzadzeniaSim.Model.RMVB.MVB
+﻿namespace UrzadzeniaSim.Model.RMVB.MVB
 {
     //"object that contains information about the time range in which the root is valid and the root identificator."
     internal class DeskryptorKorzenia

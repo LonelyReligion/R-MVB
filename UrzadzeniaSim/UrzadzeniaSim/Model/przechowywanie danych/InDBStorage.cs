@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UrzadzeniaSim.Model.DB;
+﻿using System.Data.Entity;
 using UrzadzeniaSim.Model.RMVB.R;
 
 namespace UrzadzeniaSim.Model.DB

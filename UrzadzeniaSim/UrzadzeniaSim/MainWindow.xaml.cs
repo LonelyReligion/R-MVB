@@ -1,15 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Ribbon.Primitives;
-using System.Windows.Data;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using UrzadzeniaSim.Widok.Kontrolki;
 using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Narzedzia;
 using UrzadzeniaSim.Model.DB;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace UrzadzeniaSim
 {

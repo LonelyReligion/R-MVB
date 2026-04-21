@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Intrinsics.X86;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace UrzadzeniaSim.Model.RMVB.R
+﻿namespace UrzadzeniaSim.Model.RMVB.R
 {
     public class TreeWalker   {
 

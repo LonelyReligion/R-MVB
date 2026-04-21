@@ -1,14 +1,4 @@
-﻿using Microsoft.SqlServer.Server;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Migrations;
-using System.Diagnostics.Metrics;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using UrzadzeniaSim.Model.DB;
+﻿using UrzadzeniaSim.Model.DB;
 
 namespace UrzadzeniaSim.Model.RMVB.MVB
 {
