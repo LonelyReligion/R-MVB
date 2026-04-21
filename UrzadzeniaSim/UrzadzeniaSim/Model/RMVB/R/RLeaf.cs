@@ -126,7 +126,7 @@ namespace UrzadzeniaSim.Model.RMVB.R
             {
                 if (dev.IsMeasurementValid())
                 {
-                    //sum += (double)dev.LastMeasurement().Wartosc;
+                    sum += (double)dev.LastMeasurement().Wartosc;
                     counter++;
                 }
             }

@@ -20,13 +20,15 @@ namespace UrzadzeniaSim.Model.RMVB.R
             drzewo.Insert(u);
         }
 
-/*        internal void dodajPomiar(int id, Pomiar p) {
+        internal void dodajPomiar(int id, Pomiar p)
+        {
             drzewo.AddMeasure(id, p);
-        }*/
-/*
-        internal void dodajPomiar(int ix, DateTime t, Decimal v) {
+        }
+
+        internal void dodajPomiar(int ix, DateTime t, Decimal v)
+        {
             drzewo.AddMeasure(ix, t, v);
-        }*/
+        }
 
         //usun -- nie istnieje
         internal void usunUrzadzenie(Urzadzenie_Model u) { 
@@ -54,8 +56,9 @@ namespace UrzadzeniaSim.Model.RMVB.R
             return drzewo.GetTimeAggregate(x, y);
         }
 
-/*        public void obliczAgregaty() {
+        public void obliczAgregaty()
+        {
             drzewo.SpaceAggregate();
-        }*/
+        }
     }
 }

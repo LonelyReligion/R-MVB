@@ -30,23 +30,23 @@ namespace UrzadzeniaSim.Model.RMVB.R
             root.Insert(dev, new TreeWalker(this));
         }
 
-/*        public void AddMeasure(int id, Pomiar p)
+        public void AddMeasure(int id, Pomiar p)
         {
             Urzadzenie_Model dev = repository.pobierzUrzadzenia()[id];
             if (dev != null)
             {
                 dev.AddMeasure(p, repository);
             }
-        }*/
+        }
 
-/*        public void AddMeasure(int ix, DateTime t, Decimal v)
+        public void AddMeasure(int ix, DateTime t, Decimal v)
         {
             Urzadzenie_Model dev = repository.pobierzUrzadzenia()[ix];
             if (dev != null)
             {
                 dev.AddMeasure(t, v, repository);
             }
-        }*/
+        }
 
         public RNode ProvideRoot()
         {
@@ -86,7 +86,7 @@ namespace UrzadzeniaSim.Model.RMVB.R
                 return (0m, 0m);
         }
 
-/*        public void SpaceAggregate()
+        public void SpaceAggregate()
         {
             using (var ctx = new Kontekst())
             {
@@ -100,7 +100,7 @@ namespace UrzadzeniaSim.Model.RMVB.R
                     //Console.WriteLine("Czas potrzebny na agregowanie powierzchniowe: " + czas);
                 }
             }
-        }*/
+        }
 
         public Decimal GetTimeAggregate(Decimal x, Decimal y)
         {
