@@ -3,6 +3,7 @@ using System.Windows;
 using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Narzedzia;
 using UrzadzeniaSim.Model.DB;
+using UrzadzeniaSim.Model.RMVB;
 
 namespace UrzadzeniaSim
 {
@@ -11,6 +12,7 @@ namespace UrzadzeniaSim
         Kontekst ctx = new Kontekst();
         Repo repozytorium = new Repo();
         Generatory generator;
+        RMVB rMVB;
         
         double wysokosc_okna;
         double szerokosc_okna;
@@ -25,6 +27,7 @@ namespace UrzadzeniaSim
             InDBStorage.ctx = ctx;
             Repo.ctx = ctx;
             Urzadzenie_Model.ctx = ctx;
+            rMVB = new RMVB(ctx);
             //
 
             okno.SizeChanged += (s, e) =>
@@ -52,7 +55,8 @@ namespace UrzadzeniaSim
             (decimal x, decimal y) = generator.generujWspolrzedne();
             Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
 
-            Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(0, generator.generujWspolrzedne());
+            Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(generator.generujWspolrzedne());
+            rMVB.dodajUrzadzenie(nowe_urzadzenie);
             siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
         }
     }

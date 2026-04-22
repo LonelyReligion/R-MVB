@@ -8,6 +8,8 @@ namespace UrzadzeniaSim.Model
 {
     public class Urzadzenie_Model
     {
+        public static int nastepne_wolne_id = 0;
+
         public Urządzenie punkt; //reprezentacja na ekranie
 
         public static Repo repo;
@@ -31,15 +33,15 @@ namespace UrzadzeniaSim.Model
             Wersje = new HashSet<Wersja>();
             punkt = new Urządzenie(0, 0);
         }
-        public Urzadzenie_Model(int UrzadzenieID, (Decimal, Decimal) dlugosc_szerokosc) : this()
+        public Urzadzenie_Model((Decimal, Decimal) dlugosc_szerokosc) : this()
         {
- 
+            
             Dlugosc = dlugosc_szerokosc.Item1;
             Szerokosc = dlugosc_szerokosc.Item2;
 
             punkt = new Urządzenie(Dlugosc, Szerokosc);
 
-            this.UrzadzenieID = UrzadzenieID;
+            this.UrzadzenieID = nastepne_wolne_id++;
         }
 
         public Urzadzenie_Model(int UrzadzenieID) : this() {

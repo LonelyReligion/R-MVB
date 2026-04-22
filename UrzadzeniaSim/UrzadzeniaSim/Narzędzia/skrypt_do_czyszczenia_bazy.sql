@@ -1,5 +1,5 @@
 ﻿USE master;
 
-ALTER DATABASE [UrzadzeniaSim.Kontekst] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+ALTER DATABASE [UrzadzeniaSim.Model.DB.Kontekst] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
 
-DROP DATABASE [UrzadzeniaSim.Kontekst];
+DROP DATABASE [UrzadzeniaSim.Model.DB.Kontekst];

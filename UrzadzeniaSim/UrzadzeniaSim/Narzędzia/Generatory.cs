@@ -15,7 +15,7 @@ namespace UrzadzeniaSim.Narzedzia
         private const Decimal poczatkowa_szerokosc = 49.00m; //czy to nalezy do drzewa?
         private const Decimal poczatkowa_dlugosc = 14.07m; //czy to nalezy do drzewa?
 
-        public static int liczba_urzadzen;
+        public static int liczba_urzadzen = 100;
         private static Random rnd = new Random();
         private bool pierwszy = true;
         private Repo repo;
