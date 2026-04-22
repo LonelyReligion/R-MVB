@@ -97,10 +97,20 @@ foreach (var plik in sciezkiPlikow)
 //
 
 // Urzadzenie 0v0
-Urzadzenie testowe = new Urzadzenie(0, generator.zwrocNoweWspolrzedneDeterministyczne());//new Urzadzenie(0, generator.generujWspolrzedne());
+ctx.Urzadzenia.FirstOrDefault();
+
+Stopwatch sw;
+sw = Stopwatch.StartNew();
+
+Urzadzenie testowe = new Urzadzenie(generator.zwrocNoweWspolrzedneDeterministyczne());
 rmvb.dodajUrzadzenie(testowe);
 
-Pomiar testowy = new Pomiar(0, DateTime.Now);
+long wynik = sw.ElapsedMilliseconds;
+Console.WriteLine("Utworzenie i dodanie pierwszego urządzenia zajeło: " + wynik + " ms.");
+
+
+
+/*Pomiar testowy = new Pomiar(0, DateTime.Now);
 
 Wersja alfa = new Wersja(rmvb.zwrocRepo());
 alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
@@ -121,7 +131,7 @@ for (int i = 0; i < liczbaUrzadzen; i++)
 {
     int id = i % liczbaUrzadzen;
     if (!rmvb.czyUrzadzenieIstnieje(id)) {
-        Urzadzenie testowe1 =  new Urzadzenie(id, generator.zwrocNoweWspolrzedneDeterministyczne());//new Urzadzenie(id, generator.generujWspolrzedne());
+        Urzadzenie testowe1 =  new Urzadzenie(generator.zwrocNoweWspolrzedneDeterministyczne());//new Urzadzenie(id, generator.generujWspolrzedne());
         rmvb.dodajUrzadzenie(testowe1);
     }
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
@@ -181,6 +191,6 @@ else
 {
     jednostka_testujaca.zapiszWyniki(sciezkaFolderuWyjsciowego); //osobne logowanie błędów do innego pliku wyżej powinno nastąpić
 }
-
+*/
 ctx.Dispose();
 return 0;

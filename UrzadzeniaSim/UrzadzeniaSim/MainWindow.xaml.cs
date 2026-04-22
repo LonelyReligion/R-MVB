@@ -28,6 +28,8 @@ namespace UrzadzeniaSim
             Repo.ctx = ctx;
             Urzadzenie_Model.ctx = ctx;
             rMVB = new RMVB(ctx);
+
+            ctx.Urzadzenia.FirstOrDefault();
             //
 
             okno.SizeChanged += (s, e) =>
@@ -56,7 +58,7 @@ namespace UrzadzeniaSim
             Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
 
             Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(generator.generujWspolrzedne());
-            rMVB.dodajUrzadzenie(nowe_urzadzenie);
+            Task.Run(() => rMVB.dodajUrzadzenie(nowe_urzadzenie)); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
             siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
         }
     }

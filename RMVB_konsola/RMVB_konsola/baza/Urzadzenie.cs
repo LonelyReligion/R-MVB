@@ -4,11 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using RMVB_konsola.MVB;
 using RMVB_konsola;
 using RMVB_konsola.R;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RMVB_konsola
 {
     public class Urzadzenie
     {
+        public static int nastepne_wolne_id = 0;
         public static Repo repo;
         public static Kontekst ctx;
         [Key, Column(Order = 0)]
@@ -28,13 +30,13 @@ namespace RMVB_konsola
         protected Urzadzenie() { 
             Wersje = new HashSet<Wersja>();
         }
-        public Urzadzenie(int UrzadzenieID, (Decimal, Decimal) dlugosc_szerokosc) : this()
+        public Urzadzenie((Decimal, Decimal) dlugosc_szerokosc) : this()
         {
  
             Dlugosc = dlugosc_szerokosc.Item1;
             Szerokosc = dlugosc_szerokosc.Item2;
 
-            this.UrzadzenieID = UrzadzenieID;
+            this.UrzadzenieID = nastepne_wolne_id++;
         }
 
         public Urzadzenie(int UrzadzenieID) : this() {
