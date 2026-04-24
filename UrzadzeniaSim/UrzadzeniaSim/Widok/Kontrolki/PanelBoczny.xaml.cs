@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using UrzadzeniaSim.Model;
+using UrzadzeniaSim.Model.DB;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
@@ -17,6 +19,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private const int bazowa_wielkosc_czcionki = 15;
         private string wielkosc_czcionki = "15";
+
+        public static Kontekst ctx;
         public string Wielkosc_czcionki 
         {
             get 
@@ -66,6 +70,22 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void ZlecGenerowanie(object sender, RoutedEventArgs e) {
             DodajUrzadzenie?.Invoke();
+        }
+
+        public void uzupelnijInformacjeOurzadzeniu(int id_urzadzenia) {
+            if (id_urzadzenia == -1) {
+                //odznaczamy
+                Label_ID.Content = "UrzadzenieID:";
+                Label_Dlugosc.Content = "Długość:";
+                Label_Szerokosc.Content = "Szerokość:";
+            }
+            else
+            {
+                Urzadzenie_Model szukane = ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
+                Label_ID.Content = "UrzadzenieID: " + szukane.UrzadzenieID;
+                Label_Dlugosc.Content = "Długość: " + szukane.Dlugosc + " E"; //poprawic wyswietlanie ze znaczkami minuty i stopni
+                Label_Szerokosc.Content = "Szerokość: " + szukane.Szerokosc + " N";
+            }
         }
     }
 }

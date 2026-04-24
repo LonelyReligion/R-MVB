@@ -4,6 +4,7 @@ using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Narzedzia;
 using UrzadzeniaSim.Model.DB;
 using UrzadzeniaSim.Model.RMVB;
+using UrzadzeniaSim.Widok.Kontrolki;
 
 namespace UrzadzeniaSim
 {
@@ -28,6 +29,7 @@ namespace UrzadzeniaSim
             Repo.ctx = ctx;
             Urzadzenie_Model.ctx = ctx;
             rMVB = new RMVB(ctx);
+            PanelBoczny.ctx = ctx;
 
             ctx.Urzadzenia.FirstOrDefault();
             //
@@ -60,6 +62,10 @@ namespace UrzadzeniaSim
             Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(generator.generujWspolrzedne());
             Task.Run(() => rMVB.dodajUrzadzenie(nowe_urzadzenie)); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
             siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
+        }
+
+        private void powiedz_o_znaczeniu_panelowi(int id_urzadzenia) {
+            panelBoczny.uzupelnijInformacjeOurzadzeniu(id_urzadzenia);
         }
     }
     

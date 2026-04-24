@@ -34,6 +34,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         double r = 5; // domyslna szerokosc kola reprezentujacego urzadzenie 
 
+        public event Action<int> znaczono_urzadzenie; //hehe, bo (za)znaczono i (od)znaczono
         public Siatka()
         {
             InitializeComponent();
@@ -405,6 +406,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 //id bierzemy z listy, kolejne elementy z bazy? repo? drzewa?
 
             }
+            znaczono_urzadzenie?.Invoke(numer_porzadkowy_zaznaczonego);
         }
     }
 }
