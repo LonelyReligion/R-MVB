@@ -83,8 +83,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 Urzadzenie_Model szukane = ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
                 Label_ID.Content = "UrzadzenieID: " + szukane.UrzadzenieID;
-                Label_Dlugosc.Content = "Długość: " + szukane.Dlugosc + " E"; //poprawic wyswietlanie ze znaczkami minuty i stopni
-                Label_Szerokosc.Content = "Szerokość: " + szukane.Szerokosc + " N";
+                Label_Dlugosc.Content = "Długość: " + (int)szukane.Dlugosc + "°" + (int)((szukane.Dlugosc % 1) * 100) + "'" + "E"; //poprawic wyswietlanie ze znaczkami minuty i stopni
+                Label_Szerokosc.Content = "Szerokość: " + (int)szukane.Szerokosc + "°" + (int)((szukane.Szerokosc % 1) * 100) + "'" + "N";
             }
         }
     }
