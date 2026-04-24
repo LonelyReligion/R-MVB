@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -14,7 +15,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 AKTYWNY_NADAJE
     };
 
-public partial class Urządzenie : UserControl
+public partial class Urządzenie : UserControl, INotifyPropertyChanged
     {
         public event Action<int> zaznaczono;
         bool zaznaczone = false;
@@ -26,9 +27,41 @@ public partial class Urządzenie : UserControl
 
         public const int oryg_szerokosc_wysokosc = 6;
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private double szerokosc_wysokosc_zaznaczenia = oryg_szerokosc_wysokosc;
+
+        public double Szerokosc_wysokosc_zaznaczenia
+        {
+            get
+            {
+                return szerokosc_wysokosc_zaznaczenia;
+            }
+            set
+            {
+                szerokosc_wysokosc_zaznaczenia = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Szerokosc_wysokosc_zaznaczenia"));
+            }
+        }
+
+        private double szerokosc_wysokosc = 5;
+
+        public double Szerokosc_wysokosc
+        {
+            get
+            {
+                return szerokosc_wysokosc;
+            }
+            set
+            {
+                szerokosc_wysokosc = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Szerokosc_wysokosc"));
+            }
+
+        }
         public Urządzenie(decimal dlugosc, decimal szerokosc)
         {
             InitializeComponent();
+            this.DataContext = this;
             this.dlugosc = dlugosc;
             this.szerokosc = szerokosc;
         }

@@ -32,16 +32,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         double krokX;
         double krokY;
 
-        double r = 5; // domyslna szerokosc kola reprezentujacego urzadzenie 
+
+        const double oryginalna_wysokosc = 361; //nwm czy beda takie same na kazdym pc, pewnie to wina suwaków
+        const double oryginalna_szerokosc = 784;
 
         public event Action<int> znaczono_urzadzenie; //hehe, bo (za)znaczono i (od)znaczono
         public Siatka()
         {
             InitializeComponent();
-         
-            double oryginalna_wysokosc = 361; //nwm czy beda takie same na kazdym pc, pewnie to wina suwaków
-            double oryginalna_szerokosc = 784;
-
 
             plotno.SizeChanged += (s, e) =>
             {
@@ -63,17 +61,15 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 skalowanie.CenterX = szerokosc_plotna * (wartosc_h - min_h) / (max_h - min_h);
                 //
+                double skala = obliczSkale();
 
-                double skala_x = szerokosc_plotna / oryginalna_szerokosc;
-                double skala_y = wysokosc_plotna / oryginalna_wysokosc;
-                double skala = Math.Min(skala_x, skala_y);
-                
                 wielkosc_czcionki = (int)(skala * (double)bazowa_wielkosc_czcionki);
 
                 //
-                foreach(Urządzenie u in urządzenia) {
-                    u.Width = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
-                    u.Height = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+               foreach (Urządzenie u in urządzenia) {
+                    u.Szerokosc_wysokosc_zaznaczenia = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+                    u.Szerokosc_wysokosc = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+
                     obliczPozycjePunktu(u);
                 }
                 //
@@ -82,14 +78,24 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         }
 
+        public double obliczSkale() {
+            double skala_x = szerokosc_plotna / oryginalna_szerokosc;
+            double skala_y = wysokosc_plotna / oryginalna_wysokosc;
+
+            double skala = Math.Min(skala_x, skala_y);
+
+            return skala;
+        }
+
         private void obliczPozycjePunktu(Urządzenie u) {
             
             if(u.ActualWidth != 0)
-                r = u.ActualWidth;
+                u.Szerokosc_wysokosc = u.ActualWidth;
 
             int dlugosc_minuty = (int)((u.dlugosc % 1) * 100);
             int dlugosc_stopnie = (int)(u.dlugosc / 1);
             double dlugosc_przesuniecie = 0;
+
             if (dlugosc_stopnie == 14)
             {
                 dlugosc_przesuniecie += ((double)(dlugosc_minuty - 7)) * krokX / 60.0;
@@ -104,7 +110,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             int szerokosc_stopnie = (int)(u.szerokosc / 1);
             double szerokosc_przesuniecie = (szerokosc_stopnie - 49) * krokY + ((double)(szerokosc_minuty)) * krokY / 60.0;
 
-            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - r/2, szerokosc_przesuniecie + wysokosc_plotna - marginesY - r/2, 0, 0); 
+            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - u.Szerokosc_wysokosc/2, szerokosc_przesuniecie + wysokosc_plotna - marginesY - u.Szerokosc_wysokosc/2, 0, 0); 
         }
         private void rysujUrządzenia() {
             foreach (Urządzenie u in urządzenia) {
@@ -368,6 +374,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void dodajUrzadzenie(Urzadzenie_Model u) {
             urządzenia.Add(u.punkt);
+            double skala = obliczSkale();
+
+            if (skala != 1) {
+                u.punkt.Szerokosc_wysokosc_zaznaczenia = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+                u.punkt.Szerokosc_wysokosc = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+            }
+
+            
             u.punkt.ustaw_id_siatka(urządzenia.Count - 1);
             u.punkt.zaznaczono += zmianaZaznaczenia;
 

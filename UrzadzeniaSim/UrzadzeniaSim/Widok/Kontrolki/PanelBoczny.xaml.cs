@@ -18,9 +18,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         private double oryginalna_szerokosc;
 
         private const int bazowa_wielkosc_czcionki = 15;
+        
+        public static Kontekst ctx;
+
         private string wielkosc_czcionki = "15";
 
-        public static Kontekst ctx;
         public string Wielkosc_czcionki 
         {
             get 

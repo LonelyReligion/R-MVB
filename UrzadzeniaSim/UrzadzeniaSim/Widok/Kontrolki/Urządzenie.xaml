@@ -13,6 +13,10 @@
                     <Grid>
                         <Ellipse
                             x:Name="zaznaczenie"
+                            
+                            Width="{Binding Szerokosc_wysokosc_zaznaczenia}"
+                            Height="{Binding Szerokosc_wysokosc_zaznaczenia}"
+                            
                             MinWidth="6"
                             MinHeight="6"
                             Stretch="Fill"
@@ -20,6 +24,10 @@
                         />
                         <Ellipse
                             x:Name="kolko"
+                            
+                            Width="{Binding Szerokosc_wysokosc}"
+                            Height="{Binding Szerokosc_wysokosc}"
+                            
                             Stretch="Fill"
                             MinHeight="5"
                             MinWidth="5"
