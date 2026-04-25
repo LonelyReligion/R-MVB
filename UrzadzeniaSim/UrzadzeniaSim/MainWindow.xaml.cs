@@ -67,6 +67,13 @@ namespace UrzadzeniaSim
         private void powiedz_o_znaczeniu_panelowi(int id_urzadzenia) {
             panelBoczny.uzupelnijInformacjeOurzadzeniu(id_urzadzenia);
         }
+
+        private void pasekNarzedzi_wyczysc_wszystko()
+        {
+            using (var ctx = new Kontekst()) {
+                ctx.Database.ExecuteSqlCommand("delete from Urzadzenie_Model");
+            }
+        }
     }
     
 }

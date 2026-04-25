@@ -16,7 +16,7 @@
             <MenuItem Header="Plik" FontSize="12">
                 <MenuItem Header="Zapisz"/>
                 <MenuItem Header="Wczytaj"/>
-                <MenuItem Header="Wyczyść"/>
+                <MenuItem Header="Wyczyść" Click="KliknietoWyczysc"/>
             </MenuItem>
                 
             <MenuItem Header="Edytuj" FontSize="12">

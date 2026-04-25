@@ -29,6 +29,7 @@
                                  zmienionoDokladnoscPoludniki="siatkaZmienPoludniki" 
                                  zmienionoDokladnoscRownolezniki="siatkaZmienRownolezniki"
                                  Grid.Row="0"
+                                 wyczysc_wszystko="pasekNarzedzi_wyczysc_wszystko"
                                  />
     </Grid>
 </Window>

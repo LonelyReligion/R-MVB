@@ -14,7 +14,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public event Action<double> zmienionoPowiekszenie;
         public event Action<bool> zmienionoDokladnoscPoludniki;
         public event Action<bool> zmienionoDokladnoscRownolezniki;
-        
+        public event Action wyczysc_wszystko;
 
         public PasekNarzedzi()
         {
@@ -56,6 +56,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         private void przycisnieto_rownolezniki_minuta(object sender, RoutedEventArgs e)
         {
             zmienionoDokladnoscRownolezniki?.Invoke(rownolezniki_minuta.IsChecked);
+        }
+
+        private void KliknietoWyczysc(object sender, RoutedEventArgs e)
+        {
+            wyczysc_wszystko?.Invoke();
         }
     }
 }
