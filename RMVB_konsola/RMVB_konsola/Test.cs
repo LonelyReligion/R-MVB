@@ -165,7 +165,7 @@ namespace RMVB_konsola
             for (int i = 0; i < ileRazy; i++)
             {
                 Console.WriteLine("Szukanie agregatu powierzchniowego dla obszaru: xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
-                    "xMax(" + szukane[i].YMin + "), " + "yMax(" + szukane[i].YMax + "), ");
+                    "xMax(" + szukane[i].XMax + "), " + "yMax(" + szukane[i].YMax + "), ");
                 Console.WriteLine("WARTOŚCI: Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
                 Console.WriteLine(Out[i] + ")/" + ile[i]);
 
@@ -179,7 +179,6 @@ namespace RMVB_konsola
                     }
                     Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
                         ile_r[i] + " (r)");
-                    //rmvb.szukajAgregatu(szukane[i]);
                     blad = true;
                     rmvb.szukajAgregatu(szukane[i]);
 

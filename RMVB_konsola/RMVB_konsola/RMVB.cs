@@ -119,5 +119,11 @@ namespace RMVB_konsola
                     outputFile.WriteLine(linijka);
             }
         }
+
+        public void Reset() { 
+            repo.Reset();
+            MVB = new DrzewoMVB(repo, ctx);
+            R = new RTreeAdapter(new RTree(repo, ctx));
+        }
     }
 }

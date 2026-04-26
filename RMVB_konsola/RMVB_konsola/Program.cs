@@ -99,18 +99,11 @@ foreach (var plik in sciezkiPlikow)
 // Urzadzenie 0v0
 ctx.Urzadzenia.FirstOrDefault();
 
-Stopwatch sw;
-sw = Stopwatch.StartNew();
-
 Urzadzenie testowe = new Urzadzenie(generator.zwrocNoweWspolrzedneDeterministyczne());
 rmvb.dodajUrzadzenie(testowe);
 
-long wynik = sw.ElapsedMilliseconds;
-Console.WriteLine("Utworzenie i dodanie pierwszego urządzenia zajeło: " + wynik + " ms.");
 
-
-
-/*Pomiar testowy = new Pomiar(0, DateTime.Now);
+Pomiar testowy = new Pomiar(0, DateTime.Now);
 
 Wersja alfa = new Wersja(rmvb.zwrocRepo());
 alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
@@ -130,15 +123,16 @@ List<Wersja> losowe = new List<Wersja>(); //do debuggowania, potrzebne nam do od
 for (int i = 0; i < liczbaUrzadzen; i++)
 {
     int id = i % liczbaUrzadzen;
-    if (!rmvb.czyUrzadzenieIstnieje(id)) {
-        Urzadzenie testowe1 =  new Urzadzenie(generator.zwrocNoweWspolrzedneDeterministyczne());//new Urzadzenie(id, generator.generujWspolrzedne());
+    if (!rmvb.czyUrzadzenieIstnieje(id))
+    {
+        Urzadzenie testowe1 = new Urzadzenie(generator.zwrocNoweWspolrzedneDeterministyczne());//new Urzadzenie(id, generator.generujWspolrzedne());
         rmvb.dodajUrzadzenie(testowe1);
     }
     Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
 
     rmvb.dodajWersje(tmp);
 
-    for (int j = 0; j < liczbaUrzadzen * 2/10; j++)
+    for (int j = 0; j < liczbaUrzadzen * 2 / 10; j++)
     {
         Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0) * 100) / 100;
         Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
@@ -168,7 +162,6 @@ for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
 rmvb.obliczAgregaty();
 
 rmvb.wypiszMVB();
-rmvb.zapiszMVB(sciezkaFolderuWyjsciowego);
 
 Test jednostka_testujaca = Test.pobierzInstancje();
 if (jednostka_testujaca.wykonajTesty(100))
@@ -191,6 +184,9 @@ else
 {
     jednostka_testujaca.zapiszWyniki(sciezkaFolderuWyjsciowego); //osobne logowanie błędów do innego pliku wyżej powinno nastąpić
 }
-*/
+
+rmvb.Reset();
+rmvb.zapiszMVB(sciezkaFolderuWyjsciowego);
+
 ctx.Dispose();
 return 0;

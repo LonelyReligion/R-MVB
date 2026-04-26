@@ -40,7 +40,7 @@ namespace RMVB_konsola.MVB
                 liczba_zywych += wpisy[i].Item2.wezel.liczbaZywych();
                 liczba += wpisy[i].Item2.wezel.urzadzenia.Count();
             }
-            return Decimal.Divide(liczba_zywych, liczba);
+            return liczba > 0 ? Decimal.Divide(liczba_zywych, liczba) : 0;
         }
         public List<Wersja> zwrocZywe() {
             List<Wersja> zywe = new List<Wersja>();

@@ -64,5 +64,11 @@ namespace RMVB_konsola
         public List<Wersja> pobierzWersje() {
             return wersje;
         }
+
+        public void Reset() {
+            urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
+            urzadzenia = new Dictionary<int, Urzadzenie>();
+            wersje = new List<Wersja>();
+        }
     }
 }
