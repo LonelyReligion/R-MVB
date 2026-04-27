@@ -14,5 +14,7 @@ namespace UrzadzeniaSim.Model.DB
         void saveSpaceAggregate(SpaceAggregate spaceAggregate);
 
         void saveSrednia(Srednia srednia);
+
+        void Reset();
     }
 }

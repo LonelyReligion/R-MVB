@@ -50,5 +50,8 @@ namespace UrzadzeniaSim.Model.DB
             ctx.SaveChanges();
         }
 
+        public void Reset() {
+            ctx.Database.ExecuteSqlCommand("delete from Urzadzenie_Model");
+        }
     }
 }

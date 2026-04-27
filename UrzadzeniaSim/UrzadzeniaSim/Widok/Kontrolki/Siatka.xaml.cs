@@ -422,5 +422,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
             znaczono_urzadzenie?.Invoke(numer_porzadkowy_zaznaczonego);
         }
+
+        public void Reset() {
+            urządzenia = new List<Urządzenie>();
+            rysuj();
+        }
     }
 }

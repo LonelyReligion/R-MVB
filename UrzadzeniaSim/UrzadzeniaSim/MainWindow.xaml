@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>
 
             <kontrolki:Siatka x:Name="siatkaWalcowa" Grid.Column="0" znaczono_urzadzenie = "powiedz_o_znaczeniu_panelowi"/>
-            <kontrolki:PanelBoczny x:Name="panelBoczny" DodajUrzadzenie="GenerujLosoweUrzadzenie" Grid.Column="1"/>
+            <kontrolki:PanelBoczny x:Name="panelBoczny" Grid.Column="1"/>
         </Grid>
         <kontrolki:PasekNarzedzi x:Name="pasekNarzedzi"  
                                  zmienionoPowiekszenie="powiedzOtymSiatce" 

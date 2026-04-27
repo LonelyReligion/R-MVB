@@ -20,6 +20,8 @@ namespace UrzadzeniaSim
 
         public MainWindow()
         {
+            ctx.Database.ExecuteSqlCommand("delete from Urzadzenie_Model");
+
             InitializeComponent();
 
             // Inicjowanie 
@@ -70,9 +72,8 @@ namespace UrzadzeniaSim
 
         private void pasekNarzedzi_wyczysc_wszystko()
         {
-            using (var ctx = new Kontekst()) {
-                ctx.Database.ExecuteSqlCommand("delete from Urzadzenie_Model");
-            }
+            rMVB.Reset(); //usuwa z bazy i z lokalnego repo
+            siatkaWalcowa.Reset();
         }
     }
     

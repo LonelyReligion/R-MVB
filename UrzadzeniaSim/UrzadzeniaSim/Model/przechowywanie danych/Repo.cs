@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity.Migrations;
+using UrzadzeniaSim.Widok.Kontrolki;
 
 namespace UrzadzeniaSim.Model.DB
 {
@@ -59,5 +60,13 @@ namespace UrzadzeniaSim.Model.DB
         public List<Wersja> pobierzWersje() {
             return wersje;
         }
+        public void Reset()
+        {
+            base.Reset();
+            urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
+            urzadzenia = new Dictionary<int, Urzadzenie_Model>();
+            wersje = new List<Wersja>();
+        }
+
     }
 }

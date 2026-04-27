@@ -11,7 +11,6 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     /// </summary>
     public partial class PanelBoczny : UserControl, INotifyPropertyChanged
     {
-        public event Action DodajUrzadzenie;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private double oryginalna_wysokosc;
@@ -62,16 +61,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 double skala = Math.Min(skala_x, skala_y);
 
                 Wielkosc_czcionki = (skala * (double)bazowa_wielkosc_czcionki).ToString();
-                
-                przycisk_generuj.Height = oryginalna_wysokosc_przycisku * skala;
-                przycisk_generuj.Width = oryginalna_szerokosc_przycisku * skala;
-                przycisk_generuj.Margin = new Thickness(0, 0, 0, 10 * skala );
+              
 
             };
-        }
-
-        public void ZlecGenerowanie(object sender, RoutedEventArgs e) {
-            DodajUrzadzenie?.Invoke();
         }
 
         public void uzupelnijInformacjeOurzadzeniu(int id_urzadzenia) {
