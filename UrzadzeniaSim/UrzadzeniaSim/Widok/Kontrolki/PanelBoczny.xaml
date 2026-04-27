@@ -12,14 +12,11 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
 
-            <RowDefinition Height="*"/>
-
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Label x:Name="Label_ID" Content="UrzadzenieID:" Grid.Row="0" Margin="0,10,0,0" FontSize="{Binding Wielkosc_czcionki}"/>
         <Label x:Name="Label_Dlugosc" Content="Długość:" Grid.Row="1" FontSize="{Binding Wielkosc_czcionki}"/>
         <Label x:Name="Label_Szerokosc" Content="Szerokość:" Grid.Row="2" FontSize="{Binding Wielkosc_czcionki}"/>
 
-    S </Grid>
+    </Grid>
 </UserControl>
