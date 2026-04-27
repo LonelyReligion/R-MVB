@@ -6,17 +6,31 @@
              xmlns:local="clr-namespace:UrzadzeniaSim.Widok.Kontrolki"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="150">
-    <Grid Background="#d496a7" Name="panel">
+    <Grid Background="#C4DBB8" Name="panel">
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-
         </Grid.RowDefinitions>
 
-        <Label x:Name="Label_ID" Content="UrzadzenieID:" Grid.Row="0" Margin="0,10,0,0" FontSize="{Binding Wielkosc_czcionki}"/>
-        <Label x:Name="Label_Dlugosc" Content="Długość:" Grid.Row="1" FontSize="{Binding Wielkosc_czcionki}"/>
-        <Label x:Name="Label_Szerokosc" Content="Szerokość:" Grid.Row="2" FontSize="{Binding Wielkosc_czcionki}"/>
+        <Grid Grid.Row="0">
+        </Grid>
 
+        <Border Grid.Row="1"
+        BorderThickness="1"
+        BorderBrush="#5C7D60"/>
+        
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+
+            </Grid.RowDefinitions>
+
+            <Label x:Name="Label_ID" Content="UrzadzenieID:" Grid.Row="0" Margin="0,10,0,0" FontSize="{Binding Wielkosc_czcionki}"/>
+            <Label x:Name="Label_Dlugosc" Content="Długość:" Grid.Row="1" FontSize="{Binding Wielkosc_czcionki}"/>
+            <Label x:Name="Label_Szerokosc" Content="Szerokość:" Grid.Row="2" FontSize="{Binding Wielkosc_czcionki}"/>
+        </Grid>
     </Grid>
 </UserControl>
