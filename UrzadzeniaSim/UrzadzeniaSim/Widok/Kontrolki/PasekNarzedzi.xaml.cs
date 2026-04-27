@@ -11,11 +11,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     public partial class PasekNarzedzi : UserControl
     {
         public double powiekszenie;
+
         public event Action<double> zmienionoPowiekszenie;
         public event Action<bool> zmienionoDokladnoscPoludniki;
         public event Action<bool> zmienionoDokladnoscRownolezniki;
+        
         public event Action wyczysc_wszystko;
-
+        public event Action dodaj_losowe;
         public PasekNarzedzi()
         {
             InitializeComponent();
@@ -61,6 +63,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         private void KliknietoWyczysc(object sender, RoutedEventArgs e)
         {
             wyczysc_wszystko?.Invoke();
+        }
+
+        private void DodajLosoweUrzadzenie(object sender, RoutedEventArgs e)
+        {
+            dodaj_losowe?.Invoke();
         }
     }
 }

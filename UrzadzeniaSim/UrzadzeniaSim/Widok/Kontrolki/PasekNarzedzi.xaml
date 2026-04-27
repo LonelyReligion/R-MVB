@@ -20,8 +20,10 @@
             </MenuItem>
                 
             <MenuItem Header="Edytuj" FontSize="12">
-                <MenuItem Header="Dodaj"/>
-                <MenuItem Header="Usuń"/>
+                <MenuItem Header="Dodaj urządzenie">
+                    <MenuItem Header="Losowe" Click="DodajLosoweUrzadzenie"/>
+                </MenuItem>
+                <MenuItem Header="Dezaktywuj"/>
             </MenuItem>
             <MenuItem Header="Widok" FontSize="12">
                 <MenuItem Header="Wyświetl siatkę z dokładnością do minuty">

@@ -28,6 +28,7 @@
                                  zmienionoPowiekszenie="powiedzOtymSiatce" 
                                  zmienionoDokladnoscPoludniki="siatkaZmienPoludniki" 
                                  zmienionoDokladnoscRownolezniki="siatkaZmienRownolezniki"
+                                 dodaj_losowe="GenerujLosoweUrzadzenie"
                                  Grid.Row="0"
                                  wyczysc_wszystko="pasekNarzedzi_wyczysc_wszystko"
                                  />
