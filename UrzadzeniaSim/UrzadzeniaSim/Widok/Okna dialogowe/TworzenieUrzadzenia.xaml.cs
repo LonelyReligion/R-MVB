@@ -19,9 +19,20 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
     /// </summary>
     public partial class TworzenieUrzadzenia : Window
     {
+        bool sukces = false; //czy otrzymalismy poprawne dane
         public TworzenieUrzadzenia()
         {
             InitializeComponent();
+        }
+
+        private void Przeslij_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Anuluj_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
