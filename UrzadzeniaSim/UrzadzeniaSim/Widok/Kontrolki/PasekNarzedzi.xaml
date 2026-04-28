@@ -22,6 +22,7 @@
             <MenuItem Header="Edytuj" FontSize="12">
                 <MenuItem Header="Dodaj urządzenie">
                     <MenuItem Header="Losowe" Click="DodajLosoweUrzadzenie"/>
+                    <MenuItem Header="O określonych współrzędnych" Click="DodajUrzadzenie"/>
                 </MenuItem>
                 <MenuItem Header="Dezaktywuj"/>
             </MenuItem>

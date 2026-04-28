@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using UrzadzeniaSim.Widok.Okna_dialogowe;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
@@ -68,6 +69,12 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         private void DodajLosoweUrzadzenie(object sender, RoutedEventArgs e)
         {
             dodaj_losowe?.Invoke();
+        }
+
+        private void DodajUrzadzenie(object sender, RoutedEventArgs e)
+        {
+            TworzenieUrzadzenia dialog = new TworzenieUrzadzenia();
+            dialog.ShowDialog(); //zatrzymujemy glowne okno
         }
     }
 }
