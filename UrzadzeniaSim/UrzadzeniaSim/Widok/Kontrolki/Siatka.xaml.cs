@@ -88,9 +88,6 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         }
 
         private void obliczPozycjePunktu(Urządzenie u) {
-            
-            if(u.ActualWidth != 0)
-                u.Szerokosc_wysokosc = u.ActualWidth;
 
             int dlugosc_minuty = (int)((u.dlugosc % 1) * 100);
             int dlugosc_stopnie = (int)(u.dlugosc / 1);
