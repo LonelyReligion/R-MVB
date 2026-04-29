@@ -19,6 +19,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         
         public event Action wyczysc_wszystko;
         public event Action dodaj_losowe;
+        public event Action<(decimal, decimal)> dodaj_urzadzenie;
         public PasekNarzedzi()
         {
             InitializeComponent();
@@ -75,6 +76,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         {
             TworzenieUrzadzenia dialog = new TworzenieUrzadzenia();
             dialog.ShowDialog(); //zatrzymujemy glowne okno
+
+            if (dialog.sukces == true) {
+                dodaj_urzadzenie?.Invoke((dialog.dlugosc, dialog.szerokosc));
+            }
         }
     }
 }

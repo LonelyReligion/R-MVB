@@ -19,10 +19,14 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
     /// </summary>
     public partial class TworzenieUrzadzenia : Window
     {
-        bool sukces = false; //czy otrzymalismy poprawne dane
+        public bool sukces { get; set; } //czy otrzymalismy poprawne dane
+        public Decimal dlugosc { get; set; }
+        public Decimal szerokosc { get; set; }
+
         public TworzenieUrzadzenia()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
         private void Przeslij_Click(object sender, RoutedEventArgs e)
@@ -32,7 +36,28 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
 
         private void Anuluj_Click(object sender, RoutedEventArgs e)
         {
+            sukces = false;
             Close();
+        }
+
+        private void dlugosc_spinner_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if ((dlugosc_spinner.Value % 1) == 0.99m)
+                dlugosc_spinner.Value = ((int)(dlugosc_spinner.Value / 1)) + 0.59m;
+            else if ((dlugosc_spinner.Value % 1) == 0.60m)
+                dlugosc_spinner.Value = ((int)(dlugosc_spinner.Value / 1)) + ((int)((dlugosc_spinner.Value % 1) * 100) / 60) + ((dlugosc_spinner.Value % 1) - 0.6m);
+            else
+                ;
+        }
+
+        private void szerokosc_spinner_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if ((szerokosc_spinner.Value % 1) == 0.99m)
+                szerokosc_spinner.Value = ((int)(szerokosc_spinner.Value / 1)) + 0.59m;
+            else if ((szerokosc_spinner.Value % 1) == 0.60m)
+                szerokosc_spinner.Value = ((int)(szerokosc_spinner.Value / 1)) + ((int)((szerokosc_spinner.Value % 1) * 100) / 60) + ((szerokosc_spinner.Value % 1) - 0.6m);
+            else
+                ;
         }
     }
 }
