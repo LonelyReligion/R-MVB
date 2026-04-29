@@ -20,8 +20,10 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
     public partial class TworzenieUrzadzenia : Window
     {
         public bool sukces { get; set; } //czy otrzymalismy poprawne dane
-        public Decimal dlugosc { get; set; }
-        public Decimal szerokosc { get; set; }
+
+        public Decimal dlugosc = new Decimal(14.07);
+
+        public Decimal szerokosc = new Decimal(49);
 
         public TworzenieUrzadzenia()
         {
@@ -40,9 +42,18 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
             Close();
         }
 
+        bool dlugosc_set = false;
         private void dlugosc_spinner_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if ((dlugosc_spinner.Value % 1) == 0.99m)
+            dlugosc_set = true;
+            if(szerokosc_set)
+                Przeslij.IsEnabled = true;
+
+            if (dlugosc_spinner.Value == 14.06m)
+                dlugosc_spinner.Value = 24.09m;
+            else if (dlugosc_spinner.Value == 24.10m)
+                dlugosc_spinner.Value = 14.07m;
+            else if ((dlugosc_spinner.Value % 1) == 0.99m)
                 dlugosc_spinner.Value = ((int)(dlugosc_spinner.Value / 1)) + 0.59m;
             else if ((dlugosc_spinner.Value % 1) == 0.60m)
                 dlugosc_spinner.Value = ((int)(dlugosc_spinner.Value / 1)) + ((int)((dlugosc_spinner.Value % 1) * 100) / 60) + ((dlugosc_spinner.Value % 1) - 0.6m);
@@ -50,8 +61,17 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
                 ;
         }
 
+        bool szerokosc_set = false;
         private void szerokosc_spinner_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            szerokosc_set = true;
+            if(dlugosc_set)
+                Przeslij.IsEnabled = true;
+
+            if (szerokosc_spinner.Value == 48.99m)
+                szerokosc_spinner.Value = 54.5m;
+            else if (szerokosc_spinner.Value == 54.51m)
+                szerokosc_spinner.Value = 49m;
             if ((szerokosc_spinner.Value % 1) == 0.99m)
                 szerokosc_spinner.Value = ((int)(szerokosc_spinner.Value / 1)) + 0.59m;
             else if ((szerokosc_spinner.Value % 1) == 0.60m)

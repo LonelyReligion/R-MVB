@@ -58,6 +58,7 @@ public partial class Urządzenie : UserControl, INotifyPropertyChanged
             }
 
         }
+
         public Urządzenie(decimal dlugosc, decimal szerokosc)
         {
             InitializeComponent();

@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="Dlugosc: " Margin="10,0,0,0" Grid.Column="0"/>
             <xctk:DecimalUpDown x:Name="dlugosc_spinner" Grid.Column="1" Margin="0,0,10,0" Value="{Binding dlugosc}" Increment=".01" 
-                                ValueChanged="dlugosc_spinner_ValueChanged" AllowTextInput="False" Minimum="14.07" Maximum="24.09"
+                                ValueChanged="dlugosc_spinner_ValueChanged" AllowTextInput="False" Minimum="14.06" Maximum="24.10"
                                 AllowSpin="True" DefaultValue="14.07"/>
         </Grid>
         
@@ -33,7 +33,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock  Text="Szerokosc: " Margin="10,0,0,0" Grid.Column="0"/>
             <xctk:DecimalUpDown x:Name="szerokosc_spinner" Grid.Column="1" Margin="0,0,10,0" Value="{Binding szerokosc}" Increment=".01"
-                                ValueChanged="szerokosc_spinner_ValueChanged" AllowTextInput="False" Minimum="49" Maximum="54.5"
+                                ValueChanged="szerokosc_spinner_ValueChanged" AllowTextInput="False" Minimum="48.99" Maximum="54.51"
                                 AllowSpin="True" DefaultValue="49"/>
         </Grid>
                 
