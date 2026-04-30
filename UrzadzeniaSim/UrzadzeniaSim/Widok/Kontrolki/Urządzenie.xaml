@@ -32,7 +32,7 @@
                             MinHeight="5"
                             MinWidth="5"
                             Margin="1,1,1,1"
-                            Fill="Blue"
+                            Fill="#5C7D60"
                         />
                     </Grid>
                 </ControlTemplate>

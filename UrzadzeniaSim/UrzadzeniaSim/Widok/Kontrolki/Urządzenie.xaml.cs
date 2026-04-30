@@ -15,11 +15,17 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 AKTYWNY_NADAJE
     };
 
-public partial class Urządzenie : UserControl, INotifyPropertyChanged
+    public partial class Urządzenie : UserControl, INotifyPropertyChanged
     {
-        private Color kolor_aktywny = (Color)ColorConverter.ConvertFromString("#5C7D60");
-        private Color kolor_nieaktywny = (Color)ColorConverter.ConvertFromString("#5B6B7D");
-        private Color kolor_nadajnik = (Color)ColorConverter.ConvertFromString("#DBCA16");
+        private static Color kolor_aktywny = (Color)ColorConverter.ConvertFromString("#5C7D60");
+        private static Color kolor_nieaktywny = (Color)ColorConverter.ConvertFromString("#5B6B7D");
+        private static Color kolor_nadajnik = (Color)ColorConverter.ConvertFromString("#DBCA16");
+        private static List<Color> kolory = new List<Color>
+        {
+            kolor_nieaktywny,
+            kolor_aktywny,
+            kolor_nadajnik
+        };
 
         public event Action<int> zaznaczono;
         bool zaznaczone = false;
