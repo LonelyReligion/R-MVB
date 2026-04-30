@@ -49,6 +49,15 @@ namespace UrzadzeniaSim.Model.DB
             return false;
         }
 
+        public bool czyUrzadzenieIstnieje(decimal dlugosc, decimal szerokosc) {
+            foreach (Urzadzenie_Model urzadzenie in urzadzenia.Values) {
+                if (urzadzenie.Dlugosc == dlugosc && urzadzenie.Szerokosc == szerokosc) {
+                    return true;
+                };
+            };
+            return false;
+        }
+
         public Dictionary<int, List<Wersja>> pobierzUrzadzeniaWersje() {
             return urzadzenia_wersje;
         }

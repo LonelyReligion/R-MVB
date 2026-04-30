@@ -11,7 +11,6 @@ namespace UrzadzeniaSim
     public partial class MainWindow : Window
     {
         Kontekst ctx = new Kontekst();
-        Repo repozytorium = new Repo();
         Generatory generator;
         RMVB rMVB;
         
@@ -25,14 +24,20 @@ namespace UrzadzeniaSim
             InitializeComponent();
 
             // Inicjowanie 
-            generator = new Generatory(repozytorium);
+            rMVB = new RMVB(ctx);
+
+            generator = new Generatory(rMVB.zwrocRepo());
             Wersja.ctx = ctx;
             InDBStorage.ctx = ctx;
             Repo.ctx = ctx;
             Urzadzenie_Model.ctx = ctx;
-            rMVB = new RMVB(ctx);
+
             PanelBoczny.ctx = ctx;
 
+            pasekNarzedzi.rodzic = this;
+            pasekNarzedzi.repo = rMVB.zwrocRepo();
+            Urzadzenie_Model.repo = rMVB.zwrocRepo();
+            
             ctx.Urzadzenia.FirstOrDefault();
             //
 
@@ -74,6 +79,13 @@ namespace UrzadzeniaSim
         {
             rMVB.Reset(); //usuwa z bazy i z lokalnego repo
             siatkaWalcowa.Reset();
+        }
+
+        private void pasekNarzedzi_dodaj_urzadzenie((decimal, decimal) obj)
+        {
+            Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(obj);
+            Task.Run(() => rMVB.dodajUrzadzenie(nowe_urzadzenie)); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
+            siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); 
         }
     }
     

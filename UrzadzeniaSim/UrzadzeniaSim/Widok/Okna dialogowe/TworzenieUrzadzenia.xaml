@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:UrzadzeniaSim.Widok.Okna_dialogowe"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="TworzenieUrzadzenia" Height="150" Width="300">
+        Title="TworzenieUrzadzenia" Height="195" Width="350" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="65"/>
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
@@ -21,7 +21,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Dlugosc: " Margin="10,0,0,0" Grid.Column="0"/>
-            <xctk:DecimalUpDown x:Name="dlugosc_spinner" Grid.Column="1" Margin="0,0,10,0" Value="{Binding dlugosc}" Increment=".01" 
+            <xctk:DecimalUpDown x:Name="dlugosc_spinner" Grid.Column="1" Margin="0,0,10,0" Increment=".01" 
                                 ValueChanged="dlugosc_spinner_ValueChanged" AllowTextInput="False" Minimum="14.06" Maximum="24.10"
                                 AllowSpin="True" DefaultValue="14.07"/>
         </Grid>
@@ -32,12 +32,12 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBlock  Text="Szerokosc: " Margin="10,0,0,0" Grid.Column="0"/>
-            <xctk:DecimalUpDown x:Name="szerokosc_spinner" Grid.Column="1" Margin="0,0,10,0" Value="{Binding szerokosc}" Increment=".01"
+            <xctk:DecimalUpDown x:Name="szerokosc_spinner" Grid.Column="1" Margin="0,0,10,0" Increment=".01"
                                 ValueChanged="szerokosc_spinner_ValueChanged" AllowTextInput="False" Minimum="48.99" Maximum="54.51"
                                 AllowSpin="True" DefaultValue="49"/>
         </Grid>
                 
-        <Label Grid.Row="2" Margin="10,10,0,0"/>
+        <Label x:Name ="komunikaty_bledu" Grid.Row="2" Margin="10,10,10,10" Foreground="Red"/>
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>

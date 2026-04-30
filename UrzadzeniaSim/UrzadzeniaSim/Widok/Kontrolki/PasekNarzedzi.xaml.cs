@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using UrzadzeniaSim.Model.DB;
 using UrzadzeniaSim.Widok.Okna_dialogowe;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
@@ -20,6 +21,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public event Action wyczysc_wszystko;
         public event Action dodaj_losowe;
         public event Action<(decimal, decimal)> dodaj_urzadzenie;
+
+        public Window rodzic;
+        public Repo repo;
         public PasekNarzedzi()
         {
             InitializeComponent();
@@ -74,7 +78,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private void DodajUrzadzenie(object sender, RoutedEventArgs e)
         {
-            TworzenieUrzadzenia dialog = new TworzenieUrzadzenia();
+            TworzenieUrzadzenia dialog = new TworzenieUrzadzenia(rodzic, repo);
             dialog.ShowDialog(); //zatrzymujemy glowne okno
 
             if (dialog.sukces == true) {
