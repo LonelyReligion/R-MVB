@@ -20,7 +20,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         
         public static Kontekst ctx;
 
-        private string wielkosc_czcionki = "15";
+        private string wielkosc_czcionki = "12";
 
         public string Wielkosc_czcionki 
         {
