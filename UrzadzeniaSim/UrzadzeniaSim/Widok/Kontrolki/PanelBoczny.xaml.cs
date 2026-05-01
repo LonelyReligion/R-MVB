@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Model.DB;
+using Xceed.Wpf.Toolkit.Primitives;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
@@ -11,6 +12,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     /// </summary>
     public partial class PanelBoczny : UserControl, INotifyPropertyChanged
     {
+        public static Repo repo;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private double oryginalna_wysokosc;
@@ -43,6 +45,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         {
             DataContext = this;
             InitializeComponent();
+            Statusy.ItemsSource = new List<string>{ "AKTYWNY", "NIEAKTYWNY", "NADAJE" };
             
             panel.SizeChanged += (s,e) => 
             {
@@ -65,9 +68,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             };
         }
-
+        private Urzadzenie_Model wyswietlane;
         public void uzupelnijInformacjeOurzadzeniu(int id_urzadzenia) {
             if (id_urzadzenia == -1) {
+                wyswietlane = null;
                 //odznaczamy
                 Label_ID.Content = "UrzadzenieID:";
                 Label_Dlugosc.Content = "Długość:";
@@ -75,11 +79,33 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
             else
             {
-                Urzadzenie_Model szukane = ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
-                Label_ID.Content = "UrzadzenieID: " + szukane.UrzadzenieID;
-                Label_Dlugosc.Content = "Długość: " + (int)szukane.Dlugosc + "°" + (int)((szukane.Dlugosc % 1) * 100) + "'" + "E"; //poprawic wyswietlanie ze znaczkami minuty i stopni
-                Label_Szerokosc.Content = "Szerokość: " + (int)szukane.Szerokosc + "°" + (int)((szukane.Szerokosc % 1) * 100) + "'" + "N";
+                wyswietlane = ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
+                Label_ID.Content = "UrzadzenieID: " + wyswietlane.UrzadzenieID;
+                Label_Dlugosc.Content = "Długość: " + (int)wyswietlane.Dlugosc + "°" + (int)((wyswietlane.Dlugosc % 1) * 100) + "'" + "E"; //poprawic wyswietlanie ze znaczkami minuty i stopni
+                Label_Szerokosc.Content = "Szerokość: " + (int)wyswietlane.Szerokosc + "°" + (int)((wyswietlane.Szerokosc % 1) * 100) + "'" + "N";
+
+                if (repo.czyJestAktywne(wyswietlane.UrzadzenieID))
+                    Statusy.SelectedIndex = 0; //na razie nie mamy jak sprawdzic czy nadaje tutaj
+                else
+                    Statusy.SelectedIndex = 1;
             }
+        }
+
+        private void Statusy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Statusy.SelectedIndex == 0) //Aktywny
+            {
+
+            }
+            else if (Statusy.SelectedIndex == 1)//Nieaktywny 
+            {
+
+            }
+            else //Nadaje
+            { 
+            
+            }
+
         }
     }
 }

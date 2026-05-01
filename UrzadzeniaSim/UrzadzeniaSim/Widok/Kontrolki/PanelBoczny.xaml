@@ -37,7 +37,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <Label x:Name="Label_Status" Grid.Column="0" Content="Status:"  FontSize="{Binding Wielkosc_czcionki}"/>
-                <ComboBox x:Name="Statusy" Grid.Column="1"/>
+                <ComboBox x:Name="Statusy" Grid.Column="1" SelectionChanged="Statusy_SelectionChanged" FontSize="{Binding Wielkosc_czcionki}"/>
             </Grid>
         </Grid>
     </Grid>

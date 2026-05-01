@@ -77,5 +77,9 @@ namespace UrzadzeniaSim.Model.DB
             wersje = new List<Wersja>();
         }
 
+        public bool czyJestAktywne(int UrzadzenieID) {
+            return (urzadzenia_wersje[UrzadzenieID].Last().Aktywne); 
+        }
+
     }
 }

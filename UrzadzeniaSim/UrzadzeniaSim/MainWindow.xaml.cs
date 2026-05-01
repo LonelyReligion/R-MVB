@@ -33,6 +33,7 @@ namespace UrzadzeniaSim
             Urzadzenie_Model.ctx = ctx;
 
             PanelBoczny.ctx = ctx;
+            PanelBoczny.repo = rMVB.zwrocRepo();
 
             pasekNarzedzi.rodzic = this;
             pasekNarzedzi.repo = rMVB.zwrocRepo();
@@ -67,7 +68,7 @@ namespace UrzadzeniaSim
             Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
 
             Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(generator.generujWspolrzedne());
-            Task.Run(() => rMVB.dodajUrzadzenie(nowe_urzadzenie)); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
+            Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo()));}); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
             siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
         }
 
@@ -84,7 +85,7 @@ namespace UrzadzeniaSim
         private void pasekNarzedzi_dodaj_urzadzenie((decimal, decimal) obj)
         {
             Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(obj);
-            Task.Run(() => rMVB.dodajUrzadzenie(nowe_urzadzenie)); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
+            Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo())); }); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
             siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); 
         }
     }
