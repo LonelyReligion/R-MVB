@@ -24,6 +24,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private string wielkosc_czcionki = "12";
 
+        private static List<string> statusy = new List<string> { "AKTYWNY", "NIEAKTYWNY", "NADAJE" };
         public string Wielkosc_czcionki 
         {
             get 
@@ -45,7 +46,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         {
             DataContext = this;
             InitializeComponent();
-            Statusy.ItemsSource = new List<string>{ "AKTYWNY", "NIEAKTYWNY", "NADAJE" };
+            Statusy.ItemsSource = new List<string>(); 
             
             panel.SizeChanged += (s,e) => 
             {
@@ -72,17 +73,21 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public void uzupelnijInformacjeOurzadzeniu(int id_urzadzenia) {
             if (id_urzadzenia == -1) {
                 wyswietlane = null;
+                Statusy.ItemsSource = new List<string>();
+                Label_ID.Content = "";
+                Label_Dlugosc.Content = "";
+                Label_Szerokosc.Content = "";
+
                 //odznaczamy
-                Label_ID.Content = "UrzadzenieID:";
-                Label_Dlugosc.Content = "Długość:";
-                Label_Szerokosc.Content = "Szerokość:";
             }
             else
             {
+                Statusy.ItemsSource = statusy;
+
                 wyswietlane = ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
-                Label_ID.Content = "UrzadzenieID: " + wyswietlane.UrzadzenieID;
-                Label_Dlugosc.Content = "Długość: " + (int)wyswietlane.Dlugosc + "°" + (int)((wyswietlane.Dlugosc % 1) * 100) + "'" + "E"; //poprawic wyswietlanie ze znaczkami minuty i stopni
-                Label_Szerokosc.Content = "Szerokość: " + (int)wyswietlane.Szerokosc + "°" + (int)((wyswietlane.Szerokosc % 1) * 100) + "'" + "N";
+                Label_ID.Content = wyswietlane.UrzadzenieID;
+                Label_Dlugosc.Content = (int)wyswietlane.Dlugosc + "°" + (int)((wyswietlane.Dlugosc % 1) * 100) + "'" + "E";
+                Label_Szerokosc.Content = (int)wyswietlane.Szerokosc + "°" + (int)((wyswietlane.Szerokosc % 1) * 100) + "'" + "N";
 
                 if (repo.czyJestAktywne(wyswietlane.UrzadzenieID))
                     Statusy.SelectedIndex = 0; //na razie nie mamy jak sprawdzic czy nadaje tutaj

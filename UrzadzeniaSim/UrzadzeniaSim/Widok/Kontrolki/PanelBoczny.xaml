@@ -28,14 +28,42 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <Label x:Name="Label_ID" Content="UrzadzenieID:" Grid.Row="0" Margin="0,10,0,0" FontSize="{Binding Wielkosc_czcionki}"/>
-            <Label x:Name="Label_Dlugosc" Content="Długość:" Grid.Row="1" FontSize="{Binding Wielkosc_czcionki}"/>
-            <Label x:Name="Label_Szerokosc" Content="Szerokość:" Grid.Row="2" FontSize="{Binding Wielkosc_czcionki}"/>
+            <Grid Grid.Row="0" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Label x:Name="Label_OPIS_ID" Grid.Column="0" Content="UrzadzenieID:" FontSize="{Binding Wielkosc_czcionki}"/>
+                <Label x:Name="Label_ID" Grid.Column="1" FontSize="{Binding Wielkosc_czcionki}" HorizontalAlignment="Right"/>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Label x:Name="Label_OPIS_Dlugosc" Grid.Column="0" Content="Długość:" FontSize="{Binding Wielkosc_czcionki}"/>
+                <Label x:Name="Label_Dlugosc" Grid.Column="1" FontSize="{Binding Wielkosc_czcionki}" HorizontalAlignment="Right"/>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Label x:Name="Label_OPIS_Szerokosc" Grid.Column="0" Content="Szerokość:" FontSize="{Binding Wielkosc_czcionki}"/>
+                <Label x:Name="Label_Szerokosc" Grid.Column="1" FontSize="{Binding Wielkosc_czcionki}" HorizontalAlignment="Right"/>
+            </Grid>
+            
             <Grid Grid.Row="3" Margin="0,0,0,10" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                
                 <Label x:Name="Label_Status" Grid.Column="0" Content="Status:"  FontSize="{Binding Wielkosc_czcionki}"/>
                 <ComboBox x:Name="Statusy" Grid.Column="1" SelectionChanged="Statusy_SelectionChanged" FontSize="{Binding Wielkosc_czcionki}" HorizontalAlignment="Right"
                           Margin="0,0,10,0"/>
