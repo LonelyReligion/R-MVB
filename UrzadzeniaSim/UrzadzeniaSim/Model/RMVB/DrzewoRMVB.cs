@@ -5,13 +5,13 @@ using System.IO;
 
 namespace UrzadzeniaSim.Model.RMVB;
 
-internal class RMVB
+public class DrzewoRMVB
 {
     private Kontekst ctx;
     private DrzewoMVB MVB;
     private RTreeAdapter R;
     private Repo repo;
-    internal RMVB(Kontekst ctx) {
+    internal DrzewoRMVB(Kontekst ctx) {
         this.ctx = ctx;
         repo = new Repo();
         MVB = new DrzewoMVB(repo, ctx);

@@ -392,7 +392,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
         }
 
-        private void rysuj() {
+        public void rysuj() {
             plotno.Children.Clear();
             rysujSiatkeGeograficzna();
             rysujUrządzenia(); //tylko widoczne urządzenia?

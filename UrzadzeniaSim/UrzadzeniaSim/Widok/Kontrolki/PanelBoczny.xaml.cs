@@ -13,6 +13,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     public partial class PanelBoczny : UserControl, INotifyPropertyChanged
     {
         public static Repo repo;
+        public event Action zmianaStatusuUrzadzenia;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private double oryginalna_wysokosc;
@@ -98,19 +99,21 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private void Statusy_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Statusy.SelectedIndex == 0) //Aktywny
+            if (Statusy.SelectedItem != null)
             {
-
+                if (Statusy.SelectedIndex == 0) //Aktywny
+                {
+                    wyswietlane.Aktywuj();
+                }
+                else if (Statusy.SelectedIndex == 1)//Nieaktywny 
+                {
+                    wyswietlane.Dezaktywuj();
+                }
+                else //Nadaje
+                {
+                    wyswietlane.AddMeasure(new Pomiar(), repo); // tu bedzie sie otwierac okno z opcjami generowania/dodaniem pojedynczego pomiaru
+                }
             }
-            else if (Statusy.SelectedIndex == 1)//Nieaktywny 
-            {
-
-            }
-            else //Nadaje
-            { 
-            
-            }
-
         }
     }
 }

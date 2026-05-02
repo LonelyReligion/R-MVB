@@ -3,11 +3,13 @@ using System.ComponentModel.DataAnnotations;
 using UrzadzeniaSim.Widok.Kontrolki;
 using UrzadzeniaSim.Model.DB;
 using UrzadzeniaSim.Model.RMVB.R;
+using UrzadzeniaSim.Model.RMVB;
 
 namespace UrzadzeniaSim.Model
 {
     public class Urzadzenie_Model
     {
+        public static DrzewoRMVB rMVB;
         public static int nastepne_wolne_id = 0;
 
         public Urządzenie punkt; //reprezentacja na ekranie
@@ -66,6 +68,7 @@ namespace UrzadzeniaSim.Model
                 TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
                 repository.saveTimeAggregate(timeAggregate);
             }
+            punkt.Emituj();
         }
 
         public void AddMeasure(DateTime t, Decimal v, TreeRepository repository)
@@ -79,6 +82,7 @@ namespace UrzadzeniaSim.Model
                 TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
                 repository.saveTimeAggregate(timeAggregate);
             }
+            punkt.Emituj();
         }
 
         public Decimal GetTimeAggregate()
@@ -115,6 +119,18 @@ namespace UrzadzeniaSim.Model
         public bool IsTimeAggregateValid()
         {
             return rTimeAggregate != null;
+        }
+
+        public void Aktywuj() {
+            rMVB.dodajWersje(new Wersja(UrzadzenieID, repo));
+            punkt.Aktywuj();
+        }
+
+        public void Dezaktywuj()
+        {
+            //TODO: to potestowac w og repo
+            //odnalezc ostatnia wersje i dezaktywowac, pamietac ze w mvb ma sie tez zmienic
+            punkt.Dezktywuj();
         }
     }
 }

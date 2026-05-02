@@ -106,5 +106,20 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             zaznaczenie.Fill = new SolidColorBrush(Colors.Transparent);
             zaznaczone = false;
         }
+
+        public void Aktywuj() {
+            var kolko = (Ellipse)przycisk.Template.FindName("kolko", przycisk);
+            kolko.Fill = new SolidColorBrush(kolor_aktywny);
+        }
+
+        public void Dezktywuj() {
+            var kolko = (Ellipse)przycisk.Template.FindName("kolko", przycisk);
+            kolko.Fill = new SolidColorBrush(kolor_aktywny);
+        }
+        public void Emituj() {
+            var kolko = (Ellipse)przycisk.Template.FindName("kolko", przycisk);
+            kolko.Fill = new SolidColorBrush(kolor_aktywny);
+        }
+
     }
 }

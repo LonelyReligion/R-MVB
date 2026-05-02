@@ -12,19 +12,22 @@ namespace UrzadzeniaSim
     {
         Kontekst ctx = new Kontekst();
         Generatory generator;
-        RMVB rMVB;
+        DrzewoRMVB rMVB;
         
         double wysokosc_okna;
         double szerokosc_okna;
 
         public MainWindow()
         {
-            ctx.Database.ExecuteSqlCommand("delete from Urzadzenie_Model");
+            //to powinno byc w repo
+            ctx.Database.ExecuteSqlCommand("DELETE FROM Wersjas");
+            ctx.Database.ExecuteSqlCommand("DELETE FROM Urzadzenie_Model");
+            //
 
             InitializeComponent();
 
             // Inicjowanie 
-            rMVB = new RMVB(ctx);
+            rMVB = new DrzewoRMVB(ctx);
 
             generator = new Generatory(rMVB.zwrocRepo());
             Wersja.ctx = ctx;
@@ -37,7 +40,9 @@ namespace UrzadzeniaSim
 
             pasekNarzedzi.rodzic = this;
             pasekNarzedzi.repo = rMVB.zwrocRepo();
+
             Urzadzenie_Model.repo = rMVB.zwrocRepo();
+            Urzadzenie_Model.rMVB = rMVB;
             
             ctx.Urzadzenia.FirstOrDefault();
             //
@@ -87,6 +92,10 @@ namespace UrzadzeniaSim
             Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(obj);
             Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo())); }); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
             siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); 
+        }
+
+        private void przerysuj_siatke() {
+            siatkaWalcowa.rysuj();
         }
     }
     
