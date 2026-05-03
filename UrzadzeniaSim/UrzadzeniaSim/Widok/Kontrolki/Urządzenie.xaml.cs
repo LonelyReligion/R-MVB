@@ -114,11 +114,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void Dezktywuj() {
             var kolko = (Ellipse)przycisk.Template.FindName("kolko", przycisk);
-            kolko.Fill = new SolidColorBrush(kolor_aktywny);
+            kolko.Fill = new SolidColorBrush(kolor_nieaktywny);
         }
         public void Emituj() {
             var kolko = (Ellipse)przycisk.Template.FindName("kolko", przycisk);
-            kolko.Fill = new SolidColorBrush(kolor_aktywny);
+            kolko.Fill = new SolidColorBrush(kolor_nadajnik);
         }
 
     }

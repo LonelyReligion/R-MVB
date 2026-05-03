@@ -93,10 +93,6 @@ namespace UrzadzeniaSim
             Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo())); }); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
             siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); 
         }
-
-        private void przerysuj_siatke() {
-            siatkaWalcowa.rysuj();
-        }
     }
     
 }
