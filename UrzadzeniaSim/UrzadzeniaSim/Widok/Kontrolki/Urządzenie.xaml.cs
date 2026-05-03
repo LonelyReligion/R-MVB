@@ -18,14 +18,15 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     public partial class Urządzenie : UserControl, INotifyPropertyChanged
     {
         private static Color kolor_aktywny = (Color)ColorConverter.ConvertFromString("#5C7D60");
-        private static Color kolor_nieaktywny = (Color)ColorConverter.ConvertFromString("#5B6B7D");
-        private static Color kolor_nadajnik = (Color)ColorConverter.ConvertFromString("#DBCA16");
+        private static Color kolor_nieaktywny = (Color)ColorConverter.ConvertFromString("#9AB7D6");
+        private static Color kolor_nadajnik = (Color)ColorConverter.ConvertFromString("#BE756F");
         private static List<Color> kolory = new List<Color>
         {
             kolor_nieaktywny,
             kolor_aktywny,
             kolor_nadajnik
         };
+        private static Color kolor_zaznaczenia = Colors.Blue;
 
         public event Action<int> zaznaczono;
         bool zaznaczone = false;
@@ -35,11 +36,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private int id_siatka;
 
-        public const int oryg_szerokosc_wysokosc_zaznaczenia = 6;
+        public const int oryg_szerokosc_wysokosc_zaznaczenia = 7;
         public const int oryg_szerokosc_wysokosc = 5;
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        private double szerokosc_wysokosc_zaznaczenia = oryg_szerokosc_wysokosc;
+        private double szerokosc_wysokosc_zaznaczenia = oryg_szerokosc_wysokosc_zaznaczenia;
 
         public double Szerokosc_wysokosc_zaznaczenia
         {
@@ -115,7 +116,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             if (zaznaczone)
             {
-                Wypelnienie_zaznaczenia = Brushes.Red;
+                Wypelnienie_zaznaczenia = new SolidColorBrush(kolor_zaznaczenia);
             }
             else 
             {
