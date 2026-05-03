@@ -35,7 +35,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private int id_siatka;
 
-        public const int oryg_szerokosc_wysokosc = 6;
+        public const int oryg_szerokosc_wysokosc_zaznaczenia = 6;
+        public const int oryg_szerokosc_wysokosc = 5;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private double szerokosc_wysokosc_zaznaczenia = oryg_szerokosc_wysokosc;
