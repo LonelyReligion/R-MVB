@@ -69,6 +69,32 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         }
 
+        private Brush kolor_urzadzenia = new SolidColorBrush(kolor_aktywny);
+        public Brush Kolor_urzadzenia {
+            get
+            {
+                return kolor_urzadzenia;
+            }
+            set
+            {
+                kolor_urzadzenia = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Kolor_urzadzenia"));
+            }
+        }
+        private Brush wypelnienie_zaznaczenia = Brushes.Transparent;
+        public Brush Wypelnienie_zaznaczenia
+        {
+            get
+            {
+                return wypelnienie_zaznaczenia;
+            }
+            set
+            {
+                wypelnienie_zaznaczenia = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Wypelnienie_zaznaczenia"));
+            }
+        }
+
         public Urządzenie(decimal dlugosc, decimal szerokosc)
         {
             InitializeComponent();
@@ -84,41 +110,34 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         //czy musi byc public?
         public void Zaznacz(object sender, RoutedEventArgs e)
         {
-            Button btn = sender as Button;
-            var zaznaczenie = btn.Template.FindName("zaznaczenie", btn) as Ellipse;
-
             zaznaczone = !zaznaczone;
 
             if (zaznaczone)
             {
-                zaznaczenie.Fill = new SolidColorBrush(Colors.Red);
+                Wypelnienie_zaznaczenia = Brushes.Red;
             }
             else 
             {
-                zaznaczenie.Fill = new SolidColorBrush(Colors.Transparent);
+                Wypelnienie_zaznaczenia = Brushes.Transparent;
             }
 
             zaznaczono?.Invoke (this.id_siatka);
         }
 
         public void Odznacz() {
-            var zaznaczenie = (Ellipse)przycisk.Template.FindName("zaznaczenie", przycisk);
-            zaznaczenie.Fill = new SolidColorBrush(Colors.Transparent);
+            Wypelnienie_zaznaczenia = Brushes.Transparent;
             zaznaczone = false;
         }
 
         public void Aktywuj() {
-            var kolko = (Ellipse)przycisk.Template.FindName("kolko", przycisk);
-            kolko.Fill = new SolidColorBrush(kolor_aktywny);
+            Kolor_urzadzenia = new SolidColorBrush(kolor_aktywny);
         }
 
         public void Dezktywuj() {
-            var kolko = (Ellipse)przycisk.Template.FindName("kolko", przycisk);
-            kolko.Fill = new SolidColorBrush(kolor_nieaktywny);
+            Kolor_urzadzenia = new SolidColorBrush(kolor_nieaktywny);
         }
         public void Emituj() {
-            var kolko = (Ellipse)przycisk.Template.FindName("kolko", przycisk);
-            kolko.Fill = new SolidColorBrush(kolor_nadajnik);
+            Kolor_urzadzenia = new SolidColorBrush(kolor_nadajnik);
         }
 
     }
