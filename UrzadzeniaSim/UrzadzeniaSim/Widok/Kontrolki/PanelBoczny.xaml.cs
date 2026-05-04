@@ -110,7 +110,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 }
                 else //Nadaje
                 {
-                    wyswietlane.AddMeasure(new Pomiar(), repo); // tu bedzie sie otwierac okno z opcjami generowania/dodaniem pojedynczego pomiaru
+                    wyswietlane.AddMeasure(new Pomiar()); // tu bedzie sie otwierac okno z opcjami generowania/dodaniem pojedynczego pomiaru
                 }
             }
         }

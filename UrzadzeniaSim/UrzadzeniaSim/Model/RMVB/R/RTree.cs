@@ -27,7 +27,7 @@ namespace UrzadzeniaSim.Model.RMVB.R
             Urzadzenie_Model dev = repository.pobierzUrzadzenia()[id];
             if (dev != null)
             {
-                dev.AddMeasure(p, repository);
+                dev.AddMeasure(p);
             }
         }
 
@@ -36,7 +36,7 @@ namespace UrzadzeniaSim.Model.RMVB.R
             Urzadzenie_Model dev = repository.pobierzUrzadzenia()[ix];
             if (dev != null)
             {
-                dev.AddMeasure(t, v, repository);
+                dev.AddMeasure(t, v);
             }
         }
 

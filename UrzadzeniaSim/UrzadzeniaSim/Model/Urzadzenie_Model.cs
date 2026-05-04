@@ -57,7 +57,7 @@ namespace UrzadzeniaSim.Model
         private int liczba_uwzglednionych = 0;
         private Decimal rTimeAggregate { get; set; }
         DateTime granica = new DateTime(2024, 7, 18, 0, 0, 0);
-        public void AddMeasure(Pomiar p, TreeRepository repository)
+        public void AddMeasure(Pomiar p)
         {
             if (p.dtpomiaru > granica)
             {
@@ -66,12 +66,12 @@ namespace UrzadzeniaSim.Model
 
                 rTimeAggregate = suma / liczba_uwzglednionych;
                 TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
-                repository.saveTimeAggregate(timeAggregate);
+                repo.saveTimeAggregate(timeAggregate);
             }
             punkt.Emituj();
         }
 
-        public void AddMeasure(DateTime t, Decimal v, TreeRepository repository)
+        public void AddMeasure(DateTime t, Decimal v)
         {
             if (t > granica)
             {
@@ -80,7 +80,7 @@ namespace UrzadzeniaSim.Model
 
                 rTimeAggregate = suma / liczba_uwzglednionych;
                 TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
-                repository.saveTimeAggregate(timeAggregate);
+                repo.saveTimeAggregate(timeAggregate);
             }
             punkt.Emituj();
         }
