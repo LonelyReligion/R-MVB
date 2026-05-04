@@ -17,7 +17,7 @@
                 <MenuItem Header="Zapisz"/>
                 <MenuItem Header="Wczytaj"/>
                 <MenuItem Header="Wyczyść" Click="KliknietoWyczysc"/>
-                <MenuItem Header="Ustawienia"/>
+                <MenuItem x:Name="Ustawienia" Header="Ustawienia" Click="Ustawienia_Click"/>
             </MenuItem>
                 
             <MenuItem Header="Edytuj" FontSize="12">

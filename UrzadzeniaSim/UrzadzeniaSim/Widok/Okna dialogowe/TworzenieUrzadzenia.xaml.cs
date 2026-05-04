@@ -32,6 +32,7 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
             repo = repozytorium;
             Owner = rodzic;
             InitializeComponent();
+            this.ResizeMode = ResizeMode.NoResize;
             DataContext = this;
         }
 

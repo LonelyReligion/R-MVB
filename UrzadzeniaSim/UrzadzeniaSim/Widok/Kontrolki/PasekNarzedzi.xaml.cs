@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using UrzadzeniaSim.Model.DB;
 using UrzadzeniaSim.Widok.Okna_dialogowe;
+using UrzadzeniaSim.Widok.Okna;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
@@ -27,6 +28,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public PasekNarzedzi()
         {
             InitializeComponent();
+            
             Powiekszenie.ItemsSource = new List<string> { "100%", "150%", "250%", "500%", "1000%" };
             Powiekszenie.SelectedIndex = 0;
         }
@@ -84,6 +86,12 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             if (dialog.sukces == true) {
                 dodaj_urzadzenie?.Invoke((dialog.dlugosc, dialog.szerokosc));
             }
+        }
+
+        private void Ustawienia_Click(object sender, RoutedEventArgs e)
+        {
+            Ustawienia okno = new Ustawienia();
+            okno.Show();
         }
     }
 }

@@ -22,6 +22,7 @@ namespace UrzadzeniaSim.Widok.Okna
         public Ustawienia()
         {
             InitializeComponent();
+            this.ResizeMode = ResizeMode.NoResize;
         }
     }
 }
