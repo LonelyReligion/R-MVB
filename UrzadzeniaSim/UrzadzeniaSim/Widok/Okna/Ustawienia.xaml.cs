@@ -26,7 +26,6 @@ namespace UrzadzeniaSim.Widok.Okna
             InitializeComponent();
             this.ResizeMode = ResizeMode.NoResize;
 
-            maxLiczbaUrzadzen.Value = Generatory.liczba_urzadzen;
             granicaPrzezywalnosci.Value = Korzen.granica_przezywalnosci;
             minLiczbaUrzadzen.Value = Korzen.min_urzadzen_korzen;
         }
@@ -38,9 +37,8 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private void Zapisz_Click(object sender, RoutedEventArgs e)
         {
-            Generatory.liczba_urzadzen = maxLiczbaUrzadzen.Value;
-            Korzen.granica_przezywalnosci = granicaPrzezywalnosci.Value;
-            Korzen.min_urzadzen_korzen = minLiczbaUrzadzen.Value;
+            Korzen.granica_przezywalnosci = (decimal)granicaPrzezywalnosci.Value;
+            Korzen.min_urzadzen_korzen = (int)minLiczbaUrzadzen.Value;
             Close();
         }
     }
