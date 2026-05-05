@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UrzadzeniaSim.Model.RMVB.MVB;
+using UrzadzeniaSim.Narzedzia;
 
 namespace UrzadzeniaSim.Widok.Okna
 {
@@ -23,6 +25,10 @@ namespace UrzadzeniaSim.Widok.Okna
         {
             InitializeComponent();
             this.ResizeMode = ResizeMode.NoResize;
+
+            maxLiczbaUrzadzen.Value = Generatory.liczba_urzadzen;
+            granicaPrzezywalnosci.Value = Korzen.granica_przezywalnosci;
+            minLiczbaUrzadzen.Value = Korzen.min_urzadzen_korzen;
         }
     }
 }

@@ -4,9 +4,9 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
 {
     internal class Korzen
     {
-        public static decimal granica_przezywalnosci;
+        public static decimal granica_przezywalnosci = 0.2m;
         public static Kontekst ctx;
-        public static int min_urzadzen_korzen;
+        public static int min_urzadzen_korzen = 15;
         TreeRepository repo;
 
         List<(int, Wpis)> wpisy; //po to zeby mozna bylo znalezc ostatni wezel szybko np.
