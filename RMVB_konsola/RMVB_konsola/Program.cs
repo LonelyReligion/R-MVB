@@ -30,6 +30,7 @@ int liczbaUrzadzen = 0;
 try
 {
     liczbaUrzadzen = int.Parse(liczbaUrzadzenStr);
+    Generatory.liczba_urzadzen = liczbaUrzadzen;
 }
 catch {
     Console.WriteLine("Podana liczba urządzeń nie jest liczbą całkowitą.");
@@ -43,6 +44,7 @@ CultureInfo kultura = CultureInfo.CreateSpecificCulture("pl-PL");
 try
 {
     granicaPrzezywalnosci = Double.Parse(granicaPrzezywalnosciStr, kultura);
+    Korzen.granica_przezywalnosci = (decimal)granicaPrzezywalnosci;
 }
 catch
 {
@@ -65,28 +67,25 @@ catch {
 }
 
 //
-Generatory.liczba_urzadzen = liczbaUrzadzen;
-Korzen.granica_przezywalnosci = (decimal)granicaPrzezywalnosci;
-//
-
 Random rnd = new Random();
 Kontekst ctx = new Kontekst();
+RMVB rmvb = new RMVB(ctx);
+Generatory generator = new Generatory(rmvb.zwrocRepo());
+
 Wersja.ctx = ctx;
 InDBStorage.ctx = ctx;
 Repo.ctx = ctx;
-Test.ctx = ctx;
-Urzadzenie.ctx = ctx;
-Korzen.ctx = ctx;
 
-RMVB rmvb = new RMVB(ctx);
+Test.ctx = ctx;
 Test.repo = rmvb.zwrocRepo();
 Test.rmvb = rmvb;
-Urzadzenie.repo = rmvb.zwrocRepo();
-
-
-Generatory generator = new Generatory(rmvb.zwrocRepo());
 Test.generator = generator;
 
+Urzadzenie.ctx = ctx;
+Urzadzenie.repo = rmvb.zwrocRepo();
+
+Korzen.ctx = ctx;
+//
 
 Console.WriteLine("Uwaga, wszystkie pliki znajdujące się w folderze " + sciezkaFolderuWyjsciowego + " zostaną trwale usunięte.");
 string[] sciezkiPlikow = Directory.GetFiles(sciezkaFolderuWyjsciowego);

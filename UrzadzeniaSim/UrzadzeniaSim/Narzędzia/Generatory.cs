@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UrzadzeniaSim.Model.DB;
 using UrzadzeniaSim.Model;
+using UrzadzeniaSim.Model.RMVB.R;
 
 namespace UrzadzeniaSim.Narzedzia
 {
@@ -110,14 +111,17 @@ namespace UrzadzeniaSim.Narzedzia
 
             return (dlugosc, szerokosc);
         }
-/*
-        public Rectangle generujProstokatDeterministycznie() {
+
+        public Rectangle generujProstokatDeterministycznie()
+        {
             return new Rectangle(50, 15, 52, 19);
         }
 
-        public Rectangle generujProstokat() {
+        public Rectangle generujProstokat()
+        {
             List<Decimal> szerokosci = new List<Decimal>();
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 2; i++)
+            {
                 Decimal szerokosc = (Decimal)(rnd.Next(49, 54) * 10000);
                 if (szerokosc < 540000)
                 {
@@ -135,7 +139,8 @@ namespace UrzadzeniaSim.Narzedzia
             }
 
             List<Decimal> dlugosci = new List<Decimal>();
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 2; i++)
+            {
                 Decimal dlugosc = (Decimal)(rnd.Next(14, 24) * 10000);
                 if (dlugosc < 240000)
                 {
@@ -154,11 +159,12 @@ namespace UrzadzeniaSim.Narzedzia
             return new Rectangle(szerokosci.Min(), dlugosci.Min(), szerokosci.Max(), dlugosci.Max());
         }
 
-        public Pomiar generujLosowyPomiar() {
+        public Pomiar generujLosowyPomiar()
+        {
             Decimal temp = (Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0);
             Pomiar testowy = new Pomiar(temp, DateTime.Now);
             return testowy;
-        }*/
+        }
 
         //losowanie ze zwracaniem
         public List<Wersja> wylosujWersje(int ile)
