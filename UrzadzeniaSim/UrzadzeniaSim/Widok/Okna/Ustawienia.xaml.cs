@@ -30,5 +30,18 @@ namespace UrzadzeniaSim.Widok.Okna
             granicaPrzezywalnosci.Value = Korzen.granica_przezywalnosci;
             minLiczbaUrzadzen.Value = Korzen.min_urzadzen_korzen;
         }
+
+        private void Anuluj_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Zapisz_Click(object sender, RoutedEventArgs e)
+        {
+            Generatory.liczba_urzadzen = maxLiczbaUrzadzen.Value;
+            Korzen.granica_przezywalnosci = granicaPrzezywalnosci.Value;
+            Korzen.min_urzadzen_korzen = minLiczbaUrzadzen.Value;
+            Close();
+        }
     }
 }

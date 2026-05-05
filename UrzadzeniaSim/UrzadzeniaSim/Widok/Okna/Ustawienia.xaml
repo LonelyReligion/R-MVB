@@ -61,8 +61,8 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="Anuluj" Width="100" Height="30" HorizontalAlignment="Center"/>
-            <Button Grid.Column="1" Content="Zapisz" Width="100" Height="30" HorizontalAlignment="Center"/>
+            <Button Grid.Column="0" Content="Anuluj" Width="100" Height="30" HorizontalAlignment="Center" x:Name="Anuluj" Click="Anuluj_Click"/>
+            <Button Grid.Column="1" Content="Zapisz" Width="100" Height="30" HorizontalAlignment="Center" x:Name="Zapisz" Click="Zapisz_Click"/>
         </Grid>
 
     </Grid>
