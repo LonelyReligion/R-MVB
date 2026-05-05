@@ -15,7 +15,7 @@ namespace UrzadzeniaSim.Narzedzia
         private const Decimal poczatkowa_szerokosc = 49.00m; //czy to nalezy do drzewa?
         private const Decimal poczatkowa_dlugosc = 14.07m; //czy to nalezy do drzewa?
 
-        public static int liczba_urzadzen = 100;
+        //public static int liczba_urzadzen = 100;
         private static Random rnd = new Random();
         private bool pierwszy = true;
         private Repo repo;
@@ -23,7 +23,6 @@ namespace UrzadzeniaSim.Narzedzia
         public Generatory (Repo repozytorium)
         {
             this.repo = repozytorium;
-            generujWspolrzedneDeterministycznie();
         }
 
         private int stopnieNaMinuty(Decimal wejsciowa) {
@@ -44,7 +43,7 @@ namespace UrzadzeniaSim.Narzedzia
 
         //rozklad jednostajny (dyskretny?)
         //wiesz co, ztablicujemy to 
-        public void generujWspolrzedneDeterministycznie()
+        public void generujWspolrzedneDeterministycznie(int liczba_urzadzen)
         {
             //rozciaglosc poludnikowa to 5 st. 50 min.
             //w minutach: 5 * 60 + 50 = 360
