@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using UrzadzeniaSim.Model.RMVB.MVB;
-using UrzadzeniaSim.Narzedzia;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using System.IO;
+using UrzadzeniaSim.Model.RMVB;
 
 namespace UrzadzeniaSim.Widok.Okna
 {
@@ -28,6 +18,7 @@ namespace UrzadzeniaSim.Widok.Okna
 
             granicaPrzezywalnosci.Value = Korzen.granica_przezywalnosci;
             minLiczbaUrzadzen.Value = Korzen.min_urzadzen_korzen;
+            wybranaSciezka.Text = DrzewoRMVB.sciezkaFolderuWyjsciowego;
         }
 
         private void Anuluj_Click(object sender, RoutedEventArgs e)
@@ -40,6 +31,31 @@ namespace UrzadzeniaSim.Widok.Okna
             Korzen.granica_przezywalnosci = (decimal)granicaPrzezywalnosci.Value;
             Korzen.min_urzadzen_korzen = (int)minLiczbaUrzadzen.Value;
             Close();
+        }
+
+        private void przegladaj_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new CommonOpenFileDialog();
+            dlg.Title = "Wybierz folder plików wyjściowych";
+            dlg.IsFolderPicker = true;
+            dlg.InitialDirectory = Directory.GetCurrentDirectory();
+
+            dlg.AddToMostRecentlyUsedList = false;
+            dlg.AllowNonFileSystemItems = false;
+            dlg.DefaultDirectory = Directory.GetCurrentDirectory();
+            dlg.EnsureFileExists = true;
+            dlg.EnsurePathExists = true;
+            dlg.EnsureReadOnly = false;
+            dlg.EnsureValidNames = true;
+            dlg.Multiselect = false;
+            dlg.ShowPlacesList = true;
+
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                var folder = dlg.FileName;
+                DrzewoRMVB.sciezkaFolderuWyjsciowego = folder;
+                wybranaSciezka.Text = DrzewoRMVB.sciezkaFolderuWyjsciowego;
+            }
         }
     }
 }

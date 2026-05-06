@@ -11,6 +11,7 @@ public class DrzewoRMVB
     private DrzewoMVB MVB;
     private RTreeAdapter R;
     private Repo repo;
+    public static string sciezkaFolderuWyjsciowego = Directory.GetCurrentDirectory();
     internal DrzewoRMVB(Kontekst ctx) {
         this.ctx = ctx;
         repo = new Repo();
