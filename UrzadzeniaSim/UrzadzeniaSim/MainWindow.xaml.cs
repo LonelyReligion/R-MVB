@@ -24,7 +24,6 @@ namespace UrzadzeniaSim
             ctx.Database.ExecuteSqlCommand("DELETE FROM Urzadzenie_Model");
             //
 
-            InitializeComponent();
 
             // Inicjowanie 
             rMVB = new DrzewoRMVB(ctx);
@@ -38,13 +37,17 @@ namespace UrzadzeniaSim
             PanelBoczny.ctx = ctx;
             PanelBoczny.repo = rMVB.zwrocRepo();
 
-            pasekNarzedzi.rodzic = this;
-            pasekNarzedzi.repo = rMVB.zwrocRepo();
-
             Urzadzenie_Model.repo = rMVB.zwrocRepo();
             Urzadzenie_Model.rMVB = rMVB;
-            
+
             ctx.Urzadzenia.FirstOrDefault();
+            //
+
+            InitializeComponent();
+
+            // Inicjowanie Widokow
+            pasekNarzedzi.rodzic = this;
+            pasekNarzedzi.repo = rMVB.zwrocRepo();
             //
 
             okno.SizeChanged += (s, e) =>

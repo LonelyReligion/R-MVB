@@ -1,4 +1,6 @@
-﻿using System.Data.Entity.Migrations;
+﻿using System.Collections.ObjectModel;
+using System.Data.Entity.Migrations;
+using System.Windows;
 using UrzadzeniaSim.Widok.Kontrolki;
 
 namespace UrzadzeniaSim.Model.DB
@@ -9,7 +11,12 @@ namespace UrzadzeniaSim.Model.DB
         //zmienic na przechowywanie samych id urzadzen i wersji
         //list, bo często sięgamy do ostatniego (największego) elementu
         private Dictionary<int, List<Wersja>> urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
+        
         private Dictionary<int, Urzadzenie_Model> urzadzenia = new Dictionary<int, Urzadzenie_Model>();
+
+        //na potrzeby UI
+        public ObservableCollection<Urzadzenie_Model> UrzadzeniaUI = new ObservableCollection<Urzadzenie_Model>();
+
         //do zwrocenia wszystkich
         private List<Wersja> wersje = new List<Wersja>();
 
@@ -21,7 +28,15 @@ namespace UrzadzeniaSim.Model.DB
         public override void saveDevice(Urzadzenie_Model device) {
             ctx.Urzadzenia.Add(device);
             urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
+            
             urzadzenia.Add(device.UrzadzenieID, device);
+            
+            //bez sensu troche, przeniesc to gdzie indziej
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                UrzadzeniaUI.Add(device);
+            });
+
             base.saveDevice(device);
         }
 
@@ -75,6 +90,7 @@ namespace UrzadzeniaSim.Model.DB
             urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
             urzadzenia = new Dictionary<int, Urzadzenie_Model>();
             wersje = new List<Wersja>();
+            UrzadzeniaUI = new ObservableCollection<Urzadzenie_Model>();
         }
 
         public bool czyJestAktywne(int UrzadzenieID) {

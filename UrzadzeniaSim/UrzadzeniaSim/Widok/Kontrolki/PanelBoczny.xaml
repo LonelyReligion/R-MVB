@@ -14,6 +14,8 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
+            <DataGrid x:Name="listaUrzadzen"/>
+
         </Grid>
 
         <Border Grid.Row="1"

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using UrzadzeniaSim.Model;
@@ -42,12 +43,18 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         private double oryginalna_szerokosc_przycisku = 120;
 
         private bool mamy_wymiary = false;
+
+
         public PanelBoczny()
         {
-            DataContext = this;
             InitializeComponent();
-            Statusy.ItemsSource = new List<string>(); 
-            
+
+            listaUrzadzen.ItemsSource = repo.UrzadzeniaUI;
+            Statusy.ItemsSource = new List<string>();
+
+
+            DataContext = this;
+
             panel.SizeChanged += (s,e) => 
             {
 
