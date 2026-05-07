@@ -128,7 +128,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 e.Column.Visibility = Visibility.Collapsed;
 
             if (e.PropertyName == "UrzadzenieID")
+            {
                 e.Column.Header = "ID";
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            }
+            else {
+                e.Column.Width = new DataGridLength(2, DataGridLengthUnitType.Star);
+            }
         }
 
         private void listaUrzadzen_SelectionChanged(object sender, SelectionChangedEventArgs e)
