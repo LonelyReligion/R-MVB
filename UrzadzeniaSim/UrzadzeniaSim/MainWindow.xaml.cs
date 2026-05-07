@@ -5,6 +5,8 @@ using UrzadzeniaSim.Narzedzia;
 using UrzadzeniaSim.Model.DB;
 using UrzadzeniaSim.Model.RMVB;
 using UrzadzeniaSim.Widok.Kontrolki;
+using System.Collections.ObjectModel;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace UrzadzeniaSim
 {
@@ -17,6 +19,8 @@ namespace UrzadzeniaSim
         double wysokosc_okna;
         double szerokosc_okna;
 
+        //na potrzeby UI
+        public static ObservableCollection<Urzadzenie_Model> UrzadzeniaUI = new ObservableCollection<Urzadzenie_Model>();
         public MainWindow()
         {
             //to powinno byc w repo
@@ -76,8 +80,12 @@ namespace UrzadzeniaSim
             Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
 
             Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(generator.generujWspolrzedne());
-            Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo()));}); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
+            System.Threading.Tasks.Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo()));}); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
             siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
+
+
+            UrzadzeniaUI.Add(nowe_urzadzenie);
+
         }
 
         private void powiedz_o_znaczeniu_panelowi(int id_urzadzenia) {
@@ -93,8 +101,10 @@ namespace UrzadzeniaSim
         private void pasekNarzedzi_dodaj_urzadzenie((decimal, decimal) obj)
         {
             Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(obj);
-            Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo())); }); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
-            siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); 
+            System.Threading.Tasks.Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo())); }); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
+            siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie);
+
+            UrzadzeniaUI.Add(nowe_urzadzenie);
         }
     }
     

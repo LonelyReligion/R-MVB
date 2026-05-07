@@ -2,6 +2,7 @@
 using UrzadzeniaSim.Model.RMVB.R;
 using UrzadzeniaSim.Model.RMVB.MVB;
 using System.IO;
+using System.Collections.ObjectModel;
 
 namespace UrzadzeniaSim.Model.RMVB;
 
@@ -119,6 +120,7 @@ public class DrzewoRMVB
     }
     public void Reset()
     {
+        MainWindow.UrzadzeniaUI = new ObservableCollection<Urzadzenie_Model>();
         repo.Reset();
         MVB = new DrzewoMVB(repo, ctx);
         R = new RTreeAdapter(new RTree(repo, ctx));

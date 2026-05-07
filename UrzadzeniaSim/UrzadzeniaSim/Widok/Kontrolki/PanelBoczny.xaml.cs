@@ -49,7 +49,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         {
             InitializeComponent();
 
-            listaUrzadzen.ItemsSource = repo.UrzadzeniaUI;
+            listaUrzadzen.ItemsSource = MainWindow.UrzadzeniaUI;
             Statusy.ItemsSource = new List<string>();
 
 
@@ -120,6 +120,21 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     wyswietlane.AddMeasure(new Pomiar()); // tu bedzie sie otwierac okno z opcjami generowania/dodaniem pojedynczego pomiaru
                 }
             }
+        }
+
+        private void listaUrzadzen_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if(e.PropertyName == "Wersje")
+                e.Column.Visibility = Visibility.Collapsed;
+
+            if (e.PropertyName == "UrzadzenieID")
+                e.Column.Header = "ID";
+        }
+
+        private void listaUrzadzen_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Urzadzenie_Model zaznaczone = listaUrzadzen.SelectedItem as Urzadzenie_Model;
+            zaznaczone.punkt.Zaznacz();
         }
     }
 }

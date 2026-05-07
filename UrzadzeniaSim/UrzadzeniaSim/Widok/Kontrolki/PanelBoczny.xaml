@@ -14,7 +14,9 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <DataGrid x:Name="listaUrzadzen"/>
+            <DataGrid x:Name="listaUrzadzen" AutoGeneratingColumn="listaUrzadzen_AutoGeneratingColumn" CanUserResizeColumns="False" 
+                      CanUserAddRows="False" CanUserResizeRows="False"
+                      CanUserDeleteRows="False" IsReadOnly="True" SelectionChanged="listaUrzadzen_SelectionChanged"/>
 
         </Grid>
 

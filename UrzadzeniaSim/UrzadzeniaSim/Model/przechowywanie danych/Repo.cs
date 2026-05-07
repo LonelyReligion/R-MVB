@@ -14,9 +14,6 @@ namespace UrzadzeniaSim.Model.DB
         
         private Dictionary<int, Urzadzenie_Model> urzadzenia = new Dictionary<int, Urzadzenie_Model>();
 
-        //na potrzeby UI
-        public ObservableCollection<Urzadzenie_Model> UrzadzeniaUI = new ObservableCollection<Urzadzenie_Model>();
-
         //do zwrocenia wszystkich
         private List<Wersja> wersje = new List<Wersja>();
 
@@ -30,12 +27,6 @@ namespace UrzadzeniaSim.Model.DB
             urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
             
             urzadzenia.Add(device.UrzadzenieID, device);
-            
-            //bez sensu troche, przeniesc to gdzie indziej
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                UrzadzeniaUI.Add(device);
-            });
 
             base.saveDevice(device);
         }
@@ -90,7 +81,6 @@ namespace UrzadzeniaSim.Model.DB
             urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
             urzadzenia = new Dictionary<int, Urzadzenie_Model>();
             wersje = new List<Wersja>();
-            UrzadzeniaUI = new ObservableCollection<Urzadzenie_Model>();
         }
 
         public bool czyJestAktywne(int UrzadzenieID) {

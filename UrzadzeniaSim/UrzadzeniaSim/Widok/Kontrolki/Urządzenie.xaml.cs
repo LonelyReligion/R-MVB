@@ -112,18 +112,23 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         //czy musi byc public?
         public void Zaznacz(object sender, RoutedEventArgs e)
         {
+            Zaznacz();
+        }
+
+        public void Zaznacz()
+        {
             zaznaczone = !zaznaczone;
 
             if (zaznaczone)
             {
                 Wypelnienie_zaznaczenia = new SolidColorBrush(kolor_zaznaczenia);
             }
-            else 
+            else
             {
                 Wypelnienie_zaznaczenia = Brushes.Transparent;
             }
 
-            zaznaczono?.Invoke (this.id_siatka);
+            zaznaczono?.Invoke(this.id_siatka);
         }
 
         public void Odznacz() {
