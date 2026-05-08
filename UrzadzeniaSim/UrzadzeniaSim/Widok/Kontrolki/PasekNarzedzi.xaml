@@ -40,7 +40,8 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Powiększenie" Width="auto" Height="auto" Margin="5"/>
-            <ComboBox Name="Powiekszenie" Grid.Column="1" Width="auto" Margin="5" SelectionChanged="zmianaPowiekszenia" IsEditable="True" />
+            <ComboBox Name="Powiekszenie" Grid.Column="1" Width="auto" Margin="5" SelectionChanged="zmianaPowiekszenia" IsEditable="True" 
+                      LostFocus="Powiekszenie_LostFocus" ItemsSource="{Binding domyslne_powiekszenia}"/>
         </Grid>
     </Grid>
 </UserControl>
