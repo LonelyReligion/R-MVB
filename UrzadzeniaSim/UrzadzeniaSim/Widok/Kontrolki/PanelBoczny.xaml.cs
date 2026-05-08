@@ -118,7 +118,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 }
                 else //Nadaje
                 {
-                    Window okno_generowania = new Generowanie();
+                    Window okno_generowania = new Generowanie(wyswietlane.UrzadzenieID);
                     okno_generowania.Show();
                 }
             }

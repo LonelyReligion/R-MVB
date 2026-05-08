@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="ID: "/>
-            <Label Grid.Column="1" Content="[ID URZADZENIA]"/>
+            <Label Grid.Column="1" Content="{Binding id}"/>
         </Grid>
 
         <Grid Grid.Row="1" Margin="10,10,0,0">
@@ -45,9 +45,9 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <RadioButton GroupName="automatyczneGenerowanie" IsChecked="True" Grid.Column="0" VerticalAlignment="Center"/>
+            <RadioButton x:Name="generowanieZparemetryzowane"  GroupName="automatyczneGenerowanie" IsChecked="True" Grid.Column="0" VerticalAlignment="Center"/>
             <Label Grid.Column="1" Content="Zakończ generowanie automatycznie po "/>
-            <xctk:IntegerUpDown Grid.Column="2" Watermark="ilu?" Minimum="1"/>
+            <xctk:IntegerUpDown Grid.Column="2" Watermark="ilu?" Minimum="1" IsEnabled="{Binding IsChecked, ElementName=generowanieZparemetryzowane}"/>
             <Label Grid.Column="3" Content=" cyklach."/>
         </Grid>
 
@@ -57,7 +57,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <RadioButton GroupName="automatyczneGenerowanie" IsChecked="False" Grid.Column="0" VerticalAlignment="Center"/>
+            <RadioButton x:Name="generowanieCykliczne"  GroupName="automatyczneGenerowanie" IsChecked="False" Grid.Column="0" VerticalAlignment="Center"/>
             <Label Grid.Column="1" Content="Generuj pomiary cyklicznie."/>
         </Grid>
 
@@ -68,7 +68,7 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0" Content="Stop" Width="100"/>
-            <Button Grid.Column="1" Content="Start" Width="100"/>
+            <Button Grid.Column="1" Content="Start" Width="100" IsEnabled="False"/>
         </Grid>
     </Grid>
 </Window>
