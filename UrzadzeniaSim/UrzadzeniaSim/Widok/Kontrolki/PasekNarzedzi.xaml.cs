@@ -35,16 +35,29 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private void zmianaPowiekszenia(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
             string procenty = Powiekszenie.SelectedItem?.ToString();
-            int procenty_i = int.Parse(procenty.Substring(0, procenty.Length-1));
+            int procenty_i;
+            if (procenty != null)
+            {
+                procenty_i = int.Parse(procenty.Substring(0, procenty.Length - 1));
+            }
+            else if (!string.IsNullOrEmpty(Powiekszenie.Text))
+            {
+                procenty_i = int.Parse(Powiekszenie.Text.Substring(0, Powiekszenie.Text.Length - 1)); //zakladajac ze konczy sie na % do poprawy
+            }
+            else {
+                return;
+            }
+
             Trace.WriteLine("Zmieniono powiekszenie na " + procenty_i);
-            powiekszenie = (double) procenty_i / 100;
-            
+            powiekszenie = (double)procenty_i / 100;
+
             if (procenty_i >= 250)
             {
                 poludniki_minuta.IsEnabled = true;
                 rownolezniki_minuta.IsEnabled = true;
             }
-            else {
+            else
+            {
                 poludniki_minuta.IsEnabled = false;
                 rownolezniki_minuta.IsEnabled = false;
 
@@ -54,8 +67,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 poludniki_minuta.ToolTip = "Aby zwiększyć dokładność ustaw powiększenie większe lub równe 250%";
                 rownolezniki_minuta.ToolTip = "Aby zwiększyć dokładność ustaw powiększenie większe lub równe 250%";
             }
-
             zmienionoPowiekszenie?.Invoke(powiekszenie);
+
         }
 
         private void przycisnieto_poludniki_minuta(object sender, RoutedEventArgs e)
