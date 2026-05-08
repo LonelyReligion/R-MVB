@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Model.DB;
 using Xceed.Wpf.Toolkit.Primitives;
+using UrzadzeniaSim.Widok.Okna;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
@@ -117,7 +118,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 }
                 else //Nadaje
                 {
-                    wyswietlane.AddMeasure(new Pomiar()); // tu bedzie sie otwierac okno z opcjami generowania/dodaniem pojedynczego pomiaru
+                    Window okno_generowania = new Generowanie();
+                    okno_generowania.Show();
                 }
             }
         }
