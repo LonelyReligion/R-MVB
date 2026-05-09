@@ -1,7 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Data.Entity.Migrations;
-using System.Windows;
-using UrzadzeniaSim.Widok.Kontrolki;
+﻿using System.Data.Entity.Migrations;
 
 namespace UrzadzeniaSim.Model.DB
 {

@@ -14,25 +14,25 @@
                         <Ellipse
                             x:Name="zaznaczenie"
                             
-                            Width="{Binding Szerokosc_wysokosc_zaznaczenia}"
-                            Height="{Binding Szerokosc_wysokosc_zaznaczenia}"
+                            Width="{Binding szerokosc_wysokosc_zaznaczenia}"
+                            Height="{Binding szerokosc_wysokosc_zaznaczenia}"
                             
                             MinWidth="6"
                             MinHeight="6"
                             Stretch="Fill"
-                            Fill="{Binding Wypelnienie_zaznaczenia, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                            Fill="{Binding wypelnienie_zaznaczenia, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                         />
                         <Ellipse
                             x:Name="kolko"
                             
-                            Width="{Binding Szerokosc_wysokosc}"
-                            Height="{Binding Szerokosc_wysokosc}"
+                            Width="{Binding szerokosc_wysokosc}"
+                            Height="{Binding szerokosc_wysokosc}"
                             
                             Stretch="Fill"
                             MinHeight="5"
                             MinWidth="5"
                             Margin="1,1,1,1"
-                            Fill="{Binding Kolor_urzadzenia, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                            Fill="{Binding kolor_urzadzenia, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                         />
                     </Grid>
                 </ControlTemplate>

@@ -67,8 +67,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 //
                foreach (Urządzenie u in urządzenia) {
-                    u.Szerokosc_wysokosc_zaznaczenia = Math.Max(Urządzenie.oryg_szerokosc_wysokosc_zaznaczenia * skala, Urządzenie.oryg_szerokosc_wysokosc_zaznaczenia);
-                    u.Szerokosc_wysokosc = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+                    u.szerokosc_wysokosc_zaznaczenia = Math.Max(Urządzenie.oryg_szerokosc_wysokosc_zaznaczenia * skala, Urządzenie.oryg_szerokosc_wysokosc_zaznaczenia);
+                    u.szerokosc_wysokosc = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
 
                     obliczPozycjePunktu(u);
                 }
@@ -107,7 +107,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             int szerokosc_stopnie = (int)(u.szerokosc / 1);
             double szerokosc_przesuniecie = (szerokosc_stopnie - 49) * krokY + ((double)(szerokosc_minuty)) * krokY / 60.0;
 
-            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - u.Szerokosc_wysokosc/2, szerokosc_przesuniecie + wysokosc_plotna - marginesY - u.Szerokosc_wysokosc/2, 0, 0); 
+            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - u.szerokosc_wysokosc/2, szerokosc_przesuniecie + wysokosc_plotna - marginesY - u.szerokosc_wysokosc/2, 0, 0); 
         }
         private void rysujUrządzenia() {
             foreach (Urządzenie u in urządzenia) {
@@ -374,8 +374,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             double skala = obliczSkale();
 
             if (skala != 1) {
-                u.punkt.Szerokosc_wysokosc_zaznaczenia = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
-                u.punkt.Szerokosc_wysokosc = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+                u.punkt.szerokosc_wysokosc_zaznaczenia = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+                u.punkt.szerokosc_wysokosc = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
             }
 
             

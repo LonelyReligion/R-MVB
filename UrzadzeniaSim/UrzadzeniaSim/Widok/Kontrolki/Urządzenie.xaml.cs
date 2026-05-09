@@ -40,60 +40,60 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public const int oryg_szerokosc_wysokosc = 5;
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        private double szerokosc_wysokosc_zaznaczenia = oryg_szerokosc_wysokosc_zaznaczenia;
+        private double _szerokosc_wysokosc_zaznaczenia = oryg_szerokosc_wysokosc_zaznaczenia;
 
-        public double Szerokosc_wysokosc_zaznaczenia
+        public double szerokosc_wysokosc_zaznaczenia
         {
             get
             {
-                return szerokosc_wysokosc_zaznaczenia;
+                return _szerokosc_wysokosc_zaznaczenia;
             }
             set
             {
-                szerokosc_wysokosc_zaznaczenia = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Szerokosc_wysokosc_zaznaczenia"));
+                _szerokosc_wysokosc_zaznaczenia = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("szerokosc_wysokosc_zaznaczenia"));
             }
         }
 
-        private double szerokosc_wysokosc = 5;
+        private double _szerokosc_wysokosc = 5;
 
-        public double Szerokosc_wysokosc
+        public double szerokosc_wysokosc
         {
             get
             {
-                return szerokosc_wysokosc;
+                return _szerokosc_wysokosc;
             }
             set
             {
-                szerokosc_wysokosc = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Szerokosc_wysokosc"));
+                _szerokosc_wysokosc = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("szerokosc_wysokosc"));
             }
 
         }
 
-        private Brush kolor_urzadzenia = new SolidColorBrush(kolor_aktywny);
-        public Brush Kolor_urzadzenia {
+        private Brush _kolor_urzadzenia = new SolidColorBrush(kolor_aktywny);
+        public Brush kolor_urzadzenia {
             get
             {
-                return kolor_urzadzenia;
+                return _kolor_urzadzenia;
             }
             set
             {
-                kolor_urzadzenia = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Kolor_urzadzenia"));
+                _kolor_urzadzenia = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("kolor_urzadzenia"));
             }
         }
-        private Brush wypelnienie_zaznaczenia = Brushes.Transparent;
-        public Brush Wypelnienie_zaznaczenia
+        private Brush _wypelnienie_zaznaczenia = Brushes.Transparent;
+        public Brush wypelnienie_zaznaczenia
         {
             get
             {
-                return wypelnienie_zaznaczenia;
+                return _wypelnienie_zaznaczenia;
             }
             set
             {
-                wypelnienie_zaznaczenia = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Wypelnienie_zaznaczenia"));
+                _wypelnienie_zaznaczenia = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("wypelnienie_zaznaczenia"));
             }
         }
 
@@ -121,30 +121,30 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             if (zaznaczone)
             {
-                Wypelnienie_zaznaczenia = new SolidColorBrush(kolor_zaznaczenia);
+                wypelnienie_zaznaczenia = new SolidColorBrush(kolor_zaznaczenia);
             }
             else
             {
-                Wypelnienie_zaznaczenia = Brushes.Transparent;
+                wypelnienie_zaznaczenia = Brushes.Transparent;
             }
 
             zaznaczono?.Invoke(this.id_siatka);
         }
 
         public void Odznacz() {
-            Wypelnienie_zaznaczenia = Brushes.Transparent;
+            wypelnienie_zaznaczenia = Brushes.Transparent;
             zaznaczone = false;
         }
 
         public void Aktywuj() {
-            Kolor_urzadzenia = new SolidColorBrush(kolor_aktywny);
+            kolor_urzadzenia = new SolidColorBrush(kolor_aktywny);
         }
 
         public void Dezktywuj() {
-            Kolor_urzadzenia = new SolidColorBrush(kolor_nieaktywny);
+            kolor_urzadzenia = new SolidColorBrush(kolor_nieaktywny);
         }
         public void Emituj() {
-            Kolor_urzadzenia = new SolidColorBrush(kolor_nadajnik);
+            kolor_urzadzenia = new SolidColorBrush(kolor_nadajnik);
         }
 
     }

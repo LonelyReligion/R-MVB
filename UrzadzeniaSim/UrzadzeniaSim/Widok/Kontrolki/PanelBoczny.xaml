@@ -38,8 +38,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <Label x:Name="Label_OPIS_ID" Grid.Column="0" Content="UrzadzenieID:" FontSize="{Binding Wielkosc_czcionki}"/>
-                <Label x:Name="Label_ID" Grid.Column="1" FontSize="{Binding Wielkosc_czcionki}" HorizontalAlignment="Right"/>
+                <Label x:Name="Label_OPIS_ID" Grid.Column="0" Content="UrzadzenieID:" FontSize="{Binding wielkosc_czcionki}"/>
+                <Label x:Name="Label_ID" Grid.Column="1" FontSize="{Binding wielkosc_czcionki}" HorizontalAlignment="Right"/>
             </Grid>
 
             <Grid Grid.Row="1">
@@ -48,8 +48,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <Label x:Name="Label_OPIS_Dlugosc" Grid.Column="0" Content="Długość:" FontSize="{Binding Wielkosc_czcionki}"/>
-                <Label x:Name="Label_Dlugosc" Grid.Column="1" FontSize="{Binding Wielkosc_czcionki}" HorizontalAlignment="Right"/>
+                <Label x:Name="Label_OPIS_Dlugosc" Grid.Column="0" Content="Długość:" FontSize="{Binding wielkosc_czcionki}"/>
+                <Label x:Name="Label_Dlugosc" Grid.Column="1" FontSize="{Binding wielkosc_czcionki}" HorizontalAlignment="Right"/>
             </Grid>
 
             <Grid Grid.Row="2">
@@ -58,8 +58,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <Label x:Name="Label_OPIS_Szerokosc" Grid.Column="0" Content="Szerokość:" FontSize="{Binding Wielkosc_czcionki}"/>
-                <Label x:Name="Label_Szerokosc" Grid.Column="1" FontSize="{Binding Wielkosc_czcionki}" HorizontalAlignment="Right"/>
+                <Label x:Name="Label_OPIS_Szerokosc" Grid.Column="0" Content="Szerokość:" FontSize="{Binding wielkosc_czcionki}"/>
+                <Label x:Name="Label_Szerokosc" Grid.Column="1" FontSize="{Binding wielkosc_czcionki}" HorizontalAlignment="Right"/>
             </Grid>
             
             <Grid Grid.Row="3" Margin="0,0,0,10" >
@@ -68,8 +68,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <Label x:Name="Label_Status" Grid.Column="0" Content="Status:"  FontSize="{Binding Wielkosc_czcionki}"/>
-                <ComboBox x:Name="Statusy" Grid.Column="1" SelectionChanged="Statusy_SelectionChanged" FontSize="{Binding Wielkosc_czcionki}" HorizontalAlignment="Right"
+                <Label x:Name="Label_Status" Grid.Column="0" Content="Status:"  FontSize="{Binding wielkosc_czcionki}"/>
+                <ComboBox x:Name="Statusy" Grid.Column="1" SelectionChanged="Statusy_SelectionChanged" FontSize="{Binding wielkosc_czcionki}" HorizontalAlignment="Right"
                           Margin="0,0,10,0"/>
             </Grid>
         </Grid>

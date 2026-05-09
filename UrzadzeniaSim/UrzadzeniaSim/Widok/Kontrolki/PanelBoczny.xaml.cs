@@ -24,19 +24,19 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         
         public static Kontekst ctx;
 
-        private string wielkosc_czcionki = "12";
+        private string _wielkosc_czcionki = "12";
 
         private static List<string> statusy = new List<string> { "AKTYWNY", "NIEAKTYWNY", "NADAJE" };
-        public string Wielkosc_czcionki 
+        public string wielkosc_czcionki 
         {
             get 
             {
-                return wielkosc_czcionki;
+                return _wielkosc_czcionki;
             }
             set 
             {
-                wielkosc_czcionki = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Wielkosc_czcionki"));
+                _wielkosc_czcionki = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("wielkosc_czcionki"));
             } 
         }
 
@@ -72,7 +72,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 double skala_y = wysokosc_panelu / oryginalna_wysokosc;
                 double skala = Math.Min(skala_x, skala_y);
 
-                Wielkosc_czcionki = (skala * (double)bazowa_wielkosc_czcionki).ToString();
+                wielkosc_czcionki = (skala * (double)bazowa_wielkosc_czcionki).ToString();
               
 
             };
