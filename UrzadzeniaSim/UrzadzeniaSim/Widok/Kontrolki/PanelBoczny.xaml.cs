@@ -104,7 +104,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
         }
 
-        private void Statusy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Statusy_SelectionChanged(object sender, EventArgs e)
         {
             if (Statusy.SelectedItem != null)
             {

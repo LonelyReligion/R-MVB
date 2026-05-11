@@ -35,7 +35,7 @@ namespace UrzadzeniaSim.Widok.Okna
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
             PasekPostepu.IsIndeterminate = true;
-            await Task.Yield();//potrzebne żeby UI się zaktualizowało
+            await Task.Yield(); //potrzebne żeby UI się zaktualizowało
             
             cancellationTokenSource = new CancellationTokenSource();
             token = cancellationTokenSource.Token;
