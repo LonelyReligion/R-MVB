@@ -34,7 +34,7 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" Content="Generuj pomiar co "/>
-            <xctk:IntegerUpDown Grid.Column="1" Watermark="ile?" Minimum="1"/>
+            <xctk:IntegerUpDown Grid.Column="1" Watermark="ile?" Minimum="1" x:Name="sekundy" ValueChanged="sekundy_ValueChanged"/>
             <Label Grid.Column="2" Content=" sekund."/>
         </Grid>
 
@@ -48,7 +48,8 @@
 
             <RadioButton x:Name="generowanieZparemetryzowane"  GroupName="automatyczneGenerowanie" IsChecked="True" Grid.Column="0" VerticalAlignment="Center"/>
             <Label Grid.Column="1" Content="Zakończ generowanie automatycznie po "/>
-            <xctk:IntegerUpDown Grid.Column="2" Watermark="ilu?" Minimum="1" IsEnabled="{Binding IsChecked, ElementName=generowanieZparemetryzowane}"/>
+            <xctk:IntegerUpDown Grid.Column="2" Watermark="ilu?" Minimum="1" IsEnabled="{Binding IsChecked, ElementName=generowanieZparemetryzowane}" 
+                                x:Name="liczbaCykli" ValueChanged="sekundy_ValueChanged"/>
             <Label Grid.Column="3" Content=" cyklach."/>
         </Grid>
 
@@ -69,8 +70,8 @@
             </Grid.ColumnDefinitions>
 
             <Button x:Name="Stop" Grid.Column="0" Content="Stop" Width="100" Click="Stop_Click" IsEnabled="False"/>
-            <Button x:Name="Start" Grid.Column="1" Content="Start" Width="100" IsEnabled="True" Click="Start_Click"/>
+            <Button x:Name="Start" Grid.Column="1" Content="Start" Width="100" IsEnabled="False" Click="Start_Click"/>
         </Grid>
-        <ProgressBar Grid.Row="5" Height="20" Margin="0,10,0,0" x:Name="PasekPostepu"/>
+        <ProgressBar Grid.Row="5" Height="20" Margin="0,20,0,0" x:Name="PasekPostepu" Foreground="#5C7D60"/>
     </Grid>
 </Window>

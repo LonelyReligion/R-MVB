@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using UrzadzeniaSim.Model;
 
@@ -30,23 +31,57 @@ namespace UrzadzeniaSim.Widok.Okna
 
             InitializeComponent();
         }
-
-        private void Start_Click(object sender, RoutedEventArgs e)
+        private bool pracaWtoku = false;
+        private async void Start_Click(object sender, RoutedEventArgs e)
         {
+            PasekPostepu.IsIndeterminate = true;
+            await Task.Yield();//potrzebne żeby UI się zaktualizowało
+            
+            cancellationTokenSource = new CancellationTokenSource();
+            token = cancellationTokenSource.Token;
+
+            pracaWtoku = true;
             Task.Run(async () => 
                 {
                     while (!token.IsCancellationRequested)
                     {
-                        //PasekPostepu.IsIndeterminate = True;
-                        await Task.Delay(1000);
+                        await Task.Delay(1000); //tyle ile w updown
                     }
+                    Trace.WriteLine("Zadanie zostało anulowane przez użytkownika lub zakończyło się pomyślnie.");
                 }
             );
+            Start.IsEnabled = false;
+            Stop.IsEnabled = true;
+
+
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
-            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Cancel(); //to nie jest zatrzymanie tylko uprzejma prośba
+
+            PasekPostepu.IsIndeterminate = false;
+
+            pracaWtoku = false;
+
+            if (sekundy.Value != null && liczbaCykli.Value != null)
+                Start.IsEnabled = true;
+            else 
+                Start.IsEnabled = false;
+            Stop.IsEnabled = false;
+
         }
+
+        private void sekundy_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (pracaWtoku == false && (sekundy.Value == null || liczbaCykli.Value == null)) {
+                Start.IsEnabled = false;
+                Stop.IsEnabled = false;
+            }
+
+            if(pracaWtoku == false && sekundy.Value != null && liczbaCykli.Value != null)
+                Start.IsEnabled = true;
+        }
+
     }
 }
