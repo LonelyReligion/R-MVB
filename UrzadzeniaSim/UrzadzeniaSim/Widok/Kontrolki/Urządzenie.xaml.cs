@@ -97,6 +97,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
         }
 
+        public STATUS status_urzadzenia = STATUS.AKTYWNY;
         public Urządzenie(decimal dlugosc, decimal szerokosc)
         {
             InitializeComponent();
@@ -138,13 +139,19 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void Aktywuj() {
             kolor_urzadzenia = new SolidColorBrush(kolor_aktywny);
+            status_urzadzenia = STATUS.AKTYWNY;
         }
 
         public void Dezktywuj() {
             kolor_urzadzenia = new SolidColorBrush(kolor_nieaktywny);
+            status_urzadzenia = STATUS.NIEAKTYWNY;
         }
+
+        public int Interwal = 0;
+        public int? IleCykli = null;
         public void Emituj() {
             kolor_urzadzenia = new SolidColorBrush(kolor_nadajnik);
+            status_urzadzenia = STATUS.AKTYWNY_NADAJE;
         }
 
     }
