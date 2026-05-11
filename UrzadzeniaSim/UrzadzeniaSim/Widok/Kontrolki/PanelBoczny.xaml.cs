@@ -118,8 +118,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 }
                 else //Nadaje
                 {
-                    Window okno_generowania = new Generowanie(wyswietlane);
-                    okno_generowania.Show();
+                    if (!Generowanie.OtwarteOkna.Contains(wyswietlane.UrzadzenieID))
+                    {
+                        Window okno_generowania = new Generowanie(wyswietlane);
+                        okno_generowania.Show();
+                    }
+                    else { 
+                        //tu powinnismy dac znac uzytkowanikowi co robi zle
+                    }
                 }
             }
         }

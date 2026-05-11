@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using UrzadzeniaSim.Model;
+using UrzadzeniaSim.Widok.Kontrolki;
 
 namespace UrzadzeniaSim.Widok.Okna
 {
@@ -10,6 +12,8 @@ namespace UrzadzeniaSim.Widok.Okna
     /// </summary>
     public partial class Generowanie : Window, INotifyPropertyChanged
     {
+        public static HashSet<int> OtwarteOkna = new HashSet<int>();
+
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         CancellationToken token;
 
@@ -30,10 +34,13 @@ namespace UrzadzeniaSim.Widok.Okna
             token = cancellationTokenSource.Token;
 
             InitializeComponent();
+
+            OtwarteOkna.Add(urzadzenie.UrzadzenieID);
         }
         private bool pracaWtoku = false;
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
+            
             PasekPostepu.IsIndeterminate = true;
             await Task.Yield(); //potrzebne żeby UI się zaktualizowało
             
@@ -83,5 +90,9 @@ namespace UrzadzeniaSim.Widok.Okna
                 Start.IsEnabled = true;
         }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            OtwarteOkna.Remove(_id);
+        }
     }
 }
