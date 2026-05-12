@@ -39,8 +39,17 @@ namespace UrzadzeniaSim.Widok.Okna
 
             OtwarteOkna.Add(urzadzenie.UrzadzenieID);
 
-            if (_urzadzenie.punkt.status_urzadzenia == STATUS.AKTYWNY_NADAJE) {
+            Loaded += Generowanie_Loaded;
+        }
+
+        //gdyby bylo w konstruktorze, nie zadzialaloby
+        private async void Generowanie_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_urzadzenie.punkt.status_urzadzenia == STATUS.AKTYWNY_NADAJE)
+            {
                 PasekPostepu.IsIndeterminate = true;
+                pracaWtoku = true;
+
                 await Task.Yield();
 
                 Stop.IsEnabled = true;
@@ -51,13 +60,13 @@ namespace UrzadzeniaSim.Widok.Okna
                     liczbaCykli.Value = _urzadzenie.punkt.IleCykli;
                     generowanieZparemetryzowane.IsChecked = true;
                 }
-                else {
+                else
+                {
                     generowanieCykliczne.IsChecked = true;
                 }
 
                 sekundy.Value = _urzadzenie.punkt.Interwal;
 
-                pracaWtoku = true;
             }
         }
 
