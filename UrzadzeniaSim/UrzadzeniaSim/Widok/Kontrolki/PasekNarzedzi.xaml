@@ -25,7 +25,6 @@
                     <MenuItem Header="Losowe" Click="DodajLosoweUrzadzenie"/>
                     <MenuItem Header="O określonych współrzędnych" Click="DodajUrzadzenie"/>
                 </MenuItem>
-                <MenuItem Header="Dezaktywuj"/>
             </MenuItem>
             <MenuItem Header="Widok" FontSize="12">
                 <MenuItem Header="Wyświetl siatkę z dokładnością do minuty">

@@ -19,6 +19,7 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private Urzadzenie_Model _urzadzenie;
         private int _id;
+        private bool pracaWtoku = false;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -32,15 +33,39 @@ namespace UrzadzeniaSim.Widok.Okna
             DataContext = this;
             id = urzadzenie.UrzadzenieID;
             token = cancellationTokenSource.Token;
+            _urzadzenie = urzadzenie;
 
             InitializeComponent();
 
             OtwarteOkna.Add(urzadzenie.UrzadzenieID);
+
+            if (_urzadzenie.punkt.status_urzadzenia == STATUS.AKTYWNY_NADAJE) {
+                PasekPostepu.IsIndeterminate = true;
+                await Task.Yield();
+
+                Stop.IsEnabled = true;
+                Start.IsEnabled = false;
+
+                if (_urzadzenie.punkt.IleCykli != null)
+                {
+                    liczbaCykli.Value = _urzadzenie.punkt.IleCykli;
+                    generowanieZparemetryzowane.IsChecked = true;
+                }
+                else {
+                    generowanieCykliczne.IsChecked = true;
+                }
+
+                sekundy.Value = _urzadzenie.punkt.Interwal;
+
+                pracaWtoku = true;
+            }
         }
-        private bool pracaWtoku = false;
+
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
-            
+            _urzadzenie.punkt.IleCykli = liczbaCykli.Value;
+            _urzadzenie.punkt.Interwal = (int)sekundy.Value; 
+
             PasekPostepu.IsIndeterminate = true;
             await Task.Yield(); //potrzebne żeby UI się zaktualizowało
             
@@ -50,6 +75,7 @@ namespace UrzadzeniaSim.Widok.Okna
             pracaWtoku = true;
             Task.Run(async () => 
                 {
+                    _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY_NADAJE;
                     while (!token.IsCancellationRequested)
                     {
                         await Task.Delay(1000); //tyle ile w updown
@@ -66,6 +92,7 @@ namespace UrzadzeniaSim.Widok.Okna
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
             cancellationTokenSource.Cancel(); //to nie jest zatrzymanie tylko uprzejma prośba
+            _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY;
 
             PasekPostepu.IsIndeterminate = false;
 
