@@ -97,7 +97,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
         }
 
+        // te zmienne dotyczą okna generowania
         public STATUS status_urzadzenia = STATUS.AKTYWNY;
+        public CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        public CancellationToken token;
+        public int Interwal = 0;
+        public int? IleCykli = null;
+        //
+
         public Urządzenie(decimal dlugosc, decimal szerokosc)
         {
             InitializeComponent();
@@ -147,8 +154,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             status_urzadzenia = STATUS.NIEAKTYWNY;
         }
 
-        public int Interwal = 0;
-        public int? IleCykli = null;
+
         public void Emituj() {
             kolor_urzadzenia = new SolidColorBrush(kolor_nadajnik);
             status_urzadzenia = STATUS.AKTYWNY_NADAJE;

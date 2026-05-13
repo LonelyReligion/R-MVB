@@ -14,10 +14,8 @@ namespace UrzadzeniaSim.Widok.Okna
     {
         public static HashSet<int> OtwarteOkna = new HashSet<int>();
 
-        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        CancellationToken token;
-
         private Urzadzenie_Model _urzadzenie;
+        private Urządzenie _urzadzenie_gui;
         private int _id;
         private bool pracaWtoku = false;
 
@@ -32,9 +30,10 @@ namespace UrzadzeniaSim.Widok.Okna
         {
             DataContext = this;
             id = urzadzenie.UrzadzenieID;
-            token = cancellationTokenSource.Token;
             _urzadzenie = urzadzenie;
+            _urzadzenie_gui = urzadzenie.punkt;
 
+            _urzadzenie_gui.token = _urzadzenie_gui.cancellationTokenSource.Token;
             InitializeComponent();
 
             OtwarteOkna.Add(urzadzenie.UrzadzenieID);
@@ -78,14 +77,14 @@ namespace UrzadzeniaSim.Widok.Okna
             PasekPostepu.IsIndeterminate = true;
             await Task.Yield(); //potrzebne żeby UI się zaktualizowało
             
-            cancellationTokenSource = new CancellationTokenSource();
-            token = cancellationTokenSource.Token;
+            _urzadzenie_gui.cancellationTokenSource = new CancellationTokenSource();
+            _urzadzenie_gui.token = _urzadzenie_gui.cancellationTokenSource.Token;
 
             pracaWtoku = true;
             Task.Run(async () => 
                 {
                     _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY_NADAJE;
-                    while (!token.IsCancellationRequested)
+                    while (!_urzadzenie_gui.token.IsCancellationRequested)
                     {
                         await Task.Delay(1000); //tyle ile w updown
                     }
@@ -100,7 +99,7 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
-            cancellationTokenSource.Cancel(); //to nie jest zatrzymanie tylko uprzejma prośba
+            _urzadzenie_gui.cancellationTokenSource.Cancel(); //to nie jest zatrzymanie tylko uprzejma prośba
             _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY;
 
             PasekPostepu.IsIndeterminate = false;
