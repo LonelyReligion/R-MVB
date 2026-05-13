@@ -14,36 +14,36 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     /// </summary>
     public partial class PanelBoczny : UserControl, INotifyPropertyChanged
     {
-        public static Repo repo;
+        public static Repo Repozytorium;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private double oryginalna_wysokosc;
-        private double oryginalna_szerokosc;
+        private double _oryginalnaWysokosc;
+        private double _oryginalnaSzerokosc;
 
-        private const int bazowa_wielkosc_czcionki = 15;
+        private const int _bazowaWielkoscCzcionki = 15;
         
-        public static Kontekst ctx;
+        public static Kontekst Ctx;
 
-        private string _wielkosc_czcionki = "12";
+        private string _wielkoscCzcionki = "12";
 
-        private static List<string> statusy = new List<string> { "AKTYWNY", "NIEAKTYWNY", "NADAJE" };
-        public string wielkosc_czcionki 
+        private static List<string> s_statusy = new List<string> { "AKTYWNY", "NIEAKTYWNY", "NADAJE" };
+        public string WielkoscCzcionki 
         {
             get 
             {
-                return _wielkosc_czcionki;
+                return _wielkoscCzcionki;
             }
             set 
             {
-                _wielkosc_czcionki = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("wielkosc_czcionki"));
+                _wielkoscCzcionki = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WielkoscCzcionki"));
             } 
         }
 
-        private double oryginalna_wysokosc_przycisku = 30;
-        private double oryginalna_szerokosc_przycisku = 120;
+        private double _oryginalnaWysokoscPrzycisku = 30;
+        private double _oryginalnaSzerokoscPrzycisku = 120;
 
-        private bool mamy_wymiary = false;
+        private bool _mamyWymiary = false; //przechowuje informację nt. tego czy zczytaliśmy oryginalne wymiary okna
 
 
         public PanelBoczny()
@@ -62,17 +62,17 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 double wysokosc_panelu = panel.ActualHeight;
                 double szerokosc_panelu = panel.ActualWidth;
 
-                if (!mamy_wymiary) {
-                    mamy_wymiary = true;
-                    oryginalna_wysokosc = wysokosc_panelu;
-                    oryginalna_szerokosc = szerokosc_panelu;
+                if (!_mamyWymiary) {
+                    _mamyWymiary = true;
+                    _oryginalnaWysokosc = wysokosc_panelu;
+                    _oryginalnaSzerokosc = szerokosc_panelu;
                 }
 
-                double skala_x = szerokosc_panelu / oryginalna_szerokosc;
-                double skala_y = wysokosc_panelu / oryginalna_wysokosc;
+                double skala_x = szerokosc_panelu / _oryginalnaSzerokosc;
+                double skala_y = wysokosc_panelu / _oryginalnaWysokosc;
                 double skala = Math.Min(skala_x, skala_y);
 
-                wielkosc_czcionki = (skala * (double)bazowa_wielkosc_czcionki).ToString();
+                WielkoscCzcionki = (skala * (double)_bazowaWielkoscCzcionki).ToString();
               
 
             };
@@ -90,14 +90,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
             else
             {
-                Statusy.ItemsSource = statusy;
+                Statusy.ItemsSource = s_statusy;
 
-                wyswietlane = ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
+                wyswietlane = Ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
                 Label_ID.Content = wyswietlane.UrzadzenieID;
                 Label_Dlugosc.Content = (int)wyswietlane.Dlugosc + "°" + (int)((wyswietlane.Dlugosc % 1) * 100) + "'" + "E";
                 Label_Szerokosc.Content = (int)wyswietlane.Szerokosc + "°" + (int)((wyswietlane.Szerokosc % 1) * 100) + "'" + "N";
 
-                if (repo.czyJestAktywne(wyswietlane.UrzadzenieID))
+                if (Repozytorium.czyJestAktywne(wyswietlane.UrzadzenieID))
                     Statusy.SelectedIndex = 0; //na razie nie mamy jak sprawdzic czy nadaje tutaj
                 else
                     Statusy.SelectedIndex = 1;

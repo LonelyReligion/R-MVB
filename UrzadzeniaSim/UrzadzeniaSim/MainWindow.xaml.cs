@@ -38,8 +38,8 @@ namespace UrzadzeniaSim
             Repo.ctx = ctx;
             Urzadzenie_Model.ctx = ctx;
 
-            PanelBoczny.ctx = ctx;
-            PanelBoczny.repo = rMVB.zwrocRepo();
+            PanelBoczny.Ctx = ctx;
+            PanelBoczny.Repozytorium = rMVB.zwrocRepo();
 
             Urzadzenie_Model.repo = rMVB.zwrocRepo();
             Urzadzenie_Model.rMVB = rMVB;

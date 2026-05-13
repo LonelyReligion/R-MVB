@@ -17,7 +17,7 @@ namespace UrzadzeniaSim.Widok.Okna
         private Urzadzenie_Model _urzadzenie;
         private Urządzenie _urzadzenie_gui;
         private int _id;
-        private bool pracaWtoku = false;
+        private bool _pracaWtoku = false;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -47,7 +47,7 @@ namespace UrzadzeniaSim.Widok.Okna
             if (_urzadzenie.punkt.status_urzadzenia == STATUS.AKTYWNY_NADAJE)
             {
                 PasekPostepu.IsIndeterminate = true;
-                pracaWtoku = true;
+                _pracaWtoku = true;
 
                 await Task.Yield();
 
@@ -80,7 +80,7 @@ namespace UrzadzeniaSim.Widok.Okna
             _urzadzenie_gui.cancellationTokenSource = new CancellationTokenSource();
             _urzadzenie_gui.token = _urzadzenie_gui.cancellationTokenSource.Token;
 
-            pracaWtoku = true;
+            _pracaWtoku = true;
             Task.Run(async () => 
                 {
                     _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY_NADAJE;
@@ -104,7 +104,7 @@ namespace UrzadzeniaSim.Widok.Okna
 
             PasekPostepu.IsIndeterminate = false;
 
-            pracaWtoku = false;
+            _pracaWtoku = false;
 
             if (sekundy.Value != null && liczbaCykli.Value != null)
                 Start.IsEnabled = true;
@@ -116,12 +116,12 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private void sekundy_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (pracaWtoku == false && (sekundy.Value == null || liczbaCykli.Value == null)) {
+            if (_pracaWtoku == false && (sekundy.Value == null || liczbaCykli.Value == null)) {
                 Start.IsEnabled = false;
                 Stop.IsEnabled = false;
             }
 
-            if(pracaWtoku == false && sekundy.Value != null && liczbaCykli.Value != null)
+            if(_pracaWtoku == false && sekundy.Value != null && liczbaCykli.Value != null)
                 Start.IsEnabled = true;
         }
 
