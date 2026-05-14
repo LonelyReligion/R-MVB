@@ -12,22 +12,35 @@ namespace UrzadzeniaSim.Widok.Okna
     /// </summary>
     public partial class Generowanie : Window, INotifyPropertyChanged
     {
+        //zrob jakas akcje co bedzie informowala ze sie zmienilo pole informujace o tym czy aktualnie generujwmy podepnij do metody w panelu
+
+        private PanelBoczny _rodzic;
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         public static HashSet<int> OtwarteOkna = new HashSet<int>();
 
         private Urzadzenie_Model _urzadzenie;
         private Urządzenie _urzadzenie_gui;
         private int _id;
-        private bool _pracaWtoku = false;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        private bool _pracaWtoku = false;
+        public bool PracaWtoku {
+            get { return _pracaWtoku; }
+            set { 
+                _pracaWtoku = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PracaWtoku"));
+            }
+        }
 
         public int id
         {
             get { return _id; }
             set { _id = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("id")); }
         }
-        public Generowanie(Urzadzenie_Model urzadzenie)
+        public Generowanie(PanelBoczny kontolkaRodzic, Urzadzenie_Model urzadzenie)
         {
+            _rodzic = kontolkaRodzic;
+
             DataContext = this;
             id = urzadzenie.UrzadzenieID;
             _urzadzenie = urzadzenie;
@@ -72,7 +85,8 @@ namespace UrzadzeniaSim.Widok.Okna
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
             _urzadzenie.punkt.IleCykli = liczbaCykli.Value;
-            _urzadzenie.punkt.Interwal = (int)sekundy.Value; 
+            _urzadzenie.punkt.Interwal = (int)sekundy.Value;
+            _urzadzenie.CzyGenerujemy = true;
 
             PasekPostepu.IsIndeterminate = true;
             await Task.Yield(); //potrzebne żeby UI się zaktualizowało
@@ -99,6 +113,7 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
+            _urzadzenie.CzyGenerujemy = false;
             _urzadzenie_gui.cancellationTokenSource.Cancel(); //to nie jest zatrzymanie tylko uprzejma prośba
             _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY;
 

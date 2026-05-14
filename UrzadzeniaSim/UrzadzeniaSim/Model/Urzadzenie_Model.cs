@@ -9,6 +9,8 @@ namespace UrzadzeniaSim.Model
 {
     public class Urzadzenie_Model
     {
+        public bool CzyGenerujemy = false;
+
         public static DrzewoRMVB rMVB;
         public static int nastepne_wolne_id = 0;
 

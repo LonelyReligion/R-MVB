@@ -45,6 +45,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private bool _mamyWymiary = false; //przechowuje informację nt. tego czy zczytaliśmy oryginalne wymiary okna
 
+        public bool MozemyZmienicStatus
+        {
+            get => _wyswietlane != null && !_wyswietlane.CzyGenerujemy;
+        }
 
         public PanelBoczny()
         {
@@ -77,10 +81,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             };
         }
-        private Urzadzenie_Model wyswietlane;
+        private Urzadzenie_Model _wyswietlane;
         public void uzupelnijInformacjeOurzadzeniu(int id_urzadzenia) {
             if (id_urzadzenia == -1) {
-                wyswietlane = null;
+                _wyswietlane = null;
                 Statusy.ItemsSource = new List<string>();
                 Label_ID.Content = "";
                 Label_Dlugosc.Content = "";
@@ -92,35 +96,44 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 Statusy.ItemsSource = s_statusy;
 
-                wyswietlane = Ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
-                Label_ID.Content = wyswietlane.UrzadzenieID;
-                Label_Dlugosc.Content = (int)wyswietlane.Dlugosc + "°" + (int)((wyswietlane.Dlugosc % 1) * 100) + "'" + "E";
-                Label_Szerokosc.Content = (int)wyswietlane.Szerokosc + "°" + (int)((wyswietlane.Szerokosc % 1) * 100) + "'" + "N";
+                _wyswietlane = Ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
+                Label_ID.Content = _wyswietlane.UrzadzenieID;
+                Label_Dlugosc.Content = (int)_wyswietlane.Dlugosc + "°" + (int)((_wyswietlane.Dlugosc % 1) * 100) + "'" + "E";
+                Label_Szerokosc.Content = (int)_wyswietlane.Szerokosc + "°" + (int)((_wyswietlane.Szerokosc % 1) * 100) + "'" + "N";
 
-                if (Repozytorium.czyJestAktywne(wyswietlane.UrzadzenieID))
+                if (_wyswietlane.CzyGenerujemy)
+                    Statusy.SelectedIndex = 2;
+                else if (Repozytorium.czyJestAktywne(_wyswietlane.UrzadzenieID))
                     Statusy.SelectedIndex = 0; //na razie nie mamy jak sprawdzic czy nadaje tutaj
                 else
                     Statusy.SelectedIndex = 1;
+
+                //MozemyZmienicStatus = !_wyswietlane.CzyGenerujemy;
             }
+
+            _zaktualizujMozemyZmienicStatus();
         }
 
+        private void _zaktualizujMozemyZmienicStatus() {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MozemyZmienicStatus)));
+        }
         private void Statusy_SelectionChanged(object sender, EventArgs e)
         {
             if (Statusy.SelectedItem != null)
             {
                 if (Statusy.SelectedIndex == 0) //Aktywny
                 {
-                    wyswietlane.Aktywuj();
+                    _wyswietlane.Aktywuj();
                 }
                 else if (Statusy.SelectedIndex == 1)//Nieaktywny 
                 {
-                    wyswietlane.Dezaktywuj();
+                    _wyswietlane.Dezaktywuj();
                 }
                 else //Nadaje
                 {
-                    if (!Generowanie.OtwarteOkna.Contains(wyswietlane.UrzadzenieID))
+                    if (!Generowanie.OtwarteOkna.Contains(_wyswietlane.UrzadzenieID))
                     {
-                        Window okno_generowania = new Generowanie(wyswietlane);
+                        Window okno_generowania = new Generowanie(this, _wyswietlane);
                         okno_generowania.Show();
                     }
                     else { 
