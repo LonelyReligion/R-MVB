@@ -13,7 +13,8 @@ namespace UrzadzeniaSim.Widok.Okna
     public partial class Generowanie : Window, INotifyPropertyChanged
     {
         //zrob jakas akcje co bedzie informowala ze sie zmienilo pole informujace o tym czy aktualnie generujwmy podepnij do metody w panelu
-
+        //int to id urzadzenia
+        public event Action<int> ZmieniloSieCzyGenerujemy;
         private PanelBoczny _rodzic;
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -86,7 +87,9 @@ namespace UrzadzeniaSim.Widok.Okna
         {
             _urzadzenie.punkt.IleCykli = liczbaCykli.Value;
             _urzadzenie.punkt.Interwal = (int)sekundy.Value;
+            
             _urzadzenie.CzyGenerujemy = true;
+            ZmieniloSieCzyGenerujemy?.Invoke(_id);
 
             PasekPostepu.IsIndeterminate = true;
             await Task.Yield(); //potrzebne żeby UI się zaktualizowało
@@ -114,6 +117,8 @@ namespace UrzadzeniaSim.Widok.Okna
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
             _urzadzenie.CzyGenerujemy = false;
+            ZmieniloSieCzyGenerujemy?.Invoke(_id);
+
             _urzadzenie_gui.cancellationTokenSource.Cancel(); //to nie jest zatrzymanie tylko uprzejma prośba
             _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY;
 

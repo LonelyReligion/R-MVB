@@ -113,7 +113,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             _zaktualizujMozemyZmienicStatus();
         }
-
+        public void ZmienStatusDla(int IdUrzadzenia) { 
+            if(_wyswietlane.UrzadzenieID == IdUrzadzenia)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MozemyZmienicStatus)));
+        }
         private void _zaktualizujMozemyZmienicStatus() {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MozemyZmienicStatus)));
         }
@@ -133,7 +136,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 {
                     if (!Generowanie.OtwarteOkna.Contains(_wyswietlane.UrzadzenieID))
                     {
-                        Window okno_generowania = new Generowanie(this, _wyswietlane);
+                        Generowanie okno_generowania = new Generowanie(this, _wyswietlane);
+                        okno_generowania.ZmieniloSieCzyGenerujemy += ZmienStatusDla;
                         okno_generowania.Show();
                     }
                     else { 
