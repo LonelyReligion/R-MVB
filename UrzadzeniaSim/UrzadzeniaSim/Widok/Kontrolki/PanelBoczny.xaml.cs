@@ -6,6 +6,7 @@ using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Model.DB;
 using Xceed.Wpf.Toolkit.Primitives;
 using UrzadzeniaSim.Widok.Okna;
+using System.Windows.Input;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
@@ -14,7 +15,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     /// </summary>
     public partial class PanelBoczny : UserControl, INotifyPropertyChanged
     {
-        private Dictionary<int, Generowanie> _otwarteOkna = new Dictionary<int, Generowanie>();
+        public Dictionary<int, Generowanie> OtwarteOkna = new Dictionary<int, Generowanie>();
         public static Repo Repozytorium;
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -81,6 +82,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
               
 
             };
+
         }
         private Urzadzenie_Model _wyswietlane;
         public void uzupelnijInformacjeOurzadzeniu(int id_urzadzenia) {
@@ -131,8 +133,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                     try
                     {
-                        _otwarteOkna.ElementAt(_wyswietlane.UrzadzenieID).Value.Close();
-                        _otwarteOkna.Remove(_wyswietlane.UrzadzenieID);
+                        OtwarteOkna.ElementAt(_wyswietlane.UrzadzenieID).Value.Close();
+                        OtwarteOkna.Remove(_wyswietlane.UrzadzenieID);
                     }
                     catch { 
                         //to nic nie musimy robic
@@ -143,8 +145,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     _wyswietlane.Dezaktywuj();
                     try
                     {
-                        _otwarteOkna.ElementAt(_wyswietlane.UrzadzenieID).Value.Close();
-                        _otwarteOkna.Remove(_wyswietlane.UrzadzenieID);
+                        OtwarteOkna.ElementAt(_wyswietlane.UrzadzenieID).Value.Close();
+                        OtwarteOkna.Remove(_wyswietlane.UrzadzenieID);
                     }
                     catch
                     {
@@ -159,7 +161,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                         okno_generowania.ZmieniloSieCzyGenerujemy += ZmienStatusDla;
                         okno_generowania.Show();
 
-                        _otwarteOkna.Add(_wyswietlane.UrzadzenieID, okno_generowania);
+                        OtwarteOkna.Add(_wyswietlane.UrzadzenieID, okno_generowania);
                     }
                     else { 
                         //tu powinnismy dac znac uzytkowanikowi co robi zle
@@ -188,6 +190,5 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             Urzadzenie_Model zaznaczone = listaUrzadzen.SelectedItem as Urzadzenie_Model;
             zaznaczone.punkt.Zaznacz();
         }
-
     }
 }

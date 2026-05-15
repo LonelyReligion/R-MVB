@@ -148,6 +148,7 @@ namespace UrzadzeniaSim.Widok.Okna
         private void Window_Closed(object sender, EventArgs e)
         {
             OtwarteOkna.Remove(_id);
+            _rodzic.OtwarteOkna.Remove(_id);
         }
     }
 }

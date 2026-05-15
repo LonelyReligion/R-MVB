@@ -70,7 +70,7 @@
                 
                 <Label x:Name="Label_Status" Grid.Column="0" Content="Status:"  FontSize="{Binding wielkosc_czcionki}"/>
                 <ComboBox x:Name="Statusy" Grid.Column="1" DropDownClosed="Statusy_SelectionChanged" FontSize="{Binding wielkosc_czcionki}" HorizontalAlignment="Right"
-                          Margin="0,0,10,0" IsEnabled="{Binding MozemyZmienicStatus}"/>
+                          Margin="0,0,10,0" IsHitTestVisible="{Binding MozemyZmienicStatus}" Opacity="1" Focusable="True" />
             </Grid>
         </Grid>
     </Grid>
