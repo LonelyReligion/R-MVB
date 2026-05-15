@@ -14,6 +14,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     /// </summary>
     public partial class PanelBoczny : UserControl, INotifyPropertyChanged
     {
+        private Dictionary<int, Generowanie> _otwarteOkna = new Dictionary<int, Generowanie>();
         public static Repo Repozytorium;
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -127,10 +128,28 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 if (Statusy.SelectedIndex == 0) //Aktywny
                 {
                     _wyswietlane.Aktywuj();
+
+                    try
+                    {
+                        _otwarteOkna.ElementAt(_wyswietlane.UrzadzenieID).Value.Close();
+                        _otwarteOkna.Remove(_wyswietlane.UrzadzenieID);
+                    }
+                    catch { 
+                        //to nic nie musimy robic
+                    }
                 }
                 else if (Statusy.SelectedIndex == 1)//Nieaktywny 
                 {
                     _wyswietlane.Dezaktywuj();
+                    try
+                    {
+                        _otwarteOkna.ElementAt(_wyswietlane.UrzadzenieID).Value.Close();
+                        _otwarteOkna.Remove(_wyswietlane.UrzadzenieID);
+                    }
+                    catch
+                    {
+                        //to nic nie musimy robic
+                    }
                 }
                 else //Nadaje
                 {
@@ -139,6 +158,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                         Generowanie okno_generowania = new Generowanie(this, _wyswietlane);
                         okno_generowania.ZmieniloSieCzyGenerujemy += ZmienStatusDla;
                         okno_generowania.Show();
+
+                        _otwarteOkna.Add(_wyswietlane.UrzadzenieID, okno_generowania);
                     }
                     else { 
                         //tu powinnismy dac znac uzytkowanikowi co robi zle
@@ -167,5 +188,6 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             Urzadzenie_Model zaznaczone = listaUrzadzen.SelectedItem as Urzadzenie_Model;
             zaznaczone.punkt.Zaznacz();
         }
+
     }
 }
