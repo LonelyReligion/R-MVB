@@ -190,5 +190,26 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             Urzadzenie_Model zaznaczone = listaUrzadzen.SelectedItem as Urzadzenie_Model;
             zaznaczone.punkt.Zaznacz();
         }
+
+        private void RamkaWokolComboboxa_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!MozemyZmienicStatus)
+            {
+                try
+                {
+                    OtwarteOkna.ElementAt(_wyswietlane.UrzadzenieID);
+                    //nic, juz mamy okno
+                }
+                catch
+                {
+                    //otworz okno
+                    Generowanie okno_generowania = new Generowanie(this, _wyswietlane);
+                    okno_generowania.ZmieniloSieCzyGenerujemy += ZmienStatusDla;
+                    okno_generowania.Show();
+
+                    OtwarteOkna.Add(_wyswietlane.UrzadzenieID, okno_generowania);
+                }
+            }
+        }
     }
 }
