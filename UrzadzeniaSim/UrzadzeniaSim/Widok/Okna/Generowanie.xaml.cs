@@ -82,9 +82,15 @@ namespace UrzadzeniaSim.Widok.Okna
 
             }
         }
-
+        private void _zablokujPrzyjmowanieDanych() { 
+            sekundy.IsEnabled = false;
+            generowanieZparemetryzowane.IsEnabled = false;
+            liczbaCykli.IsEnabled = false;
+            generowanieCykliczne.IsEnabled = false;
+        }
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
+            _zablokujPrzyjmowanieDanych();
             _urzadzenie.punkt.IleCykli = liczbaCykli.Value;
             _urzadzenie.punkt.Interwal = (int)sekundy.Value;
             
@@ -114,8 +120,16 @@ namespace UrzadzeniaSim.Widok.Okna
 
         }
 
+        private void _odblokujPrzyjmowanieDanych() {
+            sekundy.IsEnabled = true;
+            generowanieZparemetryzowane.IsEnabled = true;
+            liczbaCykli.IsEnabled = true;
+            generowanieCykliczne.IsEnabled = true;
+        }
+
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
+            _odblokujPrzyjmowanieDanych();
             _urzadzenie.CzyGenerujemy = false;
             ZmieniloSieCzyGenerujemy?.Invoke(_id);
 
@@ -136,12 +150,12 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private void sekundy_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (_pracaWtoku == false && (sekundy.Value == null || liczbaCykli.Value == null)) {
+            if (_pracaWtoku == false && (sekundy.Value == null || (liczbaCykli.Value == null && generowanieZparemetryzowane.IsChecked == true))) {
                 Start.IsEnabled = false;
                 Stop.IsEnabled = false;
             }
 
-            if(_pracaWtoku == false && sekundy.Value != null && liczbaCykli.Value != null)
+            if(_pracaWtoku == false && sekundy.Value != null && (liczbaCykli.Value != null || generowanieCykliczne.IsChecked == true))
                 Start.IsEnabled = true;
         }
 
@@ -149,6 +163,17 @@ namespace UrzadzeniaSim.Widok.Okna
         {
             OtwarteOkna.Remove(_id);
             _rodzic.OtwarteOkna.Remove(_id);
+        }
+
+        private void generowanieZparemetryzowane_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!this.IsLoaded)
+                return;
+
+            if (liczbaCykli.Value == null) {
+                Start.IsEnabled = false;
+                Stop.IsEnabled = false;
+            }
         }
     }
 }

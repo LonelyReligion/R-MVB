@@ -46,7 +46,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <RadioButton x:Name="generowanieZparemetryzowane"  GroupName="automatyczneGenerowanie" IsChecked="True" Grid.Column="0" VerticalAlignment="Center"/>
+            <RadioButton x:Name="generowanieZparemetryzowane"  GroupName="automatyczneGenerowanie" IsChecked="True" Grid.Column="0" VerticalAlignment="Center" Checked="generowanieZparemetryzowane_Checked"/>
             <Label Grid.Column="1" Content="Zakończ generowanie automatycznie po "/>
             <xctk:IntegerUpDown Grid.Column="2" Watermark="ilu?" Minimum="1" IsEnabled="{Binding IsChecked, ElementName=generowanieZparemetryzowane}" 
                                 x:Name="liczbaCykli" ValueChanged="sekundy_ValueChanged"/>
