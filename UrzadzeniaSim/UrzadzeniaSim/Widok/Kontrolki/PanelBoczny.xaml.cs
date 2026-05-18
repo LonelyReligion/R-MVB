@@ -7,6 +7,7 @@ using UrzadzeniaSim.Model.DB;
 using Xceed.Wpf.Toolkit.Primitives;
 using UrzadzeniaSim.Widok.Okna;
 using System.Windows.Input;
+using UrzadzeniaSim.Narzedzia;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
@@ -46,7 +47,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         private double _oryginalnaSzerokoscPrzycisku = 120;
 
         private bool _mamyWymiary = false; //przechowuje informację nt. tego czy zczytaliśmy oryginalne wymiary okna
-
+        public static Generatory Generator;
         public bool MozemyZmienicStatus
         {
             get => _wyswietlane != null && !_wyswietlane.CzyGenerujemy;
@@ -157,7 +158,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 {
                     if (!Generowanie.OtwarteOkna.Contains(_wyswietlane.UrzadzenieID))
                     {
-                        Generowanie okno_generowania = new Generowanie(this, _wyswietlane);
+                        Generowanie okno_generowania = new Generowanie(this, _wyswietlane, Generator);
                         okno_generowania.ZmieniloSieCzyGenerujemy += ZmienStatusDla;
                         okno_generowania.Show();
 
@@ -203,7 +204,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 catch
                 {
                     //otworz okno
-                    Generowanie okno_generowania = new Generowanie(this, _wyswietlane);
+                    Generowanie okno_generowania = new Generowanie(this, _wyswietlane, Generator);
                     okno_generowania.ZmieniloSieCzyGenerujemy += ZmienStatusDla;
                     okno_generowania.Show();
 

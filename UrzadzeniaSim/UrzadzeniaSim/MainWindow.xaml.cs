@@ -43,6 +43,7 @@ namespace UrzadzeniaSim
 
             Urzadzenie_Model.repo = rMVB.zwrocRepo();
             Urzadzenie_Model.rMVB = rMVB;
+            PanelBoczny.Generator = generator;
 
             ctx.Urzadzenia.FirstOrDefault();
             //

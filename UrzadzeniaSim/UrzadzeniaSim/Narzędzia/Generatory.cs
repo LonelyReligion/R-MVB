@@ -11,7 +11,7 @@ using UrzadzeniaSim.Model.RMVB.R;
 namespace UrzadzeniaSim.Narzedzia
 {
     //singleton?
-    internal class Generatory
+    public class Generatory
     {
         private const Decimal poczatkowa_szerokosc = 49.00m; //czy to nalezy do drzewa?
         private const Decimal poczatkowa_dlugosc = 14.07m; //czy to nalezy do drzewa?

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using UrzadzeniaSim.Model;
+using UrzadzeniaSim.Narzedzia;
 using UrzadzeniaSim.Widok.Kontrolki;
 
 namespace UrzadzeniaSim.Widok.Okna
@@ -12,6 +13,8 @@ namespace UrzadzeniaSim.Widok.Okna
     /// </summary>
     public partial class Generowanie : Window, INotifyPropertyChanged
     {
+        private Generatory _generator;
+        
         //zrob jakas akcje co bedzie informowala ze sie zmienilo pole informujace o tym czy aktualnie generujwmy podepnij do metody w panelu
         //int to id urzadzenia
         public event Action<int> ZmieniloSieCzyGenerujemy;
@@ -38,8 +41,9 @@ namespace UrzadzeniaSim.Widok.Okna
             get { return _id; }
             set { _id = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("id")); }
         }
-        public Generowanie(PanelBoczny kontolkaRodzic, Urzadzenie_Model urzadzenie)
+        public Generowanie(PanelBoczny kontolkaRodzic, Urzadzenie_Model urzadzenie, Generatory generator)
         {
+            _generator = generator;
             _rodzic = kontolkaRodzic;
 
             DataContext = this;
@@ -82,38 +86,74 @@ namespace UrzadzeniaSim.Widok.Okna
 
             }
         }
-        private void _zablokujPrzyjmowanieDanych() { 
+        private void _zatrzymajGenerowanie()
+        {
+            _odblokujPrzyjmowanieDanych();
+            _urzadzenie.CzyGenerujemy = false;
+            ZmieniloSieCzyGenerujemy?.Invoke(_id);
+
+            _urzadzenie_gui.cancellationTokenSource.Cancel(); //to nie jest zatrzymanie tylko uprzejma prośba
+            _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY;
+
+            PasekPostepu.IsIndeterminate = false;
+
+            _pracaWtoku = false;
+
+            if (sekundy.Value != null && liczbaCykli.Value != null)
+                Start.IsEnabled = true;
+            else
+                Start.IsEnabled = false;
+            Stop.IsEnabled = false;
+        }
+
+        private async void generowaniePomiarowUrzadzenia() {
+            
+            _pracaWtoku = true;
+            _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY_NADAJE;
+            int? _liczbaCykliDoKonca = _urzadzenie.punkt.IleCykli;
+
+            while (!_urzadzenie_gui.token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
+            {
+                await Task.Delay(_urzadzenie.punkt.Interwal * 1000); //tyle ile w updown
+                if (_liczbaCykliDoKonca != null) _liczbaCykliDoKonca -= 1;
+            }
+            Trace.WriteLine("Zadanie zostało anulowane przez użytkownika lub zakończyło się pomyślnie.");
+            //musimy jakos dac znac ze stop
+
+            Application.Current.Dispatcher.Invoke( //glowny watek
+            () =>
+            {
+                _zatrzymajGenerowanie();
+            });
+            
+        }
+        private void _zablokujPrzyjmowanieDanych()
+        {
             sekundy.IsEnabled = false;
             generowanieZparemetryzowane.IsEnabled = false;
             liczbaCykli.IsEnabled = false;
             generowanieCykliczne.IsEnabled = false;
         }
+
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
             _zablokujPrzyjmowanieDanych();
-            _urzadzenie.punkt.IleCykli = liczbaCykli.Value;
+            _urzadzenie.punkt.IleCykli = generowanieZparemetryzowane.IsChecked == true ? liczbaCykli.Value : null;
             _urzadzenie.punkt.Interwal = (int)sekundy.Value;
             
             _urzadzenie.CzyGenerujemy = true;
             ZmieniloSieCzyGenerujemy?.Invoke(_id);
 
             PasekPostepu.IsIndeterminate = true;
+
             await Task.Yield(); //potrzebne żeby UI się zaktualizowało
             
             _urzadzenie_gui.cancellationTokenSource = new CancellationTokenSource();
             _urzadzenie_gui.token = _urzadzenie_gui.cancellationTokenSource.Token;
 
-            _pracaWtoku = true;
-            Task.Run(async () => 
-                {
-                    _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY_NADAJE;
-                    while (!_urzadzenie_gui.token.IsCancellationRequested)
-                    {
-                        await Task.Delay(1000); //tyle ile w updown
-                    }
-                    Trace.WriteLine("Zadanie zostało anulowane przez użytkownika lub zakończyło się pomyślnie.");
-                }
-            );
+            
+            Task.Run(() => generowaniePomiarowUrzadzenia());
+
             Start.IsEnabled = false;
             Stop.IsEnabled = true;
 
@@ -129,23 +169,7 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
-            _odblokujPrzyjmowanieDanych();
-            _urzadzenie.CzyGenerujemy = false;
-            ZmieniloSieCzyGenerujemy?.Invoke(_id);
-
-            _urzadzenie_gui.cancellationTokenSource.Cancel(); //to nie jest zatrzymanie tylko uprzejma prośba
-            _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY;
-
-            PasekPostepu.IsIndeterminate = false;
-
-            _pracaWtoku = false;
-
-            if (sekundy.Value != null && liczbaCykli.Value != null)
-                Start.IsEnabled = true;
-            else 
-                Start.IsEnabled = false;
-            Stop.IsEnabled = false;
-
+            _zatrzymajGenerowanie();
         }
 
         private void sekundy_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
