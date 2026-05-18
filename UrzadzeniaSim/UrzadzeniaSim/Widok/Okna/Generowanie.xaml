@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UrzadzeniaSim.Widok.Okna"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Generowanie" Height="280" Width="600" Closed="Window_Closed">
+        Title="Generowanie" Height="280" Width="600" Closed="Window_Closed" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
