@@ -24,7 +24,7 @@ namespace UrzadzeniaSim.Widok.Okna
         public static HashSet<int> OtwarteOkna = new HashSet<int>();
 
         private Urzadzenie_Model _urzadzenie;
-        private Urządzenie _urzadzenie_gui;
+        private Urządzenie _urzadzenieGui;
         private int _id;
 
         private bool _pracaWtoku = false;
@@ -49,9 +49,9 @@ namespace UrzadzeniaSim.Widok.Okna
             DataContext = this;
             id = urzadzenie.UrzadzenieID;
             _urzadzenie = urzadzenie;
-            _urzadzenie_gui = urzadzenie.punkt;
+            _urzadzenieGui = urzadzenie.punkt;
 
-            _urzadzenie_gui.token = _urzadzenie_gui.cancellationTokenSource.Token;
+            _urzadzenieGui.token = _urzadzenieGui.cancellationTokenSource.Token;
             InitializeComponent();
 
             OtwarteOkna.Add(urzadzenie.UrzadzenieID);
@@ -62,7 +62,7 @@ namespace UrzadzeniaSim.Widok.Okna
         //gdyby bylo w konstruktorze, nie zadzialaloby
         private async void Generowanie_Loaded(object sender, RoutedEventArgs e)
         {
-            if (_urzadzenie.punkt.status_urzadzenia == STATUS.AKTYWNY_NADAJE)
+            if (_urzadzenieGui.status_urzadzenia == STATUS.AKTYWNY_NADAJE)
             {
                 PasekPostepu.IsIndeterminate = true;
                 _pracaWtoku = true;
@@ -92,8 +92,8 @@ namespace UrzadzeniaSim.Widok.Okna
             _urzadzenie.CzyGenerujemy = false;
             ZmieniloSieCzyGenerujemy?.Invoke(_id);
 
-            _urzadzenie_gui.cancellationTokenSource.Cancel(); //to nie jest zatrzymanie tylko uprzejma prośba
-            _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY;
+            _urzadzenieGui.cancellationTokenSource.Cancel(); //to nie jest zatrzymanie tylko uprzejma prośba
+            _urzadzenieGui.status_urzadzenia = STATUS.AKTYWNY;
 
             PasekPostepu.IsIndeterminate = false;
 
@@ -112,7 +112,7 @@ namespace UrzadzeniaSim.Widok.Okna
             _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY_NADAJE;
             int? _liczbaCykliDoKonca = _urzadzenie.punkt.IleCykli;
 
-            while (!_urzadzenie_gui.token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
+            while (!_urzadzenieGui.token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
             {
                 await Task.Delay(_urzadzenie.punkt.Interwal * 1000); //tyle ile w updown
                 if (_liczbaCykliDoKonca != null) _liczbaCykliDoKonca -= 1;
@@ -138,8 +138,8 @@ namespace UrzadzeniaSim.Widok.Okna
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
             _zablokujPrzyjmowanieDanych();
-            _urzadzenie.punkt.IleCykli = generowanieZparemetryzowane.IsChecked == true ? liczbaCykli.Value : null;
-            _urzadzenie.punkt.Interwal = (int)sekundy.Value;
+            _urzadzenieGui.IleCykli = generowanieZparemetryzowane.IsChecked == true ? liczbaCykli.Value : null;
+            _urzadzenieGui.Interwal = (int)sekundy.Value;
             
             _urzadzenie.CzyGenerujemy = true;
             ZmieniloSieCzyGenerujemy?.Invoke(_id);
@@ -148,8 +148,8 @@ namespace UrzadzeniaSim.Widok.Okna
 
             await Task.Yield(); //potrzebne żeby UI się zaktualizowało
             
-            _urzadzenie_gui.cancellationTokenSource = new CancellationTokenSource();
-            _urzadzenie_gui.token = _urzadzenie_gui.cancellationTokenSource.Token;
+            _urzadzenieGui.cancellationTokenSource = new CancellationTokenSource();
+            _urzadzenieGui.token = _urzadzenieGui.cancellationTokenSource.Token;
 
             
             Task.Run(() => generowaniePomiarowUrzadzenia());
