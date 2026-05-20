@@ -21,6 +21,7 @@
                             MinHeight="6"
                             Stretch="Fill"
                             Fill="{Binding wypelnienie_zaznaczenia, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                            d:Fill="Blue"
                         />
                         <Ellipse
                             x:Name="kolko"
@@ -33,6 +34,7 @@
                             MinWidth="5"
                             Margin="1,1,1,1"
                             Fill="{Binding kolor_urzadzenia, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                            d:Fill="#5C7D60"
                         />
                     </Grid>
                 </ControlTemplate>

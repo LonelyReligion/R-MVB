@@ -17,7 +17,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
     public partial class Urządzenie : UserControl, INotifyPropertyChanged
     {
-        private static Color kolor_aktywny = (Color)ColorConverter.ConvertFromString("#5C7D60");
+        public static Color kolor_aktywny = (Color)ColorConverter.ConvertFromString("#5C7D60");
         private static Color kolor_nieaktywny = (Color)ColorConverter.ConvertFromString("#9AB7D6");
         private static Color kolor_nadajnik = (Color)ColorConverter.ConvertFromString("#BE756F");
         private static List<Color> kolory = new List<Color>
@@ -26,7 +26,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             kolor_aktywny,
             kolor_nadajnik
         };
-        private static Color kolor_zaznaczenia = Colors.Blue;
+        public static Color kolor_zaznaczenia = Colors.Blue;
 
         public event Action<int> zaznaczono;
         bool zaznaczone = false;
