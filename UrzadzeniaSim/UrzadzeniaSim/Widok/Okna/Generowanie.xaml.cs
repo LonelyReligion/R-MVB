@@ -24,10 +24,14 @@ namespace UrzadzeniaSim.Widok.Okna
         public static HashSet<int> OtwarteOkna = new HashSet<int>();
 
         private Urzadzenie_Model _urzadzenie;
+
         private Urządzenie _urzadzenieGui;
+        public Urządzenie ZwrocUrzadzenieGui() { return _urzadzenieGui; }
+
         private int _id;
 
         private bool _pracaWtoku = false;
+        public void UstawPracaWToku(bool pwt) { _pracaWtoku = pwt; }
         public bool PracaWtoku {
             get { return _pracaWtoku; }
             set { 
@@ -86,7 +90,7 @@ namespace UrzadzeniaSim.Widok.Okna
 
             }
         }
-        private void _zatrzymajGenerowanie()
+        public void ZatrzymajGenerowanie()
         {
             _odblokujPrzyjmowanieDanych();
             _urzadzenie.CzyGenerujemy = false;
@@ -104,29 +108,9 @@ namespace UrzadzeniaSim.Widok.Okna
             else
                 Start.IsEnabled = false;
             Stop.IsEnabled = false;
+            _urzadzenieGui.Aktywuj();
         }
 
-        private async void generowaniePomiarowUrzadzenia() {
-            
-            _pracaWtoku = true;
-            _urzadzenie.punkt.status_urzadzenia = STATUS.AKTYWNY_NADAJE;
-            int? _liczbaCykliDoKonca = _urzadzenie.punkt.IleCykli;
-
-            while (!_urzadzenieGui.token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
-            {
-                await Task.Delay(_urzadzenie.punkt.Interwal * 1000); //tyle ile w updown
-                if (_liczbaCykliDoKonca != null) _liczbaCykliDoKonca -= 1;
-            }
-            Trace.WriteLine("Zadanie zostało anulowane przez użytkownika lub zakończyło się pomyślnie.");
-            //musimy jakos dac znac ze stop
-
-            Application.Current.Dispatcher.Invoke( //glowny watek
-            () =>
-            {
-                _zatrzymajGenerowanie();
-            });
-            
-        }
         private void _zablokujPrzyjmowanieDanych()
         {
             sekundy.IsEnabled = false;
@@ -152,7 +136,7 @@ namespace UrzadzeniaSim.Widok.Okna
             _urzadzenieGui.token = _urzadzenieGui.cancellationTokenSource.Token;
 
             
-            Task.Run(() => generowaniePomiarowUrzadzenia());
+            Task.Run(() => _generator.generowaniePomiarowUrzadzenia(this));
 
             Start.IsEnabled = false;
             Stop.IsEnabled = true;
@@ -169,7 +153,7 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
-            _zatrzymajGenerowanie();
+            ZatrzymajGenerowanie();
         }
 
         private void sekundy_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

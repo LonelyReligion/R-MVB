@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 using UrzadzeniaSim.Model.DB;
 using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Model.RMVB.R;
+using System.Diagnostics;
+using UrzadzeniaSim.Widok.Kontrolki;
+using UrzadzeniaSim.Widok.Okna;
+using System.Windows;
 
 namespace UrzadzeniaSim.Narzedzia
 {
@@ -183,6 +187,29 @@ namespace UrzadzeniaSim.Narzedzia
         {
             Urzadzenie_Model losowe = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value;
             return (losowe.Dlugosc, losowe.Szerokosc);
+        }
+
+        public async void generowaniePomiarowUrzadzenia(Generowanie nadawca)
+        {
+
+            nadawca.UstawPracaWToku(true);
+            nadawca.ZwrocUrzadzenieGui().status_urzadzenia = STATUS.AKTYWNY_NADAJE;
+            int? _liczbaCykliDoKonca = nadawca.ZwrocUrzadzenieGui().IleCykli;
+
+            while (!nadawca.ZwrocUrzadzenieGui().token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
+            {
+                await Task.Delay(nadawca.ZwrocUrzadzenieGui().Interwal * 1000); //tyle ile w updown
+                if (_liczbaCykliDoKonca != null) _liczbaCykliDoKonca -= 1;
+            }
+            Trace.WriteLine("Zadanie zostało anulowane przez użytkownika lub zakończyło się pomyślnie.");
+            //musimy jakos dac znac ze stop
+
+            Application.Current.Dispatcher.Invoke( //glowny watek
+            () =>
+            {
+                nadawca.ZatrzymajGenerowanie();
+            });
+
         }
     }
 }

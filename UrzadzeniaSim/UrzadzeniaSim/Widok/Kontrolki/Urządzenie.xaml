@@ -12,6 +12,13 @@
                 <ControlTemplate>
                     <Grid>
                         <Ellipse
+                            x:Name="krag_generowania"
+                            MinWidth="6"
+                            MinHeight="6"
+                            Fill="Transparent"
+                            Stroke="Red"
+                        />
+                        <Ellipse
                             x:Name="zaznaczenie"
                             
                             Width="{Binding szerokosc_wysokosc_zaznaczenia}"
