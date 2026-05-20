@@ -56,18 +56,20 @@ namespace UrzadzeniaSim.Model
         //rtree
         public Decimal suma = 0;
 
-        private int liczba_uwzglednionych = 0;
-        private Decimal rTimeAggregate { get; set; }
+        private int _liczbaUwzglednionych = 0;
+        private Decimal _rTimeAggregate { get; set; }
+        
+        //to jest do usunięcia?
         DateTime granica = new DateTime(2024, 7, 18, 0, 0, 0);
         public void AddMeasure(Pomiar p)
         {
             if (p.dtpomiaru > granica)
             {
                 suma += p.Wartosc;
-                liczba_uwzglednionych++;
+                _liczbaUwzglednionych++;
 
-                rTimeAggregate = suma / liczba_uwzglednionych;
-                TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
+                _rTimeAggregate = suma / _liczbaUwzglednionych;
+                TimeAggregate timeAggregate = new TimeAggregate(_rTimeAggregate, DateTime.Now, UrzadzenieID);
                 repo.saveTimeAggregate(timeAggregate);
             }
             punkt.Emituj();
@@ -78,10 +80,10 @@ namespace UrzadzeniaSim.Model
             if (t > granica)
             {
                 suma += v;
-                liczba_uwzglednionych++;
+                _liczbaUwzglednionych++;
 
-                rTimeAggregate = suma / liczba_uwzglednionych;
-                TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
+                _rTimeAggregate = suma / _liczbaUwzglednionych;
+                TimeAggregate timeAggregate = new TimeAggregate(_rTimeAggregate, DateTime.Now, UrzadzenieID);
                 repo.saveTimeAggregate(timeAggregate);
             }
             punkt.Emituj();
@@ -89,12 +91,12 @@ namespace UrzadzeniaSim.Model
 
         public Decimal GetTimeAggregate()
         {
-            return rTimeAggregate;
+            return _rTimeAggregate;
         }
 
         public (int, Decimal) get_liczba_suma()
         {
-            return (liczba_uwzglednionych, suma);
+            return (_liczbaUwzglednionych, suma);
         }
 
         public Pomiar LastMeasurement()
@@ -120,7 +122,7 @@ namespace UrzadzeniaSim.Model
 
         public bool IsTimeAggregateValid()
         {
-            return rTimeAggregate != null;
+            return _rTimeAggregate != null;
         }
 
         public void Aktywuj() {

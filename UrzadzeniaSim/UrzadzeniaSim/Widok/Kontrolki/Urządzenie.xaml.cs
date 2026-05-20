@@ -17,90 +17,85 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
     public partial class Urządzenie : UserControl, INotifyPropertyChanged
     {
-        public static Color kolor_aktywny = (Color)ColorConverter.ConvertFromString("#5C7D60");
-        private static Color kolor_nieaktywny = (Color)ColorConverter.ConvertFromString("#9AB7D6");
-        private static Color kolor_nadajnik = (Color)ColorConverter.ConvertFromString("#BE756F");
-        private static List<Color> kolory = new List<Color>
-        {
-            kolor_nieaktywny,
-            kolor_aktywny,
-            kolor_nadajnik
-        };
-        public static Color kolor_zaznaczenia = Colors.Blue;
+        private static Color _kolorAktywny = (Color)ColorConverter.ConvertFromString("#5C7D60");
+        private static Color _kolorNieaktywny = (Color)ColorConverter.ConvertFromString("#9AB7D6");
+        private static Color _kolorNadajnik = (Color)ColorConverter.ConvertFromString("#BE756F");
 
-        public event Action<int> zaznaczono;
-        bool zaznaczone = false;
+        public static Color KolorZaznaczenia = Colors.Blue;
 
-        public decimal dlugosc;
-        public decimal szerokosc;
+        public event Action<int> Zaznaczono;
+        private bool _zaznaczone = false;
 
-        private int id_siatka;
+        public decimal Dlugosc;
+        public decimal Szerokosc;
 
-        public const int oryg_szerokosc_wysokosc_zaznaczenia = 7;
-        public const int oryg_szerokosc_wysokosc = 5;
+        private int _idSiatka;
+
+        public const int OrygSzerokoscWysokoscZaznaczenia = 7;
+        public const int OrygSzerokoscWysokosc = 5;
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        private double _szerokosc_wysokosc_zaznaczenia = oryg_szerokosc_wysokosc_zaznaczenia;
+        private double _szerokoscWysokoscZaznaczenia = OrygSzerokoscWysokoscZaznaczenia;
 
-        public double szerokosc_wysokosc_zaznaczenia
+        public double SzerokoscWysokoscZaznaczenia
         {
             get
             {
-                return _szerokosc_wysokosc_zaznaczenia;
+                return _szerokoscWysokoscZaznaczenia;
             }
             set
             {
-                _szerokosc_wysokosc_zaznaczenia = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("szerokosc_wysokosc_zaznaczenia"));
+                _szerokoscWysokoscZaznaczenia = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SzerokoscWysokoscZaznaczenia"));
             }
         }
 
-        private double _szerokosc_wysokosc = 5;
+        private double _szerokoscWysokosc = 5;
 
-        public double szerokosc_wysokosc
+        public double SzerokoscWysokosc
         {
             get
             {
-                return _szerokosc_wysokosc;
+                return _szerokoscWysokosc;
             }
             set
             {
-                _szerokosc_wysokosc = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("szerokosc_wysokosc"));
+                _szerokoscWysokosc = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SzerokoscWysokosc"));
             }
 
         }
 
-        private Brush _kolor_urzadzenia = new SolidColorBrush(kolor_aktywny);
-        public Brush kolor_urzadzenia {
+        private Brush _kolorUrzadzenia = new SolidColorBrush(_kolorAktywny);
+        public Brush KolorUrzadzenia {
             get
             {
-                return _kolor_urzadzenia;
+                return _kolorUrzadzenia;
             }
             set
             {
-                _kolor_urzadzenia = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("kolor_urzadzenia"));
+                _kolorUrzadzenia = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("KolorUrzadzenia"));
             }
         }
-        private Brush _wypelnienie_zaznaczenia = Brushes.Transparent;
-        public Brush wypelnienie_zaznaczenia
+        private Brush _wypelnienieZaznaczenia = Brushes.Transparent;
+        public Brush WypelnienieZaznaczenia
         {
             get
             {
-                return _wypelnienie_zaznaczenia;
+                return _wypelnienieZaznaczenia;
             }
             set
             {
-                _wypelnienie_zaznaczenia = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("wypelnienie_zaznaczenia"));
+                _wypelnienieZaznaczenia = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WypelnienieZaznaczenia"));
             }
         }
 
         // te zmienne dotyczą okna generowania
-        public STATUS status_urzadzenia = STATUS.AKTYWNY;
-        public CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        public CancellationToken token;
+        public STATUS StatusUrzadzenia = STATUS.AKTYWNY;
+        public CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+        public CancellationToken Token;
         public int Interwal = 0;
         public int? IleCykli = null;
         //
@@ -109,12 +104,12 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         {
             InitializeComponent();
             this.DataContext = this;
-            this.dlugosc = dlugosc;
-            this.szerokosc = szerokosc;
+            this.Dlugosc = dlugosc;
+            this.Szerokosc = szerokosc;
         }
 
-        public void ustaw_id_siatka(int id) { 
-            id_siatka = id;
+        public void UstawIdSiatka(int id) { 
+            _idSiatka = id;
         }
 
         //czy musi byc public?
@@ -125,39 +120,39 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void Zaznacz()
         {
-            zaznaczone = !zaznaczone;
+            _zaznaczone = !_zaznaczone;
 
-            if (zaznaczone)
+            if (_zaznaczone)
             {
-                wypelnienie_zaznaczenia = new SolidColorBrush(kolor_zaznaczenia);
+                WypelnienieZaznaczenia = new SolidColorBrush(KolorZaznaczenia);
             }
             else
             {
-                wypelnienie_zaznaczenia = Brushes.Transparent;
+                WypelnienieZaznaczenia = Brushes.Transparent;
             }
 
-            zaznaczono?.Invoke(this.id_siatka);
+            Zaznaczono?.Invoke(this._idSiatka);
         }
 
         public void Odznacz() {
-            wypelnienie_zaznaczenia = Brushes.Transparent;
-            zaznaczone = false;
+            WypelnienieZaznaczenia = Brushes.Transparent;
+            _zaznaczone = false;
         }
 
         public void Aktywuj() {
-            kolor_urzadzenia = new SolidColorBrush(kolor_aktywny);
-            status_urzadzenia = STATUS.AKTYWNY;
+            KolorUrzadzenia = new SolidColorBrush(_kolorAktywny);
+            StatusUrzadzenia = STATUS.AKTYWNY;
         }
 
         public void Dezktywuj() {
-            kolor_urzadzenia = new SolidColorBrush(kolor_nieaktywny);
-            status_urzadzenia = STATUS.NIEAKTYWNY;
+            KolorUrzadzenia = new SolidColorBrush(_kolorNieaktywny);
+            StatusUrzadzenia = STATUS.NIEAKTYWNY;
         }
 
 
         public void Emituj() {
-            kolor_urzadzenia = new SolidColorBrush(kolor_nadajnik);
-            status_urzadzenia = STATUS.AKTYWNY_NADAJE;
+            KolorUrzadzenia = new SolidColorBrush(_kolorNadajnik);
+            StatusUrzadzenia = STATUS.AKTYWNY_NADAJE;
         }
 
     }

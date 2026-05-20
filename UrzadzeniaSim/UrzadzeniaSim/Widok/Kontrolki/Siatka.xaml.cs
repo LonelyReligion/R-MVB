@@ -67,8 +67,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 //
                foreach (Urządzenie u in urządzenia) {
-                    u.szerokosc_wysokosc_zaznaczenia = Math.Max(Urządzenie.oryg_szerokosc_wysokosc_zaznaczenia * skala, Urządzenie.oryg_szerokosc_wysokosc_zaznaczenia);
-                    u.szerokosc_wysokosc = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+                    u.SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie.OrygSzerokoscWysokoscZaznaczenia * skala, Urządzenie.OrygSzerokoscWysokoscZaznaczenia);
+                    u.SzerokoscWysokosc = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
 
                     obliczPozycjePunktu(u);
                 }
@@ -89,8 +89,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private void obliczPozycjePunktu(Urządzenie u) {
 
-            int dlugosc_minuty = (int)((u.dlugosc % 1) * 100);
-            int dlugosc_stopnie = (int)(u.dlugosc / 1);
+            int dlugosc_minuty = (int)((u.Dlugosc % 1) * 100);
+            int dlugosc_stopnie = (int)(u.Dlugosc / 1);
             double dlugosc_przesuniecie = 0;
 
             if (dlugosc_stopnie == 14)
@@ -103,11 +103,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 dlugosc_przesuniecie += (dlugosc_stopnie-15) * krokX + ((double)(dlugosc_minuty)) * krokX / 60.0;
             }
 
-            int szerokosc_minuty = (int)((u.szerokosc % 1) * 100);
-            int szerokosc_stopnie = (int)(u.szerokosc / 1);
+            int szerokosc_minuty = (int)((u.Szerokosc % 1) * 100);
+            int szerokosc_stopnie = (int)(u.Szerokosc / 1);
             double szerokosc_przesuniecie = (szerokosc_stopnie - 49) * krokY + ((double)(szerokosc_minuty)) * krokY / 60.0;
 
-            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - u.szerokosc_wysokosc/2, szerokosc_przesuniecie + wysokosc_plotna - marginesY - u.szerokosc_wysokosc/2, 0, 0); 
+            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - u.SzerokoscWysokosc/2, szerokosc_przesuniecie + wysokosc_plotna - marginesY - u.SzerokoscWysokosc/2, 0, 0); 
         }
         private void rysujUrządzenia() {
             foreach (Urządzenie u in urządzenia) {
@@ -374,13 +374,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             double skala = obliczSkale();
 
             if (skala != 1) {
-                u.punkt.szerokosc_wysokosc_zaznaczenia = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
-                u.punkt.szerokosc_wysokosc = Math.Max(Urządzenie.oryg_szerokosc_wysokosc * skala, Urządzenie.oryg_szerokosc_wysokosc);
+                u.punkt.SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
+                u.punkt.SzerokoscWysokosc = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
             }
 
             
-            u.punkt.ustaw_id_siatka(urządzenia.Count - 1);
-            u.punkt.zaznaczono += zmianaZaznaczenia;
+            u.punkt.UstawIdSiatka(urządzenia.Count - 1);
+            u.punkt.Zaznaczono += zmianaZaznaczenia;
 
             obliczPozycjePunktu(u.punkt); 
             plotno.Children.Add(u.punkt);

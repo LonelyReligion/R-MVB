@@ -193,10 +193,10 @@ namespace UrzadzeniaSim.Narzedzia
         {
 
             nadawca.UstawPracaWToku(true);
-            nadawca.ZwrocUrzadzenieGui().status_urzadzenia = STATUS.AKTYWNY_NADAJE;
+            nadawca.ZwrocUrzadzenieGui().StatusUrzadzenia = STATUS.AKTYWNY_NADAJE; //CZY ROBIC TO PRZEZ _URZADZENIE JEDNAK?
             int? _liczbaCykliDoKonca = nadawca.ZwrocUrzadzenieGui().IleCykli;
 
-            while (!nadawca.ZwrocUrzadzenieGui().token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
+            while (!nadawca.ZwrocUrzadzenieGui().Token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
             {
                 await Task.Delay(nadawca.ZwrocUrzadzenieGui().Interwal * 1000); //tyle ile w updown
                 if (_liczbaCykliDoKonca != null) _liczbaCykliDoKonca -= 1;
