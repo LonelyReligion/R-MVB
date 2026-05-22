@@ -66,6 +66,16 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         }
 
+        private double _wysokoscSzerokoscOkregu = 6;
+        public double WysokoscSzerokoscOkregu
+        {
+            get { return _wysokoscSzerokoscOkregu; }
+            set {
+                _wysokoscSzerokoscOkregu = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WysokoscSzerokoscOkregu"));
+            }
+        }
+
         private Brush _kolorUrzadzenia = new SolidColorBrush(_kolorAktywny);
         public Brush KolorUrzadzenia {
             get
