@@ -21,7 +21,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         private static Color _kolorNieaktywny = (Color)ColorConverter.ConvertFromString("#9AB7D6");
         private static Color _kolorNadajnik = (Color)ColorConverter.ConvertFromString("#BE756F");
 
-        public static Color KolorZaznaczenia = Colors.Blue;
+        private static Color _kolorZaznaczenia = Colors.Blue;
 
         public event Action<int> Zaznaczono;
         private bool _zaznaczone = false;
@@ -124,7 +124,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             if (_zaznaczone)
             {
-                WypelnienieZaznaczenia = new SolidColorBrush(KolorZaznaczenia);
+                WypelnienieZaznaczenia = new SolidColorBrush(_kolorZaznaczenia);
             }
             else
             {
