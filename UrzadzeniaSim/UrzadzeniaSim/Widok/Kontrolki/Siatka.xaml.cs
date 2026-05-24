@@ -67,9 +67,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 //
                foreach (Urządzenie u in urządzenia) {
-                    u.SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie.OrygSzerokoscWysokoscZaznaczenia * skala, Urządzenie.OrygSzerokoscWysokoscZaznaczenia);
-                    u.SzerokoscWysokosc = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
-
+                    u.Skaluj(skala);
                     obliczPozycjePunktu(u);
                 }
                 //

@@ -19,19 +19,7 @@
                             Fill="Transparent"
                             Stroke="Red"
                         >
-                            <Ellipse.Triggers>
-                                <!-- Animates the rectangle's opacity. -->
-                                <EventTrigger RoutedEvent="Ellipse.Loaded">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="krag_generowania" Storyboard.TargetProperty="Opacity" From="1.0" To="0.0" Duration="0:0:1" RepeatBehavior="Forever" />
-                                            <DoubleAnimation Storyboard.TargetName="krag_generowania" Storyboard.TargetProperty="Width" From="6.0" To="10.0" Duration="0:0:1" RepeatBehavior="Forever" />
-                                            <DoubleAnimation Storyboard.TargetName="krag_generowania" Storyboard.TargetProperty="Height" From="6.0" To="10.0" Duration="0:0:1" RepeatBehavior="Forever" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Ellipse.Triggers>
-                            
+
                         </Ellipse>
                         <Ellipse
                             x:Name="zaznaczenie"

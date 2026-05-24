@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
@@ -66,7 +67,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         }
 
-        private double _wysokoscSzerokoscOkregu = 6;
+        private const double _oryginalnaWysokoscSzerokoscOkregu = 6;
+
+        private double _wysokoscSzerokoscOkregu = _oryginalnaWysokoscSzerokoscOkregu;
         public double WysokoscSzerokoscOkregu
         {
             get { return _wysokoscSzerokoscOkregu; }
@@ -116,13 +119,44 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             this.DataContext = this;
             this.Dlugosc = dlugosc;
             this.Szerokosc = szerokosc;
+
+            this.Loaded += _animacjaNadawania;
+        }
+
+        private void _animacjaNadawania(object sender, RoutedEventArgs e) {
+            Ellipse krag_generowania =
+                    (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
+
+            double xy = krag_generowania.Width;
+
+            DoubleAnimation animacjaSzerokosci = new DoubleAnimation
+            {
+                From = xy,
+                To = xy + 4,
+                Duration = TimeSpan.FromSeconds(1),
+                RepeatBehavior = RepeatBehavior.Forever,
+                AutoReverse = true
+            };
+
+            DoubleAnimation animacjaWysokosci = new DoubleAnimation
+            {
+                From = xy,
+                To = xy + 4,
+                Duration = TimeSpan.FromSeconds(1),
+                RepeatBehavior = RepeatBehavior.Forever,
+                AutoReverse = true
+            };
+
+            krag_generowania.BeginAnimation(WidthProperty, animacjaSzerokosci);
+            krag_generowania.BeginAnimation(HeightProperty, animacjaWysokosci);
+
+            //<DoubleAnimation Storyboard.TargetName="krag_generowania" Storyboard.TargetProperty="Opacity" From="1.0" To="0.0" Duration="0:0:1" RepeatBehavior="Forever" />
         }
 
         public void UstawIdSiatka(int id) { 
             _idSiatka = id;
         }
 
-        //czy musi byc public?
         public void Zaznacz(object sender, RoutedEventArgs e)
         {
             Zaznacz();
@@ -163,6 +197,15 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public void Emituj() {
             KolorUrzadzenia = new SolidColorBrush(_kolorNadajnik);
             StatusUrzadzenia = STATUS.AKTYWNY_NADAJE;
+        }
+
+        public void Skaluj(double skala) {
+            Width = Math.Max(10 * skala, 10);
+            Height = Math.Max(10 * skala, 10);
+
+            SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie.OrygSzerokoscWysokoscZaznaczenia * skala, Urządzenie.OrygSzerokoscWysokoscZaznaczenia);
+            SzerokoscWysokosc = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
+            WysokoscSzerokoscOkregu = Math.Max(Urządzenie._oryginalnaWysokoscSzerokoscOkregu * skala, Urządzenie._oryginalnaWysokoscSzerokoscOkregu);
         }
 
     }
