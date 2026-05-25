@@ -17,7 +17,7 @@
                             Width="{Binding WysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                             Height="{Binding WysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                             Fill="Transparent"
-                            Stroke="Red"
+                            Stroke="{Binding KolorOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                             StrokeThickness="{Binding GruboscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                         >
 

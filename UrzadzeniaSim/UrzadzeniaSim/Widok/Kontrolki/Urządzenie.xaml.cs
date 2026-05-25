@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Ink;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
@@ -18,11 +19,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
     public partial class Urządzenie : UserControl, INotifyPropertyChanged
     {
-        private static Color _kolorAktywny = (Color)ColorConverter.ConvertFromString("#5C7D60");
-        private static Color _kolorNieaktywny = (Color)ColorConverter.ConvertFromString("#9AB7D6");
-        private static Color _kolorNadajnik = (Color)ColorConverter.ConvertFromString("#BE756F");
+        private static readonly Color _kolorAktywny = (Color)ColorConverter.ConvertFromString("#5C7D60");
+        private static readonly Color _kolorNieaktywny = (Color)ColorConverter.ConvertFromString("#9AB7D6");
+        private static readonly Color _kolorNadajnik = (Color)ColorConverter.ConvertFromString("#BE756F");
 
-        private static Color _kolorZaznaczenia = Colors.Blue;
+        private static readonly Color _kolorZaznaczenia = Colors.Blue;
 
         public event Action<int> Zaznaczono;
         private bool _zaznaczone = false;
@@ -76,11 +77,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             set {
                 _wysokoscSzerokoscOkregu = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WysokoscSzerokoscOkregu"));
-                _resetujAnimacje();
+
+                if(animujemy)
+                    _resetujAnimacje();
             }
         }
 
-        private Brush _kolorUrzadzenia = new SolidColorBrush(_kolorAktywny);
+        private Brush _kolorUrzadzenia;
         public Brush KolorUrzadzenia {
             get
             {
@@ -130,22 +133,42 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             this.DataContext = this;
             this.Dlugosc = dlugosc;
             this.Szerokosc = szerokosc;
+            _kolorUrzadzenia = new SolidColorBrush(_kolorAktywny);
 
-            this.Loaded += _animacjaNadawania;
         }
 
-        private void _resetujAnimacje() {
-            Ellipse krag_generowania =
-            (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
+        bool animujemy = false;
+
+        //#00FFFFFF
+        private static readonly Brush _domyslnyKolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Transparent");
+        private Brush _kolorOkregu = _domyslnyKolorOkregu;
+        public Brush KolorOkregu
+        {
+            get { return _kolorOkregu; }
+            set {
+                _kolorOkregu = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("KolorOKregu"));
+            }
+        }
+
+        public void ZatrzymajAnimacje() {
+            animujemy = false;
+            Ellipse krag_generowania = (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
+            KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Transparent");
 
             krag_generowania.BeginAnimation(WidthProperty, null);
             krag_generowania.BeginAnimation(HeightProperty, null);
             krag_generowania.BeginAnimation(OpacityProperty, null);
+        }
+        public void UruchomAnimacje() {
+            animujemy = true;
+            Ellipse krag_generowania = (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
+            KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Red");
 
             DoubleAnimation animacjaSzerokosci = new DoubleAnimation
             {
                 From = WysokoscSzerokoscOkregu,
-                To = WysokoscSzerokoscOkregu + WysokoscSzerokoscOkregu / 6 * 4,
+                To = WysokoscSzerokoscOkregu + WysokoscSzerokoscOkregu / 6 * 8,
                 Duration = TimeSpan.FromSeconds(1),
                 RepeatBehavior = RepeatBehavior.Forever
             };
@@ -153,7 +176,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             DoubleAnimation animacjaWysokosci = new DoubleAnimation
             {
                 From = WysokoscSzerokoscOkregu,
-                To = WysokoscSzerokoscOkregu + WysokoscSzerokoscOkregu / 6 * 4,
+                To = WysokoscSzerokoscOkregu + WysokoscSzerokoscOkregu / 6 * 8,
                 Duration = TimeSpan.FromSeconds(1),
                 RepeatBehavior = RepeatBehavior.Forever
             };
@@ -172,9 +195,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             krag_generowania.BeginAnimation(OpacityProperty, animacjaKrycia);
         }
-
-        private void _animacjaNadawania(object sender, RoutedEventArgs e) {
-            _resetujAnimacje();
+        private void _resetujAnimacje() {
+            ZatrzymajAnimacje();
+            UruchomAnimacje();
         }
 
         public void UstawIdSiatka(int id) { 
@@ -224,8 +247,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         }
 
         public void Skaluj(double skala) {
-            Width = Math.Max(10 * skala, 10);
-            Height = Math.Max(10 * skala, 10);
+            Width = Math.Max(14 * skala, 14);
+            Height = Math.Max(14 * skala, 14);
 
             SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie.OrygSzerokoscWysokoscZaznaczenia * skala, Urządzenie.OrygSzerokoscWysokoscZaznaczenia);
             SzerokoscWysokosc = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);

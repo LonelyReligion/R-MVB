@@ -4,17 +4,36 @@ using UrzadzeniaSim.Widok.Kontrolki;
 using UrzadzeniaSim.Model.DB;
 using UrzadzeniaSim.Model.RMVB.R;
 using UrzadzeniaSim.Model.RMVB;
+using System.ComponentModel;
 
 namespace UrzadzeniaSim.Model
 {
-    public class Urzadzenie_Model
+    public class Urzadzenie_Model : INotifyPropertyChanged
     {
-        public bool CzyGenerujemy = false;
+        public Urządzenie punkt; //reprezentacja na ekranie
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private const bool _domyslnaWartoscCzyGenerujemy = false;
+        private bool _czyGenerujemy = _domyslnaWartoscCzyGenerujemy;
+        public bool CzyGenerujemy
+        {
+            get { return _czyGenerujemy; }
+            set { 
+                _czyGenerujemy = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CzyGenerujemy"));
+                if (value)
+                {
+                    punkt.UruchomAnimacje();
+                }
+                else { 
+                    punkt.ZatrzymajAnimacje();
+                }
+            }
+        }
 
         public static DrzewoRMVB rMVB;
         public static int nastepne_wolne_id = 0;
-
-        public Urządzenie punkt; //reprezentacja na ekranie
 
         public static Repo repo;
         public static Kontekst ctx;
@@ -61,6 +80,8 @@ namespace UrzadzeniaSim.Model
         
         //to jest do usunięcia?
         DateTime granica = new DateTime(2024, 7, 18, 0, 0, 0);
+
+
         public void AddMeasure(Pomiar p)
         {
             if (p.dtpomiaru > granica)
