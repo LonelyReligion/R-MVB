@@ -127,30 +127,35 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             Ellipse krag_generowania =
                     (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
 
-            double xy = krag_generowania.Width;
-
             DoubleAnimation animacjaSzerokosci = new DoubleAnimation
             {
-                From = xy,
-                To = xy + 4,
+                From = WysokoscSzerokoscOkregu,
+                To = WysokoscSzerokoscOkregu + 4,
                 Duration = TimeSpan.FromSeconds(1),
-                RepeatBehavior = RepeatBehavior.Forever,
-                AutoReverse = true
+                RepeatBehavior = RepeatBehavior.Forever
             };
 
             DoubleAnimation animacjaWysokosci = new DoubleAnimation
             {
-                From = xy,
-                To = xy + 4,
+                From = WysokoscSzerokoscOkregu,
+                To = WysokoscSzerokoscOkregu + 4,
                 Duration = TimeSpan.FromSeconds(1),
-                RepeatBehavior = RepeatBehavior.Forever,
-                AutoReverse = true
+                RepeatBehavior = RepeatBehavior.Forever
             };
 
             krag_generowania.BeginAnimation(WidthProperty, animacjaSzerokosci);
             krag_generowania.BeginAnimation(HeightProperty, animacjaWysokosci);
 
             //<DoubleAnimation Storyboard.TargetName="krag_generowania" Storyboard.TargetProperty="Opacity" From="1.0" To="0.0" Duration="0:0:1" RepeatBehavior="Forever" />
+            DoubleAnimation animacjaKrycia = new DoubleAnimation
+            {
+                From = 1.0,
+                To = 0.0,
+                Duration = TimeSpan.FromSeconds(1),
+                RepeatBehavior= RepeatBehavior.Forever,
+            };
+
+            krag_generowania.BeginAnimation(OpacityProperty, animacjaKrycia);
         }
 
         public void UstawIdSiatka(int id) { 
