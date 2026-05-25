@@ -76,6 +76,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             set {
                 _wysokoscSzerokoscOkregu = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WysokoscSzerokoscOkregu"));
+                _resetujAnimacje();
             }
         }
 
@@ -123,9 +124,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             this.Loaded += _animacjaNadawania;
         }
 
-        private void _animacjaNadawania(object sender, RoutedEventArgs e) {
+        private void _resetujAnimacje() {
             Ellipse krag_generowania =
-                    (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
+            (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
+
+            krag_generowania.BeginAnimation(WidthProperty, null);
+            krag_generowania.BeginAnimation(HeightProperty, null);
+            krag_generowania.BeginAnimation(OpacityProperty, null);
 
             DoubleAnimation animacjaSzerokosci = new DoubleAnimation
             {
@@ -152,10 +157,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 From = 1.0,
                 To = 0.0,
                 Duration = TimeSpan.FromSeconds(1),
-                RepeatBehavior= RepeatBehavior.Forever,
+                RepeatBehavior = RepeatBehavior.Forever,
             };
 
             krag_generowania.BeginAnimation(OpacityProperty, animacjaKrycia);
+        }
+
+        private void _animacjaNadawania(object sender, RoutedEventArgs e) {
+            _resetujAnimacje();
         }
 
         public void UstawIdSiatka(int id) { 
