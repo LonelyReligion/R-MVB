@@ -106,6 +106,16 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
         }
 
+        private const double _domyslnaGruboscOkregu = 1;
+        private double _gruboscOkregu = _domyslnaGruboscOkregu;
+        public double GruboscOkregu {
+            get { return _gruboscOkregu; }
+            set { 
+                _gruboscOkregu = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("GruboscOkregu"));
+            }
+        }
+
         // te zmienne dotyczą okna generowania
         public STATUS StatusUrzadzenia = STATUS.AKTYWNY;
         public CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
@@ -135,7 +145,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             DoubleAnimation animacjaSzerokosci = new DoubleAnimation
             {
                 From = WysokoscSzerokoscOkregu,
-                To = WysokoscSzerokoscOkregu + 4,
+                To = WysokoscSzerokoscOkregu + WysokoscSzerokoscOkregu / 6 * 4,
                 Duration = TimeSpan.FromSeconds(1),
                 RepeatBehavior = RepeatBehavior.Forever
             };
@@ -143,7 +153,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             DoubleAnimation animacjaWysokosci = new DoubleAnimation
             {
                 From = WysokoscSzerokoscOkregu,
-                To = WysokoscSzerokoscOkregu + 4,
+                To = WysokoscSzerokoscOkregu + WysokoscSzerokoscOkregu / 6 * 4,
                 Duration = TimeSpan.FromSeconds(1),
                 RepeatBehavior = RepeatBehavior.Forever
             };
@@ -220,6 +230,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie.OrygSzerokoscWysokoscZaznaczenia * skala, Urządzenie.OrygSzerokoscWysokoscZaznaczenia);
             SzerokoscWysokosc = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
             WysokoscSzerokoscOkregu = Math.Max(Urządzenie._oryginalnaWysokoscSzerokoscOkregu * skala, Urządzenie._oryginalnaWysokoscSzerokoscOkregu);
+            GruboscOkregu = Math.Max(Urządzenie._domyslnaGruboscOkregu * skala, Urządzenie._domyslnaGruboscOkregu);
         }
 
     }
