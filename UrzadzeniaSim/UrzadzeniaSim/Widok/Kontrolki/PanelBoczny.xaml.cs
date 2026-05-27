@@ -178,7 +178,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private void listaUrzadzen_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            if (e.PropertyName == "Wersje")
+            if (e.PropertyName == "Wersje" || e.PropertyName == "CzyGenerujemy")
                 e.Column.Visibility = Visibility.Collapsed;
 
             if (e.PropertyName == "UrzadzenieID")
