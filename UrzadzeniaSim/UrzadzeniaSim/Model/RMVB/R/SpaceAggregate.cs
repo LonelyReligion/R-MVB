@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UrzadzeniaSim.Model.RMVB.R
 {
@@ -14,16 +14,16 @@ namespace UrzadzeniaSim.Model.RMVB.R
         public Decimal xMax { get; set; }
         public Decimal yMax { get; set; }
 
-        private Rectangle mbr {  get; set; }
+        private Rectangle mbr { get; set; }
         public DateTime sATime { get; set; }
         public Decimal sAValue { get; set; }
 
         public SpaceAggregate(Rectangle r, DateTime dt, Decimal v)
         {
             mbr = r;
-            xMin = r.XMin; 
-            yMin = r.YMin; 
-            xMax = r.XMax; 
+            xMin = r.XMin;
+            yMin = r.YMin;
+            xMax = r.XMax;
             yMax = r.YMax;
             sATime = dt;
             sAValue = v;

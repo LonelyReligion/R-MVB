@@ -2,8 +2,8 @@
 {
     public interface RootHandler
     {
-        RNode ProvideRoot ();
+        RNode ProvideRoot();
 
-        void UpdateRoot (RNode root);
+        void UpdateRoot(RNode root);
     }
 }

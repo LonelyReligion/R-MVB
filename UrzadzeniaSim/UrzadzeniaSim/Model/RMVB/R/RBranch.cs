@@ -6,7 +6,8 @@ namespace UrzadzeniaSim.Model.RMVB.R
     {
         private List<RNode> children = new List<RNode>();
 
-        public override int zwrocLiczbeDzieci() { 
+        public override int zwrocLiczbeDzieci()
+        {
             return children.Count;
         }
         public RBranch(Decimal xmin, Decimal ymin, Decimal xmax, Decimal ymax) : base(xmin, ymin, xmax, ymax)
@@ -205,7 +206,7 @@ namespace UrzadzeniaSim.Model.RMVB.R
                 foreach (RNode ch in children)
                 {
                     Urzadzenie_Model wynikowe = ch.SearchBy(x, y);
-                    if ( wynikowe != null)
+                    if (wynikowe != null)
                         return wynikowe;
                 }
             }

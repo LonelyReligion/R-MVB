@@ -5,53 +5,55 @@ namespace UrzadzeniaSim.Model.DB
 {
     public class InDBStorage : TreeRepository
     {
-        public static Kontekst ctx;
+        public static Kontekst s_Ctx;
 
         //nie abstract, bo ma ciało
         //virtual jest konieczne do tego, aby klasa Repo mogła ją napisać
         //"znacza to, że dana metoda może zostać nadpisana w klasie która dziedziczy po klasie w której jest ta metoda zdefiniowana"
         public virtual void saveDevice(Urzadzenie_Model device)
         {
-            ctx.SaveChanges();
+            s_Ctx.SaveChanges();
         }
 
-        public virtual void saveVersion(Wersja version) {
-            ctx.SaveChanges();
+        public virtual void saveVersion(Wersja version)
+        {
+            s_Ctx.SaveChanges();
         }
 
         public void saveMeasurement(Pomiar measure)
         {
-            ctx.Pomiary.Add(measure);
-            ctx.SaveChanges();
+            s_Ctx.Pomiary.Add(measure);
+            s_Ctx.SaveChanges();
         }
 
         public void saveTimeAggregate(TimeAggregate timeAggregate)
         {
             //brzydkie rozwiazanie dzieki niemu nie ma bledu
-            foreach (var entry in ctx.ChangeTracker.Entries())
+            foreach (var entry in s_Ctx.ChangeTracker.Entries())
             {
                 entry.State = EntityState.Detached;
             }
 
-            ctx.TimeAggregates.Add(timeAggregate);
-            ctx.SaveChanges();
+            s_Ctx.TimeAggregates.Add(timeAggregate);
+            s_Ctx.SaveChanges();
         }
 
         public void saveSpaceAggregate(SpaceAggregate spaceAggregate)
         {
-            ctx.SpaceAggregates.Add(spaceAggregate);
-            ctx.SaveChanges();
+            s_Ctx.SpaceAggregates.Add(spaceAggregate);
+            s_Ctx.SaveChanges();
         }
 
 
         public void saveSrednia(Srednia srednia)
         {
-            ctx.Srednie.Add(srednia);
-            ctx.SaveChanges();
+            s_Ctx.Srednie.Add(srednia);
+            s_Ctx.SaveChanges();
         }
 
-        public void Reset() {
-            ctx.Database.ExecuteSqlCommand("delete from Urzadzenie_Model");
+        public void Reset()
+        {
+            s_Ctx.Database.ExecuteSqlCommand("delete from Urzadzenie_Model");
         }
     }
 }

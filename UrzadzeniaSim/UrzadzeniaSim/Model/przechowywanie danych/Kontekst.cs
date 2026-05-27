@@ -5,13 +5,14 @@ namespace UrzadzeniaSim.Model.DB
 {
     public class Kontekst : DbContext
     {
-        public Kontekst() : base() {
+        public Kontekst() : base()
+        {
             //Database.SetInitializer<Kontekst>(new DropCreateDatabaseAlways<Kontekst>());
         }
 
         public DbSet<Pomiar> Pomiary { get; set; }
         public DbSet<Srednia> Srednie { get; set; }
-        
+
         public DbSet<Urzadzenie_Model> Urzadzenia { get; set; }
         public DbSet<Wersja> Wersje { get; set; }
         public DbSet<SpaceAggregate> SpaceAggregates { get; set; }
@@ -21,15 +22,15 @@ namespace UrzadzeniaSim.Model.DB
         {
             //wieksza precyzja
             modelBuilder.Entity<Wersja>()
-            .Property(u => u.dataOstatniejModyfikacji)
+            .Property(u => u.DataOstatniejModyfikacji)
             .HasColumnType("datetime2");
 
             modelBuilder.Entity<Wersja>()
-            .Property(u => u.dataWygasniecia)
+            .Property(u => u.DataWygasniecia)
             .HasColumnType("datetime2");
 
             modelBuilder.Entity<Pomiar>()
-            .Property(u => u.dtpomiaru)
+            .Property(u => u.DataPomiaru)
             .HasColumnType("datetime2");
 
             modelBuilder.Entity<Urzadzenie_Model>()

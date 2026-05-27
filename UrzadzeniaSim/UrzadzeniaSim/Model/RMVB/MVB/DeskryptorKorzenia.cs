@@ -15,15 +15,18 @@
             this.korzen = korzen;
         }
 
-        public Korzen zwrocKorzen() { 
+        public Korzen zwrocKorzen()
+        {
             return korzen;
         }
 
-        public void ustawPoczatek(DateTime dt) { 
+        public void ustawPoczatek(DateTime dt)
+        {
             poczatek = dt;
         }
 
-        public void ustawKoniec(DateTime dt) { 
+        public void ustawKoniec(DateTime dt)
+        {
             koniec = dt;
         }
 

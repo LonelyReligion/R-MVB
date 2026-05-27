@@ -1,13 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Model.DB;
-using Xceed.Wpf.Toolkit.Primitives;
-using UrzadzeniaSim.Widok.Okna;
-using System.Windows.Input;
 using UrzadzeniaSim.Narzedzia;
+using UrzadzeniaSim.Widok.Okna;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
@@ -17,37 +15,37 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     public partial class PanelBoczny : UserControl, INotifyPropertyChanged
     {
         public Dictionary<int, Generowanie> OtwarteOkna = new Dictionary<int, Generowanie>();
-        public static Repo Repozytorium;
+        public static Repo s_Repozytorium;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private double _oryginalnaWysokosc;
         private double _oryginalnaSzerokosc;
 
         private const int _bazowaWielkoscCzcionki = 15;
-        
-        public static Kontekst Ctx;
+
+        public static Kontekst s_Ctx;
 
         private string _wielkoscCzcionki = "12";
 
         private static List<string> s_statusy = new List<string> { "AKTYWNY", "NIEAKTYWNY", "NADAJE" };
-        public string WielkoscCzcionki 
+        public string WielkoscCzcionki
         {
-            get 
+            get
             {
                 return _wielkoscCzcionki;
             }
-            set 
+            set
             {
                 _wielkoscCzcionki = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WielkoscCzcionki"));
-            } 
+            }
         }
 
         private double _oryginalnaWysokoscPrzycisku = 30;
         private double _oryginalnaSzerokoscPrzycisku = 120;
 
         private bool _mamyWymiary = false; //przechowuje informację nt. tego czy zczytaliśmy oryginalne wymiary okna
-        public static Generatory Generator;
+        public static Generatory s_Generator;
         public bool MozemyZmienicStatus
         {
             get => _wyswietlane != null && !_wyswietlane.CzyGenerujemy;
@@ -57,19 +55,20 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         {
             InitializeComponent();
 
-            listaUrzadzen.ItemsSource = MainWindow.UrzadzeniaUI;
+            listaUrzadzen.ItemsSource = MainWindow.s_UrzadzeniaUI;
             Statusy.ItemsSource = new List<string>();
 
 
             DataContext = this;
 
-            panel.SizeChanged += (s,e) => 
+            panel.SizeChanged += (s, e) =>
             {
 
                 double wysokosc_panelu = panel.ActualHeight;
                 double szerokosc_panelu = panel.ActualWidth;
 
-                if (!_mamyWymiary) {
+                if (!_mamyWymiary)
+                {
                     _mamyWymiary = true;
                     _oryginalnaWysokosc = wysokosc_panelu;
                     _oryginalnaSzerokosc = szerokosc_panelu;
@@ -80,14 +79,16 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 double skala = Math.Min(skala_x, skala_y);
 
                 WielkoscCzcionki = (skala * (double)_bazowaWielkoscCzcionki).ToString();
-              
+
 
             };
 
         }
         private Urzadzenie_Model _wyswietlane;
-        public void uzupelnijInformacjeOurzadzeniu(int id_urzadzenia) {
-            if (id_urzadzenia == -1) {
+        public void uzupelnijInformacjeOurzadzeniu(int id_urzadzenia)
+        {
+            if (id_urzadzenia == -1)
+            {
                 _wyswietlane = null;
                 Statusy.ItemsSource = new List<string>();
                 Label_ID.Content = "";
@@ -100,14 +101,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 Statusy.ItemsSource = s_statusy;
 
-                _wyswietlane = Ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
+                _wyswietlane = s_Ctx.Urzadzenia.Where(p => p.UrzadzenieID == id_urzadzenia).First();
                 Label_ID.Content = _wyswietlane.UrzadzenieID;
                 Label_Dlugosc.Content = (int)_wyswietlane.Dlugosc + "°" + (int)((_wyswietlane.Dlugosc % 1) * 100) + "'" + "E";
                 Label_Szerokosc.Content = (int)_wyswietlane.Szerokosc + "°" + (int)((_wyswietlane.Szerokosc % 1) * 100) + "'" + "N";
 
                 if (_wyswietlane.CzyGenerujemy)
                     Statusy.SelectedIndex = 2;
-                else if (Repozytorium.czyJestAktywne(_wyswietlane.UrzadzenieID))
+                else if (s_Repozytorium.czyJestAktywne(_wyswietlane.UrzadzenieID))
                     Statusy.SelectedIndex = 0; //na razie nie mamy jak sprawdzic czy nadaje tutaj
                 else
                     Statusy.SelectedIndex = 1;
@@ -117,11 +118,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             _zaktualizujMozemyZmienicStatus();
         }
-        public void ZmienStatusDla(int IdUrzadzenia) { 
-            if(_wyswietlane.UrzadzenieID == IdUrzadzenia)
+        public void ZmienStatusDla(int IdUrzadzenia)
+        {
+            if (_wyswietlane.UrzadzenieID == IdUrzadzenia)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MozemyZmienicStatus)));
         }
-        private void _zaktualizujMozemyZmienicStatus() {
+        private void _zaktualizujMozemyZmienicStatus()
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MozemyZmienicStatus)));
         }
         private void Statusy_SelectionChanged(object sender, EventArgs e)
@@ -137,7 +140,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                         OtwarteOkna.ElementAt(_wyswietlane.UrzadzenieID).Value.Close();
                         OtwarteOkna.Remove(_wyswietlane.UrzadzenieID);
                     }
-                    catch { 
+                    catch
+                    {
                         //to nic nie musimy robic
                     }
                 }
@@ -156,15 +160,16 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 }
                 else //Nadaje
                 {
-                    if (!Generowanie.OtwarteOkna.Contains(_wyswietlane.UrzadzenieID))
+                    if (!Generowanie.s_OtwarteOkna.Contains(_wyswietlane.UrzadzenieID))
                     {
-                        Generowanie okno_generowania = new Generowanie(this, _wyswietlane, Generator);
+                        Generowanie okno_generowania = new Generowanie(this, _wyswietlane, s_Generator);
                         okno_generowania.ZmieniloSieCzyGenerujemy += ZmienStatusDla;
                         okno_generowania.Show();
 
                         OtwarteOkna.Add(_wyswietlane.UrzadzenieID, okno_generowania);
                     }
-                    else { 
+                    else
+                    {
                         //tu powinnismy dac znac uzytkowanikowi co robi zle
                     }
                 }
@@ -173,7 +178,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private void listaUrzadzen_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            if(e.PropertyName == "Wersje")
+            if (e.PropertyName == "Wersje")
                 e.Column.Visibility = Visibility.Collapsed;
 
             if (e.PropertyName == "UrzadzenieID")
@@ -181,7 +186,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 e.Column.Header = "ID";
                 e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
             }
-            else {
+            else
+            {
                 e.Column.Width = new DataGridLength(2, DataGridLengthUnitType.Star);
             }
         }
@@ -204,7 +210,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 catch
                 {
                     //otworz okno
-                    Generowanie okno_generowania = new Generowanie(this, _wyswietlane, Generator);
+                    Generowanie okno_generowania = new Generowanie(this, _wyswietlane, s_Generator);
                     okno_generowania.ZmieniloSieCzyGenerujemy += ZmienStatusDla;
                     okno_generowania.Show();
 

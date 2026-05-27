@@ -12,14 +12,17 @@
 
         //moze samo urzadzenie atp
         internal List<(int, Wersja)> urzadzenia; //zmienic
-        internal Wezel() { 
-            urzadzenia = new List<(int, Wersja)> ();
+        internal Wezel()
+        {
+            urzadzenia = new List<(int, Wersja)>();
             id = aktualne_id++;
         }
-        
+
         //zwraca true jezeli sie zmiescilo, false jezeli block ov
-        internal bool dodaj(Wersja u) {
-            if (urzadzenia.Count() < pojemnoscWezla) {
+        internal bool dodaj(Wersja u)
+        {
+            if (urzadzenia.Count() < pojemnoscWezla)
+            {
                 urzadzenia.Add((u.UrzadzenieID, u));
                 urzadzenia = urzadzenia.OrderBy(w => w.Item1).ToList();
                 return true;
@@ -28,7 +31,7 @@
         }
         internal List<String> drukuj()
         {
-            List<String> wyjsciowa =  new List<string> ();
+            List<String> wyjsciowa = new List<string>();
             wyjsciowa.Add(id.ToString());
             if (urzadzenia.Count == 0)
             {
@@ -41,7 +44,7 @@
                 List<String> wynikowy = new List<String>();
                 for (int i = 0; i < urzadzenia.Count; i++)
                 {
-                    wynikowy.Add("<" + (urzadzenia[i].Item1.ToString() + "v" + urzadzenia[i].Item2.WersjaID.ToString()) + "," + urzadzenia[i].Item2.dataOstatniejModyfikacji.ToString() + "," + urzadzenia[i].Item2.dataWygasniecia.ToString() + ">");
+                    wynikowy.Add("<" + (urzadzenia[i].Item1.ToString() + "v" + urzadzenia[i].Item2.WersjaID.ToString()) + "," + urzadzenia[i].Item2.DataOstatniejModyfikacji.ToString() + "," + urzadzenia[i].Item2.DataWygasniecia.ToString() + ">");
                 }
                 int max = wynikowy.Max(x => x.Length);
                 String pozioma = "";
@@ -75,17 +78,19 @@
             return liczbaZywych() < pojemnoscWezla * Psvu;
         }
 
-        internal int liczbaZywych() 
-        { 
+        internal int liczbaZywych()
+        {
             int output = 0;
-            foreach (var u in urzadzenia) {
+            foreach (var u in urzadzenia)
+            {
                 if (u.Item2.Aktywne)
                     output++;
             }
             return output;
         }
-        
-        public List<Wersja> zwrocUrzadzenia() { 
+
+        public List<Wersja> zwrocUrzadzenia()
+        {
             List<Wersja> output = new List<Wersja>();
             foreach (var wpis in urzadzenia)
                 output.Add(wpis.Item2);

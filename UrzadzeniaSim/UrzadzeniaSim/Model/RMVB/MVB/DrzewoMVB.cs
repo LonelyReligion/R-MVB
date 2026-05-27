@@ -4,9 +4,9 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
 {
     internal class DrzewoMVB
     {
-        private double Pversion = 1.0/3;
-        private double Psvu = 1.0/3;
-        private double Psvo = 5.0/6;
+        private double Pversion = 1.0 / 3;
+        private double Psvu = 1.0 / 3;
+        private double Psvo = 5.0 / 6;
 
         private TreeRepository Repo;
         private Kontekst ctx;
@@ -25,7 +25,7 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
             this.ctx = ctx;
         }
 
-        internal List<string> drukujDrzewo() 
+        internal List<string> drukujDrzewo()
         {
             List<string> wyjsciowa = new List<String>();
             foreach (DeskryptorKorzenia dk in desk)
@@ -35,15 +35,16 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
                 wyjsciowa.Add("\n");
             }
 
-            wyjsciowa.Add("Liczba korzeni MVB: " + desk.Count);
+            wyjsciowa.Add("Liczba korzeni _mvb: " + desk.Count);
             return wyjsciowa;
         }
 
-        internal int zwrocLiczbeWpisowKorzenia(int nr) {
+        internal int zwrocLiczbeWpisowKorzenia(int nr)
+        {
             return desk[nr].zwrocKorzen().zwrocLiczbeWpisow();
         }
 
-        internal void dodajUrzadzenie(Wersja u) 
+        internal void dodajUrzadzenie(Wersja u)
         {
             Korzen ostatni_korzen = desk.Last().zwrocKorzen();
             if (!ostatni_korzen.dodaj(u))
@@ -52,45 +53,47 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
                 desk.Last().ustawKoniec(czas_zmiany);
                 //zczytac zywe
                 List<Wersja> zywe = ostatni_korzen.zwrocZywe();
-                
+
                 //zabic te w starym korzeniu z data wyzej
                 //zywe maja miec to jako date ostatniej modyfikacji w nowym korzeniu
                 Korzen nowy = new Korzen(Repo, Pversion);
                 Wezel.aktualne_id = 'A';
                 desk.Add(new DeskryptorKorzenia(czas_zmiany, DateTime.MaxValue, nowy));
 
-                
+
                 List<Wersja> do_dodania = new List<Wersja>();
                 foreach (Wersja w in zywe)
                 {
-                    w.dezaktywuj();
-                    
+                    w._dezaktywuj();
+
                     Wersja kopia = new Wersja(w.UrzadzenieID, (Repo)Repo);
-                    kopia.dataOstatniejModyfikacji = czas_zmiany;
+                    kopia.DataOstatniejModyfikacji = czas_zmiany;
                     Repo.saveVersion(kopia);
                     do_dodania.Add(kopia);
 
                 }
 
                 do_dodania.Add(u);//tego nie musimy kopiowac;)
-                
-                foreach (Wersja w in do_dodania) {
+
+                foreach (Wersja w in do_dodania)
+                {
                     dodajUrzadzenie(w);
                 }
-            }; 
-            
+            };
+
         }
 
         internal bool usunUrzadzenie(Wersja testowe2)
         {
-            if (testowe2.dataWygasniecia != DateTime.MaxValue) {
+            if (testowe2.DataWygasniecia != DateTime.MaxValue)
+            {
                 Console.WriteLine("To urzadzenie zostało juz usuniete (zdezaktywowane).");
                 return false;
             }
             for (int i = 0; i < desk.Count(); i++)
             {
                 /* data wygasniecia przy nieusunietym dotychczas urzadzeniu zawsze bedzie DateTimeMax */
-                if (desk[i].zwrocPoczatek() <= testowe2.dataOstatniejModyfikacji)
+                if (desk[i].zwrocPoczatek() <= testowe2.DataOstatniejModyfikacji)
                 {
                     desk[i].zwrocKorzen().usun(testowe2);
                     return true;
@@ -110,12 +113,13 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
                 for (int i = 0; i < desk.Count(); i++)
                 {
                     Wersja wartosc = desk[i].zwrocKorzen().szukaj(id, v).Item3;
-                    if(wartosc != null)
+                    if (wartosc != null)
                         return wartosc;
                 }
             }
-            
-            else { 
+
+            else
+            {
                 int poczatkowy_indeks = desk.Count() / 2;
                 Stack<DeskryptorKorzenia> do_przejrzenia = new Stack<DeskryptorKorzenia>();
                 int aktualny_indeks = poczatkowy_indeks;
@@ -123,11 +127,13 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
                 HashSet<int> odwiedzone = new HashSet<int>();
                 bool kierunek = true; //domyslnie idziemy w gore, kierunek poszukiwan
 
-                while (do_przejrzenia.Count != 0) {
+                while (do_przejrzenia.Count != 0)
+                {
                     DeskryptorKorzenia analizowany = do_przejrzenia.Pop();
                     (byte, Wezel, Wersja) wartosc = analizowany.zwrocKorzen().szukaj(id, v);
                     odwiedzone.Add(aktualny_indeks);
-                    if (wartosc.Item1 == 0) { //znalezliśmy 
+                    if (wartosc.Item1 == 0)
+                    { //znalezliśmy 
                         return wartosc.Item3;
                     }
                     else if (wartosc.Item1 == 1) //znaleziona wersja jest mniejsza
@@ -149,24 +155,26 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
                     {
                         //szukamy nizej
                         kierunek = false;
-                        if (aktualny_indeks != 0) {
+                        if (aktualny_indeks != 0)
+                        {
                             aktualny_indeks = aktualny_indeks - 1;
                             do_przejrzenia.Push(desk[aktualny_indeks]);
                         }
-                        else {
+                        else
+                        {
                             Console.WriteLine("Uwaga: Nie znaleziono urzadzenia");
                             return null;
                         }
                     }
-                    else if(wartosc.Item1 == 3)//nie znaleziono
-                    {                        
+                    else if (wartosc.Item1 == 3)//nie znaleziono
+                    {
                         //szukamy zgodnie z kierunkiem
                         if (!(aktualny_indeks == desk.Count() - 1 && kierunek) && !(!kierunek && aktualny_indeks == 0))
                         {
                             int jeden = kierunek ? 1 : -1;
                             aktualny_indeks += jeden;
                             while (odwiedzone.Contains(aktualny_indeks) &&
-                                !(aktualny_indeks == desk.Count() - 1 && kierunek) && 
+                                !(aktualny_indeks == desk.Count() - 1 && kierunek) &&
                                 !(!kierunek && aktualny_indeks == 0)) //nie uwzgl. przyp granicznych
                             {
                                 aktualny_indeks += jeden;
@@ -174,7 +182,7 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
                             do_przejrzenia.Push(desk[aktualny_indeks]);
                         }
                         //uwzglednic co jak nam sie skoncza w jednym kierunku a nie znaleziono zadnego
-                        else 
+                        else
                         {
                             if (odwiedzone.Count == desk.Count)
                             {
@@ -203,11 +211,11 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
         }
 
         //szukaj wersji aktualnej w danym momencie
-        internal Wersja szukaj(int id, DateTime dt) 
+        internal Wersja szukaj(int id, DateTime dt)
         {
             for (int i = 0; i < desk.Count(); i++)
             {
-                if(desk[i].zwrocPoczatek() <= dt && dt < desk[i].zwrocKoniec())
+                if (desk[i].zwrocPoczatek() <= dt && dt < desk[i].zwrocKoniec())
                     return desk[i].zwrocKorzen().szukaj(id, dt);
 
             }
@@ -216,9 +224,9 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
         }
 
         //szukaj ostatniej wersji
-        internal Wersja szukaj(int id) 
+        internal Wersja szukaj(int id)
         {
-            for (int i = desk.Count() - 1; i >= 0;  i--)
+            for (int i = desk.Count() - 1; i >= 0; i--)
             {
                 Wersja? wartosc = desk[i].zwrocKorzen().szukaj(id);
                 if (wartosc != null)
@@ -229,23 +237,24 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
         }
 
         //zwraca wersje z danego skonczonego przedzialu czasowego
-        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) 
+        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec)
         {
-            List<Wersja> wyjsciowa =  new List<Wersja>();
+            List<Wersja> wyjsciowa = new List<Wersja>();
             //musi byc od konca, przez ten warunek nizej
-            for (int i = desk.Count - 1; i >= 0; i--) {
+            for (int i = desk.Count - 1; i >= 0; i--)
+            {
                 //zupelnie inne warunki powinny byc
                 if (desk[i].zwrocKoniec() <= poczatek)
                 {
                     return wyjsciowa; //przejrzelismy wszystko co pasowalo do przedzialu
                 }
-                else if (!(desk[i].zwrocPoczatek() > koniec)) 
+                else if (!(desk[i].zwrocPoczatek() > koniec))
                 {
                     wyjsciowa.AddRange(desk[i].zwrocKorzen().szukaj(poczatek, koniec));
                 }
-                
+
             }
-            return wyjsciowa; 
+            return wyjsciowa;
         }
     }
 }

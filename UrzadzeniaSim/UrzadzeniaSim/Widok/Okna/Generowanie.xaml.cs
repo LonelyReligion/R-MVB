@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Narzedzia;
@@ -14,14 +12,14 @@ namespace UrzadzeniaSim.Widok.Okna
     public partial class Generowanie : Window, INotifyPropertyChanged
     {
         private Generatory _generator;
-        
+
         //zrob jakas akcje co bedzie informowala ze sie zmienilo pole informujace o tym czy aktualnie generujwmy podepnij do metody w panelu
         //int to id urzadzenia
         public event Action<int> ZmieniloSieCzyGenerujemy;
         private PanelBoczny _rodzic;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public static HashSet<int> OtwarteOkna = new HashSet<int>();
+        public static HashSet<int> s_OtwarteOkna = new HashSet<int>();
 
         private Urzadzenie_Model _urzadzenie;
 
@@ -32,9 +30,11 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private bool _pracaWtoku = false;
         public void UstawPracaWToku(bool pwt) { _pracaWtoku = pwt; }
-        public bool PracaWtoku {
+        public bool PracaWtoku
+        {
             get { return _pracaWtoku; }
-            set { 
+            set
+            {
                 _pracaWtoku = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PracaWtoku"));
             }
@@ -58,7 +58,7 @@ namespace UrzadzeniaSim.Widok.Okna
             _urzadzenieGui.Token = _urzadzenieGui.CancellationTokenSource.Token;
             InitializeComponent();
 
-            OtwarteOkna.Add(urzadzenie.UrzadzenieID);
+            s_OtwarteOkna.Add(urzadzenie.UrzadzenieID);
 
             Loaded += Generowanie_Loaded;
         }
@@ -124,19 +124,19 @@ namespace UrzadzeniaSim.Widok.Okna
             _zablokujPrzyjmowanieDanych();
             _urzadzenieGui.IleCykli = generowanieZparemetryzowane.IsChecked == true ? liczbaCykli.Value : null;
             _urzadzenieGui.Interwal = (int)sekundy.Value;
-            
+
             _urzadzenie.CzyGenerujemy = true;
             ZmieniloSieCzyGenerujemy?.Invoke(_id);
 
             PasekPostepu.IsIndeterminate = true;
 
             await Task.Yield(); //potrzebne żeby UI się zaktualizowało
-            
+
             _urzadzenieGui.CancellationTokenSource = new CancellationTokenSource();
             _urzadzenieGui.Token = _urzadzenieGui.CancellationTokenSource.Token;
 
-            
-            Task.Run(() => _generator.generowaniePomiarowUrzadzenia(this));
+
+            Task.Run(() => _generator.GenerowaniePomiarowUrzadzenia(this));
 
             Start.IsEnabled = false;
             Stop.IsEnabled = true;
@@ -144,7 +144,8 @@ namespace UrzadzeniaSim.Widok.Okna
 
         }
 
-        private void _odblokujPrzyjmowanieDanych() {
+        private void _odblokujPrzyjmowanieDanych()
+        {
             sekundy.IsEnabled = true;
             generowanieZparemetryzowane.IsEnabled = true;
             liczbaCykli.IsEnabled = true;
@@ -158,18 +159,19 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private void sekundy_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (_pracaWtoku == false && (sekundy.Value == null || (liczbaCykli.Value == null && generowanieZparemetryzowane.IsChecked == true))) {
+            if (_pracaWtoku == false && (sekundy.Value == null || (liczbaCykli.Value == null && generowanieZparemetryzowane.IsChecked == true)))
+            {
                 Start.IsEnabled = false;
                 Stop.IsEnabled = false;
             }
 
-            if(_pracaWtoku == false && sekundy.Value != null && (liczbaCykli.Value != null || generowanieCykliczne.IsChecked == true))
+            if (_pracaWtoku == false && sekundy.Value != null && (liczbaCykli.Value != null || generowanieCykliczne.IsChecked == true))
                 Start.IsEnabled = true;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            OtwarteOkna.Remove(_id);
+            s_OtwarteOkna.Remove(_id);
             _rodzic.OtwarteOkna.Remove(_id);
         }
 
@@ -178,7 +180,8 @@ namespace UrzadzeniaSim.Widok.Okna
             if (!this.IsLoaded)
                 return;
 
-            if (liczbaCykli.Value == null) {
+            if (liczbaCykli.Value == null)
+            {
                 Start.IsEnabled = false;
                 Stop.IsEnabled = false;
             }

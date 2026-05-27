@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using UrzadzeniaSim.Model.DB;
 
 namespace UrzadzeniaSim.Widok.Okna_dialogowe
@@ -46,7 +34,8 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
                 sukces = true;
                 Close();
             }
-            else {
+            else
+            {
                 komunikaty_bledu.Content = "Urządzenie o podanych współrzędnych już istnieje. \nWpisz inne współrzędne i spróbuj ponownie.";
             }
         }
@@ -61,7 +50,7 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
         private void dlugosc_spinner_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             dlugosc_set = true;
-            if(szerokosc_set)
+            if (szerokosc_set)
                 Przeslij.IsEnabled = true;
 
             if (dlugosc_spinner.Value == 14.06m)
@@ -82,7 +71,7 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
             if (!IsLoaded) return;
 
             szerokosc_set = true;
-            if(dlugosc_set)
+            if (dlugosc_set)
                 Przeslij.IsEnabled = true;
 
             if (szerokosc_spinner.Value == 48.99m)

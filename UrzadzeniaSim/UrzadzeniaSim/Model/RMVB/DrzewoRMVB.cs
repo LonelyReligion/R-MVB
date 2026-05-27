@@ -1,118 +1,127 @@
-﻿using UrzadzeniaSim.Model.DB;
-using UrzadzeniaSim.Model.RMVB.R;
-using UrzadzeniaSim.Model.RMVB.MVB;
+﻿using System.Collections.ObjectModel;
 using System.IO;
-using System.Collections.ObjectModel;
+using UrzadzeniaSim.Model.DB;
+using UrzadzeniaSim.Model.RMVB.MVB;
+using UrzadzeniaSim.Model.RMVB.R;
 
 namespace UrzadzeniaSim.Model.RMVB;
 
 public class DrzewoRMVB
 {
-    private Kontekst ctx;
-    private DrzewoMVB MVB;
-    private RTreeAdapter R;
-    private Repo repo;
-    public static string sciezkaFolderuWyjsciowego = Directory.GetCurrentDirectory();
-    internal DrzewoRMVB(Kontekst ctx) {
-        this.ctx = ctx;
-        repo = new Repo();
-        MVB = new DrzewoMVB(repo, ctx);
-        R = new RTreeAdapter(new RTree(repo, ctx));
+    private Kontekst _ctx;
+    private DrzewoMVB _mvb;
+    private RTreeAdapter _r;
+    private Repo _repo;
+    public static string s_SciezkaFolderuWyjsciowego = Directory.GetCurrentDirectory();
+    internal DrzewoRMVB(Kontekst ctx)
+    {
+        this._ctx = ctx;
+        _repo = new Repo();
+        _mvb = new DrzewoMVB(_repo, ctx);
+        _r = new RTreeAdapter(new RTree(_repo, ctx));
     }
 
-    internal Repo zwrocRepo() { return repo; }
-    internal bool czyUrzadzenieIstnieje(int id) { return repo.czyUrzadzenieIstnieje(id); }
-    internal DrzewoMVB zwrocMVB() { return MVB; }
-    internal void wypiszMVB() 
-    { 
-        foreach(String linijka in MVB.drukujDrzewo())
+    internal Repo zwrocRepo() { return _repo; }
+    internal bool czyUrzadzenieIstnieje(int id) { return _repo.czyUrzadzenieIstnieje(id); }
+    internal DrzewoMVB zwrocMVB() { return _mvb; }
+    internal void wypiszMVB()
+    {
+        foreach (String linijka in _mvb.drukujDrzewo())
             Console.WriteLine(linijka);
     }
     //dodaj
-    internal void dodajUrzadzenie(Urzadzenie_Model u) {
-        repo.saveDevice(u);
-        R.dodajUrzadzenie(u);
+    internal void dodajUrzadzenie(Urzadzenie_Model u)
+    {
+        _repo.saveDevice(u);
+        _r.dodajUrzadzenie(u);
     }
 
-    internal void dodajWersje(Wersja w) {
-        repo.saveVersion(w);
-        MVB.dodajUrzadzenie(w);
+    internal void dodajWersje(Wersja w)
+    {
+        _repo.saveVersion(w);
+        _mvb.dodajUrzadzenie(w);
     }
 
-    internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa) {
-        
-        ctx.Wersje.Attach(alfa);
-        ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
+    internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
+    {
+
+        _ctx.Wersje.Attach(alfa);
+        _ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
 
         alfa.Pomiary.Add(p);
-        ctx.Pomiary.Add(p);
-        ctx.SaveChanges();
+        _ctx.Pomiary.Add(p);
+        _ctx.SaveChanges();
 
-        R.dodajPomiar(UrzadzenieID, p);
+        _r.dodajPomiar(UrzadzenieID, p);
     }
 
     //usun
-    internal void usunWersje(Wersja w) {
-        MVB.dodajUrzadzenie(w); //musi zostac zapisana najpierw
-        MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
-        repo.saveVersion(w);
+    internal void usunWersje(Wersja w)
+    {
+        _mvb.dodajUrzadzenie(w); //musi zostac zapisana najpierw
+        _mvb.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
+        _repo.saveVersion(w);
     }
 
     //szukaj
     //wyszukiwanie wersji o UrządzenieID równym id i WersjaID równym v
-    internal Wersja szukaj(int id, int v) { 
-        return MVB.szukaj(id, v);
+    internal Wersja szukaj(int id, int v)
+    {
+        return _mvb.szukaj(id, v);
     }
 
     //wyszukiwanie wersji urządzenia o UrzadzenieID aktualnej w chwili dt
     internal Wersja szukaj(int id, DateTime dt)
     {
-        return MVB.szukaj(id, dt);
+        return _mvb.szukaj(id, dt);
     }
 
     //wyszukiwanie ostatniej wersji o UrzadzenieID równym id
     internal Wersja szukaj(int id)
     {
-        return MVB.szukaj(id);
+        return _mvb.szukaj(id);
     }
 
     //wyszukiwanie wersji aktualnych w podanym przedziale czasowym
-    internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) { 
-        return MVB.szukaj(poczatek, koniec);
+    internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec)
+    {
+        return _mvb.szukaj(poczatek, koniec);
     }
 
     //zwraca listę urządzeń znajdujących się w zadanym prostokącie
     internal List<Urzadzenie_Model> szukaj(Rectangle rect)
     {
-        return R.szukaj(rect);
+        return _r.szukaj(rect);
     }
 
     //zwraca urządzenie w podanym punkcie
     internal Urzadzenie_Model szukaj(Decimal x, Decimal y)
     {
-        return R.szukaj((Decimal)x, (Decimal)y);
+        return _r.szukaj((Decimal)x, (Decimal)y);
     }
 
     //zwraca liczbę pomiarów i agregat czasowy (z czego?)
     internal (Decimal, Decimal) szukajAgregatu(Rectangle rect)
     {
-        return R.szukajAgregatuPowierzchniowego(rect);
+        return _r.szukajAgregatuPowierzchniowego(rect);
     }
 
     //zwraca agregat czasowy urzadzenia
-    internal Decimal szukajAgregatuCzasowego(Decimal x, Decimal y) {
-        return R.szukajAgregatuCzasowego(x, y);
+    internal Decimal szukajAgregatuCzasowego(Decimal x, Decimal y)
+    {
+        return _r.szukajAgregatuCzasowego(x, y);
     }
 
     //oblicza agregaty powierzchniowe
-    internal void obliczAgregaty() { 
-        R.obliczAgregaty();
+    internal void obliczAgregaty()
+    {
+        _r.obliczAgregaty();
     }
 
     internal void zapiszMVB(string v)
     {
-        List<string> linijki = MVB.drukujDrzewo();
-        using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "MVB.txt")))
+        List<string> linijki = _mvb.drukujDrzewo();
+        using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "_mvb.txt")))
         {
             foreach (string linijka in linijki)
                 outputFile.WriteLine(linijka);
@@ -120,9 +129,9 @@ public class DrzewoRMVB
     }
     public void Reset()
     {
-        MainWindow.UrzadzeniaUI = new ObservableCollection<Urzadzenie_Model>();
-        repo.Reset();
-        MVB = new DrzewoMVB(repo, ctx);
-        R = new RTreeAdapter(new RTree(repo, ctx));
+        MainWindow.s_UrzadzeniaUI = new ObservableCollection<Urzadzenie_Model>();
+        _repo.Reset();
+        _mvb = new DrzewoMVB(_repo, _ctx);
+        _r = new RTreeAdapter(new RTree(_repo, _ctx));
     }
 }

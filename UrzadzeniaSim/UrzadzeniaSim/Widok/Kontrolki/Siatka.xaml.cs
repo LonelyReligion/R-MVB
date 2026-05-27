@@ -47,7 +47,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 szerokosc_plotna = plotno.ActualWidth;
 
                 // 
-                pionowy_scroll.Value = pionowy_scroll.Minimum + ( pionowy_scroll.Maximum - pionowy_scroll.Minimum ) / 5;
+                pionowy_scroll.Value = pionowy_scroll.Minimum + (pionowy_scroll.Maximum - pionowy_scroll.Minimum) / 5;
                 double min = pionowy_scroll.Minimum;
                 double max = pionowy_scroll.Maximum;
                 double wartosc = pionowy_scroll.Value;
@@ -66,17 +66,19 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 wielkosc_czcionki = (int)(skala * (double)bazowa_wielkosc_czcionki);
 
                 //
-               foreach (Urządzenie u in urządzenia) {
+                foreach (Urządzenie u in urządzenia)
+                {
                     u.Skaluj(skala);
                     obliczPozycjePunktu(u);
                 }
                 //
-                rysuj(); 
+                rysuj();
             };
 
         }
 
-        public double obliczSkale() {
+        public double obliczSkale()
+        {
             double skala_x = szerokosc_plotna / oryginalna_szerokosc;
             double skala_y = wysokosc_plotna / oryginalna_wysokosc;
 
@@ -85,7 +87,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             return skala;
         }
 
-        private void obliczPozycjePunktu(Urządzenie u) {
+        private void obliczPozycjePunktu(Urządzenie u)
+        {
 
             int dlugosc_minuty = (int)((u.Dlugosc % 1) * 100);
             int dlugosc_stopnie = (int)(u.Dlugosc / 1);
@@ -95,20 +98,22 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 dlugosc_przesuniecie += ((double)(dlugosc_minuty - 7)) * krokX / 60.0;
             }
-            else 
-            { 
+            else
+            {
                 dlugosc_przesuniecie += 53 * krokX / 60.0;
-                dlugosc_przesuniecie += (dlugosc_stopnie-15) * krokX + ((double)(dlugosc_minuty)) * krokX / 60.0;
+                dlugosc_przesuniecie += (dlugosc_stopnie - 15) * krokX + ((double)(dlugosc_minuty)) * krokX / 60.0;
             }
 
             int szerokosc_minuty = (int)((u.Szerokosc % 1) * 100);
             int szerokosc_stopnie = (int)(u.Szerokosc / 1);
             double szerokosc_przesuniecie = (szerokosc_stopnie - 49) * krokY + ((double)(szerokosc_minuty)) * krokY / 60.0;
 
-            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - u.SzerokoscWysokosc/2, szerokosc_przesuniecie + wysokosc_plotna - marginesY - u.SzerokoscWysokosc/2, 0, 0); 
+            u.Margin = new System.Windows.Thickness(marginesX + dlugosc_przesuniecie - u.SzerokoscWysokosc / 2, szerokosc_przesuniecie + wysokosc_plotna - marginesY - u.SzerokoscWysokosc / 2, 0, 0);
         }
-        private void rysujUrządzenia() {
-            foreach (Urządzenie u in urządzenia) {
+        private void rysujUrządzenia()
+        {
+            foreach (Urządzenie u in urządzenia)
+            {
                 obliczPozycjePunktu(u);
                 plotno.Children.Add(u);
             }
@@ -151,12 +156,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 StrokeThickness = grubosc_minuty,
                 X1 = pierwszy_poludnik_x,
                 X2 = pierwszy_poludnik_x,
-                Y1 = marginesY ,
+                Y1 = marginesY,
                 Y2 = ostatni_rownoleznik_y
             }; //ten 14 st. 7 min.
             plotno.Children.Add(pierwszy_poludnik);
 
-            if (minuty_dlugosc) {
+            if (minuty_dlugosc)
+            {
                 for (int i = 0; i < 52; i++) //51 minut? 
                 {
                     Line minutka = new Line
@@ -192,7 +198,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 TextBlock opis = new TextBlock();
                 opis.Text = (15 + i).ToString() + "\u00B0" + " E";
                 opis.FontSize = wielkosc_czcionki;
-                opis.Margin = new Thickness(poludnik.X1 - 8 - (wielkosc_czcionki/2), poludnik.Y1 - 15 - wielkosc_czcionki, 0, 0);
+                opis.Margin = new Thickness(poludnik.X1 - 8 - (wielkosc_czcionki / 2), poludnik.Y1 - 15 - wielkosc_czcionki, 0, 0);
                 plotno.Children.Add(opis);
 
                 if (minuty_dlugosc && i != liczba_poludnikow_grubych - 1)
@@ -204,8 +210,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                             Visibility = Visibility.Visible,
                             Stroke = Brushes.Black,
                             StrokeThickness = grubosc_minuty,
-                            X1 = poludnik.X1 + ((j+1) * krokX / 60.0),
-                            X2 = poludnik.X2 + ((j+1) * krokX / 60.0),
+                            X1 = poludnik.X1 + ((j + 1) * krokX / 60.0),
+                            X2 = poludnik.X2 + ((j + 1) * krokX / 60.0),
                             Y1 = marginesY,
                             Y2 = ostatni_rownoleznik_y
                         };
@@ -215,7 +221,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
                 //umiescic generowanie poludnikow przy przyblizeniu tych mniejszych
             }
-            
+
             if (minuty_dlugosc)
             {
                 for (int j = 0; j < 9; j++)
@@ -267,7 +273,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 opis.Margin = new Thickness(ostatni_poludnik_x + 20, rownoleznik.Y1 + 2 - wielkosc_czcionki, 0, 0);
                 plotno.Children.Add(opis);
 
-                if (minuty_szerokosc && i != liczba_równoleżników_grubych - 1) {
+                if (minuty_szerokosc && i != liczba_równoleżników_grubych - 1)
+                {
                     for (int j = 0; j < 59; j++)
                     {
                         Line minutka = new Line
@@ -277,15 +284,16 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                             StrokeThickness = grubosc_minuty,
                             X1 = pierwszy_poludnik_x,
                             X2 = ostatni_poludnik_x,
-                            Y1 = rownoleznik.Y1 + ((j+1) * krokY/60.0),
-                            Y2 = rownoleznik.Y1 + ((j+1) * krokY/60.0)
+                            Y1 = rownoleznik.Y1 + ((j + 1) * krokY / 60.0),
+                            Y2 = rownoleznik.Y1 + ((j + 1) * krokY / 60.0)
                         };
                         plotno.Children.Add(minutka);
                     }
                 }
             }
-            
-            if (minuty_szerokosc) {
+
+            if (minuty_szerokosc)
+            {
                 for (int j = 0; j < liczba_minut_rownoleznik; j++)
                 {
                     Line minutka = new Line
@@ -315,7 +323,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             plotno.Children.Add(pierwszy_rownoleznik);
         }
 
-        public void powiekszSiatke(double powiekszenie) {
+        public void powiekszSiatke(double powiekszenie)
+        {
             Trace.WriteLine("Tu siatka. Juz ogarniam.");
 
             if (powiekszenie != 1.0)
@@ -323,15 +332,17 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 pionowy_scroll.Visibility = Visibility.Visible;
                 poziomy_scroll.Visibility = Visibility.Visible;
             }
-            else {
-                pionowy_scroll.Visibility = Visibility.Collapsed; 
+            else
+            {
+                pionowy_scroll.Visibility = Visibility.Collapsed;
                 poziomy_scroll.Visibility = Visibility.Collapsed;
             }
 
             skalowanie.ScaleX = powiekszenie;
             skalowanie.ScaleY = powiekszenie;
 
-            if (powiekszenie < 2.5) {
+            if (powiekszenie < 2.5)
+            {
                 minuty_dlugosc = false;
                 minuty_szerokosc = false;
 
@@ -339,7 +350,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
         }
 
-        private void przewijanie_pionowe(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e) {
+        private void przewijanie_pionowe(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
             double min = pionowy_scroll.Minimum;
             double max = pionowy_scroll.Maximum;
             double wartosc = pionowy_scroll.Value;
@@ -347,7 +359,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             skalowanie.CenterY = wysokosc_plotna * (wartosc - min) / (max - min);
         }
 
-        private void przewijanie_poziome(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e) {
+        private void przewijanie_poziome(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
             double min = poziomy_scroll.Minimum;
             double max = poziomy_scroll.Maximum;
             double wartosc = poziomy_scroll.Value;
@@ -355,42 +368,49 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             skalowanie.CenterX = szerokosc_plotna * (wartosc - min) / (max - min);
         }
 
-        public void zmienDokladnoscPoludniki(bool taknie) { 
+        public void zmienDokladnoscPoludniki(bool taknie)
+        {
             minuty_dlugosc = taknie;
             rysuj();
 
         }
 
-        public void zmienDokladnoscRownolezniki(bool taknie) { 
+        public void zmienDokladnoscRownolezniki(bool taknie)
+        {
             minuty_szerokosc = taknie;
             rysuj();
 
         }
 
-        public void dodajUrzadzenie(Urzadzenie_Model u) {
+        public void dodajUrzadzenie(Urzadzenie_Model u)
+        {
             urządzenia.Add(u.punkt);
             double skala = obliczSkale();
 
-            if (skala != 1) {
+            if (skala != 1)
+            {
                 u.punkt.SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
                 u.punkt.SzerokoscWysokosc = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
             }
 
-            
+
             u.punkt.UstawIdSiatka(urządzenia.Count - 1);
             u.punkt.Zaznaczono += zmianaZaznaczenia;
 
-            obliczPozycjePunktu(u.punkt); 
+            obliczPozycjePunktu(u.punkt);
             plotno.Children.Add(u.punkt);
         }
 
-        public void dodajUrzadzenia(List<Urzadzenie_Model> urzadzenia) {
-            foreach (Urzadzenie_Model u in urzadzenia) {
+        public void dodajUrzadzenia(List<Urzadzenie_Model> urzadzenia)
+        {
+            foreach (Urzadzenie_Model u in urzadzenia)
+            {
                 dodajUrzadzenie(u);
             }
         }
 
-        public void rysuj() {
+        public void rysuj()
+        {
             plotno.Children.Clear();
             rysujSiatkeGeograficzna();
             rysujUrządzenia(); //tylko widoczne urządzenia?
@@ -418,7 +438,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             znaczono_urzadzenie?.Invoke(numer_porzadkowy_zaznaczonego);
         }
 
-        public void Reset() {
+        public void Reset()
+        {
             urządzenia = new List<Urządzenie>();
             rysuj();
         }

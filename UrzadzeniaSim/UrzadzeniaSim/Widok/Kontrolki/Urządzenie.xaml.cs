@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Ink;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
@@ -11,10 +10,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
     /// <summary>
     /// Logika interakcji dla klasy Urządzenie.xaml
     /// </summary>
-    public enum STATUS { 
-                NIEAKTYWNY,//wyszarzony?
-                AKTYWNY,
-                AKTYWNY_NADAJE
+    public enum STATUS
+    {
+        NIEAKTYWNY,//wyszarzony?
+        AKTYWNY,
+        AKTYWNY_NADAJE
     };
 
     public partial class Urządzenie : UserControl, INotifyPropertyChanged
@@ -74,17 +74,19 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public double WysokoscSzerokoscOkregu
         {
             get { return _wysokoscSzerokoscOkregu; }
-            set {
+            set
+            {
                 _wysokoscSzerokoscOkregu = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WysokoscSzerokoscOkregu"));
 
-                if(animujemy)
+                if (animujemy)
                     _resetujAnimacje();
             }
         }
 
         private Brush _kolorUrzadzenia;
-        public Brush KolorUrzadzenia {
+        public Brush KolorUrzadzenia
+        {
             get
             {
                 return _kolorUrzadzenia;
@@ -111,9 +113,11 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private const double _domyslnaGruboscOkregu = 1;
         private double _gruboscOkregu = _domyslnaGruboscOkregu;
-        public double GruboscOkregu {
+        public double GruboscOkregu
+        {
             get { return _gruboscOkregu; }
-            set { 
+            set
+            {
                 _gruboscOkregu = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("GruboscOkregu"));
             }
@@ -145,13 +149,15 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public Brush KolorOkregu
         {
             get { return _kolorOkregu; }
-            set {
+            set
+            {
                 _kolorOkregu = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("KolorOKregu"));
             }
         }
 
-        public void ZatrzymajAnimacje() {
+        public void ZatrzymajAnimacje()
+        {
             animujemy = false;
             Ellipse krag_generowania = (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
             KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Transparent");
@@ -160,7 +166,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             krag_generowania.BeginAnimation(HeightProperty, null);
             krag_generowania.BeginAnimation(OpacityProperty, null);
         }
-        public void UruchomAnimacje() {
+        public void UruchomAnimacje()
+        {
             animujemy = true;
             Ellipse krag_generowania = (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
             KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Red");
@@ -195,12 +202,14 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             krag_generowania.BeginAnimation(OpacityProperty, animacjaKrycia);
         }
-        private void _resetujAnimacje() {
+        private void _resetujAnimacje()
+        {
             ZatrzymajAnimacje();
             UruchomAnimacje();
         }
 
-        public void UstawIdSiatka(int id) { 
+        public void UstawIdSiatka(int id)
+        {
             _idSiatka = id;
         }
 
@@ -225,28 +234,33 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             Zaznaczono?.Invoke(this._idSiatka);
         }
 
-        public void Odznacz() {
+        public void Odznacz()
+        {
             WypelnienieZaznaczenia = Brushes.Transparent;
             _zaznaczone = false;
         }
 
-        public void Aktywuj() {
+        public void Aktywuj()
+        {
             KolorUrzadzenia = new SolidColorBrush(_kolorAktywny);
             StatusUrzadzenia = STATUS.AKTYWNY;
         }
 
-        public void Dezktywuj() {
+        public void Dezktywuj()
+        {
             KolorUrzadzenia = new SolidColorBrush(_kolorNieaktywny);
             StatusUrzadzenia = STATUS.NIEAKTYWNY;
         }
 
 
-        public void Emituj() {
+        public void Emituj()
+        {
             KolorUrzadzenia = new SolidColorBrush(_kolorNadajnik);
             StatusUrzadzenia = STATUS.AKTYWNY_NADAJE;
         }
 
-        public void Skaluj(double skala) {
+        public void Skaluj(double skala)
+        {
             Width = Math.Max(14 * skala, 14);
             Height = Math.Max(14 * skala, 14);
 

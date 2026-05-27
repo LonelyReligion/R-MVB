@@ -7,7 +7,8 @@ namespace UrzadzeniaSim.Model.RMVB.R
 
         private List<Urzadzenie_Model> devices = new List<Urzadzenie_Model>();
 
-        public override int zwrocLiczbeDzieci() {
+        public override int zwrocLiczbeDzieci()
+        {
             return 0;
         }
         public RLeaf(Decimal xmin, Decimal ymin, Decimal xmax, Decimal ymax) : base(xmin, ymin, xmax, ymax)
@@ -51,14 +52,14 @@ namespace UrzadzeniaSim.Model.RMVB.R
         public override Decimal Distance(int i, int j)
         {
             Decimal xDistance = Math.Max(devices[i].Dlugosc, devices[j].Dlugosc);
-            Decimal yDistance = Math.Max(devices[i].Szerokosc, devices[j].Szerokosc); 
+            Decimal yDistance = Math.Max(devices[i].Szerokosc, devices[j].Szerokosc);
             return xDistance + yDistance;
         }
 
         public override void Insert(Urzadzenie_Model dev, TreeWalker adaptor)
         {
             devices.Add(dev);
-            if (devices.Count > MAX_ITEM_COUNT)
+            if (devices.Count > s_MaxItemCount)
             {
                 adaptor.Split(this);
 

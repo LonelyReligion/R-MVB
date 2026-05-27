@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using UrzadzeniaSim.Model.DB;
-using UrzadzeniaSim.Widok.Okna_dialogowe;
 using UrzadzeniaSim.Widok.Okna;
-using System.Xml.Linq;
-using System.ComponentModel;
+using UrzadzeniaSim.Widok.Okna_dialogowe;
 
 namespace UrzadzeniaSim.Widok.Kontrolki
 {
@@ -20,7 +19,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public event Action<double> zmienionoPowiekszenie;
         public event Action<bool> zmienionoDokladnoscPoludniki;
         public event Action<bool> zmienionoDokladnoscRownolezniki;
-        
+
         public event Action wyczysc_wszystko;
         public event Action dodaj_losowe;
         public event Action<(decimal, decimal)> dodaj_urzadzenie;
@@ -28,13 +27,16 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public Window rodzic;
         public Repo repo;
-        
+
         private List<string> _domyslne_powiekszenia = new List<string> { "100%", "150%", "250%", "500%", "1000%" };
-        public List<string> domyslne_powiekszenia {
-            get {
+        public List<string> domyslne_powiekszenia
+        {
+            get
+            {
                 return _domyslne_powiekszenia;
             }
-            set {
+            set
+            {
                 _domyslne_powiekszenia = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("domyslne_powiekszenia"));
             }
@@ -43,19 +45,20 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         {
             DataContext = this;
             InitializeComponent();
-            
+
             Powiekszenie.SelectedIndex = 0;
         }
 
-        private void zmianaPowiekszenia(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
-            
+        private void zmianaPowiekszenia(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
             string procenty = Powiekszenie.SelectedItem?.ToString();
             int procenty_i;
             if (procenty == null)
                 return;
 
             procenty_i = int.Parse(procenty.Substring(0, procenty.Length - 1));
-        
+
             Trace.WriteLine("Zmieniono powiekszenie na " + procenty_i);
             powiekszenie = (double)procenty_i / 100;
 
@@ -104,7 +107,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             TworzenieUrzadzenia dialog = new TworzenieUrzadzenia(rodzic, repo);
             dialog.ShowDialog(); //zatrzymujemy glowne okno
 
-            if (dialog.sukces == true) {
+            if (dialog.sukces == true)
+            {
                 dodaj_urzadzenie?.Invoke((dialog.dlugosc, dialog.szerokosc));
             }
         }

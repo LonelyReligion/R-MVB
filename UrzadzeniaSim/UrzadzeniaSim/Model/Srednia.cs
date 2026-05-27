@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UrzadzeniaSim.Model
 {
@@ -8,11 +8,11 @@ namespace UrzadzeniaSim.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SredniaID { get; set; }
-        public Decimal wartosc { get; set; }
-        public Decimal x1 { get; set; }
-        public Decimal x2 { get; set; }
-        public Decimal y1 { get; set; }
-        public Decimal y2 { get; set; }
-        public DateTime utworzona { get; set; }
+        public Decimal Wartosc { get; set; }
+        public Decimal X1 { get; set; }
+        public Decimal X2 { get; set; }
+        public Decimal Y1 { get; set; }
+        public Decimal Y2 { get; set; }
+        public DateTime Utworzona { get; set; }
     }
 }

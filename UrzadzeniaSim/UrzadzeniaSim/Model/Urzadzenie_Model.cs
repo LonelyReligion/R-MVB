@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using UrzadzeniaSim.Widok.Kontrolki;
+using System.ComponentModel.DataAnnotations.Schema;
 using UrzadzeniaSim.Model.DB;
-using UrzadzeniaSim.Model.RMVB.R;
 using UrzadzeniaSim.Model.RMVB;
-using System.ComponentModel;
+using UrzadzeniaSim.Model.RMVB.R;
+using UrzadzeniaSim.Widok.Kontrolki;
 
 namespace UrzadzeniaSim.Model
 {
@@ -19,14 +19,16 @@ namespace UrzadzeniaSim.Model
         public bool CzyGenerujemy
         {
             get { return _czyGenerujemy; }
-            set { 
+            set
+            {
                 _czyGenerujemy = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CzyGenerujemy"));
                 if (value)
                 {
                     punkt.UruchomAnimacje();
                 }
-                else { 
+                else
+                {
                     punkt.ZatrzymajAnimacje();
                 }
             }
@@ -47,18 +49,19 @@ namespace UrzadzeniaSim.Model
 
         [Column(TypeName = "Decimal")]
         public Decimal Dlugosc { get; set; }
-        
+
         //wlasnosc nawigacyjna
         public virtual ICollection<Wersja> Wersje { get; set; }
 
         //metody
-        protected Urzadzenie_Model() {
+        protected Urzadzenie_Model()
+        {
             Wersje = new HashSet<Wersja>();
             punkt = new Urządzenie(0, 0);
         }
         public Urzadzenie_Model((Decimal, Decimal) dlugosc_szerokosc) : this()
         {
-            
+
             Dlugosc = dlugosc_szerokosc.Item1;
             Szerokosc = dlugosc_szerokosc.Item2;
 
@@ -67,7 +70,8 @@ namespace UrzadzeniaSim.Model
             this.UrzadzenieID = nastepne_wolne_id++;
         }
 
-        public Urzadzenie_Model(int UrzadzenieID) : this() {
+        public Urzadzenie_Model(int UrzadzenieID) : this()
+        {
             this.UrzadzenieID = UrzadzenieID;
             punkt = new Urządzenie(0, 0);
         }
@@ -77,14 +81,14 @@ namespace UrzadzeniaSim.Model
 
         private int _liczbaUwzglednionych = 0;
         private Decimal _rTimeAggregate { get; set; }
-        
+
         //to jest do usunięcia?
         DateTime granica = new DateTime(2024, 7, 18, 0, 0, 0);
 
 
         public void AddMeasure(Pomiar p)
         {
-            if (p.dtpomiaru > granica)
+            if (p.DataPomiaru > granica)
             {
                 suma += p.Wartosc;
                 _liczbaUwzglednionych++;
@@ -136,7 +140,7 @@ namespace UrzadzeniaSim.Model
             //return ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First().Wersje.Last().Pomiary.Count > 0;
             //
             //return Wersje.Last().Pomiary.Count > 0;
-            
+
 
             return repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Count > 0;
         }
@@ -146,7 +150,8 @@ namespace UrzadzeniaSim.Model
             return _rTimeAggregate != null;
         }
 
-        public void Aktywuj() {
+        public void Aktywuj()
+        {
             rMVB.dodajWersje(new Wersja(UrzadzenieID, repo));
             punkt.Aktywuj();
         }

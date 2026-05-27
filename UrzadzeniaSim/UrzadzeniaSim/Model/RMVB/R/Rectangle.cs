@@ -12,7 +12,8 @@
 
         public Rectangle(Decimal yMin, Decimal xMin, Decimal yMax, Decimal xMax)
         {
-            if ((xMin > xMax) || (yMin > yMax)) {
+            if ((xMin > xMax) || (yMin > yMax))
+            {
                 throw new ArgumentException("\"min\" coordinates must be less than the \"max\" ones");
             }
             XMin = xMin;
@@ -64,7 +65,8 @@
             );
         }
 
-        public void Enlarge (Rectangle other) {
+        public void Enlarge(Rectangle other)
+        {
             XMin = Math.Min(XMin, other.XMin);
             YMin = Math.Min(YMin, other.YMin);
             XMax = Math.Max(XMax, other.XMax);

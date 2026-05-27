@@ -1,8 +1,8 @@
-﻿using System.Windows;
-using UrzadzeniaSim.Model.RMVB.MVB;
-using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
+using System.Windows;
 using UrzadzeniaSim.Model.RMVB;
+using UrzadzeniaSim.Model.RMVB.MVB;
 
 namespace UrzadzeniaSim.Widok.Okna
 {
@@ -16,9 +16,9 @@ namespace UrzadzeniaSim.Widok.Okna
             InitializeComponent();
             this.ResizeMode = ResizeMode.NoResize;
 
-            granicaPrzezywalnosci.Value = Korzen.granica_przezywalnosci;
-            minLiczbaUrzadzen.Value = Korzen.min_urzadzen_korzen;
-            wybranaSciezka.Text = DrzewoRMVB.sciezkaFolderuWyjsciowego;
+            granicaPrzezywalnosci.Value = Korzen.s_GranicaPrzezywalnosci;
+            minLiczbaUrzadzen.Value = Korzen.s_MinUrzadzenKorzen;
+            wybranaSciezka.Text = DrzewoRMVB.s_SciezkaFolderuWyjsciowego;
         }
 
         private void Anuluj_Click(object sender, RoutedEventArgs e)
@@ -28,8 +28,8 @@ namespace UrzadzeniaSim.Widok.Okna
 
         private void Zapisz_Click(object sender, RoutedEventArgs e)
         {
-            Korzen.granica_przezywalnosci = (decimal)granicaPrzezywalnosci.Value;
-            Korzen.min_urzadzen_korzen = (int)minLiczbaUrzadzen.Value;
+            Korzen.s_GranicaPrzezywalnosci = (decimal)granicaPrzezywalnosci.Value;
+            Korzen.s_MinUrzadzenKorzen = (int)minLiczbaUrzadzen.Value;
             Close();
         }
 
@@ -53,8 +53,8 @@ namespace UrzadzeniaSim.Widok.Okna
             if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 var folder = dlg.FileName;
-                DrzewoRMVB.sciezkaFolderuWyjsciowego = folder;
-                wybranaSciezka.Text = DrzewoRMVB.sciezkaFolderuWyjsciowego;
+                DrzewoRMVB.s_SciezkaFolderuWyjsciowego = folder;
+                wybranaSciezka.Text = DrzewoRMVB.s_SciezkaFolderuWyjsciowego;
             }
         }
     }
