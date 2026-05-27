@@ -2,6 +2,7 @@
 using System.Windows;
 using UrzadzeniaSim.Model;
 using UrzadzeniaSim.Model.DB;
+using UrzadzeniaSim.Model.RMVB;
 using UrzadzeniaSim.Model.RMVB.R;
 using UrzadzeniaSim.Widok.Kontrolki;
 using UrzadzeniaSim.Widok.Okna;
@@ -17,10 +18,12 @@ namespace UrzadzeniaSim.Narzedzia
         private static Random s_rnd = new Random();
         private bool _pierwszy = true;
         private Repo _repo;
+        private DrzewoRMVB _rmvb;
 
-        public Generatory(Repo repozytorium)
+        public Generatory(Repo repozytorium, DrzewoRMVB rmvb)
         {
             this._repo = repozytorium;
+            this._rmvb = rmvb;
         }
 
         private int _stopnieNaMinuty(Decimal wejsciowa)
@@ -189,16 +192,21 @@ namespace UrzadzeniaSim.Narzedzia
             return (losowe.Dlugosc, losowe.Szerokosc);
         }
 
-        public async void GenerowaniePomiarowUrzadzenia(Generowanie nadawca)
+        public async void GenerowaniePomiarowUrzadzenia(Generowanie nadawca, Urzadzenie_Model zrodlo, int interwal)
         {
 
-            nadawca.UstawPracaWToku(true);
-            nadawca.ZwrocUrzadzenieGui().StatusUrzadzenia = STATUS.AKTYWNY_NADAJE; //CZY ROBIC TO PRZEZ _URZADZENIE JEDNAK?
-            int? _liczbaCykliDoKonca = nadawca.ZwrocUrzadzenieGui().IleCykli;
+            int? _liczbaCykliDoKonca = zrodlo.punkt.IleCykli; //moze to tez przekazac do metody
 
-            while (!nadawca.ZwrocUrzadzenieGui().Token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
+            while (!zrodlo.punkt.Token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
             {
-                await Task.Delay(nadawca.ZwrocUrzadzenieGui().Interwal * 1000); //tyle ile w updown
+                Pomiar wygenerowany = GenerujLosowyPomiar();
+                //przekazac samo id?
+                Wersja nowa = new Wersja(zrodlo.UrzadzenieID, _repo);
+
+                _rmvb.dodajWersje(nowa);
+                _rmvb.dodajPomiar(nowa.UrzadzenieID, wygenerowany, nowa); //tu jest problem!
+
+                await Task.Delay(interwal * 1000); //tyle ile w updown
                 if (_liczbaCykliDoKonca != null) _liczbaCykliDoKonca -= 1;
             }
             Trace.WriteLine("Zadanie zostało anulowane przez użytkownika lub zakończyło się pomyślnie.");

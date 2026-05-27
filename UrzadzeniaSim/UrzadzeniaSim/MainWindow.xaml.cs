@@ -24,6 +24,7 @@ namespace UrzadzeniaSim
         {
             //to powinno byc w repo
             ctx.Database.ExecuteSqlCommand("DELETE FROM Wersjas");
+            ctx.Database.ExecuteSqlCommand("DELETE FROM Pomiars");
             ctx.Database.ExecuteSqlCommand("DELETE FROM Urzadzenie_Model");
             //
 
@@ -31,7 +32,7 @@ namespace UrzadzeniaSim
             // Inicjowanie 
             rMVB = new DrzewoRMVB(ctx);
 
-            generator = new Generatory(rMVB.zwrocRepo());
+            generator = new Generatory(rMVB.zwrocRepo(), rMVB);
             Wersja.ctx = ctx;
             InDBStorage.s_Ctx = ctx;
             Repo.s_Ctx = ctx;

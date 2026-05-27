@@ -135,8 +135,10 @@ namespace UrzadzeniaSim.Widok.Okna
             _urzadzenieGui.CancellationTokenSource = new CancellationTokenSource();
             _urzadzenieGui.Token = _urzadzenieGui.CancellationTokenSource.Token;
 
+            _pracaWtoku = true;
+            _urzadzenieGui.Emituj();
 
-            Task.Run(() => _generator.GenerowaniePomiarowUrzadzenia(this));
+            Task.Run(() => _generator.GenerowaniePomiarowUrzadzenia(this, _urzadzenie, this.ZwrocUrzadzenieGui().Interwal));
 
             Start.IsEnabled = false;
             Stop.IsEnabled = true;

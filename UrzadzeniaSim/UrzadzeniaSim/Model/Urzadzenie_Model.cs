@@ -97,7 +97,6 @@ namespace UrzadzeniaSim.Model
                 TimeAggregate timeAggregate = new TimeAggregate(_rTimeAggregate, DateTime.Now, UrzadzenieID);
                 repo.saveTimeAggregate(timeAggregate);
             }
-            punkt.Emituj();
         }
 
         public void AddMeasure(DateTime t, Decimal v)
@@ -111,7 +110,6 @@ namespace UrzadzeniaSim.Model
                 TimeAggregate timeAggregate = new TimeAggregate(_rTimeAggregate, DateTime.Now, UrzadzenieID);
                 repo.saveTimeAggregate(timeAggregate);
             }
-            punkt.Emituj();
         }
 
         public Decimal GetTimeAggregate()
