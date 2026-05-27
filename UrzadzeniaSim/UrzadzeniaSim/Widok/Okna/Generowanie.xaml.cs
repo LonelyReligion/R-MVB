@@ -180,9 +180,23 @@ namespace UrzadzeniaSim.Widok.Okna
             if (!this.IsLoaded)
                 return;
 
-            if (liczbaCykli.Value == null)
+            if (liczbaCykli.Value == null || sekundy.Value == null)
             {
                 Start.IsEnabled = false;
+                Stop.IsEnabled = false;
+            }
+        }
+
+        private void generowanieCykliczne_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sekundy.Value == null)
+            {
+                Start.IsEnabled = false;
+                Stop.IsEnabled = false;
+            }
+            else
+            {
+                Start.IsEnabled = true;
                 Stop.IsEnabled = false;
             }
         }

@@ -59,7 +59,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <RadioButton x:Name="generowanieCykliczne"  GroupName="automatyczneGenerowanie" IsChecked="False" Grid.Column="0" VerticalAlignment="Center"/>
+            <RadioButton x:Name="generowanieCykliczne"  GroupName="automatyczneGenerowanie" IsChecked="False" Grid.Column="0" VerticalAlignment="Center" Checked="generowanieCykliczne_Checked"/>
             <Label Grid.Column="1" Content="Generuj pomiary cyklicznie."/>
         </Grid>
 
