@@ -6,7 +6,7 @@ namespace UrzadzeniaSim.Model.RMVB.R
     abstract public class RNode
     {
 
-        public static int MAX_ITEM_COUNT = 4;
+        public static int s_MaxItemCount = 4;
 
         public Rectangle mbr { get; }
 
