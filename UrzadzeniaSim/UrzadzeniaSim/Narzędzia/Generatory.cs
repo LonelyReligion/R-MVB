@@ -204,7 +204,7 @@ namespace UrzadzeniaSim.Narzedzia
                 Wersja nowa = new Wersja(zrodlo.UrzadzenieID, _repo);
 
                 _rmvb.dodajWersje(nowa);
-                _rmvb.dodajPomiar(nowa.UrzadzenieID, wygenerowany, nowa); //tu jest problem!
+                _rmvb.dodajPomiar(nowa.UrzadzenieID, wygenerowany, nowa); 
 
                 await Task.Delay(interwal * 1000); //tyle ile w updown
                 if (_liczbaCykliDoKonca != null) _liczbaCykliDoKonca -= 1;
