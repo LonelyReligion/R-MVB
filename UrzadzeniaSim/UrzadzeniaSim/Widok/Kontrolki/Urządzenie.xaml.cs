@@ -33,11 +33,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private int _idSiatka;
 
-        public const int OrygSzerokoscWysokoscZaznaczenia = 7;
-        public const int OrygSzerokoscWysokosc = 5;
+        private const int _orygSzerokoscWysokoscZaznaczenia = 7;
+        private const int _orygSzerokoscWysokosc = 5;
+        private const double _orygWysokoscSzerokoscOkregu = 6;
+        private const double _orygGruboscOkregu = 1;
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        private double _szerokoscWysokoscZaznaczenia = OrygSzerokoscWysokoscZaznaczenia;
+        private double _szerokoscWysokoscZaznaczenia = _orygSzerokoscWysokoscZaznaczenia;
 
         public double SzerokoscWysokoscZaznaczenia
         {
@@ -68,9 +70,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         }
 
-        private const double _oryginalnaWysokoscSzerokoscOkregu = 6;
-
-        private double _wysokoscSzerokoscOkregu = _oryginalnaWysokoscSzerokoscOkregu;
+        private double _wysokoscSzerokoscOkregu = _orygWysokoscSzerokoscOkregu;
         public double WysokoscSzerokoscOkregu
         {
             get { return _wysokoscSzerokoscOkregu; }
@@ -111,8 +111,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             }
         }
 
-        private const double _domyslnaGruboscOkregu = 1;
-        private double _gruboscOkregu = _domyslnaGruboscOkregu;
+        private double _gruboscOkregu = _orygGruboscOkregu;
         public double GruboscOkregu
         {
             get { return _gruboscOkregu; }
@@ -264,10 +263,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             Width = Math.Max(14 * skala, 14);
             Height = Math.Max(14 * skala, 14);
 
-            SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie.OrygSzerokoscWysokoscZaznaczenia * skala, Urządzenie.OrygSzerokoscWysokoscZaznaczenia);
-            SzerokoscWysokosc = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
-            WysokoscSzerokoscOkregu = Math.Max(Urządzenie._oryginalnaWysokoscSzerokoscOkregu * skala, Urządzenie._oryginalnaWysokoscSzerokoscOkregu);
-            GruboscOkregu = Math.Max(Urządzenie._domyslnaGruboscOkregu * skala, Urządzenie._domyslnaGruboscOkregu);
+            SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie._orygSzerokoscWysokoscZaznaczenia * skala, Urządzenie._orygSzerokoscWysokoscZaznaczenia);
+            SzerokoscWysokosc = Math.Max(Urządzenie._orygSzerokoscWysokosc * skala, Urządzenie._orygSzerokoscWysokosc);
+            WysokoscSzerokoscOkregu = Math.Max(Urządzenie._orygWysokoscSzerokoscOkregu * skala, Urządzenie._orygWysokoscSzerokoscOkregu);
+            GruboscOkregu = Math.Max(Urządzenie._orygGruboscOkregu * skala, Urządzenie._orygGruboscOkregu);
         }
 
     }

@@ -389,8 +389,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             if (skala != 1)
             {
-                u.punkt.SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
-                u.punkt.SzerokoscWysokosc = Math.Max(Urządzenie.OrygSzerokoscWysokosc * skala, Urządzenie.OrygSzerokoscWysokosc);
+                u.punkt.Skaluj(skala);
             }
 
 

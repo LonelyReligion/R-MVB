@@ -162,5 +162,10 @@ namespace UrzadzeniaSim.Model
             //odnalezc ostatnia wersje i dezaktywowac, pamietac ze w mvb ma sie tez zmienic
             punkt.Dezktywuj();
         }
+
+        internal void skaluj()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
