@@ -175,7 +175,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 From = WysokoscSzerokoscOkregu,
                 To = WysokoscSzerokoscOkregu + WysokoscSzerokoscOkregu / 6 * 8,
-                Duration = TimeSpan.FromSeconds(1),
+                Duration = TimeSpan.FromSeconds(Interwal),
                 RepeatBehavior = RepeatBehavior.Forever
             };
 
@@ -183,7 +183,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 From = WysokoscSzerokoscOkregu,
                 To = WysokoscSzerokoscOkregu + WysokoscSzerokoscOkregu / 6 * 8,
-                Duration = TimeSpan.FromSeconds(1),
+                Duration = TimeSpan.FromSeconds(Interwal),
                 RepeatBehavior = RepeatBehavior.Forever
             };
 
@@ -195,7 +195,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 From = 1.0,
                 To = 0.0,
-                Duration = TimeSpan.FromSeconds(1),
+                Duration = TimeSpan.FromSeconds(Interwal),
                 RepeatBehavior = RepeatBehavior.Forever,
             };
 
