@@ -131,6 +131,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         {
             if (Statusy.SelectedItem != null)
             {
+                Statusy.ToolTip = null;
                 if (Statusy.SelectedIndex == 0) //Aktywny
                 {
                     _wyswietlane.Aktywuj();
@@ -147,6 +148,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 }
                 else if (Statusy.SelectedIndex == 1)//Nieaktywny 
                 {
+                    Statusy.ToolTip = null;
                     _wyswietlane.Dezaktywuj();
                     try
                     {
@@ -171,6 +173,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                     else
                     {
                         //tu powinnismy dac znac uzytkowanikowi co robi zle
+                        Statusy.ToolTip = "Jest już otwarte okno generowania dla tego urządzenia";
                     }
                 }
             }
