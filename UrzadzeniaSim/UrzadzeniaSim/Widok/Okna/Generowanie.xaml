@@ -72,6 +72,6 @@
             <Button x:Name="Stop" Grid.Column="0" Content="Stop" Width="100" Click="Stop_Click" IsEnabled="False"/>
             <Button x:Name="Start" Grid.Column="1" Content="Start" Width="100" IsEnabled="False" Click="Start_Click"/>
         </Grid>
-        <ProgressBar Grid.Row="5" Height="20" Margin="0,20,0,0" x:Name="PasekPostepu" Foreground="#5C7D60"/>
+        <ProgressBar Grid.Row="5" Height="20" Margin="0,20,0,0" x:Name="PasekPostepu" Foreground="#5C7D60" Value="{Binding WartoscPostepu}"/>
     </Grid>
 </Window>

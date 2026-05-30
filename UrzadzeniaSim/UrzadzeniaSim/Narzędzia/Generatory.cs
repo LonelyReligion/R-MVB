@@ -194,9 +194,9 @@ namespace UrzadzeniaSim.Narzedzia
 
         public async void GenerowaniePomiarowUrzadzenia(Generowanie nadawca, Urzadzenie_Model zrodlo, int interwal)
         {
-
-            int? _liczbaCykliDoKonca = zrodlo.punkt.IleCykli; //moze to tez przekazac do metody
-
+            int? liczbaCykli = zrodlo.punkt.IleCykli;
+            int? _liczbaCykliDoKonca = liczbaCykli; //moze to tez przekazac do metody
+            int index = 0;
             while (!zrodlo.punkt.Token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
             {
                 Pomiar wygenerowany = GenerujLosowyPomiar();
@@ -207,7 +207,11 @@ namespace UrzadzeniaSim.Narzedzia
                 _rmvb.dodajPomiar(nowa.UrzadzenieID, wygenerowany, nowa); 
 
                 await Task.Delay(interwal * 1000); //tyle ile w updown
-                if (_liczbaCykliDoKonca != null) _liczbaCykliDoKonca -= 1;
+
+                if (_liczbaCykliDoKonca != null) {
+                    _liczbaCykliDoKonca -= 1;
+                    nadawca.WartoscPostepu = 100.0 * (++index) / (double)liczbaCykli;
+                };
             }
             Trace.WriteLine("Zadanie zostało anulowane przez użytkownika lub zakończyło się pomyślnie.");
             //musimy jakos dac znac ze stop

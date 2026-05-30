@@ -118,7 +118,14 @@ namespace UrzadzeniaSim.Widok.Okna
             liczbaCykli.IsEnabled = false;
             generowanieCykliczne.IsEnabled = false;
         }
-
+        private double _wartoscPostepu = 0;
+        public double WartoscPostepu { 
+            get => _wartoscPostepu;
+            set { 
+                _wartoscPostepu = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WartoscPostepu"));
+            }
+        }
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
             _zablokujPrzyjmowanieDanych();
@@ -128,7 +135,13 @@ namespace UrzadzeniaSim.Widok.Okna
             _urzadzenie.CzyGenerujemy = true;
             ZmieniloSieCzyGenerujemy?.Invoke(_id);
 
-            PasekPostepu.IsIndeterminate = true;
+            if (liczbaCykli.Value == null)
+                PasekPostepu.IsIndeterminate = true;
+            else
+            {
+                PasekPostepu.IsIndeterminate = false;
+                WartoscPostepu = 0;
+            }
 
             await Task.Yield(); //potrzebne żeby UI się zaktualizowało
 
