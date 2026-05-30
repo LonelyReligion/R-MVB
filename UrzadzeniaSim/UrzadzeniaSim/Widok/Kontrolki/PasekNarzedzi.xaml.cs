@@ -128,5 +128,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             domyslne_powiekszenia.Add(newItem);
             comboBox.SelectedItem = newItem;
         }
+
+        private void DodajLosoweUrzadzenia_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -25,6 +25,10 @@
                     <MenuItem Header="Losowe" Click="DodajLosoweUrzadzenie"/>
                     <MenuItem Header="O określonych współrzędnych" Click="DodajUrzadzenie"/>
                 </MenuItem>
+                <MenuItem Header="Dodaj wiele urządzeń">
+                    <MenuItem x:Name="DodajLosoweUrzadzenia" Header="Losowych" Click="DodajLosoweUrzadzenia_Click"/>
+                    <MenuItem Header="Z pliku"/>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Widok" FontSize="12">
                 <MenuItem Header="Wyświetl siatkę z dokładnością do minuty">
