@@ -19,9 +19,30 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
     /// </summary>
     public partial class TworzenieLosowychUrzadzen : Window
     {
+        public bool sukces = false;
         public TworzenieLosowychUrzadzen()
         {
             InitializeComponent();
+        }
+
+        private void Przeslij_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = true;
+            Close();
+        }
+
+        private void Anuluj_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = false;
+            Close();
+        }
+
+        private void Liczba_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (Liczba.Value != null)
+                Przeslij.IsEnabled = true;
+            else
+                Przeslij.IsEnabled = false;
         }
     }
 }

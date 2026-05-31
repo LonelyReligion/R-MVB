@@ -6,16 +6,26 @@
         xmlns:local="clr-namespace:UrzadzeniaSim.Widok.Okna_dialogowe"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="TworzenieLosowychUrzadzen" Height="450" Width="800">
+        Title="Tworzenie losowych urządzeń" Height="150" Width="350">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-                
-        <TextBlock Grid.Row="0" Text="Podaj liczbę losowych urządzeń, które chcesz wygenerować: "/>
-        <xctk:IntegerUpDown Grid.Row="1" Watermark="ile?" Minimum="1"/>
-        <Button Grid.Row="2" Width="50" Height="20" Content="Prześlij"/>
+
+        <TextBlock HorizontalAlignment="Center" Margin="10,10,0,0" Grid.Row="0" Text="Podaj liczbę losowych urządzeń, które chcesz wygenerować: "/>
+        <xctk:IntegerUpDown HorizontalAlignment="Center" Margin="10,10,0,0" Grid.Row="1" Watermark="ile?" Minimum="1" Width="100" x:Name="Liczba" 
+                            ValueChanged="Liczba_ValueChanged"/>
+
+        <Grid HorizontalAlignment="Center" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="60"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="Przeslij" Grid.Column="0" Margin="10,20,0,0" Width="50" Height="20" Content="Prześlij" Click="Przeslij_Click" IsEnabled="False"/>
+            <Button x:Name="Anuluj" Grid.Column="1" Margin="10,20,0,0" Width="50" Height="20" Content="Anuluj" Click="Anuluj_Click"/>
+        </Grid>
     </Grid>
 </Window>

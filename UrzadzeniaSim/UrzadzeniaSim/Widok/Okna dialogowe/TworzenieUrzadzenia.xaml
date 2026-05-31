@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UrzadzeniaSim.Widok.Okna_dialogowe"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="TworzenieUrzadzenia" Height="195" Width="350" WindowStartupLocation="CenterOwner">
+        Title="Tworzenie Urządzenia" Height="195" Width="350" WindowStartupLocation="CenterOwner">
     <Grid Margin="10,10,10,10">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

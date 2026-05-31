@@ -131,7 +131,13 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private void DodajLosoweUrzadzenia_Click(object sender, RoutedEventArgs e)
         {
+            TworzenieLosowychUrzadzen dialog = new TworzenieLosowychUrzadzen();
+            dialog.ShowDialog(); //zatrzymujemy glowne okno
 
+            if (dialog.sukces == true)
+            {
+               
+            }
         }
     }
 }
