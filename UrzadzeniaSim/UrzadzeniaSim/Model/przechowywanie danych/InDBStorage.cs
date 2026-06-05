@@ -10,15 +10,11 @@ namespace UrzadzeniaSim.Model.DB
         //nie abstract, bo ma ciało
         //virtual jest konieczne do tego, aby klasa Repo mogła ją napisać
         //"znacza to, że dana metoda może zostać nadpisana w klasie która dziedziczy po klasie w której jest ta metoda zdefiniowana"
-        public virtual void saveDevice(Urzadzenie_Model device)
+        public virtual void save()
         {
             s_Ctx.SaveChanges();
         }
 
-        public virtual void saveVersion(Wersja version)
-        {
-            s_Ctx.SaveChanges();
-        }
 
         public void saveMeasurement(Pomiar measure)
         {

@@ -4,8 +4,7 @@ namespace UrzadzeniaSim.Model.DB
 {
     public interface TreeRepository
     {
-        void saveDevice(Urzadzenie_Model device);
-        void saveVersion(Wersja version);
+        void save();
 
         void saveMeasurement(Pomiar measure);
 

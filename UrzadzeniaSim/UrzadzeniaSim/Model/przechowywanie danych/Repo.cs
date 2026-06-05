@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity.Migrations;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace UrzadzeniaSim.Model.DB
 {
@@ -19,17 +20,28 @@ namespace UrzadzeniaSim.Model.DB
         internal Dictionary<int, List<Wersja>> zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
         //override jest konieczne inaczej realizowana jest wersja z klasy bazowej
         //"Modyfikator override jest wymagany do rozszerzenia lub zmodyfikowania abstrakcyjnej lub wirtualnej implementacji dziedziczonej metody, właściwości, indeksatora lub zdarzenia."
-        public override void saveDevice(Urzadzenie_Model device)
+        public void saveDevice(Urzadzenie_Model device)
         {
             s_Ctx.Urzadzenia.Add(device);
             urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
 
             urzadzenia.Add(device.UrzadzenieID, device);
 
-            base.saveDevice(device);
+            base.save();
         }
 
-        public override void saveVersion(Wersja v)
+        internal void saveDevices(List<Urzadzenie_Model> devices)
+        {
+            foreach (Urzadzenie_Model u in devices) {
+                s_Ctx.Urzadzenia.Add(u);
+                urzadzenia_wersje.Add(u.UrzadzenieID, new List<Wersja>());
+
+                urzadzenia.Add(u.UrzadzenieID, u);
+            }
+            base.save();
+        }
+
+        public void saveVersion(Wersja v)
         {
             this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
 
@@ -37,7 +49,7 @@ namespace UrzadzeniaSim.Model.DB
             urzadzenia_wersje[v.UrzadzenieID].Add(v);
 
             wersje.Add(v);
-            base.saveVersion(v);
+            base.save();
         }
 
         public bool czyUrzadzenieIstnieje(int UrzadzenieID)

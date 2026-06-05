@@ -21,7 +21,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public event Action<bool> zmienionoDokladnoscRownolezniki;
 
         public event Action wyczysc_wszystko;
-        public event Action dodaj_losowe;
+        public event Action<int> dodaj_losowe;
         public event Action<(decimal, decimal)> dodaj_urzadzenie;
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -99,7 +99,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private void DodajLosoweUrzadzenie(object sender, RoutedEventArgs e)
         {
-            dodaj_losowe?.Invoke();
+            dodaj_losowe?.Invoke(1);
         }
 
         private void DodajUrzadzenie(object sender, RoutedEventArgs e)
@@ -136,7 +136,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
             if (dialog.sukces == true)
             {
-               
+                dodaj_losowe?.Invoke(dialog.ileUrzadzen);
             }
         }
     }

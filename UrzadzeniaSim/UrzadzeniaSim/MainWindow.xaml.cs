@@ -78,18 +78,33 @@ namespace UrzadzeniaSim
         {
             siatkaWalcowa.zmienDokladnoscRownolezniki(onoff);
         }
-        private void GenerujLosoweUrzadzenie()
+        private void GenerujLosoweUrzadzenie(int ileUrzadzen)
         {
-            (decimal x, decimal y) = generator.GenerujWspolrzedne();
-            Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
+            if (ileUrzadzen == 1) {
+                (decimal x, decimal y) = generator.GenerujWspolrzedne();
+                Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
 
-            Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(generator.GenerujWspolrzedne());
-            System.Threading.Tasks.Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo())); }); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
-            siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
+                Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(generator.GenerujWspolrzedne());
+                System.Threading.Tasks.Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo())); }); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
+                siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
 
 
-            s_UrzadzeniaUI.Add(nowe_urzadzenie);
+                s_UrzadzeniaUI.Add(nowe_urzadzenie);
+                return;
+            }
 
+            for (int i = 0; i < ileUrzadzen; i++)
+            {
+                (decimal x, decimal y) = generator.GenerujWspolrzedne();
+                Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
+
+                Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(generator.GenerujWspolrzedne());
+                System.Threading.Tasks.Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo())); }); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
+                siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
+
+
+                s_UrzadzeniaUI.Add(nowe_urzadzenie);
+            }
         }
 
         private void powiedz_o_znaczeniu_panelowi(int id_urzadzenia)

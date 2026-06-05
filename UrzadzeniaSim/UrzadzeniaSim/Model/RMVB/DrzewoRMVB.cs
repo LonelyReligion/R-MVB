@@ -36,6 +36,15 @@ public class DrzewoRMVB
         _r.dodajUrzadzenie(u);
     }
 
+    internal void dodajUrzadzenia(List<Urzadzenie_Model> urzadzenia)
+    {
+        _repo.saveDevices(urzadzenia);
+        
+        foreach(Urzadzenie_Model u in urzadzenia)
+            _r.dodajUrzadzenie(u);
+    }
+
+
     internal void dodajWersje(Wersja w)
     {
         _repo.saveVersion(w);

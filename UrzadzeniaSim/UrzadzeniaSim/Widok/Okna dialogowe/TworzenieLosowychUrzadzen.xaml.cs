@@ -20,6 +20,7 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
     public partial class TworzenieLosowychUrzadzen : Window
     {
         public bool sukces = false;
+        public int ileUrzadzen = 0;
         public TworzenieLosowychUrzadzen()
         {
             InitializeComponent();
@@ -28,6 +29,7 @@ namespace UrzadzeniaSim.Widok.Okna_dialogowe
         private void Przeslij_Click(object sender, RoutedEventArgs e)
         {
             sukces = true;
+            ileUrzadzen = (int)Liczba.Value;
             Close();
         }
 
