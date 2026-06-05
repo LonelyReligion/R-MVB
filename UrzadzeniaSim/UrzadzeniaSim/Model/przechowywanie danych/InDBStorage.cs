@@ -53,7 +53,9 @@ namespace UrzadzeniaSim.Model.DB
 
         public void Reset()
         {
-            s_Ctx.Database.ExecuteSqlCommand("delete from Urzadzenie_Model");
+            s_Ctx.Database.ExecuteSqlCommand("DELETE FROM Wersjas");
+            s_Ctx.Database.ExecuteSqlCommand("DELETE FROM Pomiars");
+            s_Ctx.Database.ExecuteSqlCommand("DELETE FROM Urzadzenie_Model");
         }
     }
 }
