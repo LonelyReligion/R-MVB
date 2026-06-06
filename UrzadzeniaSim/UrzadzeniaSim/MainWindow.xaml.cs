@@ -93,17 +93,28 @@ namespace UrzadzeniaSim
                 return;
             }
 
+            List<Urzadzenie_Model> urzadzenia = new List<Urzadzenie_Model>();
+            List<Wersja> wersje = new List<Wersja>();
+
             for (int i = 0; i < ileUrzadzen; i++)
             {
                 (decimal x, decimal y) = generator.GenerujWspolrzedne();
                 Trace.WriteLine("Generujemy nowe urządzenie o współrzędnych: " + x + ", " + y);
 
                 Urzadzenie_Model nowe_urzadzenie = new Urzadzenie_Model(generator.GenerujWspolrzedne());
-                System.Threading.Tasks.Task.Run(() => { rMVB.dodajUrzadzenie(nowe_urzadzenie); rMVB.dodajWersje(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo())); }); //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
-                siatkaWalcowa.dodajUrzadzenie(nowe_urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
+                urzadzenia.Add(nowe_urzadzenie);
+                wersje.Add(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo()));
+            }
 
+            System.Threading.Tasks.Task.Run(() =>  //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
+            {
+                rMVB.dodajUrzadzenia(urzadzenia);
+                rMVB.dodajWieleWersji(wersje);
+            });
 
-                s_UrzadzeniaUI.Add(nowe_urzadzenie);
+            foreach (Urzadzenie_Model urzadzenie in urzadzenia) {
+                siatkaWalcowa.dodajUrzadzenie(urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze
+                s_UrzadzeniaUI.Add(urzadzenie);
             }
         }
 

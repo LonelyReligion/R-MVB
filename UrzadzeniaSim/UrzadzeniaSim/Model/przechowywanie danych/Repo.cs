@@ -52,6 +52,18 @@ namespace UrzadzeniaSim.Model.DB
             base.save();
         }
 
+        internal void saveVersions(List<Wersja> w)
+        {
+            foreach (Wersja v in w) {
+                this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
+                s_Ctx.Wersje.AddOrUpdate(v);
+                urzadzenia_wersje[v.UrzadzenieID].Add(v);
+                wersje.Add(v);
+            }
+
+            base.save();
+        }
+
         public bool czyUrzadzenieIstnieje(int UrzadzenieID)
         {
             return urzadzenia.ContainsKey(UrzadzenieID);

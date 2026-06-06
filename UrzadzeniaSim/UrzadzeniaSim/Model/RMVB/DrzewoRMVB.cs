@@ -51,6 +51,14 @@ public class DrzewoRMVB
         _mvb.dodajUrzadzenie(w);
     }
 
+    internal void dodajWieleWersji(List<Wersja> w)
+    {
+        _repo.saveVersions(w);
+
+        foreach(Wersja wersja in w)
+            _mvb.dodajUrzadzenie(wersja);
+
+    }
     internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
     {
 

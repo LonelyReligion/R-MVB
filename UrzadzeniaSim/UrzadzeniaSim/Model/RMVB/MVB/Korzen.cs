@@ -7,7 +7,7 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
         public static decimal s_GranicaPrzezywalnosci = 0.2m;
         public static Kontekst s_Ctx;
         public static int s_MinUrzadzenKorzen = 15;
-        TreeRepository repo;
+        Repo repo;
 
         List<(int, Wpis)> wpisy; //po to zeby mozna bylo znalezc ostatni wezel szybko np.
 
@@ -15,7 +15,7 @@ namespace UrzadzeniaSim.Model.RMVB.MVB
         //parametry drzewa, sa zdefiniowane w klasie drzewa
         private static double s_pversion;
 
-        internal Korzen(TreeRepository repo, double pversion)
+        internal Korzen(Repo repo, double pversion)
         {
             wpisy = new List<(int, Wpis)>();
             this.repo = repo;
