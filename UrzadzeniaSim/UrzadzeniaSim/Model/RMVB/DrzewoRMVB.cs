@@ -61,14 +61,15 @@ public class DrzewoRMVB
     }
     internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
     {
+        using (Kontekst ctx = new Kontekst())
+        {
+            ctx.Wersje.Attach(alfa);
+            ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
 
-        _ctx.Wersje.Attach(alfa);
-        _ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
-
-        alfa.Pomiary.Add(p);
-        _ctx.Pomiary.Add(p);
-        _ctx.SaveChanges();
-
+            alfa.Pomiary.Add(p);
+            ctx.Pomiary.Add(p);
+            ctx.SaveChanges();
+        }
         _r.dodajPomiar(UrzadzenieID, p);
     }
 

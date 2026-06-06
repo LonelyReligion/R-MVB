@@ -106,11 +106,11 @@ namespace UrzadzeniaSim
                 wersje.Add(new Wersja(nowe_urzadzenie.UrzadzenieID, rMVB.zwrocRepo()));
             }
 
-            System.Threading.Tasks.Task.Run(() =>  //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
-            {
+/*            System.Threading.Tasks.Task.Run(() =>  //zlecamy wykonanie wątkowi w tle, nie blokuje GUI
+            {*/
                 rMVB.dodajUrzadzenia(urzadzenia);
                 rMVB.dodajWieleWersji(wersje);
-            });
+           /* });*/
 
             foreach (Urzadzenie_Model urzadzenie in urzadzenia) {
                 siatkaWalcowa.dodajUrzadzenie(urzadzenie); //zrobic metode ktora doda i przeladuje od razu w wersji dodawanie z listy i dodawanie pojedyncze

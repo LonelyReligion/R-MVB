@@ -12,7 +12,8 @@ namespace UrzadzeniaSim.Model.DB
         //"znacza to, że dana metoda może zostać nadpisana w klasie która dziedziczy po klasie w której jest ta metoda zdefiniowana"
         public virtual void save()
         {
-            s_Ctx.SaveChanges();
+            using (Kontekst ctx = new Kontekst())
+                ctx.SaveChanges();
         }
 
 

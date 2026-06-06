@@ -157,13 +157,19 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void ZatrzymajAnimacje()
         {
-            animujemy = false;
-            Ellipse krag_generowania = (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
-            KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Transparent");
 
-            krag_generowania.BeginAnimation(WidthProperty, null);
-            krag_generowania.BeginAnimation(HeightProperty, null);
-            krag_generowania.BeginAnimation(OpacityProperty, null);
+            animujemy = false;
+
+            przycisk.ApplyTemplate();
+            var template = przycisk.Template;
+            var krag_generowania = template.FindName("krag_generowania", przycisk) as Ellipse;
+
+            KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Transparent");
+            MessageBox.Show(template.GetType().FullName);
+
+            ((Ellipse)krag_generowania).BeginAnimation(WidthProperty, null);
+            ((Ellipse)krag_generowania).BeginAnimation(HeightProperty, null);
+            ((Ellipse)krag_generowania).BeginAnimation(OpacityProperty, null);
         }
         public void UruchomAnimacje()
         {
