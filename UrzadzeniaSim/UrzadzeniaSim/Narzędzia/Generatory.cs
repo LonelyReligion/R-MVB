@@ -197,14 +197,12 @@ namespace UrzadzeniaSim.Narzedzia
             int? liczbaCykli = zrodlo.punkt.IleCykli;
             int? _liczbaCykliDoKonca = liczbaCykli; //moze to tez przekazac do metody
             int index = 0;
-
-            List<Wersja> wersje = new List<Wersja>();
             while (!zrodlo.punkt.Token.IsCancellationRequested && (_liczbaCykliDoKonca == null || _liczbaCykliDoKonca > 0))
             {
                 Pomiar wygenerowany = GenerujLosowyPomiar();
                 //przekazac samo id?
                 Wersja nowa = new Wersja(zrodlo.UrzadzenieID, _repo);
-                wersje.Add(nowa);
+
                 _rmvb.dodajWersje(nowa);
                 _rmvb.dodajPomiar(nowa.UrzadzenieID, wygenerowany, nowa); 
 

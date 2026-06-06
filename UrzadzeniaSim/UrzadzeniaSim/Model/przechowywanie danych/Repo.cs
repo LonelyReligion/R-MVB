@@ -22,59 +22,46 @@ namespace UrzadzeniaSim.Model.DB
         //"Modyfikator override jest wymagany do rozszerzenia lub zmodyfikowania abstrakcyjnej lub wirtualnej implementacji dziedziczonej metody, właściwości, indeksatora lub zdarzenia."
         public void saveDevice(Urzadzenie_Model device)
         {
-            using (Kontekst ctx = new Kontekst())
-            {
-                ctx.Urzadzenia.Add(device);
-                urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
+            s_Ctx.Urzadzenia.Add(device);
+            urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
 
-                urzadzenia.Add(device.UrzadzenieID, device);
+            urzadzenia.Add(device.UrzadzenieID, device);
 
-                ctx.SaveChanges();
-            }
+            base.save();
         }
 
         internal void saveDevices(List<Urzadzenie_Model> devices)
         {
-            using (Kontekst ctx = new Kontekst()) { 
-                foreach (Urzadzenie_Model u in devices) {
-                    ctx.Urzadzenia.Add(u);
-                    urzadzenia_wersje.Add(u.UrzadzenieID, new List<Wersja>());
+            foreach (Urzadzenie_Model u in devices) {
+                s_Ctx.Urzadzenia.Add(u);
+                urzadzenia_wersje.Add(u.UrzadzenieID, new List<Wersja>());
 
-                    urzadzenia.Add(u.UrzadzenieID, u);
-                }
-                ctx.SaveChanges();
+                urzadzenia.Add(u.UrzadzenieID, u);
             }
+            base.save();
         }
 
         public void saveVersion(Wersja v)
         {
             this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
 
-            using (Kontekst ctx = new Kontekst())
-            {    
-                ctx.Wersje.AddOrUpdate(v);
-                urzadzenia_wersje[v.UrzadzenieID].Add(v);
+            s_Ctx.Wersje.AddOrUpdate(v);
+            urzadzenia_wersje[v.UrzadzenieID].Add(v);
 
-                wersje.Add(v);
-                ctx.SaveChanges();
-            }
+            wersje.Add(v);
+            base.save();
         }
 
         internal void saveVersions(List<Wersja> w)
         {
             foreach (Wersja v in w) {
+                this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
+                s_Ctx.Wersje.AddOrUpdate(v);
                 urzadzenia_wersje[v.UrzadzenieID].Add(v);
                 wersje.Add(v);
             }
 
-            using (Kontekst ctx = new Kontekst()) { 
-                foreach (Wersja v in w)
-                {
-                    this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
-                    ctx.Wersje.Add(v);
-                }
-                ctx.SaveChanges() ;
-            }
+            base.save();
         }
 
         public bool czyUrzadzenieIstnieje(int UrzadzenieID)

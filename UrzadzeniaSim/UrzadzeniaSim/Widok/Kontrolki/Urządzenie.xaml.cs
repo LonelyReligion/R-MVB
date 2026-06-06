@@ -121,6 +121,17 @@ namespace UrzadzeniaSim.Widok.Kontrolki
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("GruboscOkregu"));
             }
         }
+        public static readonly DependencyProperty IsAnimatedProperty =
+    DependencyProperty.Register(
+        nameof(IsAnimated),
+        typeof(bool),
+        typeof(Urządzenie),
+        new PropertyMetadata(false));
+        public bool IsAnimated
+        {
+            get => (bool)GetValue(IsAnimatedProperty);
+            set => SetValue(IsAnimatedProperty, value);
+        }
 
         // te zmienne dotyczą okna generowania
         public STATUS StatusUrzadzenia = STATUS.AKTYWNY;
@@ -157,55 +168,17 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void ZatrzymajAnimacje()
         {
-
             animujemy = false;
-
-            przycisk.ApplyTemplate();
-            var template = przycisk.Template;
-            var krag_generowania = template.FindName("krag_generowania", przycisk) as Ellipse;
-
+            Ellipse krag_generowania = (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
             KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Transparent");
-            MessageBox.Show(template.GetType().FullName);
 
-            ((Ellipse)krag_generowania).BeginAnimation(WidthProperty, null);
-            ((Ellipse)krag_generowania).BeginAnimation(HeightProperty, null);
-            ((Ellipse)krag_generowania).BeginAnimation(OpacityProperty, null);
+            IsAnimated = false;
         }
         public void UruchomAnimacje()
         {
             animujemy = true;
-            Ellipse krag_generowania = (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
             KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Red");
-
-            DoubleAnimation animacjaSzerokosci = new DoubleAnimation
-            {
-                From = WysokoscSzerokoscOkregu,
-                To = WysokoscSzerokoscOkregu + WysokoscSzerokoscOkregu / 6 * 8,
-                Duration = TimeSpan.FromSeconds(Interwal),
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-
-            DoubleAnimation animacjaWysokosci = new DoubleAnimation
-            {
-                From = WysokoscSzerokoscOkregu,
-                To = WysokoscSzerokoscOkregu + WysokoscSzerokoscOkregu / 6 * 8,
-                Duration = TimeSpan.FromSeconds(Interwal),
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-
-            krag_generowania.BeginAnimation(WidthProperty, animacjaSzerokosci);
-            krag_generowania.BeginAnimation(HeightProperty, animacjaWysokosci);
-
-            //<DoubleAnimation Storyboard.TargetName="krag_generowania" Storyboard.TargetProperty="Opacity" From="1.0" To="0.0" Duration="0:0:1" RepeatBehavior="Forever" />
-            DoubleAnimation animacjaKrycia = new DoubleAnimation
-            {
-                From = 1.0,
-                To = 0.0,
-                Duration = TimeSpan.FromSeconds(Interwal),
-                RepeatBehavior = RepeatBehavior.Forever,
-            };
-
-            krag_generowania.BeginAnimation(OpacityProperty, animacjaKrycia);
+            IsAnimated = true;
         }
         private void _resetujAnimacje()
         {

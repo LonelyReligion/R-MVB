@@ -120,7 +120,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         }
         public void ZmienStatusDla(int IdUrzadzenia)
         {
-            if (_wyswietlane.UrzadzenieID == IdUrzadzenia)
+            if (_wyswietlane != null && _wyswietlane.UrzadzenieID == IdUrzadzenia)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MozemyZmienicStatus)));
         }
         private void _zaktualizujMozemyZmienicStatus()
