@@ -36,10 +36,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Kolejka.cs" />
     <Compile Include="Konsument.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Producent.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
