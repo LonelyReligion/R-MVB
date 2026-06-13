@@ -203,7 +203,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         private void RamkaWokolComboboxa_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (!MozemyZmienicStatus)
+            if (!MozemyZmienicStatus && _wyswietlane != null)
             {
                 try
                 {
