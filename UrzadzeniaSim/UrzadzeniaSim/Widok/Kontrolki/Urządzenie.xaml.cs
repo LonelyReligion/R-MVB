@@ -180,8 +180,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void ZatrzymajAnimacje()
         {
-/*            Storyboard sb = (Storyboard)krag.Resources["AnimacjaGenerowania"];
-            sb.Stop(krag);*/
+            Grid siatka = (Grid)przycisk.Template.FindName("siatka", przycisk);
+            Storyboard sb = (Storyboard)siatka.FindResource("AnimacjaGenerowania");
+            sb.Stop();
 
             animujemy = false;
             Ellipse krag_generowania = (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
@@ -191,9 +192,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         }
         public void UruchomAnimacje()
         {
-/*            Storyboard sb = (Storyboard)krag.Resources["AnimacjaGenerowania"];
+            Grid siatka = (Grid)przycisk.Template.FindName("siatka", przycisk);
+            Storyboard sb = (Storyboard)siatka.FindResource("AnimacjaGenerowania");
 
-            sb.Begin("krag");*/
+            sb.Begin();
 
             animujemy = true;
             KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Red");

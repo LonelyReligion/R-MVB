@@ -11,7 +11,7 @@
         <Button Name="przycisk" Click="Zaznacz">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
-                    <Grid>
+                <Grid x:Name="siatka">
                         <Ellipse x:Name="krag_generowania"
                  Width="{Binding WysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                  Height="{Binding WysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
@@ -19,35 +19,10 @@
                  StrokeThickness="{Binding GruboscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                  Fill="Transparent">
 
-                            <Ellipse.Triggers>
 
-                                <EventTrigger RoutedEvent="Loaded">
-                                    <BeginStoryboard x:Name="pulse">
+                            <Ellipse.Resources>
 
-                                        <Storyboard RepeatBehavior="Forever">
-
-                                            <DoubleAnimation Storyboard.TargetProperty="Width"
-                                             To="{Binding MaxWysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
-                                             Duration="0:0:1"
-                                             AutoReverse="False"/>
-
-                                            <DoubleAnimation Storyboard.TargetProperty="Height"
-                                             To="{Binding MaxWysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
-                                             Duration="0:0:1"
-                                             AutoReverse="False"/>
-
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                             From="1"
-                                             To="0"
-                                             Duration="0:0:1"
-                                             AutoReverse="False"/>
-
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-
-                            </Ellipse.Triggers>
-
+                            </Ellipse.Resources>
                         </Ellipse>
 
                         <Ellipse
@@ -75,8 +50,39 @@
                             Fill="{Binding KolorUrzadzenia, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                             d:Fill="#5C7D60"
                         />
+                        <Grid.Resources>
+                            <Storyboard x:Key="AnimacjaGenerowania" RepeatBehavior="Forever" Storyboard.TargetName="krag_generowania">
+
+                                <DoubleAnimation
+                                    Storyboard.TargetName="krag_generowania"
+                                    Storyboard.TargetProperty="Width"
+                                    To="{Binding MaxWysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                                    Duration="0:0:1"
+                                    AutoReverse="False"/>
+
+                                <DoubleAnimation
+                                    Storyboard.TargetName="krag_generowania"
+                                    Storyboard.TargetProperty="Height"
+                                    To="{Binding MaxWysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                                    Duration="0:0:1"
+                                    AutoReverse="False"/>
+
+                                <DoubleAnimation 
+                                    Storyboard.TargetName="krag_generowania"
+                                    Storyboard.TargetProperty="Opacity"
+                                    From="1"
+                                    To="0"
+                                    Duration="0:0:1"
+                                    AutoReverse="False"/>
+
+                            </Storyboard>
+                        </Grid.Resources>
+                    
                     </Grid>
+                    
+                    
                 </ControlTemplate>
+                
             </Button.Template>
         </Button>
     </Grid>
