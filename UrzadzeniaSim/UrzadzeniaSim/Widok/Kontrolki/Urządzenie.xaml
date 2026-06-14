@@ -10,12 +10,13 @@
     <Grid>
         <Button Name="przycisk" Click="Zaznacz">
             <Button.Template>
-                <ControlTemplate>
+                <ControlTemplate TargetType="Button">
                     <Grid>
                         <Ellipse x:Name="krag_generowania"
                  Width="{Binding WysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                  Height="{Binding WysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                  Stroke="{Binding KolorOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                 StrokeThickness="{Binding GruboscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                  Fill="Transparent">
 
                             <Ellipse.Triggers>
@@ -26,20 +27,20 @@
                                         <Storyboard RepeatBehavior="Forever">
 
                                             <DoubleAnimation Storyboard.TargetProperty="Width"
-                                             To="{Binding WysokoscSzerokoscOkregu}"
+                                             To="{Binding MaxWysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                                              Duration="0:0:1"
-                                             AutoReverse="True"/>
+                                             AutoReverse="False"/>
 
                                             <DoubleAnimation Storyboard.TargetProperty="Height"
-                                             To="{Binding WysokoscSzerokoscOkregu}"
+                                             To="{Binding MaxWysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
                                              Duration="0:0:1"
-                                             AutoReverse="True"/>
+                                             AutoReverse="False"/>
 
                                             <DoubleAnimation Storyboard.TargetProperty="Opacity"
                                              From="1"
                                              To="0"
                                              Duration="0:0:1"
-                                             AutoReverse="True"/>
+                                             AutoReverse="False"/>
 
                                         </Storyboard>
                                     </BeginStoryboard>

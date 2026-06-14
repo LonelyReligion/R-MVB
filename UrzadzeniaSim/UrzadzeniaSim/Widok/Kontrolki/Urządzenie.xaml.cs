@@ -36,6 +36,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         private const int _orygSzerokoscWysokoscZaznaczenia = 7;
         private const int _orygSzerokoscWysokosc = 5;
         private const double _orygWysokoscSzerokoscOkregu = 6;
+        private const double _orygMaxWysokoscSzerokoscOkregu = 10;
         private const double _orygGruboscOkregu = 1;
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -78,6 +79,17 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             {
                 _wysokoscSzerokoscOkregu = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WysokoscSzerokoscOkregu"));
+            }
+        }
+
+        private double _wysokoscMaxSzerokoscOkregu = _orygMaxWysokoscSzerokoscOkregu;
+        public double MaxWysokoscSzerokoscOkregu
+        {
+            get { return _wysokoscMaxSzerokoscOkregu; }
+            set
+            {
+                _wysokoscMaxSzerokoscOkregu = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MaxWysokoscSzerokoscOkregu"));
 
                 if (animujemy)
                     _resetujAnimacje();
@@ -168,6 +180,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void ZatrzymajAnimacje()
         {
+/*            Storyboard sb = (Storyboard)krag.Resources["AnimacjaGenerowania"];
+            sb.Stop(krag);*/
+
             animujemy = false;
             Ellipse krag_generowania = (Ellipse)przycisk.Template.FindName("krag_generowania", przycisk);
             KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Transparent");
@@ -176,6 +191,10 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         }
         public void UruchomAnimacje()
         {
+/*            Storyboard sb = (Storyboard)krag.Resources["AnimacjaGenerowania"];
+
+            sb.Begin("krag");*/
+
             animujemy = true;
             KolorOkregu = (SolidColorBrush)new BrushConverter().ConvertFrom("Red");
             IsAnimated = true;
@@ -245,6 +264,7 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             SzerokoscWysokoscZaznaczenia = Math.Max(Urządzenie._orygSzerokoscWysokoscZaznaczenia * skala, Urządzenie._orygSzerokoscWysokoscZaznaczenia);
             SzerokoscWysokosc = Math.Max(Urządzenie._orygSzerokoscWysokosc * skala, Urządzenie._orygSzerokoscWysokosc);
             WysokoscSzerokoscOkregu = Math.Max(Urządzenie._orygWysokoscSzerokoscOkregu * skala, Urządzenie._orygWysokoscSzerokoscOkregu);
+            MaxWysokoscSzerokoscOkregu = Math.Max(Urządzenie._orygMaxWysokoscSzerokoscOkregu * skala, Urządzenie._orygMaxWysokoscSzerokoscOkregu);
             GruboscOkregu = Math.Max(Urządzenie._orygGruboscOkregu * skala, Urządzenie._orygGruboscOkregu);
         }
 
