@@ -153,6 +153,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         public int? IleCykli = null;
         //
 
+        Grid siatka;
+        Storyboard sb;
+
         public Urządzenie(decimal dlugosc, decimal szerokosc)
         {
             InitializeComponent();
@@ -160,6 +163,12 @@ namespace UrzadzeniaSim.Widok.Kontrolki
             this.Dlugosc = dlugosc;
             this.Szerokosc = szerokosc;
             _kolorUrzadzenia = new SolidColorBrush(_kolorAktywny);
+
+            this.Loaded += (sender, e) =>
+            {
+                siatka = (Grid)przycisk.Template.FindName("siatka", przycisk);
+                sb = (Storyboard)siatka.FindResource("AnimacjaGenerowania");
+            };
 
         }
 
@@ -180,8 +189,9 @@ namespace UrzadzeniaSim.Widok.Kontrolki
 
         public void ZatrzymajAnimacje()
         {
-            Grid siatka = (Grid)przycisk.Template.FindName("siatka", przycisk);
-            Storyboard sb = (Storyboard)siatka.FindResource("AnimacjaGenerowania");
+            if (!this.IsLoaded)
+                return;
+
             sb.Stop();
 
             animujemy = false;
@@ -192,8 +202,8 @@ namespace UrzadzeniaSim.Widok.Kontrolki
         }
         public void UruchomAnimacje()
         {
-            Grid siatka = (Grid)przycisk.Template.FindName("siatka", przycisk);
-            Storyboard sb = (Storyboard)siatka.FindResource("AnimacjaGenerowania");
+            if (!this.IsLoaded)
+                return;
 
             sb.Begin();
 
