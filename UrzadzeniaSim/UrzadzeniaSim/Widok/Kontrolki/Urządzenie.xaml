@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="UrzadzeniaSim.Widok.Kontrolki.Urządzenie"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UrzadzeniaSim.Widok.Kontrolki"
+             mc:Ignorable="d" 
+             Height="10" Width="10"
+             d:DesignHeight="10" d:DesignWidth="10">
+    <Grid>
+        <Button Name="przycisk" Click="Zaznacz">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                <Grid x:Name="siatka">
+                        <Ellipse x:Name="krag_generowania"
+                 Width="{Binding WysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                 Height="{Binding WysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                 Stroke="{Binding KolorOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                 StrokeThickness="{Binding GruboscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                 Fill="Transparent">
+
+
+                            <Ellipse.Resources>
+
+                            </Ellipse.Resources>
+                        </Ellipse>
+
+                        <Ellipse
+                            x:Name="zaznaczenie"
+                            
+                            Width="{Binding SzerokoscWysokoscZaznaczenia}"
+                            Height="{Binding SzerokoscWysokoscZaznaczenia}"
+                            
+                            MinWidth="6"
+                            MinHeight="6"
+                            Stretch="Fill"
+                            Fill="{Binding WypelnienieZaznaczenia, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                            d:Fill="Blue"
+                        />
+                        <Ellipse
+                            x:Name="kolko"
+                            
+                            Width="{Binding SzerokoscWysokosc}"
+                            Height="{Binding SzerokoscWysokosc}"
+                            
+                            Stretch="Fill"
+                            MinHeight="5"
+                            MinWidth="5"
+                            Margin="1,1,1,1"
+                            Fill="{Binding KolorUrzadzenia, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                            d:Fill="#5C7D60"
+                        />
+                        <Grid.Resources>
+                            <Storyboard x:Key="AnimacjaGenerowania" RepeatBehavior="Forever" Storyboard.TargetName="krag_generowania">
+
+                                <DoubleAnimation
+                                    Storyboard.TargetName="krag_generowania"
+                                    Storyboard.TargetProperty="Width"
+                                    To="{Binding MaxWysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                                    Duration="0:0:1"
+                                    AutoReverse="False"/>
+
+                                <DoubleAnimation
+                                    Storyboard.TargetName="krag_generowania"
+                                    Storyboard.TargetProperty="Height"
+                                    To="{Binding MaxWysokoscSzerokoscOkregu, RelativeSource={RelativeSource AncestorType={x:Type local:Urządzenie}}}"
+                                    Duration="0:0:1"
+                                    AutoReverse="False"/>
+
+                                <DoubleAnimation 
+                                    Storyboard.TargetName="krag_generowania"
+                                    Storyboard.TargetProperty="Opacity"
+                                    From="1"
+                                    To="0"
+                                    Duration="0:0:1"
+                                    AutoReverse="False"/>
+
+                            </Storyboard>
+                        </Grid.Resources>
+                    
+                    </Grid>
+                    
+                    
+                </ControlTemplate>
+                
+            </Button.Template>
+        </Button>
+    </Grid>
+</UserControl>

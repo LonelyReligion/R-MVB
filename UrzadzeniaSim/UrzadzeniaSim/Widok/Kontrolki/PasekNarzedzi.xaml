@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="UrzadzeniaSim.Widok.Kontrolki.PasekNarzedzi"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UrzadzeniaSim.Widok.Kontrolki"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="800" >
+    <Grid Name="pasek_narzedzi" Background="#5C7D60">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <Menu>
+            <MenuItem Header="Plik" FontSize="12">
+                <MenuItem Header="Zapisz"/>
+                <MenuItem Header="Wczytaj"/>
+                <MenuItem Header="Wyczyść" Click="KliknietoWyczysc"/>
+                <MenuItem x:Name="Ustawienia" Header="Ustawienia" Click="Ustawienia_Click"/>
+            </MenuItem>
+                
+            <MenuItem Header="Edytuj" FontSize="12">
+                <MenuItem Header="Dodaj urządzenie">
+                    <MenuItem Header="Losowe" Click="DodajLosoweUrzadzenie"/>
+                    <MenuItem Header="O określonych współrzędnych" Click="DodajUrzadzenie"/>
+                </MenuItem>
+                <MenuItem Header="Dodaj wiele urządzeń">
+                    <MenuItem x:Name="DodajLosoweUrzadzenia" Header="Losowych" Click="DodajLosoweUrzadzenia_Click"/>
+                    <MenuItem Header="Z pliku"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Widok" FontSize="12">
+                <MenuItem Header="Wyświetl siatkę z dokładnością do minuty">
+                    <MenuItem Name="poludniki_minuta" Header="Południki" IsEnabled="False" IsCheckable="True" Click="przycisnieto_poludniki_minuta" ToolTipService.ShowOnDisabled="True"/>
+                    <MenuItem Name="rownolezniki_minuta" Header="Równoleżniki" IsEnabled="False" IsCheckable="True" Click="przycisnieto_rownolezniki_minuta" ToolTipService.ShowOnDisabled="True"/>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Powiększenie" Width="auto" Height="auto" Margin="5"/>
+            <ComboBox Name="Powiekszenie" Grid.Column="1" Width="auto" Margin="5" SelectionChanged="zmianaPowiekszenia" IsEditable="True" 
+                      LostFocus="Powiekszenie_LostFocus" ItemsSource="{Binding domyslne_powiekszenia}"/>
+        </Grid>
+    </Grid>
+</UserControl>
