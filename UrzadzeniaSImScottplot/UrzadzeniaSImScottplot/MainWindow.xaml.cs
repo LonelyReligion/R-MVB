@@ -17,10 +17,21 @@ namespace UrzadzeniaSImScottplot
     public partial class MainWindow : Window
     {
         private Repo _repozytorium = new Repo();
+        public void InicjujKontrolki() {
+            using (var ctx = new Kontekst())
+                SiatkaUrzadzen.ItemsSource = ctx.Urzadzenia.ToList(); 
+        }
+
+        public void AktualizujSiatkeUrzadzen() {
+            using (var ctx = new Kontekst())
+                SiatkaUrzadzen.ItemsSource = ctx.Urzadzenia.ToList();
+        }
+
         public MainWindow()
         {
             _repozytorium.InicjujBazeDanych();
             InitializeComponent();
+            InicjujKontrolki();
         }
 
         static int i = 1;
@@ -40,6 +51,8 @@ namespace UrzadzeniaSImScottplot
                 ctx.Urzadzenia.Add(u);
                 ctx.SaveChanges();
             }
+
+            AktualizujSiatkeUrzadzen();
         }
     }
 }
