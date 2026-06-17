@@ -23,7 +23,9 @@ namespace UrzadzeniaSImScottplot
             using (var ctx = new Kontekst())
             {
                 SiatkaUrzadzen.ItemsSource = ctx.Urzadzenia.ToList();
+
                 plot.Plot.Axes.SetLimits(14.11, 24.15, 49, 54.83);
+                plot.UserInputProcessor.Disable();
             }
         }
 
@@ -46,8 +48,11 @@ namespace UrzadzeniaSImScottplot
             (decimal dlugosc, decimal szerokosc) = _generator.generujWspolrzedne();
             Urzadzenie u = new Urzadzenie((dlugosc, szerokosc));
 
-            double[] x = { (double)u.Dlugosc };
-            double[] y = { (double)u.Szerokosc};
+            double dlugosc_w_systemie_dziesietnym = (int)dlugosc + (double)(dlugosc - (int)dlugosc) * 100 / 60;
+            double szerokosc_w_systemie_dziesietnym = (int)szerokosc + (double)(szerokosc - (int)szerokosc) * 100 / 60;
+
+            double[] x = { dlugosc_w_systemie_dziesietnym };
+            double[] y = { szerokosc_w_systemie_dziesietnym };
 
             plot.Plot.Add.Scatter(x, y);
             plot.Refresh();
