@@ -13,18 +13,41 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ScottPlot:WpfPlot x:Name="plot" Grid.Column="0" />
+        <ScottPlot:WpfPlot x:Name="plot" Grid.Column="0" Margin="10,10,10,10"/>
 
         <Grid Grid.Column="1">
-            <Button Content="Dodaj urzadzenie" x:Name="GenerujLosowy" Click="GenerujLosowy_Click" Margin="25,28,272,372"/>
-            <Button Content="Generuj pomiary" Margin="282,28,21,372" />
 
-            <Button Content="Wyszukaj srednia" Margin="146,254,146,147" />
-            <Button Content="Wyszukaj urzadzenie" Margin="272,253,10,146" />
-            <Button Content="Wyszukaj urzadzenia" Margin="10,254,272,147" />
-            <TextBlock HorizontalAlignment="Left" Margin="10,299,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="pl-pl" Text="Wyniki pomiarów"/></TextBlock>
-            <DataGrid HorizontalAlignment="Left" Height="136" Margin="18,81,0,0" VerticalAlignment="Top" Width="361" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Button Content="Dodaj urzadzenie" x:Name="GenerujLosowy" Click="GenerujLosowy_Click" Height="30" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <Button Content="Generuj pomiary" Height="30" Width="120" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            </Grid>
+
+            <Grid Grid.Row="1"> 
+                <DataGrid   Margin ="10,10,10,10" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Button Content="Wyszukaj srednia" Height="30" Width="120" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                <Button Content="Wyszukaj urzadzenie" Height="30" Width="120" HorizontalAlignment="Center"/>
+                <Button Content="Wyszukaj urzadzenia" Height="30" Width="120" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+            </Grid>
+
+            <Grid Grid.Row="3">
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="pl-pl" Text="Wyniki pomiarów"/></TextBlock>
+            </Grid>
+            
+            <Grid Grid.Row="4">
+                <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,10"/>
+            </Grid>
+            
         </Grid>
-
     </Grid>
 </Window>
