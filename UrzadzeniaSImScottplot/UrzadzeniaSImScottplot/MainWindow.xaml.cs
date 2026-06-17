@@ -16,8 +16,10 @@ namespace UrzadzeniaSImScottplot
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Repo _repozytorium = new Repo();
         public MainWindow()
         {
+            _repozytorium.InicjujBazeDanych();
             InitializeComponent();
         }
 
