@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using ScottPlot;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,9 +18,13 @@ namespace UrzadzeniaSImScottplot
     public partial class MainWindow : Window
     {
         private Repo _repozytorium = new Repo();
+        private Generatory _generator; 
         public void InicjujKontrolki() {
             using (var ctx = new Kontekst())
-                SiatkaUrzadzen.ItemsSource = ctx.Urzadzenia.ToList(); 
+            {
+                SiatkaUrzadzen.ItemsSource = ctx.Urzadzenia.ToList();
+                plot.Plot.Axes.SetLimits(14.11, 24.15, 49, 54.83);
+            }
         }
 
         public void AktualizujSiatkeUrzadzen() {
@@ -29,25 +34,26 @@ namespace UrzadzeniaSImScottplot
 
         public MainWindow()
         {
+            _generator = new Generatory(_repozytorium);
             _repozytorium.InicjujBazeDanych();
+
             InitializeComponent();
             InicjujKontrolki();
         }
 
-        static int i = 1;
         private void GenerujLosowy_Click(object sender, RoutedEventArgs e)
         {
-            Urzadzenie u = new Urzadzenie((i, i));
+            (decimal dlugosc, decimal szerokosc) = _generator.generujWspolrzedne();
+            Urzadzenie u = new Urzadzenie((dlugosc, szerokosc));
+
             double[] x = { (double)u.Dlugosc };
             double[] y = { (double)u.Szerokosc};
 
             plot.Plot.Add.Scatter(x, y);
             plot.Refresh();
-            i++;
 
             using (var ctx = new Kontekst())
             {
-                //dodac to przyspieszenie przed 1 query
                 ctx.Urzadzenia.Add(u);
                 ctx.SaveChanges();
             }
