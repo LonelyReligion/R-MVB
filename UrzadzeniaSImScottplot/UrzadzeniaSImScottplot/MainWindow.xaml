@@ -35,9 +35,9 @@
             </Grid>
 
             <Grid Grid.Row="2">
-                <Button Content="Wyszukaj srednia" Height="30" Width="120" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                <Button Content="Wyszukaj urzadzenie" Height="30" Width="120" HorizontalAlignment="Center"/>
-                <Button Content="Wyszukaj urzadzenia" Height="30" Width="120" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <Button Content="Wyszukaj średnią" Height="30" Width="120" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                <Button x:Name="przycisk_wyszukaj_urzadzenia" Content="Wyszukaj urządzenia" Height="30" Width="120" HorizontalAlignment="Center" Click="przycisk_wyszukaj_urzadzenia_Click"/>
+                <Button Content="Wyszukaj wersję/e" Height="30" Width="120" HorizontalAlignment="Right" Margin="0,0,10,0"/>
             </Grid>
 
             <Grid Grid.Row="3">

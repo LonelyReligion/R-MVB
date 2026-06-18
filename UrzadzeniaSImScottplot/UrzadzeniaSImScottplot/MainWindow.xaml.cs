@@ -17,8 +17,9 @@ namespace UrzadzeniaSImScottplot
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Repo _repozytorium = new Repo();
+        private Repo _repozytorium;
         private Generatory _generator; 
+        private RMVB _rmvb = new RMVB();
         public void InicjujKontrolki() {
             using (var ctx = new Kontekst())
             {
@@ -36,6 +37,7 @@ namespace UrzadzeniaSImScottplot
 
         public MainWindow()
         {
+            _repozytorium = _rmvb.zwrocRepo();
             _generator = new Generatory(_repozytorium);
             _repozytorium.InicjujBazeDanych();
 
@@ -57,13 +59,14 @@ namespace UrzadzeniaSImScottplot
             plot.Plot.Add.Scatter(x, y);
             plot.Refresh();
 
-            using (var ctx = new Kontekst())
-            {
-                ctx.Urzadzenia.Add(u);
-                ctx.SaveChanges();
-            }
+            _rmvb.dodajUrzadzenie(u); //dodaje tez do bazy
 
             AktualizujSiatkeUrzadzen();
+        }
+
+        private void przycisk_wyszukaj_urzadzenia_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
