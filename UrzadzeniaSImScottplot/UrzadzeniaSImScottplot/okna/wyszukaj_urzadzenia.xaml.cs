@@ -12,16 +12,29 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace UrzadzeniaSImScottplot.okna
+namespace UrzadzeniaSImScottplot
 {
     /// <summary>
     /// Logika interakcji dla klasy wyszukaj_urzadzenia.xaml
     /// </summary>
     public partial class wyszukaj_urzadzenia : Window
     {
+        bool sukces = false;
         public wyszukaj_urzadzenia()
         {
             InitializeComponent();
+        }
+
+        private void anuluj_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = false;
+            Close();
+        }
+
+        private void przeslij_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = true;
+            Close();
         }
     }
 }

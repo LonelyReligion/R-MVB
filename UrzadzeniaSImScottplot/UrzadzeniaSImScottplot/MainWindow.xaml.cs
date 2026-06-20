@@ -66,7 +66,8 @@ namespace UrzadzeniaSImScottplot
 
         private void przycisk_wyszukaj_urzadzenia_Click(object sender, RoutedEventArgs e)
         {
-
+            wyszukaj_urzadzenia okno = new wyszukaj_urzadzenia();
+            okno.ShowDialog();
         }
     }
 }

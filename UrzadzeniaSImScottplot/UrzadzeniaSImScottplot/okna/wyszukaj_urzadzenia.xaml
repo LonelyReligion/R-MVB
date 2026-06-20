@@ -1,24 +1,69 @@
-﻿<Window x:Class="UrzadzeniaSImScottplot.okna.wyszukaj_urzadzenia"
+﻿<Window x:Class="UrzadzeniaSImScottplot.wyszukaj_urzadzenia"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UrzadzeniaSImScottplot.okna"
+        xmlns:local="clr-namespace:UrzadzeniaSImScottplot"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="wyszukaj_urzadzenia" Height="450" Width="800">
     <Grid>
-        <Rectangle HorizontalAlignment="Left" Height="178" Margin="53,0,0,0" Stroke="Black" VerticalAlignment="Center" Width="165"/>
-        <xctk:DecimalUpDown Name="myUpDownControl" Margin="595,122,112,275" />
-        <xctk:DecimalUpDown x:Name="myUpDownControl_Kopiuj" Margin="595,173,112,224" />
-        <xctk:DecimalUpDown x:Name="myUpDownControl_Kopiuj1" Margin="595,234,112,162" />
-        <xctk:DecimalUpDown x:Name="myUpDownControl_Kopiuj2" Margin="595,305,112,92" />
-        <Label Content="Label" HorizontalAlignment="Left" Margin="488,128,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="488,182,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="488,235,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="488,298,0,0" VerticalAlignment="Top"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="557,383,0,0" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="40,18,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="#C9DABA">
+            <TextBlock HorizontalAlignment="Left" Margin="10,10,0,10" TextWrapping="Wrap" Text="Uzupełnij współrzędne prostokąta, w którym będą wyszukiwane urządzenia." VerticalAlignment="Top"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Height="270" Stroke="Black" Width="256"/>
+                <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Height="44" Stroke="#6F9942" Width="46" StrokeThickness="2" Fill="#FFC9DABA" Opacity="0.5"/>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <xctk:DecimalUpDown Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                    <Label Content="xMin" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                </Grid>
+                
+                <Grid Grid.Row="1">
+                    <xctk:DecimalUpDown Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                    <Label Content="xMax" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                </Grid>
+                
+                <Grid Grid.Row="2">
+                    <xctk:DecimalUpDown Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                    <Label Content="yMin" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                </Grid>
+                
+                <Grid Grid.Row="3">
+                    <xctk:DecimalUpDown Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                    <Label Content="yMax" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                </Grid>
+                
+                <Grid Grid.Row="4">
+                    <Button x:Name="anuluj" Content="Anuluj" Width="100" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Click="anuluj_Click"/>
+                    <Button x:Name="przeslij" Content="Przeslij" Width="100" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Click="przeslij_Click"/>
+                </Grid>
+            </Grid>
+
+        </Grid>
 
     </Grid>
 </Window>
