@@ -38,22 +38,26 @@
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
-                    <xctk:DecimalUpDown Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                    <xctk:DecimalUpDown x:Name="SpinnerXmin" Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Increment=".01"
+                                        AllowTextInput="False" Minimum="14.06" Maximum="24.10" AllowSpin="True" DefaultValue="14.07" ValueChanged="SpinnerXmin_ValueChanged"/>
                     <Label Content="xMin" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                 </Grid>
                 
                 <Grid Grid.Row="1">
-                    <xctk:DecimalUpDown Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                    <xctk:DecimalUpDown x:Name="SpinnerXmax" Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Increment=".01"
+                                        AllowTextInput="False" Minimum="14.06" Maximum="24.10" AllowSpin="True" DefaultValue="14.07" ValueChanged="SpinnerXmax_ValueChanged"/>
                     <Label Content="xMax" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                 </Grid>
                 
                 <Grid Grid.Row="2">
-                    <xctk:DecimalUpDown Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                    <xctk:DecimalUpDown x:Name="SpinnerYmin" Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Increment=".01"
+                                        AllowTextInput="False" Minimum="48.99" Maximum="54.51" AllowSpin="True" DefaultValue="49" ValueChanged="SpinnerYmin_ValueChanged"/>
                     <Label Content="yMin" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                 </Grid>
                 
                 <Grid Grid.Row="3">
-                    <xctk:DecimalUpDown Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                    <xctk:DecimalUpDown x:Name="SpinnerYmax" Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Increment=".01"
+                                        AllowTextInput="False" Minimum="48.99" Maximum="54.51" AllowSpin="True" DefaultValue="49.00" ValueChanged="SpinnerYmax_ValueChanged"/>
                     <Label Content="yMax" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                 </Grid>
                 
