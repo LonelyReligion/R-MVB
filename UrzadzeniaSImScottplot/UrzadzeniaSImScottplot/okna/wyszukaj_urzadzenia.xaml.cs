@@ -21,11 +21,16 @@ namespace UrzadzeniaSImScottplot
     {
         bool sukces = false;
 
+        
         public wyszukaj_urzadzenia()
         {
             InitializeComponent();
             DataContext = this;
         }
+
+        double krok_x = 200.0/602.0; //tyle pikseli to minuta(?)
+        double krok_y = 200.0/305.0;
+
         private void _inicjalizujKontrolki()
         {
             ;
@@ -43,6 +48,20 @@ namespace UrzadzeniaSImScottplot
             Close();
         }
 
+        private int stopnieNaMinuty(decimal stopnie) {
+            return (int)(((int)stopnie) * 60 + (stopnie % 1)*100);
+        }
+
+        private void _aktualizujObszar() {
+            int xMin = (int)(-100 + krok_x * ( -stopnieNaMinuty(14.08m) + stopnieNaMinuty((decimal)SpinnerXmin.Value)));
+            int yMin = (int)(-100 + krok_y * ( -stopnieNaMinuty(49) + stopnieNaMinuty((decimal)SpinnerYmin.Value)));
+
+            int szerokosc = 100; //(int)(krok_x * ((stopnieNaMinuty((decimal)SpinnerXmin.Value) - stopnieNaMinuty((decimal)SpinnerXmax.Value))));
+            int wysokosc = 100;//(int)(krok_y * ((stopnieNaMinuty((decimal)SpinnerYmin.Value) - stopnieNaMinuty((decimal)SpinnerYmax.Value))));
+
+            RectangleGeometry rect = (RectangleGeometry)Obszar.Data;
+            rect.Rect = new Rect(xMin, yMin, szerokosc, wysokosc);
+        }
         private void SpinnerXmin_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (!IsLoaded)
@@ -72,6 +91,8 @@ namespace UrzadzeniaSImScottplot
                 SpinnerXmin.Value = 14.07m;
                 SpinnerXmax.Value = 14.08m;
             }
+
+            _aktualizujObszar();
         }
 
         private void SpinnerXmax_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -103,6 +124,8 @@ namespace UrzadzeniaSImScottplot
                 SpinnerXmin.Value = 14.07m;
                 SpinnerXmax.Value = 14.08m;
             }
+
+            _aktualizujObszar();
         }
 
         private void SpinnerYmin_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -140,6 +163,8 @@ namespace UrzadzeniaSImScottplot
                     SpinnerYmax.Value = 49.01m;
                 }
             }
+
+            _aktualizujObszar();
         }
 
         private void SpinnerYmax_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -172,6 +197,8 @@ namespace UrzadzeniaSImScottplot
                 SpinnerYmin.Value = 49m;
                 SpinnerYmax.Value = 49.01m;
             }
+
+            _aktualizujObszar();
         }
     }
 }
