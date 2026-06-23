@@ -133,8 +133,6 @@ namespace UrzadzeniaSImScottplot
             if (!IsLoaded)
                 return;
 
-            System.Diagnostics.Debug.WriteLine($"Old={e.OldValue}, New={e.NewValue}, Value={SpinnerYmin.Value}");
-
             if (SpinnerYmin.Value == 48.99m)
                 SpinnerYmin.Value = 54.5m;
             else if (SpinnerYmin.Value == 54.51m)
@@ -150,7 +148,7 @@ namespace UrzadzeniaSImScottplot
             {
                 if (SpinnerYmin.Value != 54.5m && SpinnerYmax.Value != 49m)
                 {
-                    SpinnerYmin.Value = SpinnerYmax.Value - 0.01m;
+                    SpinnerYmax.Value = SpinnerYmin.Value + 0.01m;
                 }
                 else if (SpinnerYmin.Value == 54.5m)
                 {
