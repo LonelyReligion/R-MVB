@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UrzadzeniaSImScottplot"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="wyszukaj_urzadzenia" Height="450" Width="800">
+        Title="wyszukaj_urzadzenia" Height="350" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -39,7 +39,7 @@
                 </Canvas>
             </Grid>
 
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1" Margin="0,40,40,40">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
