@@ -55,8 +55,9 @@ namespace UrzadzeniaSImScottplot
         private void _aktualizujObszar() {
             int xMin = (int)(-100 + krok_x * ( -stopnieNaMinuty(14.08m) + stopnieNaMinuty((decimal)SpinnerXmin.Value)));
             int yMin = (int)(-100 + krok_y * ( -stopnieNaMinuty(49) + stopnieNaMinuty((decimal)SpinnerYmin.Value)));
+            int xMax = (int)(-100 + krok_x * (-stopnieNaMinuty(14.08m) + stopnieNaMinuty((decimal)SpinnerXmax.Value)));
 
-            int szerokosc = 100; //(int)(krok_x * ((stopnieNaMinuty((decimal)SpinnerXmin.Value) - stopnieNaMinuty((decimal)SpinnerXmax.Value))));
+            int szerokosc = xMax - xMin;
             int wysokosc = 100;//(int)(krok_y * ((stopnieNaMinuty((decimal)SpinnerYmin.Value) - stopnieNaMinuty((decimal)SpinnerYmax.Value))));
 
             RectangleGeometry rect = (RectangleGeometry)Obszar.Data;
