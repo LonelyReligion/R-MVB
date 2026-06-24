@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace UrzadzeniaSImScottplot
         }
 
         double krok_x = 200.0/602.0; //tyle pikseli to minuta(?)
-        double krok_y = 200.0/305.0;
+        double krok_y = 200.0/350.0;
 
         private void _inicjalizujKontrolki()
         {
@@ -55,10 +56,12 @@ namespace UrzadzeniaSImScottplot
         private void _aktualizujObszar() {
             int xMin = (int)(-100 + krok_x * ( -stopnieNaMinuty(14.08m) + stopnieNaMinuty((decimal)SpinnerXmin.Value)));
             int yMin = (int)(-100 + krok_y * ( -stopnieNaMinuty(49) + stopnieNaMinuty((decimal)SpinnerYmin.Value)));
+            
             int xMax = (int)(-100 + krok_x * (-stopnieNaMinuty(14.08m) + stopnieNaMinuty((decimal)SpinnerXmax.Value)));
+            int yMax = (int)(-100 + krok_y * (-stopnieNaMinuty(49) + stopnieNaMinuty((decimal)SpinnerYmax.Value)));
 
             int szerokosc = xMax - xMin;
-            int wysokosc = 100;//(int)(krok_y * ((stopnieNaMinuty((decimal)SpinnerYmin.Value) - stopnieNaMinuty((decimal)SpinnerYmax.Value))));
+            int wysokosc = yMax - yMin;//(int)(krok_y * ((stopnieNaMinuty((decimal)SpinnerYmin.Value) - stopnieNaMinuty((decimal)SpinnerYmax.Value))));
 
             RectangleGeometry rect = (RectangleGeometry)Obszar.Data;
             rect.Rect = new Rect(xMin, yMin, szerokosc, wysokosc);
