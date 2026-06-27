@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace UrzadzeniaSImScottplot
 {
     //singleton?
-    internal class Generatory
+    public class Generatory
     {
         private const Decimal poczatkowa_szerokosc = 49.00m; //czy to nalezy do drzewa?
         private const Decimal poczatkowa_dlugosc = 14.07m; //czy to nalezy do drzewa?
@@ -111,13 +111,16 @@ namespace UrzadzeniaSImScottplot
             return (dlugosc, szerokosc);
         }
 
-/*        public Rectangle generujProstokatDeterministycznie() {
+        public Rectangle generujProstokatDeterministycznie()
+        {
             return new Rectangle(50, 15, 52, 19);
         }
 
-        public Rectangle generujProstokat() {
+        public Rectangle generujProstokat()
+        {
             List<Decimal> szerokosci = new List<Decimal>();
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 2; i++)
+            {
                 Decimal szerokosc = (Decimal)(rnd.Next(49, 54) * 10000);
                 if (szerokosc < 540000)
                 {
@@ -135,7 +138,8 @@ namespace UrzadzeniaSImScottplot
             }
 
             List<Decimal> dlugosci = new List<Decimal>();
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 2; i++)
+            {
                 Decimal dlugosc = (Decimal)(rnd.Next(14, 24) * 10000);
                 if (dlugosc < 240000)
                 {
@@ -154,7 +158,8 @@ namespace UrzadzeniaSImScottplot
             return new Rectangle(szerokosci.Min(), dlugosci.Min(), szerokosci.Max(), dlugosci.Max());
         }
 
-        public Pomiar generujLosowyPomiar() {
+/*        public Pomiar generujLosowyPomiar()
+        {
             Decimal temp = (Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0);
             Pomiar testowy = new Pomiar(temp, DateTime.Now);
             return testowy;
@@ -170,13 +175,13 @@ namespace UrzadzeniaSImScottplot
                 szukane_wersje.Add(losowa_wersja);
             }
             return szukane_wersje;
-        }
+        }*/
 
         //zwraca wspolrzedne losowego urzadzenia
         public (Decimal, Decimal) wylosujWspolrzedne()
         {
             Urzadzenie losowe = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value;
             return (losowe.Dlugosc, losowe.Szerokosc);
-        }*/
+        }
     }
 }

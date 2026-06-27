@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UrzadzeniaSImScottplot
 {
-    internal class RMVB
+    public class RMVB
     {
 /*        private DrzewoMVB MVB;*/
         private RTreeAdapter R;

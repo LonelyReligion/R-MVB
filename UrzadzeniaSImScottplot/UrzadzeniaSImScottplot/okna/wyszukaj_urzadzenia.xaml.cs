@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,13 +21,16 @@ namespace UrzadzeniaSImScottplot
     /// </summary>
     public partial class wyszukaj_urzadzenia : Window
     {
-        bool sukces = false;
-
+        public bool sukces = false;
+        RMVB _drzewo;
         
-        public wyszukaj_urzadzenia()
+        public decimal drzewo10;
+        public decimal baza10;
+        public wyszukaj_urzadzenia(Generatory gen, RMVB drzewo)
         {
             InitializeComponent();
             DataContext = this;
+            _drzewo = drzewo;
         }
 
         double krok_x = 200.0/602.0; //tyle pikseli to minuta(?)
@@ -46,6 +50,69 @@ namespace UrzadzeniaSImScottplot
         private void przeslij_Click(object sender, RoutedEventArgs e)
         {
             sukces = true;
+
+            //tu wykonamy test i przekazemy wynik do MainWindow
+
+            Rectangle rect = new Rectangle((decimal)SpinnerYmin.Value, (decimal)SpinnerXmin.Value, (decimal)SpinnerYmax.Value, (decimal)SpinnerXmax.Value);
+            Stopwatch sw;
+            sw = Stopwatch.StartNew();
+            List<List<Urzadzenie>> cnt_1 = new List<List<Urzadzenie>>();
+
+            using (Kontekst ctx = new Kontekst())
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    cnt_1.Add(ctx.Urzadzenia
+                    .AsNoTracking()
+                    .Where(u => rect.XMin <= u.Dlugosc)
+                    .Where(u => rect.YMin <= u.Szerokosc)
+                    .Where(u => rect.XMax >= u.Dlugosc)
+                    .Where(u => rect.YMax >= u.Szerokosc)
+                    .ToList());
+                }
+                long wynik = sw.ElapsedMilliseconds;
+            }
+
+            sw = Stopwatch.StartNew();
+
+            List<List<Urzadzenie>> cnt_r = new List<List<Urzadzenie>>();
+            for (int i = 0; i < 10; i++)
+            {
+                cnt_r.Add(_drzewo.szukaj(rect));
+            }
+            long wynik1 = sw.ElapsedMilliseconds;
+
+
+
+            System.Diagnostics.Debug.WriteLine("Prostokat: " + rect.XMin + " " + rect.XMax + "(x) " + rect.YMin + " " + rect.YMax + "(y)");
+
+            for (int i = 0; i < 10; i++)
+            {
+                System.Diagnostics.Debug.WriteLine("Znaleziono " + cnt_r[i].Count.ToString() + "(rt) " + cnt_1[i].Count.ToString() + "(zapytanie w bazie)");
+                if (cnt_r[i].Count != cnt_1[i].Count) //a co jezeli znalazla inne, ale liczba się zgadza?
+                {
+
+                    List<Urzadzenie> nadmiarowe = new List<Urzadzenie>();
+                    if (cnt_r[i].Count > cnt_1[i].Count)
+                    {
+                        System.Diagnostics.Debug.WriteLine("R-drzewo dodatkowo znalazło następujące urządzenia: ");
+                        nadmiarowe = (cnt_r[i].Where(u => !cnt_1[i].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Baza dodatkowo znalazła następujące urządzenia: ");
+                        nadmiarowe = (cnt_1[i].Where(u => !cnt_r[i].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
+                    }
+
+                    foreach (Urzadzenie u in nadmiarowe)
+                    {
+                        System.Diagnostics.Debug.WriteLine("UrzadzenieID: " + u.UrzadzenieID + " x: " + u.Dlugosc + " y: " + u.Szerokosc);
+                    }
+                    throw new Exception("blad w wyszukaj_urzadzenia");
+                }
+                System.Diagnostics.Debug.WriteLine("");
+            }
+
             Close();
         }
 
@@ -202,5 +269,6 @@ namespace UrzadzeniaSImScottplot
 
             _aktualizujObszar();
         }
+
     }
 }

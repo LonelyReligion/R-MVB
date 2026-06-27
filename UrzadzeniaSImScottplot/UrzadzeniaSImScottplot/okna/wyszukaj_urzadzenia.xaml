@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:UrzadzeniaSImScottplot"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="wyszukaj_urzadzenia" Height="350" Width="600">
+        Title="wyszukaj_urzadzenia" Height="350" Width="600"
+        >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
