@@ -22,10 +22,15 @@ namespace UrzadzeniaSImScottplot
     public partial class wyszukaj_urzadzenia : Window
     {
         public bool sukces = false;
+        public bool blad = false;
         RMVB _drzewo;
         
-        public decimal drzewo10;
-        public decimal baza10;
+        public decimal czas_drzewo10;
+
+        public decimal czas_baza10;
+
+        public List<Urzadzenie> odnalezione_urzadzenia;
+
         public wyszukaj_urzadzenia(Generatory gen, RMVB drzewo)
         {
             InitializeComponent();
@@ -49,8 +54,6 @@ namespace UrzadzeniaSImScottplot
 
         private void przeslij_Click(object sender, RoutedEventArgs e)
         {
-            sukces = true;
-
             //tu wykonamy test i przekazemy wynik do MainWindow
 
             Rectangle rect = new Rectangle((decimal)SpinnerYmin.Value, (decimal)SpinnerXmin.Value, (decimal)SpinnerYmax.Value, (decimal)SpinnerXmax.Value);
@@ -70,7 +73,7 @@ namespace UrzadzeniaSImScottplot
                     .Where(u => rect.YMax >= u.Szerokosc)
                     .ToList());
                 }
-                long wynik = sw.ElapsedMilliseconds;
+                czas_baza10 = sw.ElapsedMilliseconds;
             }
 
             sw = Stopwatch.StartNew();
@@ -80,11 +83,12 @@ namespace UrzadzeniaSImScottplot
             {
                 cnt_r.Add(_drzewo.szukaj(rect));
             }
-            long wynik1 = sw.ElapsedMilliseconds;
+            czas_drzewo10 = sw.ElapsedMilliseconds;
 
 
 
             System.Diagnostics.Debug.WriteLine("Prostokat: " + rect.XMin + " " + rect.XMax + "(x) " + rect.YMin + " " + rect.YMax + "(y)");
+            odnalezione_urzadzenia = null;
 
             for (int i = 0; i < 10; i++)
             {
@@ -113,6 +117,15 @@ namespace UrzadzeniaSImScottplot
                 System.Diagnostics.Debug.WriteLine("");
             }
 
+            if (blad)
+            {
+
+            }
+            else {
+                odnalezione_urzadzenia = cnt_r.Last();
+            }
+
+            sukces = !blad;
             Close();
         }
 

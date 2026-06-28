@@ -17,6 +17,7 @@ namespace UrzadzeniaSImScottplot
     /// </summary>
     public partial class MainWindow : Window
     {
+
         private Repo _repozytorium;
         private Generatory _generator; 
         private RMVB _rmvb = new RMVB();
@@ -27,6 +28,7 @@ namespace UrzadzeniaSImScottplot
 
                 plot.Plot.Axes.SetLimits(14.11, 24.15, 49, 54.83);
                 plot.UserInputProcessor.Disable();
+
             }
         }
 
@@ -64,44 +66,19 @@ namespace UrzadzeniaSImScottplot
             AktualizujSiatkeUrzadzen();
         }
 
-        public class Wynik {
-            public string liczba_powtorzen { get; set; }
-            public string wynik_rmvb { get; set; }
-            public string wynik_baza { get; set; }
-        }
+
 
         private void przycisk_wyszukaj_urzadzenia_Click(object sender, RoutedEventArgs e)
         {
             wyszukaj_urzadzenia okno = new wyszukaj_urzadzenia(_generator, _rmvb);
             okno.ShowDialog();
 
+            TabelaWynikow.Items.Clear();
             if (okno.sukces) {
-                // Liczba powtorzen | RMVB | Baza
-                //
-                //dodac jeszcze liczbe urzadzen *facepalm*
-                //nie dodawac kolumn wielokrotnie
-                //co z roznymi tabelami dla roznych rodzajow testu? dodac kolumne z rodzajem testu czy resetowac tabele 
-                //co z bledami (na razie mamy nieobsluzony wyjatek, zakladamy ze to sie nie wydarzy?)
-
-                DataGridColumn kolumna1 = new DataGridTextColumn {
-                    Header = "Liczba powtórzeń",
-                    Binding = new Binding("liczba_powtorzen")
-                };
-                TabelaWynikow.Columns.Add(kolumna1);
-
-                DataGridColumn kolumna2 = new DataGridTextColumn {
-                    Header = "RMVB (sek.)",
-                    Binding =  new Binding("wynik_rmvb")
-                };
-                TabelaWynikow.Columns.Add(kolumna2);
-
-                DataGridColumn kolumna3 = new DataGridTextColumn {
-                    Header = "Baza (sek. )",
-                    Binding = new Binding("wynik_baza")
-                };
-                TabelaWynikow.Columns.Add(kolumna3);
-
-                TabelaWynikow.Items.Add(new Wynik{ liczba_powtorzen = "10", wynik_rmvb = okno.drzewo10.ToString(), wynik_baza = okno.baza10.ToString() });
+                //wyswietlic czasy i liczby odnalezionych urzadzen, jezeli sa zgodne to odnalezione urzadzenia w tabeli
+                wyniki_pomiarow.Text = "Drzewo RMVB zrealizowalo zapytanie dziesięciokrotnie w czasie " + okno.czas_drzewo10.ToString() + " ms." + ", a baza w czasie " + okno.czas_baza10.ToString() + " ms.";
+                //TabelaWynikow.Items.Add(okno.odnalezione_urzadzenia);
+                TabelaWynikow.ItemsSource = okno.odnalezione_urzadzenia;
             }
         }
     }
