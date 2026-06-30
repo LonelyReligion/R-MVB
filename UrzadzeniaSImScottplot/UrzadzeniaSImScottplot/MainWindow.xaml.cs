@@ -58,7 +58,8 @@ namespace UrzadzeniaSImScottplot
             double[] x = { dlugosc_w_systemie_dziesietnym };
             double[] y = { szerokosc_w_systemie_dziesietnym };
 
-            plot.Plot.Add.Scatter(x, y);
+            var sp = plot.Plot.Add.Scatter(x, y);
+            sp.Color = ScottPlot.Color.FromHex("#6F9942");
             plot.Refresh();
 
             _rmvb.dodajUrzadzenie(u); //dodaje tez do bazy

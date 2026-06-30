@@ -12,13 +12,13 @@ namespace UrzadzeniaSImScottplot
         public Repo() { }
         //zmienic na przechowywanie samych id urzadzen i wersji
         //list, bo często sięgamy do ostatniego (największego) elementu
-/*        private Dictionary<int, List<Wersja>> urzadzenia_wersje = new Dictionary<int, List<Wersja>>();*/
+        private Dictionary<int, List<Wersja>> urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
         private Dictionary<int, Urzadzenie> urzadzenia = new Dictionary<int, Urzadzenie>();
         //do zwrocenia wszystkich
-/*        private List<Wersja> wersje = new List<Wersja>();
-*/
+        /*        private List<Wersja> wersje = new List<Wersja>();
+        */
 
-/*        internal Dictionary<int, List<Wersja>> zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }*/
+        internal Dictionary<int, List<Wersja>> zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
         //override jest konieczne inaczej realizowana jest wersja z klasy bazowej
         //"Modyfikator override jest wymagany do rozszerzenia lub zmodyfikowania abstrakcyjnej lub wirtualnej implementacji dziedziczonej metody, właściwości, indeksatora lub zdarzenia."
         public void saveDevice(Urzadzenie device)
@@ -58,11 +58,7 @@ namespace UrzadzeniaSImScottplot
                         return true;
             return false;
         }
-
-        public Dictionary<int, List<Wersja>> pobierzUrzadzeniaWersje()
-        {
-            return urzadzenia_wersje;
-        }*/
+    */
 
         public Dictionary<int, Urzadzenie> pobierzUrzadzenia()
         {

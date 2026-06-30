@@ -619,7 +619,7 @@ namespace RMVB_konsola
             for (int i = 0; i < ileRazy; i++)
             {
                 int losowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
-                int losowa_wersja_id = repo.pobierzUrzadzeniaWersje().ElementAt(losowe_urzadzenie_id).Value.ElementAt(rnd.Next(repo.pobierzUrzadzeniaWersje().ElementAt(losowe_urzadzenie_id).Value.Count - 1)).WersjaID;
+                int losowa_wersja_id = repo.zwroc_urzadzenie_wersje().ElementAt(losowe_urzadzenie_id).Value.ElementAt(rnd.Next(repo.zwroc_urzadzenie_wersje().ElementAt(losowe_urzadzenie_id).Value.Count - 1)).WersjaID;
                 szukane_id_v.Add((losowe_urzadzenie_id, losowa_wersja_id));
             }
             

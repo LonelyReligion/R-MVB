@@ -93,7 +93,7 @@ namespace RMVB_konsola
             //return isValid ? thisDevice.Wersje.Last().Pomiary.Last() : null;
             //
             //return isValid ? Wersje.Last().Pomiary.Last() : null;
-            return isValid ? repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Last() : null;
+            return isValid ? repo.zwroc_urzadzenie_wersje()[UrzadzenieID].Last().Pomiary.Last() : null;
         }
         public bool IsMeasurementValid()
         {
@@ -101,7 +101,7 @@ namespace RMVB_konsola
             //return ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First().Wersje.Last().Pomiary.Count > 0;
             //
             //return Wersje.Last().Pomiary.Count > 0;
-            return repo.pobierzUrzadzeniaWersje()[UrzadzenieID].Last().Pomiary.Count > 0;
+            return repo.zwroc_urzadzenie_wersje()[UrzadzenieID].Last().Pomiary.Count > 0;
         }
 
         public bool IsTimeAggregateValid()

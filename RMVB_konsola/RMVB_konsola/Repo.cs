@@ -53,10 +53,6 @@ namespace RMVB_konsola
             return false;
         }
 
-        public Dictionary<int, List<Wersja>> pobierzUrzadzeniaWersje() {
-            return urzadzenia_wersje;
-        }
-
         public Dictionary<int, Urzadzenie> pobierzUrzadzenia() {
             return urzadzenia;
         }
