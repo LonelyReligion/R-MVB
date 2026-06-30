@@ -76,7 +76,14 @@ namespace UrzadzeniaSImScottplot
             TabelaWynikow.Items.Clear();
             if (okno.sukces) {
                 //wyswietlic czasy i liczby odnalezionych urzadzen, jezeli sa zgodne to odnalezione urzadzenia w tabeli
-                wyniki_pomiarow.Text = "Drzewo RMVB zrealizowalo zapytanie dziesięciokrotnie w czasie " + okno.czas_drzewo10.ToString() + " ms." + ", a baza w czasie " + okno.czas_baza10.ToString() + " ms.";
+                int liczba = okno.odnalezione_urzadzenia.Count();
+
+                string tekst = $"Zapytanie zwróciło {liczba} " +
+                               (liczba == 1 ? "urządzenie" :
+                                liczba >= 2 && liczba <= 4 ? "urządzenia" :
+                                "urządzeń");
+
+                wyniki_pomiarow.Text = tekst + ". Drzewo RMVB zrealizowalo zapytanie dziesięciokrotnie w czasie " + okno.czas_drzewo10.ToString() + " ms." + ", a baza w czasie " + okno.czas_baza10.ToString() + " ms.";
                 //TabelaWynikow.Items.Add(okno.odnalezione_urzadzenia);
                 TabelaWynikow.ItemsSource = okno.odnalezione_urzadzenia;
             }
