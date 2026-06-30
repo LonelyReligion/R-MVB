@@ -135,16 +135,16 @@ namespace UrzadzeniaSImScottplot
 
         private void _aktualizujObszar() {
             int xMin = (int)(-100 + krok_x * ( -stopnieNaMinuty(14.08m) + stopnieNaMinuty((decimal)SpinnerXmin.Value)));
-            int yMin = (int)(-100 + krok_y * ( -stopnieNaMinuty(49) + stopnieNaMinuty((decimal)SpinnerYmin.Value)));
+            int yMin = (int)(100 - krok_y * ( -stopnieNaMinuty(49) + stopnieNaMinuty((decimal)SpinnerYmin.Value)));
             
             int xMax = (int)(-100 + krok_x * (-stopnieNaMinuty(14.08m) + stopnieNaMinuty((decimal)SpinnerXmax.Value)));
-            int yMax = (int)(-100 + krok_y * (-stopnieNaMinuty(49) + stopnieNaMinuty((decimal)SpinnerYmax.Value)));
+            int yMax = (int)(100 - krok_y * (-stopnieNaMinuty(49) + stopnieNaMinuty((decimal)SpinnerYmax.Value)));
 
             int szerokosc = xMax - xMin;
-            int wysokosc = yMax - yMin;//(int)(krok_y * ((stopnieNaMinuty((decimal)SpinnerYmin.Value) - stopnieNaMinuty((decimal)SpinnerYmax.Value))));
+            int wysokosc = yMin - yMax;//(int)(krok_y * ((stopnieNaMinuty((decimal)SpinnerYmin.Value) - stopnieNaMinuty((decimal)SpinnerYmax.Value))));
 
             RectangleGeometry rect = (RectangleGeometry)Obszar.Data;
-            rect.Rect = new Rect(xMin, yMin, szerokosc, wysokosc);
+            rect.Rect = new Rect(xMin, yMax, szerokosc, wysokosc);
         }
         private void SpinnerXmin_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
