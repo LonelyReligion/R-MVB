@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScottPlot;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Diagnostics;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UrzadzeniaSImScottplot.okna;
 
 namespace UrzadzeniaSImScottplot
 {
@@ -34,16 +36,30 @@ namespace UrzadzeniaSImScottplot
         public wyszukaj_urzadzenia(Generatory gen, RMVB drzewo)
         {
             InitializeComponent();
+
             DataContext = this;
             _drzewo = drzewo;
+
+            this.ContentRendered += _inicjalizujKontrolki;
+
         }
 
         double krok_x = 200.0/602.0; //tyle pikseli to minuta(?)
         double krok_y = 200.0/350.0;
 
-        private void _inicjalizujKontrolki()
+        private void _inicjalizujKontrolki(object sender, EventArgs e)
         {
-            ;
+            using (var ctx = new Kontekst())
+            {
+                int? maxId = ctx.Urzadzenia.Max(u => (int?)u.UrzadzenieID);
+
+                if (maxId == null)
+                {
+                    Window dialog = (Window)new brak_urzadzen_w_bazie(this);
+                    dialog.ShowDialog();
+                    Close();
+                }
+            }
         }
 
         private void anuluj_Click(object sender, RoutedEventArgs e)
