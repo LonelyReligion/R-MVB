@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="UrzadzeniaSImScottplot.wybor_prostokata"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UrzadzeniaSImScottplot"
+            xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Path x:Name="Mapa" Stroke="Black" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Path.Data>
+                        <RectangleGeometry Rect="0, 0, 200, 200" />
+                    </Path.Data>
+                </Path>
+
+                <Canvas HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Path x:Name="Obszar" Stroke="#6F9942" StrokeThickness="1"  Fill="#FFC9DABA" Opacity="0.5">
+                        <Path.Data>
+                            <RectangleGeometry Rect="-100, -10, 1, 1"/>
+                        </Path.Data>
+                    </Path>
+                </Canvas>
+            </Grid>
+
+            <Grid Grid.Column="1" Margin="0,40,40,40">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <xctk:DecimalUpDown x:Name="SpinnerXmin" Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Increment=".01"
+                                        AllowTextInput="False" Minimum="14.06" Maximum="24.10" AllowSpin="True" DefaultValue="14.07" ValueChanged="SpinnerXmin_ValueChanged"
+                                        MouseWheelActiveTrigger = "Focused" Value="{Binding Xmin}"/>
+                    <Label Content="xMin" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <xctk:DecimalUpDown x:Name="SpinnerXmax" Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Increment=".01"
+                                        AllowTextInput="False" Minimum="14.06" Maximum="24.10" AllowSpin="True" DefaultValue="14.07" ValueChanged="SpinnerXmax_ValueChanged"
+                                        Value="{Binding Xmax}"/>
+                    <Label Content="xMax" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" />
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <xctk:DecimalUpDown x:Name="SpinnerYmin" Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Increment=".01"
+                                        AllowTextInput="False" Minimum="48.99" Maximum="54.51" AllowSpin="True" DefaultValue="49" ValueChanged="SpinnerYmin_ValueChanged"
+                                        MouseWheelActiveTrigger = "Focused" Value="{Binding Ymin}"/>
+                    <Label Content="yMin" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                </Grid>
+
+                <Grid Grid.Row="3">
+                    <xctk:DecimalUpDown x:Name="SpinnerYmax" Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Increment=".01"
+                                        AllowTextInput="False" Minimum="48.99" Maximum="54.51" AllowSpin="True" DefaultValue="49.00" ValueChanged="SpinnerYmax_ValueChanged"
+                                        MouseWheelActiveTrigger = "Focused" Value="{Binding Ymax}"/>
+                    <Label Content="yMax" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                </Grid>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -74,7 +74,7 @@ namespace UrzadzeniaSImScottplot
             wyszukaj_urzadzenia okno = new wyszukaj_urzadzenia(_generator, _rmvb);
             okno.ShowDialog();
 
-            TabelaWynikow.Items.Clear();
+            //TabelaWynikow.Items.Clear();
             if (okno.sukces) {
                 //wyswietlic czasy i liczby odnalezionych urzadzen, jezeli sa zgodne to odnalezione urzadzenia w tabeli
                 int liczba = okno.odnalezione_urzadzenia.Count();
