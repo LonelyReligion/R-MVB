@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace UrzadzeniaSImScottplot.okna
+namespace UrzadzeniaSImScottplot
 {
     /// <summary>
     /// Logika interakcji dla klasy wyszukaj_srednia.xaml
