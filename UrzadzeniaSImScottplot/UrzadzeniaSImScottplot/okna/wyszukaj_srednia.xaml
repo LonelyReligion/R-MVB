@@ -6,11 +6,15 @@
         xmlns:local="clr-namespace:UrzadzeniaSImScottplot"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="wyszukaj_srednia" Height="350" Width="600">
+        Title="wyszukaj_srednia" Height="380" Width="600">
     <Grid>
         <TabControl>
             <TabItem Header="Z pomiarów na określonej powierzchni">
                 <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="271*"/>
+                        <ColumnDefinition Width="323*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -18,37 +22,41 @@
                     </Grid.RowDefinitions>
 
 
-                    <Grid Grid.Row="0" Background="#C9DABA">
+                    <Grid Grid.Row="0" Background="#C9DABA" Grid.ColumnSpan="2" Margin="0,0,0,16">
                         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,10" TextWrapping="Wrap" Text="Uzupełnij współrzędne prostokąta, dla którego chcesz obliczyć średnią z pomiarów." VerticalAlignment="Top"/>
                     </Grid>
-                    
-                    <local:wybor_prostokata Grid.Row="1"/>
 
-                    <Grid Grid.Row="2" Margin="0,0,0,10">
-                        <Button HorizontalAlignment="Center" Content="Anuluj" Width="100" Height="20" Margin="0,0,300,0" VerticalAlignment="Center"/>
-                        <Button HorizontalAlignment="Center" Content="Przeslij" Width="100" Height="20" Margin="300,0,0,0" VerticalAlignment="Center"/>
+                    <local:wybor_prostokata Margin="0,4,0,16" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                    <Grid Grid.Row="1" Margin="0,204,0,26" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                        <Button x:Name="Przeslij1" HorizontalAlignment="Center" Content="Anuluj" Width="100" Height="20" Margin="0,0,300,0" VerticalAlignment="Center" Click="Przeslij_Click"/>
+                        <Button x:Name="Anuluj1" HorizontalAlignment="Center" Content="Przeslij" Width="100" Height="20" Margin="300,0,0,0" VerticalAlignment="Center" Click="Anuluj_Click"/>
                     </Grid>
-                            
+
                 </Grid>
             </TabItem>
             <TabItem Header="Z pomiarów urządzenia">
                 <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="139*"/>
+                        <ColumnDefinition Width="455*"/>
+                    </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
 
-                    <Label Margin="0,0,0,10" HorizontalAlignment="Center" Content="Wybierz ID Urządzenia:" VerticalAlignment="Bottom" Grid.Row="0" />
+                    <Label Margin="92,0,0,10" HorizontalAlignment="Left" Content="Wybierz ID Urządzenia:" VerticalAlignment="Bottom" Grid.Row="0" Grid.Column="1" />
 
-                    <xctk:IntegerUpDown Margin="0,0,0,10" Height="20" Width="100" VerticalAlignment="Top" Minimum="0" Maximum="{Binding maxID}" Grid.Row="1" Grid.RowSpan="2"/>
+                    <xctk:IntegerUpDown Margin="108,138,247,0" Height="20" Width="80" VerticalAlignment="Top" Minimum="0" Maximum="{Binding maxID}" Grid.RowSpan="2" Grid.Column="1"/>
 
-                    <Grid Grid.Row="2" Margin="0,0,0,10">
-                        <Button HorizontalAlignment="Center" Content="Anuluj" Width="100" Height="20" Margin="0,0,300,0" VerticalAlignment="Center"/>
-                        <Button HorizontalAlignment="Center" Content="Przeslij" Width="100" Height="20" Margin="300,0,0,0" VerticalAlignment="Center"/>
+                    <Grid Grid.Row="1" Margin="0,138,0,10" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                        <Button x:Name="Anuluj2" Click="Anuluj_Click" HorizontalAlignment="Center" Content="Anuluj" Width="100" Height="20" Margin="0,0,300,0" VerticalAlignment="Center"/>
+                        <Button x:Name="Przeslij2" Click="Przeslij_Click" HorizontalAlignment="Center" Content="Przeslij" Width="100" Height="20" Margin="300,0,0,0" VerticalAlignment="Center"/>
                     </Grid>
-                    
+
                 </Grid>
             </TabItem>
         </TabControl>

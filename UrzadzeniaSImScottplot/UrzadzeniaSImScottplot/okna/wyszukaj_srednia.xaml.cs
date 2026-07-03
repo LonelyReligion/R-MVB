@@ -19,6 +19,7 @@ namespace UrzadzeniaSImScottplot
     /// </summary>
     public partial class wyszukaj_srednia : Window
     {
+        public bool sukces = false;
         public int? maxId;
         private void _inicjujKontrolki() {
             using (var ctx = new Kontekst()) {
@@ -34,6 +35,18 @@ namespace UrzadzeniaSImScottplot
         public wyszukaj_srednia()
         {
             InitializeComponent();
+        }
+
+        private void Przeslij_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = true;
+            Close();
+        }
+
+        private void Anuluj_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = false;
+            Close();
         }
     }
 }

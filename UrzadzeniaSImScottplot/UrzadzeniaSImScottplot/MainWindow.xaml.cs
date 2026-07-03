@@ -89,5 +89,15 @@ namespace UrzadzeniaSImScottplot
                 TabelaWynikow.ItemsSource = okno.odnalezione_urzadzenia;
             }
         }
+
+        private void przycisk_wyszukaj_srednia_Click(object sender, RoutedEventArgs e)
+        {
+            wyszukaj_srednia okno = new wyszukaj_srednia();
+            okno.ShowDialog();
+
+            if (okno.sukces) { 
+            
+            }
+        }
     }
 }
