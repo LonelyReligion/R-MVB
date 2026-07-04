@@ -26,7 +26,7 @@ namespace UrzadzeniaSImScottplot
         public bool sukces = false;
         public bool blad = false;
         RMVB _drzewo;
-        
+
         public decimal czas_drzewo10;
 
         public decimal czas_baza10;
@@ -39,24 +39,28 @@ namespace UrzadzeniaSImScottplot
 
             DataContext = this;
             _drzewo = drzewo;
-
-            this.ContentRendered += _inicjalizujKontrolki;
+            _inicjalizujKontrolki();
+            this.ContentRendered += _sprawdzCzyMamyUrzadzenia;
 
         }
-
-        private void _inicjalizujKontrolki(object sender, EventArgs e)
-        {
+        private void _sprawdzCzyMamyUrzadzenia(object sender, EventArgs e) {
             using (var ctx = new Kontekst())
             {
-                int? maxId = ctx.Urzadzenia.Max(u => (int?)u.UrzadzenieID);
+                bool istnieje = ctx.Urzadzenia.Any();
 
-                if (maxId == null)
+                if (!istnieje)
                 {
                     Window dialog = (Window)new brak_urzadzen_w_bazie(this);
                     dialog.ShowDialog();
                     Close();
                 }
             }
+        }
+
+
+        private void _inicjalizujKontrolki()
+        {
+            ;
         }
 
         private void anuluj_Click(object sender, RoutedEventArgs e)
