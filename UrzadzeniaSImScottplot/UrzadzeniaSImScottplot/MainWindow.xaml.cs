@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UrzadzeniaSImScottplot.okna;
 
 namespace UrzadzeniaSImScottplot
 {
@@ -98,6 +99,13 @@ namespace UrzadzeniaSImScottplot
             if (okno.sukces) { 
             
             }
+        }
+
+        private void GenerujPomiary_Click(object sender, RoutedEventArgs e)
+        {
+            Window okno = new generuj_pomiary();
+            okno.ShowDialog();
+
         }
     }
 }

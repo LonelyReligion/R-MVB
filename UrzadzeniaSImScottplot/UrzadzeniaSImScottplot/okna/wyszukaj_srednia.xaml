@@ -26,10 +26,10 @@
                         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,10" TextWrapping="Wrap" Text="Uzupełnij współrzędne prostokąta, dla którego chcesz obliczyć średnią z pomiarów." VerticalAlignment="Top"/>
                     </Grid>
 
-                    <local:wybor_prostokata Margin="0,4,0,16" Grid.Row="1" Grid.ColumnSpan="2"/>
+                    <local:wybor_prostokata x:Name="prostkat" Margin="0,4,0,16" Grid.Row="1" Grid.ColumnSpan="2"/>
 
                     <Grid Grid.Row="1" Margin="0,204,0,26" Grid.ColumnSpan="2" Grid.RowSpan="2">
-                        <Button x:Name="Przeslij1" HorizontalAlignment="Center" Content="Anuluj" Width="100" Height="20" Margin="0,0,300,0" VerticalAlignment="Center" Click="Przeslij_Click"/>
+                        <Button x:Name="Przeslij1" HorizontalAlignment="Center" Content="Anuluj" Width="100" Height="20" Margin="0,0,300,0" VerticalAlignment="Center" Click="Przeslij1_Click"/>
                         <Button x:Name="Anuluj1" HorizontalAlignment="Center" Content="Przeslij" Width="100" Height="20" Margin="300,0,0,0" VerticalAlignment="Center" Click="Anuluj_Click"/>
                     </Grid>
 
@@ -54,7 +54,7 @@
 
                     <Grid Grid.Row="1" Margin="0,138,0,10" Grid.ColumnSpan="2" Grid.RowSpan="2">
                         <Button x:Name="Anuluj2" Click="Anuluj_Click" HorizontalAlignment="Center" Content="Anuluj" Width="100" Height="20" Margin="0,0,300,0" VerticalAlignment="Center"/>
-                        <Button x:Name="Przeslij2" Click="Przeslij_Click" HorizontalAlignment="Center" Content="Przeslij" Width="100" Height="20" Margin="300,0,0,0" VerticalAlignment="Center"/>
+                        <Button x:Name="Przeslij2" Click="Przeslij2_Click" HorizontalAlignment="Center" Content="Przeslij" Width="100" Height="20" Margin="300,0,0,0" VerticalAlignment="Center"/>
                     </Grid>
 
                 </Grid>
