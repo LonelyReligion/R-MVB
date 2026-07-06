@@ -55,7 +55,7 @@
                 <Grid Grid.Row="2">
                     <xctk:DecimalUpDown x:Name="SpinnerYmin" Width="100" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Increment=".01"
                                         AllowTextInput="False" Minimum="48.99" Maximum="54.51" AllowSpin="True" DefaultValue="49" ValueChanged="SpinnerYmin_ValueChanged"
-                                        MouseWheelActiveTrigger = "Focused" Value="{Binding Ymin}"/>
+                                        MouseWheelActiveTrigger = "Focused" Value="{Binding Ymin}"/> 
                     <Label Content="yMin" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                 </Grid>
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,15 +18,73 @@ namespace UrzadzeniaSImScottplot.okna
     /// <summary>
     /// Logika interakcji dla klasy generuj_pomiary.xaml
     /// </summary>
-    public partial class generuj_pomiary : Window
+    public partial class generuj_pomiary : Window, INotifyPropertyChanged
     {
         Generatory _gen;
         public  List<(int,Pomiar)> wygenerowane = new List<(int,Pomiar)>();
         public bool sukces = false;
-        public generuj_pomiary(Generatory generator)
+
+        private int? _maxId = null;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public int? maxId
         {
-            InitializeComponent();
+            get { return _maxId; }
+            set
+            {
+                _maxId = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("maxId"));
+            }
+
         }
 
+        private void _inicjujKontrolki()
+        {
+            using (var ctx = new Kontekst())
+            {
+                maxId = ctx.Urzadzenia.Max(u => (int?)u.UrzadzenieID);
+            }
+        }
+
+        private void _sprawdzCzyMamyUrzadzenia(object sender, EventArgs e)
+        {
+            using (var ctx = new Kontekst())
+            {
+                bool istnieje = ctx.Urzadzenia.Any();
+
+                if (!istnieje)
+                {
+                    Window dialog = (Window)new brak_urzadzen_w_bazie(this);
+                    dialog.ShowDialog();
+                    Close();
+                }
+            }
+        }
+
+        public generuj_pomiary(Generatory generator)
+        {
+            DataContext = this;
+            InitializeComponent();
+            _inicjujKontrolki();
+            this.ContentRendered += _sprawdzCzyMamyUrzadzenia;
+        }
+
+        private void Anuluj_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = false;
+            Close();
+        }
+
+        private void Przeslij_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = true;
+
+            if ((bool)PodajWartosc.IsChecked && Wartosc.Value != null) { 
+                
+            }
+
+            Close();
+        }
     }
 }
