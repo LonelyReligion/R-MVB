@@ -26,7 +26,7 @@ namespace UrzadzeniaSImScottplot
             root.Insert(dev, new TreeWalker(this));
         }
 
- /*       public void AddMeasure(int id, Pomiar p)
+        public void AddMeasure(int id, Pomiar p)
         {
             Urzadzenie dev = repository.pobierzUrzadzenia()[id];
             if (dev != null)
@@ -42,7 +42,7 @@ namespace UrzadzeniaSImScottplot
             {
                 dev.AddMeasure(t, v, repository);
             }
-        }*/
+        }
 
         public RNode ProvideRoot()
         {

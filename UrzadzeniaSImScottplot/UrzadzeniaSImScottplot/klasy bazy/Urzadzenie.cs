@@ -19,13 +19,13 @@ namespace UrzadzeniaSImScottplot
 
         [Column(TypeName = "Decimal")]
         public Decimal Dlugosc { get; set; }
-        
-/*        //wlasnosc nawigacyjna
-        public virtual ICollection<Wersja> Wersje { get; set; }*/
+
+        //wlasnosc nawigacyjna
+        public virtual ICollection<Wersja> Wersje { get; set; }
 
         //metody
-        protected Urzadzenie() { 
-/*            Wersje = new HashSet<Wersja>();*/
+        protected Urzadzenie() {
+            Wersje = new HashSet<Wersja>();
         }
         public Urzadzenie((Decimal, Decimal) dlugosc_szerokosc) : this()
         {
@@ -46,7 +46,7 @@ namespace UrzadzeniaSImScottplot
         private int liczba_uwzglednionych = 0;
         private Decimal rTimeAggregate { get; set; }
         DateTime granica = new DateTime(2024, 7, 18, 0, 0, 0);
-/*        public void AddMeasure(Pomiar p, TreeRepository repository)
+        public void AddMeasure(Pomiar p, Repo repository)
         {
             if (p.dtpomiaru > granica)
             {
@@ -55,11 +55,11 @@ namespace UrzadzeniaSImScottplot
 
                 rTimeAggregate = suma / liczba_uwzglednionych;
                 TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
-                repository.saveTimeAggregate(timeAggregate);
+/*                repository.saveTimeAggregate(timeAggregate);*/
             }
         }
 
-        public void AddMeasure(DateTime t, Decimal v, TreeRepository repository)
+        public void AddMeasure(DateTime t, Decimal v, Repo repository)
         {
             if (t > granica)
             {
@@ -68,10 +68,10 @@ namespace UrzadzeniaSImScottplot
 
                 rTimeAggregate = suma / liczba_uwzglednionych;
                 TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
-                repository.saveTimeAggregate(timeAggregate);
+/*                repository.saveTimeAggregate(timeAggregate);*/
             }
         }
-*/
+
         public Decimal GetTimeAggregate()
         {
             return rTimeAggregate;

@@ -158,14 +158,14 @@ namespace UrzadzeniaSImScottplot
             return new Rectangle(szerokosci.Min(), dlugosci.Min(), szerokosci.Max(), dlugosci.Max());
         }
 
-/*        public Pomiar generujLosowyPomiar()
+        public Pomiar generujLosowyPomiar()
         {
-            Decimal temp = (Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0);
+            Decimal temp = (Decimal)(rnd.NextDouble() * (40.5 - (-41.1)) - 41.0);
             Pomiar testowy = new Pomiar(temp, DateTime.Now);
             return testowy;
         }
 
-        //losowanie ze zwracaniem
+/*        //losowanie ze zwracaniem
         public List<Wersja> wylosujWersje(int ile)
         {
             List<Wersja> szukane_wersje = new List<Wersja>();

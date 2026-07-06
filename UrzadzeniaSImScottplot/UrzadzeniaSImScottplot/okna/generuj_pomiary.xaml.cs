@@ -19,7 +19,10 @@ namespace UrzadzeniaSImScottplot.okna
     /// </summary>
     public partial class generuj_pomiary : Window
     {
-        public generuj_pomiary()
+        Generatory _gen;
+        public  List<(int,Pomiar)> wygenerowane = new List<(int,Pomiar)>();
+        public bool sukces = false;
+        public generuj_pomiary(Generatory generator)
         {
             InitializeComponent();
         }

@@ -15,8 +15,8 @@ namespace UrzadzeniaSImScottplot
         private Dictionary<int, List<Wersja>> urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
         private Dictionary<int, Urzadzenie> urzadzenia = new Dictionary<int, Urzadzenie>();
         //do zwrocenia wszystkich
-        /*        private List<Wersja> wersje = new List<Wersja>();
-        */
+        private List<Wersja> wersje = new List<Wersja>();
+
 
         internal Dictionary<int, List<Wersja>> zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
         //override jest konieczne inaczej realizowana jest wersja z klasy bazowej
@@ -32,23 +32,27 @@ namespace UrzadzeniaSImScottplot
             }
         }
 
-/*        public override void saveVersion(Wersja v)
+        public void saveVersion(Wersja v)
         {
             this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
 
-            ctx.Wersje.AddOrUpdate(v);
+            using (var ctx = new Kontekst())
+            {
+                ctx.Wersje.Add(v);//or update?
+                ctx.SaveChanges();
+            }
             urzadzenia_wersje[v.UrzadzenieID].Add(v);
 
             wersje.Add(v);
-            base.saveVersion(v);
-        }*/
+           
+        }
 
         public bool czyUrzadzenieIstnieje(int UrzadzenieID)
         {
             return urzadzenia.ContainsKey(UrzadzenieID);
         }
 
-/*        public bool czyWersjaIstnieje(int UrzadzenieID, int WersjaID)
+        public bool czyWersjaIstnieje(int UrzadzenieID, int WersjaID)
         {
             if (!urzadzenia.ContainsKey(UrzadzenieID))
                 return false;
@@ -58,21 +62,21 @@ namespace UrzadzeniaSImScottplot
                         return true;
             return false;
         }
-    */
+
 
         public Dictionary<int, Urzadzenie> pobierzUrzadzenia()
         {
             return urzadzenia;
         }
 
-/*        public List<Wersja> pobierzWersje()
+        public List<Wersja> pobierzWersje()
         {
             return wersje;
-        }*/
+        }
 
         public void Reset()
         {
-/*            urzadzenia_wersje = new Dictionary<int, List<Wersja>>();*/
+            urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
             urzadzenia = new Dictionary<int, Urzadzenie>();
 /*            wersje = new List<Wersja>();*/
         }

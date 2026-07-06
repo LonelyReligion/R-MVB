@@ -103,9 +103,22 @@ namespace UrzadzeniaSImScottplot
 
         private void GenerujPomiary_Click(object sender, RoutedEventArgs e)
         {
-            Window okno = new generuj_pomiary();
+            generuj_pomiary okno = new generuj_pomiary(_generator);
             okno.ShowDialog();
 
+            if (okno.sukces) {
+                
+                foreach (var (id,pomiar) in okno.wygenerowane) {
+                    Wersja nowa = new Wersja(id, _repozytorium);
+                    _rmvb.dodajWersje(nowa);
+                    _rmvb.dodajPomiar(id, pomiar, nowa);
+                }
+
+            }
+
         }
+
+
+
     }
 }

@@ -13,8 +13,8 @@ namespace UrzadzeniaSImScottplot
         public Kontekst() : base() {
             Database.SetInitializer<Kontekst>(null);
         }
-/*        public DbSet<Pomiar> Pomiary { get; set; }
-        public DbSet<Srednia> Srednie { get; set; }*/
+        public DbSet<Pomiar> Pomiary { get; set; }
+        public DbSet<Srednia> Srednie { get; set; }
         public DbSet<Urzadzenie> Urzadzenia { get; set; }
         public DbSet<Wersja> Wersje { get; set; }
         /* public DbSet<SpaceAggregate> SpaceAggregates { get; set; }
@@ -23,7 +23,7 @@ namespace UrzadzeniaSImScottplot
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //wieksza precyzja
-/*            modelBuilder.Entity<Wersja>()
+            modelBuilder.Entity<Wersja>()
             .Property(u => u.dataOstatniejModyfikacji)
             .HasColumnType("datetime2");
 
@@ -33,7 +33,7 @@ namespace UrzadzeniaSImScottplot
 
             modelBuilder.Entity<Pomiar>()
             .Property(u => u.dtpomiaru)
-            .HasColumnType("datetime2");*/
+            .HasColumnType("datetime2");
 
             modelBuilder.Entity<Urzadzenie>()
                 .Property(e => e.Szerokosc)
