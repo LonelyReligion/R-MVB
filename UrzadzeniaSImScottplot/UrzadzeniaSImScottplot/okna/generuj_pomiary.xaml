@@ -17,19 +17,22 @@
 
         <Grid Grid.Row="0" Margin="10,20,10,0">
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Podaj ID"/><Run Language="pl-pl" Text=" Urzadzenia"/><LineBreak/><Run/></TextBlock>
-            <xctk:IntegerUpDown VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="80" Minimum="0" Value="0" DefaultValue="0" AllowSpin="True" MouseWheelActiveTrigger = "Focused"  Maximum="{Binding maxId}"/>
+            <xctk:IntegerUpDown x:Name="IdUrzadzenia" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="80" Minimum="0" Value="0" AllowSpin="True" MouseWheelActiveTrigger = "Focused"  Maximum="{Binding maxId}"
+                                ValueChanged="ZmienionoWartoscPola" />
         </Grid>
 
         <Grid Grid.Row="1" Margin="10,40,10,0" >
-            <RadioButton  Content="Podaj wartość pomiaru" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" GroupName="RodzajGenerowania" x:Name="PodajWartosc"/>
-            <xctk:DecimalUpDown x:Name="Wartosc" AllowSpin="True" MouseWheelActiveTrigger = "Focused" 
-                                VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="80" Minimum="-41.1" Maximum="40.5" Increment="0.1" IsEnabled="{Binding IsChecked, ElementName=PodajWartosc}" Value="20" DefaultValue="20"/>
+            <RadioButton  Content="Podaj wartość pomiaru" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" GroupName="RodzajGenerowania" x:Name="PodajWartosc" Checked="PodajWartosc_Checked" />
+            <xctk:DecimalUpDown x:Name="Wartosc" AllowSpin="True" MouseWheelActiveTrigger = "Focused"
+                                VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="80" Minimum="-41.1" Maximum="40.5" Increment="0.1" IsEnabled="{Binding IsChecked, ElementName=PodajWartosc}" Value="20" 
+                                ValueChanged="ZmienionoWartoscPola" />
         </Grid>
 
         <Grid Grid.Row="2" Margin="10,10,10,0">
-            <RadioButton Content="Podaj liczbę losowych pomiarów" HorizontalAlignment="Left"  VerticalAlignment="Top" IsChecked="False" GroupName="RodzajGenerowania" x:Name="PodajLiczbe"/>
-            <xctk:IntegerUpDown HorizontalAlignment="Right" VerticalAlignment="Top"  AllowSpin="True" MouseWheelActiveTrigger = "Focused"
-                                Height="20" Width="80" Minimum="1" Maximum="100" Value="1" DefaultValue="1"  IsEnabled="{Binding IsChecked, ElementName=PodajLiczbe}" />
+            <RadioButton Content="Podaj liczbę losowych pomiarów" HorizontalAlignment="Left"  VerticalAlignment="Top" IsChecked="False" GroupName="RodzajGenerowania" x:Name="PodajLiczbe" Checked="PodajLiczbe_Checked"/>
+            <xctk:IntegerUpDown  x:Name="Liczba" HorizontalAlignment="Right" VerticalAlignment="Top"  AllowSpin="True" MouseWheelActiveTrigger = "Focused" 
+                                Height="20" Width="80" Minimum="1" Maximum="100" Value="1"  IsEnabled="{Binding IsChecked, ElementName=PodajLiczbe}"  
+                                 ValueChanged="ZmienionoWartoscPola" />
         </Grid>
 
         <Grid Grid.Row="3" Margin="10,10,10,0">

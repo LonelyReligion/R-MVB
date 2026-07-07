@@ -38,7 +38,7 @@ namespace UrzadzeniaSImScottplot.okna
             }
 
         }
-
+       
         private void _inicjujKontrolki()
         {
             using (var ctx = new Kontekst())
@@ -64,8 +64,9 @@ namespace UrzadzeniaSImScottplot.okna
 
         public generuj_pomiary(Generatory generator)
         {
-            DataContext = this;
             InitializeComponent();
+            DataContext = this;
+
             _inicjujKontrolki();
             this.ContentRendered += _sprawdzCzyMamyUrzadzenia;
         }
@@ -80,11 +81,51 @@ namespace UrzadzeniaSImScottplot.okna
         {
             sukces = true;
 
-            if ((bool)PodajWartosc.IsChecked && Wartosc.Value != null) { 
-                
+            if ((bool)PodajWartosc.IsChecked)
+            {
+                Close();
+            }
+            else { 
+            
             }
 
-            Close();
+            
+            
         }
+
+        private void ZmienionoWartoscPola(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Waliduj();
+        }
+
+        private void PodajWartosc_Checked(object sender, RoutedEventArgs e)
+        {
+            Waliduj();
+        }
+
+        private void PodajLiczbe_Checked(object sender, RoutedEventArgs e)
+        {
+            Waliduj();
+        }
+
+        private void Waliduj() {
+            if (!IsLoaded)
+                return;
+
+            bool mamy_id = (IdUrzadzenia.Value != null);
+            bool mamy_wartosc = (bool)(PodajWartosc.IsChecked == true) && Wartosc.Value != null;
+            bool mamy_liczbe = (bool)(PodajLiczbe.IsChecked == true) && Liczba.Value != null;
+
+            if (!mamy_id || (!mamy_wartosc && !mamy_liczbe))
+            {
+                Przeslij.IsEnabled = false;
+            }
+            else
+            {
+                Przeslij.IsEnabled = true;
+            }
+        }
+
+
     }
 }
