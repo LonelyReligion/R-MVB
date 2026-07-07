@@ -13,7 +13,7 @@ namespace UrzadzeniaSImScottplot
         //zmienic na przechowywanie samych id urzadzen i wersji
         //list, bo często sięgamy do ostatniego (największego) elementu
         private Dictionary<int, List<Wersja>> urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
-        private Dictionary<int, Urzadzenie> urzadzenia = new Dictionary<int, Urzadzenie>();
+
         //do zwrocenia wszystkich
         private List<Wersja> wersje = new List<Wersja>();
 
@@ -26,15 +26,14 @@ namespace UrzadzeniaSImScottplot
             using (var ctx = new Kontekst())
             {
                 ctx.Urzadzenia.Add(device);
-                //urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
-                urzadzenia.Add(device.UrzadzenieID, device);
+                urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
                 ctx.SaveChanges();
             }
         }
 
         public void saveVersion(Wersja v)
         {
-            this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
+   
 
             using (var ctx = new Kontekst())
             {
@@ -49,12 +48,15 @@ namespace UrzadzeniaSImScottplot
 
         public bool czyUrzadzenieIstnieje(int UrzadzenieID)
         {
-            return urzadzenia.ContainsKey(UrzadzenieID);
+            using (var ctx = new Kontekst())
+            {
+                return ctx.Urzadzenia.Where(u => u.UrzadzenieID == UrzadzenieID) != null;
+            }
         }
 
         public bool czyWersjaIstnieje(int UrzadzenieID, int WersjaID)
         {
-            if (!urzadzenia.ContainsKey(UrzadzenieID))
+            if (!czyUrzadzenieIstnieje(UrzadzenieID))
                 return false;
             else
                 foreach (Wersja w in urzadzenia_wersje[UrzadzenieID])
@@ -64,10 +66,6 @@ namespace UrzadzeniaSImScottplot
         }
 
 
-        public Dictionary<int, Urzadzenie> pobierzUrzadzenia()
-        {
-            return urzadzenia;
-        }
 
         public List<Wersja> pobierzWersje()
         {
@@ -77,14 +75,16 @@ namespace UrzadzeniaSImScottplot
         public void Reset()
         {
             urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
-            urzadzenia = new Dictionary<int, Urzadzenie>();
-/*            wersje = new List<Wersja>();*/
+            wersje = new List<Wersja>();
         }
 
         public void InicjujBazeDanych() {
             using (var ctx = new Kontekst())
             {
                 ctx.Database.ExecuteSqlCommand("DELETE FROM Urzadzenies");
+                ctx.Database.ExecuteSqlCommand("DELETE FROM Wersjas");
+                ctx.Database.ExecuteSqlCommand("DELETE FROM Pomiars");
+
                 ctx.Urzadzenia.FirstOrDefault(); //ma przyspieszyc pierwsze zapytanie
             }
         }

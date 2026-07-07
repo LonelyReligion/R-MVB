@@ -180,7 +180,13 @@ namespace UrzadzeniaSImScottplot
         //zwraca wspolrzedne losowego urzadzenia
         public (Decimal, Decimal) wylosujWspolrzedne()
         {
-            Urzadzenie losowe = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value;
+            Urzadzenie losowe;
+            using (var ctx = new Kontekst())
+            {
+                List<Urzadzenie> urzadzenies = ctx.Urzadzenia.ToList();
+                losowe = urzadzenies[ctx.Urzadzenia.Count() - 1];
+            }
+
             return (losowe.Dlugosc, losowe.Szerokosc);
         }
     }

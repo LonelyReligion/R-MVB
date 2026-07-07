@@ -9,7 +9,6 @@ namespace UrzadzeniaSImScottplot
 {
     public class Wersja
     {
-        public static Kontekst ctx;
         [ForeignKey("UrzadzenieRodzic")]
         public int UrzadzenieID { get; set; }
 
@@ -92,7 +91,10 @@ namespace UrzadzeniaSImScottplot
                 var ostatni_element = wersje.Last();
                 this.WersjaID = ostatni_element.WersjaID + 1;
 
-                ctx.Wersje.Attach(ostatni_element);
+                using (var ctx = new Kontekst())
+                {
+                    ctx.Wersje.Attach(ostatni_element);
+                }
                 ostatni_element.dezaktywuj();
             }
         }

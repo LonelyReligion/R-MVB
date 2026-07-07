@@ -11,7 +11,7 @@ namespace UrzadzeniaSImScottplot
     public class Kontekst : DbContext
     {
         public Kontekst() : base() {
-            Database.SetInitializer<Kontekst>(null);
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<Kontekst>());
         }
         public DbSet<Pomiar> Pomiary { get; set; }
         public DbSet<Srednia> Srednie { get; set; }

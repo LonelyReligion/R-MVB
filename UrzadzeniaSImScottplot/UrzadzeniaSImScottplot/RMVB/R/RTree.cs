@@ -28,16 +28,20 @@ namespace UrzadzeniaSImScottplot
 
         public void AddMeasure(int id, Pomiar p)
         {
-            Urzadzenie dev = repository.pobierzUrzadzenia()[id];
+            Urzadzenie dev;
+            using (Kontekst ctx =  new Kontekst())
+                dev = ctx.Urzadzenia.Where(u => u.UrzadzenieID == id).First();
             if (dev != null)
             {
                 dev.AddMeasure(p, repository);
             }
         }
 
-        public void AddMeasure(int ix, DateTime t, Decimal v)
+        public void AddMeasure(int id, DateTime t, Decimal v)
         {
-            Urzadzenie dev = repository.pobierzUrzadzenia()[ix];
+            Urzadzenie dev;
+            using (Kontekst ctx = new Kontekst())
+                dev = ctx.Urzadzenia.Where(u => u.UrzadzenieID == id).First();
             if (dev != null)
             {
                 dev.AddMeasure(t, v, repository);
@@ -107,7 +111,8 @@ namespace UrzadzeniaSImScottplot
 
         public int GtDeviceCout()
         {
-            return repository.pobierzUrzadzenia().Count;
+            using (Kontekst ctx = new Kontekst())
+                return ctx.Urzadzenia.Count();
         }
     }
 

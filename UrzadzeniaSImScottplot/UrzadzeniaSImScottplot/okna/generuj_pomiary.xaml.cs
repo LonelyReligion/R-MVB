@@ -83,14 +83,16 @@ namespace UrzadzeniaSImScottplot.okna
 
             if ((bool)PodajWartosc.IsChecked)
             {
-                Close();
+                int id = (int)IdUrzadzenia.Value;
+                Pomiar nowy = new Pomiar((decimal)Wartosc.Value, DateTime.Now);
+                wygenerowane.Add((id, nowy));   
             }
             else { 
             
             }
 
-            
-            
+            Close();
+
         }
 
         private void ZmienionoWartoscPola(object sender, RoutedPropertyChangedEventArgs<object> e)
