@@ -28,9 +28,8 @@ namespace UrzadzeniaSImScottplot
 
         public void AddMeasure(int id, Pomiar p)
         {
-            Urzadzenie dev;
-            using (Kontekst ctx =  new Kontekst())
-                dev = ctx.Urzadzenia.Where(u => u.UrzadzenieID == id).First();
+            Urzadzenie dev = repository.urzadzenia[id];
+
             if (dev != null)
             {
                 dev.AddMeasure(p, repository);
@@ -39,9 +38,8 @@ namespace UrzadzeniaSImScottplot
 
         public void AddMeasure(int id, DateTime t, Decimal v)
         {
-            Urzadzenie dev;
-            using (Kontekst ctx = new Kontekst())
-                dev = ctx.Urzadzenia.Where(u => u.UrzadzenieID == id).First();
+            Urzadzenie dev = repository.urzadzenia[id];
+            
             if (dev != null)
             {
                 dev.AddMeasure(t, v, repository);
