@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,13 +14,11 @@ namespace UrzadzeniaSImScottplot
         public Repo() { }
         //zmienic na przechowywanie samych id urzadzen i wersji
         //list, bo często sięgamy do ostatniego (największego) elementu
-        private Dictionary<int, List<Wersja>> urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
-
-        //do zwrocenia wszystkich
-        private List<Wersja> wersje = new List<Wersja>();
+        private Dictionary<int, List<int>> urzadzenia_wersje = new Dictionary<int, List<int>>();
 
 
-        internal Dictionary<int, List<Wersja>> zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
+
+        internal Dictionary<int, List<int>> zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
         //override jest konieczne inaczej realizowana jest wersja z klasy bazowej
         //"Modyfikator override jest wymagany do rozszerzenia lub zmodyfikowania abstrakcyjnej lub wirtualnej implementacji dziedziczonej metody, właściwości, indeksatora lub zdarzenia."
         public void saveDevice(Urzadzenie device)
@@ -26,7 +26,7 @@ namespace UrzadzeniaSImScottplot
             using (var ctx = new Kontekst())
             {
                 ctx.Urzadzenia.Add(device);
-                urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
+                urzadzenia_wersje.Add(device.UrzadzenieID, new List<int>());
                 ctx.SaveChanges();
             }
         }
@@ -34,16 +34,29 @@ namespace UrzadzeniaSImScottplot
         public void saveVersion(Wersja v)
         {
    
-
             using (var ctx = new Kontekst())
             {
-                ctx.Wersje.Add(v);//or update?
+
+                //TAK MUSI BYC BO WSPOLDZIELIMY POMIARY MIEDZY WERSJAMI (I WERSJE MIĘDZY POMIARAMI?)
+                foreach (var p in v.Pomiary)
+                {
+                    ctx.Entry(p).State = EntityState.Unchanged;
+                }
+
+
+                ctx.Entry(v).State = EntityState.Added;
+
+                Debug.WriteLine(ctx.ChangeTracker.Entries<Wersja>().Count());
+                foreach (var e in ctx.ChangeTracker.Entries<Wersja>())
+                {
+                    Debug.WriteLine($"{e.Entity.UrzadzenieID} {e.Entity.WersjaID} {e.State}");
+                }
+
                 ctx.SaveChanges();
             }
-            urzadzenia_wersje[v.UrzadzenieID].Add(v);
 
-            wersje.Add(v);
-           
+            urzadzenia_wersje[v.UrzadzenieID].Add(v.WersjaID);
+
         }
 
         public bool czyUrzadzenieIstnieje(int UrzadzenieID)
@@ -59,23 +72,17 @@ namespace UrzadzeniaSImScottplot
             if (!czyUrzadzenieIstnieje(UrzadzenieID))
                 return false;
             else
-                foreach (Wersja w in urzadzenia_wersje[UrzadzenieID])
-                    if (w.WersjaID == WersjaID)
+                foreach (int id in urzadzenia_wersje[UrzadzenieID])
+                    if (id == WersjaID)
                         return true;
             return false;
         }
 
 
 
-        public List<Wersja> pobierzWersje()
-        {
-            return wersje;
-        }
-
         public void Reset()
         {
-            urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
-            wersje = new List<Wersja>();
+            urzadzenia_wersje = new Dictionary<int, List<int>>();
         }
 
         public void InicjujBazeDanych() {

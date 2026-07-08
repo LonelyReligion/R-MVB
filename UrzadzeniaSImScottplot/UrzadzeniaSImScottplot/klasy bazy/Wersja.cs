@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace UrzadzeniaSImScottplot
 {
@@ -42,13 +43,22 @@ namespace UrzadzeniaSImScottplot
             this.UrzadzenieID = UrzadzenieID;
             if (r.czyUrzadzenieIstnieje(UrzadzenieID) && r.zwroc_urzadzenie_wersje()[UrzadzenieID].Count() != 0)
             {
-                Wersja w = r.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
-                foreach (var element in w.Pomiary)
-                    this.Pomiary.Add(element);
+                Wersja w;
+                using (var ctx = new Kontekst())
+                {
+                    int id_wersji = r.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
+                    w = ctx.Wersje.Include(x => x.Pomiary).First(x => x.UrzadzenieID == UrzadzenieID&& x.WersjaID == id_wersji);
 
-                DateTime data_wprowadzenia_zmiany = DateTime.Now;
-                dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
-                w.dataWygasniecia = data_wprowadzenia_zmiany;
+
+                    foreach (var element in w.Pomiary)
+                        this.Pomiary.Add(element);
+
+                    DateTime data_wprowadzenia_zmiany = DateTime.Now;
+                    dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
+                    w.dataWygasniecia = data_wprowadzenia_zmiany;
+                    
+                    ctx.SaveChanges();
+                }
                 dataWygasniecia = DateTime.MaxValue;
 
                 ustalWersje(this.UrzadzenieID, r);
@@ -89,13 +99,14 @@ namespace UrzadzeniaSImScottplot
             else
             {
                 var ostatni_element = wersje.Last();
-                this.WersjaID = ostatni_element.WersjaID + 1;
+                this.WersjaID = ostatni_element + 1;
 
                 using (var ctx = new Kontekst())
                 {
-                    ctx.Wersje.Attach(ostatni_element);
+                    Wersja wersja = ctx.Wersje.Where(w => (w.UrzadzenieID == UrzadzenieID && w.WersjaID == ostatni_element)).First();
+                    wersja.dezaktywuj();
+                    ctx.SaveChanges();
                 }
-                ostatni_element.dezaktywuj();
             }
         }
 
