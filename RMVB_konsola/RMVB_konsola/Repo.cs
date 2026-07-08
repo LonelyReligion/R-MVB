@@ -1,5 +1,7 @@
-﻿using System;
+﻿using RMVB_konsola.R;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RMVB_konsola
 {
-    public class Repo : InDBStorage
+    public class Repo
     {
 
         //zmienic na przechowywanie samych id urzadzen i wersji
@@ -17,26 +19,37 @@ namespace RMVB_konsola
         //do zwrocenia wszystkich
         private List<Wersja> wersje = new List<Wersja>();
 
-        public static Kontekst ctx;
-
         internal Dictionary<int, List<Wersja>>  zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
-        //override jest konieczne inaczej realizowana jest wersja z klasy bazowej
-        //"Modyfikator override jest wymagany do rozszerzenia lub zmodyfikowania abstrakcyjnej lub wirtualnej implementacji dziedziczonej metody, właściwości, indeksatora lub zdarzenia."
-        public override void saveDevice(Urzadzenie device) {
-            ctx.Urzadzenia.Add(device);
-            urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
-            urzadzenia.Add(device.UrzadzenieID, device);
-            base.saveDevice(device);
+
+        public void saveDevice(Urzadzenie device) {
+
+            using (var ctx = new Kontekst())
+            {
+                ctx.Urzadzenia.Add(device);
+                urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
+                urzadzenia.Add(device.UrzadzenieID, device);
+                ctx.SaveChanges();
+            }
         }
 
-        public override void saveVersion(Wersja v) {
-            this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
-            
-            ctx.Wersje.AddOrUpdate(v);
-            urzadzenia_wersje[v.UrzadzenieID].Add(v);
+        public void saveVersion(Wersja v) {
 
-            wersje.Add(v);
-            base.saveVersion(v);
+            using (var ctx = new Kontekst())
+            {
+                foreach (var p in v.Pomiary)
+                {
+                    ctx.Entry(p).State = EntityState.Unchanged;
+                }
+
+                ctx.Entry(v).State = EntityState.Added;
+
+
+                wersje.Add(v);
+                ctx.SaveChanges();
+            }
+
+            urzadzenia_wersje[v.UrzadzenieID].Add(v);
+            this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
         }
 
         public bool czyUrzadzenieIstnieje(int UrzadzenieID) {
@@ -65,6 +78,30 @@ namespace RMVB_konsola
             urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
             urzadzenia = new Dictionary<int, Urzadzenie>();
             wersje = new List<Wersja>();
+        }
+
+        public void saveTimeAggregate(TimeAggregate timeAggregate)
+        {
+            using (var ctx = new Kontekst())
+            {
+                //brzydkie rozwiazanie dzieki niemu nie ma bledu
+                foreach (var entry in ctx.ChangeTracker.Entries())
+                {
+                    entry.State = EntityState.Detached;
+                }
+
+                ctx.TimeAggregates.Add(timeAggregate);
+                ctx.SaveChanges();
+            }
+        }
+
+        public void saveSpaceAggregate(SpaceAggregate spaceAggregate)
+        {
+            using (var ctx = new Kontekst())
+            {
+                ctx.SpaceAggregates.Add(spaceAggregate);
+                ctx.SaveChanges();
+            }
         }
     }
 }

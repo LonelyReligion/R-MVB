@@ -117,7 +117,7 @@ namespace RMVB_konsola.R
             devices.Remove(devToAdd);
         }
 
-        public override (double, int) SpaceAggregate(TreeRepository repository)
+        public override (double, int) SpaceAggregate(Repo repository)
         {
             double sum = 0;
             int counter = 0;

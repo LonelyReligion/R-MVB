@@ -66,25 +66,29 @@ catch {
     return 0;
 }
 
+using (var ctx = new Kontekst())
+{
+    ctx.Urzadzenia.FirstOrDefault();
+}
+
 //
 Random rnd = new Random();
-Kontekst ctx = new Kontekst();
-RMVB rmvb = new RMVB(ctx);
+Kontekst ctx1 = new Kontekst();
+RMVB rmvb = new RMVB(ctx1);
 Generatory generator = new Generatory(rmvb.zwrocRepo());
 
-Wersja.ctx = ctx;
-InDBStorage.ctx = ctx;
-Repo.ctx = ctx;
+Wersja.ctx = ctx1;
+InDBStorage.ctx = ctx1;
 
-Test.ctx = ctx;
+Test.ctx = ctx1;
 Test.repo = rmvb.zwrocRepo();
 Test.rmvb = rmvb;
 Test.generator = generator;
 
-Urzadzenie.ctx = ctx;
+Urzadzenie.ctx = ctx1;
 Urzadzenie.repo = rmvb.zwrocRepo();
 
-Korzen.ctx = ctx;
+Korzen.ctx = ctx1;
 //
 
 Console.WriteLine("Uwaga, wszystkie pliki znajdujące się w folderze " + sciezkaFolderuWyjsciowego + " zostaną trwale usunięte.");
@@ -96,7 +100,7 @@ foreach (var plik in sciezkiPlikow)
 //
 
 // Urzadzenie 0v0
-ctx.Urzadzenia.FirstOrDefault();
+
 
 Urzadzenie testowe = new Urzadzenie(generator.zwrocNoweWspolrzedneDeterministyczne());
 rmvb.dodajUrzadzenie(testowe);
@@ -187,5 +191,5 @@ else
 rmvb.Reset();
 rmvb.zapiszMVB(sciezkaFolderuWyjsciowego);
 
-ctx.Dispose();
+ctx1.Dispose();
 return 0;

@@ -46,13 +46,6 @@ namespace UrzadzeniaSImScottplot
 
 
                 ctx.Entry(v).State = EntityState.Added;
-
-                Debug.WriteLine(ctx.ChangeTracker.Entries<Wersja>().Count());
-                foreach (var e in ctx.ChangeTracker.Entries<Wersja>())
-                {
-                    Debug.WriteLine($"{e.Entity.UrzadzenieID} {e.Entity.WersjaID} {e.State}");
-                }
-
                 ctx.SaveChanges();
             }
 

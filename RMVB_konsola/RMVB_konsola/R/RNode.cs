@@ -50,7 +50,7 @@ namespace RMVB_konsola.R
 
         public abstract RNode RemoveEntry(int index);
 
-        public abstract (double, int) SpaceAggregate(TreeRepository repository);
+        public abstract (double, int) SpaceAggregate(Repo repository);
 
         public abstract void SplitEntries(RNode pNode, RNode kNode);
 

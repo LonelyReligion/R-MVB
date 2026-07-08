@@ -17,7 +17,7 @@ namespace RMVB_konsola.MVB
         public static decimal granica_przezywalnosci;
         public static Kontekst ctx;
         public static int min_urzadzen_korzen;
-        TreeRepository repo;
+        Repo repo;
 
         List<(int, Wpis)> wpisy; //po to zeby mozna bylo znalezc ostatni wezel szybko np.
 
@@ -25,7 +25,7 @@ namespace RMVB_konsola.MVB
         //parametry drzewa, sa zdefiniowane w klasie drzewa
         static double Pversion;
 
-        internal Korzen(TreeRepository repo, double pversion)
+        internal Korzen(Repo repo, double pversion)
         {
             wpisy = new List<(int, Wpis)>();
             this.repo = repo;
