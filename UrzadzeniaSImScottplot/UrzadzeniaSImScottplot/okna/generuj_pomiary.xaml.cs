@@ -68,6 +68,7 @@ namespace UrzadzeniaSImScottplot.okna
             DataContext = this;
 
             _inicjujKontrolki();
+            _gen = generator;
             this.ContentRendered += _sprawdzCzyMamyUrzadzenia;
         }
 
@@ -80,15 +81,17 @@ namespace UrzadzeniaSImScottplot.okna
         private void Przeslij_Click(object sender, RoutedEventArgs e)
         {
             sukces = true;
+            int id = (int)IdUrzadzenia.Value;
 
             if ((bool)PodajWartosc.IsChecked)
             {
-                int id = (int)IdUrzadzenia.Value;
                 Pomiar nowy = new Pomiar((decimal)Wartosc.Value, DateTime.Now);
                 wygenerowane.Add((id, nowy));   
             }
-            else { 
-            
+            else {
+                for (int i = 0; i < Liczba.Value; i++) {        
+                    wygenerowane.Add((id,_gen.generujLosowyPomiar()));
+                }
             }
 
             Close();
