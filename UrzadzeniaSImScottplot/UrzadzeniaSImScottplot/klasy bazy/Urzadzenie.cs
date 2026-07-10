@@ -105,5 +105,26 @@ namespace UrzadzeniaSImScottplot
         {
             return rTimeAggregate != null;
         }
+
+        [NotMapped]
+        public int LiczbaPomiarow
+        {
+            get
+            {
+                using (var ctx = new Kontekst())
+                {
+                    if (ctx.Wersje.Where(u => u.UrzadzenieID == UrzadzenieID) == null || 
+                        ctx.Wersje.Where(u => u.UrzadzenieID == UrzadzenieID).Count() == 0)
+                        return 0;
+
+                    return ctx.Wersje
+                        .Where(u => u.UrzadzenieID == UrzadzenieID)
+                        .OrderByDescending(w => w.WersjaID)
+                        .First()
+                        .Pomiary
+                        ?.Count ?? 0;
+                }
+            }
+        }
     }
 }

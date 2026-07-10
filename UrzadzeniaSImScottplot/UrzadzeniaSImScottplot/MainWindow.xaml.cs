@@ -26,6 +26,10 @@ namespace UrzadzeniaSImScottplot
             using (var ctx = new Kontekst())
             {
                 SiatkaUrzadzen.ItemsSource = ctx.Urzadzenia.ToList();
+                SiatkaUrzadzen.AutoGeneratingColumn += generowanieKolumn;
+                DataGridTextColumn liczba_pomiarow =  new DataGridTextColumn();
+                liczba_pomiarow.Header = "Liczba pomiarów";
+                liczba_pomiarow.Binding = new Binding("LiczbaPomiarow");
 
                 plot.Plot.Axes.SetLimits(14.11, 24.15, 49, 54.83);
                 plot.UserInputProcessor.Disable();
@@ -33,9 +37,17 @@ namespace UrzadzeniaSImScottplot
             }
         }
 
+        public void generowanieKolumn(object sender, DataGridAutoGeneratingColumnEventArgs e) {
+            if (e.PropertyName == "Wersje")
+            {
+                e.Column.Visibility = Visibility.Collapsed;
+            }
+        }
         public void AktualizujSiatkeUrzadzen() {
             using (var ctx = new Kontekst())
+            {
                 SiatkaUrzadzen.ItemsSource = ctx.Urzadzenia.ToList();
+            }
         }
 
         public MainWindow()
@@ -113,7 +125,7 @@ namespace UrzadzeniaSImScottplot
                     _rmvb.dodajWersje(nowa);
                     _rmvb.dodajPomiar(id, pomiar, nowa);
                 }
-
+                AktualizujSiatkeUrzadzen();
             }
 
         }
