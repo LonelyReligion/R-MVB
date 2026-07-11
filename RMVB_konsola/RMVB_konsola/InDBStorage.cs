@@ -49,11 +49,5 @@ namespace RMVB_konsola
             ctx.SaveChanges();
         }
 
-        public void saveSrednia(Srednia srednia)
-        {
-            ctx.Srednie.Add(srednia);
-            ctx.SaveChanges();
-        }    
-
     }
 }

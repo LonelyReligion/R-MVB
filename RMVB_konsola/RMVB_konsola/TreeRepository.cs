@@ -16,7 +16,5 @@ namespace RMVB_konsola.R
         void saveTimeAggregate(TimeAggregate timeAggregate);
 
         void saveSpaceAggregate(SpaceAggregate spaceAggregate);
-
-        void saveSrednia(Srednia srednia);
     }
 }

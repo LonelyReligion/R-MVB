@@ -48,31 +48,24 @@ namespace RMVB_konsola
 
         private int liczba_uwzglednionych = 0;
         private Decimal rTimeAggregate { get; set; }
-        DateTime granica = new DateTime(2024, 7, 18, 0, 0, 0);
         public void AddMeasure(Pomiar p, Repo repository)
         {
-            if (p.dtpomiaru > granica)
-            {
-                suma += p.Wartosc;
-                liczba_uwzglednionych++;
+            suma += p.Wartosc;
+            liczba_uwzglednionych++;
 
-                rTimeAggregate = suma / liczba_uwzglednionych;
-                TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
-                repository.saveTimeAggregate(timeAggregate);
-            }
+            rTimeAggregate = suma / liczba_uwzglednionych;
+            TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
+            repository.saveTimeAggregate(timeAggregate);
         }
 
         public void AddMeasure(DateTime t, Decimal v, Repo repository)
         {
-            if (t > granica)
-            {
-                suma += v;
-                liczba_uwzglednionych++;
+            suma += v;
+            liczba_uwzglednionych++;
 
-                rTimeAggregate = suma / liczba_uwzglednionych;
-                TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
-                repository.saveTimeAggregate(timeAggregate);
-            }
+            rTimeAggregate = suma / liczba_uwzglednionych;
+            TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
+            repository.saveTimeAggregate(timeAggregate);
         }
 
         public Decimal GetTimeAggregate()
