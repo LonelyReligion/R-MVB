@@ -40,15 +40,7 @@ namespace UrzadzeniaSImScottplot
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
         {
 
-            using (var ctx = new Kontekst())
-            {
-                ctx.Wersje.Attach(alfa);
-                ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
-
-                alfa.Pomiary.Add(p);
-                ctx.Pomiary.Add(p);
-                ctx.SaveChanges();
-            }
+            repo.saveMeasurement(UrzadzenieID, p, alfa);
 
             R.dodajPomiar(UrzadzenieID, p);
         }

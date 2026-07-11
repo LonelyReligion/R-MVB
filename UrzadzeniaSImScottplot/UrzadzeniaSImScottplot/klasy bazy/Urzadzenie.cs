@@ -44,32 +44,44 @@ namespace UrzadzeniaSImScottplot
         public Decimal suma = 0;
 
         private int liczba_uwzglednionych = 0;
-        private Decimal rTimeAggregate { get; set; }
-        DateTime granica = new DateTime(2024, 7, 18, 0, 0, 0);
+        public Decimal rTimeAggregate { get; set; }
         public void AddMeasure(Pomiar p, Repo repository)
         {
-            if (p.dtpomiaru > granica)
-            {
-                suma += p.Wartosc;
-                liczba_uwzglednionych++;
 
-                rTimeAggregate = suma / liczba_uwzglednionych;
-                TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
-/*                repository.saveTimeAggregate(timeAggregate);*/
+            suma += p.Wartosc;
+            liczba_uwzglednionych++;
+
+            rTimeAggregate = suma / liczba_uwzglednionych;
+
+            using (var ctx = new Kontekst()) {
+                var u = ctx.Urzadzenia.Find(UrzadzenieID);
+                u.rTimeAggregate = rTimeAggregate;
+                ctx.SaveChanges();
             }
+
+            TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
+            repository.saveTimeAggregate(timeAggregate);
+
         }
 
         public void AddMeasure(DateTime t, Decimal v, Repo repository)
         {
-            if (t > granica)
-            {
-                suma += v;
-                liczba_uwzglednionych++;
 
-                rTimeAggregate = suma / liczba_uwzglednionych;
-                TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
-/*                repository.saveTimeAggregate(timeAggregate);*/
+            suma += v;
+            liczba_uwzglednionych++;
+
+            rTimeAggregate = suma / liczba_uwzglednionych;
+
+            using (var ctx = new Kontekst())
+            {
+                var u = ctx.Urzadzenia.Find(UrzadzenieID);
+                u.rTimeAggregate = rTimeAggregate;
+                ctx.SaveChanges();
             }
+
+            TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
+            repository.saveTimeAggregate(timeAggregate);
+
         }
 
         public Decimal GetTimeAggregate()

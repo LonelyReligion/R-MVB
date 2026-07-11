@@ -32,6 +32,18 @@ namespace UrzadzeniaSImScottplot
             urzadzenia.Add(device.UrzadzenieID, device);
         }
 
+        public void saveMeasurement(int UrzadzenieID, Pomiar p, Wersja alfa) {
+            using (var ctx = new Kontekst())
+            {
+                ctx.Wersje.Attach(alfa);
+                ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
+
+                alfa.Pomiary.Add(p);
+                ctx.Pomiary.Add(p);
+                ctx.SaveChanges();
+            }
+        }
+
         public void saveVersion(Wersja v)
         {
    
@@ -86,8 +98,32 @@ namespace UrzadzeniaSImScottplot
                 ctx.Database.ExecuteSqlCommand("DELETE FROM Urzadzenies");
                 ctx.Database.ExecuteSqlCommand("DELETE FROM Wersjas");
                 ctx.Database.ExecuteSqlCommand("DELETE FROM Pomiars");
+                ctx.Database.ExecuteSqlCommand("DELETE FROM TimeAggregates");
 
                 ctx.Urzadzenia.FirstOrDefault(); //ma przyspieszyc pierwsze zapytanie
+            }
+        }
+        public void saveTimeAggregate(TimeAggregate timeAggregate)
+        {
+            using (var ctx = new Kontekst())
+            {
+                //brzydkie rozwiazanie dzieki niemu nie ma bledu
+                foreach (var entry in ctx.ChangeTracker.Entries())
+                {
+                    entry.State = EntityState.Detached;
+                }
+
+                ctx.TimeAggregates.Add(timeAggregate);
+                ctx.SaveChanges();
+            }
+        }
+
+        public void saveSpaceAggregate(SpaceAggregate spaceAggregate)
+        {
+            using (var ctx = new Kontekst())
+            {
+                ctx.SpaceAggregates.Add(spaceAggregate);
+                ctx.SaveChanges();
             }
         }
     }
