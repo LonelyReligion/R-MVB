@@ -66,9 +66,10 @@ namespace RMVB_konsola.R
             return root.SearchBy(x, y);
         }
 
-        public (Decimal, Decimal) FindSpaceAggregate(Rectangle rect)
+        public (List<int>, Decimal, Decimal) FindSpaceAggregate(Rectangle rect)
         {
             List<Urzadzenie> devicesInRect = SearchBy(rect);
+
             Decimal sum = 0;
             Decimal liczba_pomiarow = 0;
 
@@ -78,10 +79,11 @@ namespace RMVB_konsola.R
                 liczba_pomiarow += device.get_liczba_suma().Item1;
             }
 
+            List<int> ids = devicesInRect.Select((o) => o.UrzadzenieID).ToList();
             if (liczba_pomiarow != 0)
-                return (liczba_pomiarow, sum / liczba_pomiarow);
+                return (ids, liczba_pomiarow, sum / liczba_pomiarow);
             else
-                return (0m, 0m);
+                return (ids, 0m, 0m);
         }
 
         public void SpaceAggregate()

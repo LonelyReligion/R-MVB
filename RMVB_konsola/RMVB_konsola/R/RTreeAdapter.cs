@@ -45,7 +45,7 @@ namespace RMVB_konsola.R
         }
 
         //zwraca liczbę pomiarów i agregat powierzchniowy (z czego?)
-        internal (Decimal, Decimal) szukajAgregatuPowierzchniowego(Rectangle rect) { 
+        internal (List<int> ids, Decimal, Decimal) szukajAgregatuPowierzchniowego(Rectangle rect) { 
             return drzewo.FindSpaceAggregate(rect);
         }
 

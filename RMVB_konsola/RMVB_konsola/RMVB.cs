@@ -98,7 +98,7 @@ namespace RMVB_konsola
         }
 
         //zwraca liczbę pomiarów i agregat czasowy (z czego?)
-        internal (Decimal, Decimal) szukajAgregatu(Rectangle rect)
+        internal (List<int> ids, Decimal, Decimal) szukajAgregatu(Rectangle rect)
         {
             return R.szukajAgregatuPowierzchniowego(rect);
         }

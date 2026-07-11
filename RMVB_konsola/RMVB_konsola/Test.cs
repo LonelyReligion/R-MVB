@@ -102,8 +102,9 @@ namespace RMVB_konsola
 
             Stopwatch sw;
             sw = Stopwatch.StartNew();
-            List<int> ile = new List<int>();
-            int cnt_1 = 0;
+            List<int> ile = new List<int>();//ile pomiarow liczy sie do sredniej
+            List<List<int>> id_urzadzen_bd = new List<List<int>>();
+
             for (int i = 0; i < ileRazy; i++)
             {
                 Decimal x1 = szukane[i].XMin;
@@ -116,9 +117,9 @@ namespace RMVB_konsola
                 int cnt = 0;
                 resultDB.Add(0);
 
-                List<int> ids = new List<int>();
+                id_urzadzen_bd.Add(new List<int>());
 
-                ids.AddRange(ctx.Urzadzenia
+                id_urzadzen_bd.Last().AddRange(ctx.Urzadzenia
                 .AsNoTracking()
                 //contains
                 .Where(u => x1 <= u.Dlugosc)
@@ -131,10 +132,15 @@ namespace RMVB_konsola
 
                 Out.Add("(");
 
-                List<Pomiar> aktualne_pomiary = ctx.Pomiary.AsNoTracking().Where(p => ids.Contains(p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID))
-                    .Where(p => p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0)).ToList();
+                List<int> ostatnieUrzadzenia = id_urzadzen_bd.Last();
 
-                foreach (Pomiar p in aktualne_pomiary)
+                List<Pomiar> pomiary = ctx.Pomiary
+                    .AsNoTracking()
+                    .Where(p => p.WersjeUrzadzenia
+                        .Any(w => ostatnieUrzadzenia.Contains(w.UrzadzenieID)))
+                    .ToList();
+
+                foreach (Pomiar p in pomiary)
                 {
                     ile[i]++;
                     resultDB[i] += p.Wartosc;
@@ -145,18 +151,19 @@ namespace RMVB_konsola
                     resultDB[i] /= ile[i];
                 else
                     resultDB[i] = 0;
-                cnt_1 = cnt;
             }
             long wynik = sw.ElapsedMilliseconds;
 
             sw = Stopwatch.StartNew();
             int cnt_r = 0;
             List<Decimal> ile_r = new List<Decimal>();
+            List<List<int>> id_urzadzen_r = new List<List<int>>();
             for (int i = 0; i < ileRazy; i++)
             {
-                (Decimal liczba_elementow, Decimal srednia) = rmvb.szukajAgregatu(szukane[i]);
+                (List<int> ids, Decimal liczba_elementow, Decimal srednia) = rmvb.szukajAgregatu(szukane[i]);
                 resultRTree.Add(srednia);
                 ile_r.Add(liczba_elementow);
+                id_urzadzen_r.Add(ids);
 
             }
             long wynik3 = sw.ElapsedMilliseconds;
@@ -218,6 +225,42 @@ namespace RMVB_konsola
 
                 }
 
+                if (blad) {
+                    Console.WriteLine(("Szukanie agregatu powierzchniowego dla obszaru: xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
+                    "xMax(" + szukane[i].XMax + "), " + "yMax(" + szukane[i].YMax + "), "));
+
+                    if (id_urzadzen_r[i].Count != id_urzadzen_bd[i].Count) 
+                    {
+
+                        List<int> nadmiarowe = new List<int>();
+                        if (id_urzadzen_r[i].Count > id_urzadzen_bd[i].Count)
+                        {
+                            bledy.Add("R-drzewo znalazło dodatkowo poniższe urządzenia: ");
+                            Console.WriteLine("R-drzewo dodatkowo znalazło następujące urządzenia: ");
+                            nadmiarowe = id_urzadzen_r[i].Except(id_urzadzen_bd[i]).ToList();
+                        }
+                        else
+                        {
+
+                            bledy.Add("Baza danych znalazła dodatkowo poniższe urządzenia: ");
+                            Console.WriteLine("Baza dodatkowo znalazła następujące urządzenia: ");
+                            nadmiarowe = id_urzadzen_bd[i].Except(id_urzadzen_r[i]).ToList();
+                        }
+
+                        foreach (int id in nadmiarowe)
+                        {
+                            using (var ctx = new Kontekst())
+                            {
+                                Urzadzenie u = ctx.Urzadzenia.Where(u => u.UrzadzenieID == id).First();
+                                bledy.Add("UrzadzenieID: " + u.UrzadzenieID + " x: " + u.Dlugosc + " y: " + u.Szerokosc);
+                                Console.WriteLine("UrzadzenieID: " + u.UrzadzenieID + " x: " + u.Dlugosc + " y: " + u.Szerokosc);
+                            }
+                        }
+
+                        bledy.Add("\n");
+
+                    }
+                }
                 Console.WriteLine("**********************************");
             }
             
