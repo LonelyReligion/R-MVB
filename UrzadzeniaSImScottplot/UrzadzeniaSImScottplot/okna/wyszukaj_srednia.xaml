@@ -10,7 +10,7 @@
     <Grid>
         <TabControl>
             <TabItem Header="Z pomiarów na określonej powierzchni">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="271*"/>
                         <ColumnDefinition Width="323*"/>
@@ -36,7 +36,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Z pomiarów urządzenia">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="139*"/>
                         <ColumnDefinition Width="455*"/>

@@ -19,7 +19,7 @@
             <TextBlock HorizontalAlignment="Left" Margin="10,10,0,10" TextWrapping="Wrap" Text="Uzupełnij współrzędne prostokąta, w którym będą wyszukiwane urządzenia." VerticalAlignment="Top"/>
         </Grid>
 
-        <local:wybor_prostokata x:Name="prostkat" Grid.Row="1"></local:wybor_prostokata>
+        <local:wybor_prostokata  x:Name="prostkat" Grid.Row="1"></local:wybor_prostokata>
 
        <Grid Margin="0,0,0,10" Grid.Row="2">
             <Button x:Name="anuluj" Content="Anuluj" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,300,0" Click="anuluj_Click"/>
