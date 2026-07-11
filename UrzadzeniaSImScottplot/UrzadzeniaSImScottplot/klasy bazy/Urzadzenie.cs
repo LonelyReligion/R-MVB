@@ -53,12 +53,6 @@ namespace UrzadzeniaSImScottplot
 
             rTimeAggregate = suma / liczba_uwzglednionych;
 
-            using (var ctx = new Kontekst()) {
-                var u = ctx.Urzadzenia.Find(UrzadzenieID);
-                u.rTimeAggregate = rTimeAggregate;
-                ctx.SaveChanges();
-            }
-
             TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
             repository.saveTimeAggregate(timeAggregate);
 
@@ -71,13 +65,6 @@ namespace UrzadzeniaSImScottplot
             liczba_uwzglednionych++;
 
             rTimeAggregate = suma / liczba_uwzglednionych;
-
-            using (var ctx = new Kontekst())
-            {
-                var u = ctx.Urzadzenia.Find(UrzadzenieID);
-                u.rTimeAggregate = rTimeAggregate;
-                ctx.SaveChanges();
-            }
 
             TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
             repository.saveTimeAggregate(timeAggregate);

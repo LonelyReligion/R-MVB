@@ -85,10 +85,13 @@ namespace RMVB_konsola
             using (var ctx = new Kontekst())
             {
                 //brzydkie rozwiazanie dzieki niemu nie ma bledu
-                foreach (var entry in ctx.ChangeTracker.Entries())
-                {
-                    entry.State = EntityState.Detached;
-                }
+                /*                foreach (var entry in ctx.ChangeTracker.Entries())
+                                {
+                                    entry.State = EntityState.Detached;
+                                }*/
+
+                var u = ctx.Urzadzenia.Find(timeAggregate.DeviceId);
+                u.rTimeAggregate = timeAggregate.tAValue;
 
                 ctx.TimeAggregates.Add(timeAggregate);
                 ctx.SaveChanges();

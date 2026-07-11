@@ -47,7 +47,7 @@ namespace RMVB_konsola
         public Decimal suma = 0;
 
         private int liczba_uwzglednionych = 0;
-        private Decimal rTimeAggregate { get; set; }
+        public Decimal rTimeAggregate { get; set; }
         public void AddMeasure(Pomiar p, Repo repository)
         {
             suma += p.Wartosc;
