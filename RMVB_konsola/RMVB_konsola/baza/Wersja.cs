@@ -9,7 +9,6 @@ namespace RMVB_konsola
 {
     public class Wersja
     {
-        public static Kontekst ctx;
         [ForeignKey("UrzadzenieRodzic")]
         public int UrzadzenieID { get; set; }
 
@@ -92,8 +91,12 @@ namespace RMVB_konsola
                 var ostatni_element = wersje.Last();
                 this.WersjaID = ostatni_element.WersjaID + 1;
 
-                ctx.Wersje.Attach(ostatni_element);
-                ostatni_element.dezaktywuj();
+                using (var ctx = new Kontekst())
+                {
+                    Wersja wersja = ctx.Wersje.Where(w => (w.UrzadzenieID == UrzadzenieID && w.WersjaID == ostatni_element.WersjaID)).First();
+                    wersja.dezaktywuj();
+                    ctx.SaveChanges();
+                }
             }
         }
 

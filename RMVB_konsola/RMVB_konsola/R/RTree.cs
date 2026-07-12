@@ -15,12 +15,10 @@ namespace RMVB_konsola.R
         private RNode root = new RLeaf(ROOTMBR);
 
         private Repo repository;
-        Kontekst ctx;
 
-        public RTree(Repo r, Kontekst context)
+        public RTree(Repo r)
         {
             repository = r;
-            ctx = context;
         }
 
         public void Insert(Urzadzenie dev)

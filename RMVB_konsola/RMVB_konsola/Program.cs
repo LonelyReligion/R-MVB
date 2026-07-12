@@ -73,22 +73,14 @@ using (var ctx = new Kontekst())
 
 //
 Random rnd = new Random();
-Kontekst ctx1 = new Kontekst();
-RMVB rmvb = new RMVB(ctx1);
+RMVB rmvb = new RMVB( );
 Generatory generator = new Generatory(rmvb.zwrocRepo());
 
-Wersja.ctx = ctx1;
-InDBStorage.ctx = ctx1;
-
-Test.ctx = ctx1;
 Test.repo = rmvb.zwrocRepo();
 Test.rmvb = rmvb;
 Test.generator = generator;
 
-Urzadzenie.ctx = ctx1;
 Urzadzenie.repo = rmvb.zwrocRepo();
-
-Korzen.ctx = ctx1;
 //
 
 Console.WriteLine("Uwaga, wszystkie pliki znajdujące się w folderze " + sciezkaFolderuWyjsciowego + " zostaną trwale usunięte.");
@@ -191,5 +183,4 @@ else
 rmvb.Reset();
 rmvb.zapiszMVB(sciezkaFolderuWyjsciowego);
 
-ctx1.Dispose();
 return 0;

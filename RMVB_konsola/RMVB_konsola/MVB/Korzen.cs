@@ -15,7 +15,6 @@ namespace RMVB_konsola.MVB
     internal class Korzen
     {
         public static decimal granica_przezywalnosci;
-        public static Kontekst ctx;
         public static int min_urzadzen_korzen;
         Repo repo;
 
@@ -329,7 +328,7 @@ namespace RMVB_konsola.MVB
 
                         repo.saveVersion(kopia);
 
-                        ctx.Wersje.Add(kopia);
+                        //ctx.Wersje.Add(kopia); //?
                         repo.saveVersion(kopia);
 
                     }

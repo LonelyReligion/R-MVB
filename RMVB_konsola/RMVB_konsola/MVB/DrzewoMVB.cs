@@ -16,11 +16,10 @@ namespace RMVB_konsola.MVB
         private double Psvo = 5.0/6;
 
         private Repo Repo;
-        private Kontekst ctx;
 
         private List<DeskryptorKorzenia> desk = new List<DeskryptorKorzenia>(); // "List of tree descriptors. Descriptors for all roots in the tree are connected in a list(or other structures) according to growing, separable life spans."
 
-        internal DrzewoMVB(Repo repo, Kontekst ctx)
+        internal DrzewoMVB(Repo repo)
         {
             Korzen k = new Korzen(repo, Pversion);
 
@@ -29,7 +28,6 @@ namespace RMVB_konsola.MVB
 
             desk.Add(new DeskryptorKorzenia(DateTime.Now, DateTime.MaxValue, k));
             this.Repo = repo;
-            this.ctx = ctx;
         }
 
         internal List<string> drukujDrzewo() 

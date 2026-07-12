@@ -18,7 +18,6 @@ namespace RMVB_konsola
     internal class Test
     {
         public static Repo repo;
-        public static Kontekst ctx;
         public static RMVB rmvb;
         public static Generatory generator;
         public static Test instancja;
@@ -105,7 +104,9 @@ namespace RMVB_konsola
             List<int> ile = new List<int>();//ile pomiarow liczy sie do sredniej
             List<List<int>> id_urzadzen_bd = new List<List<int>>();
 
-            for (int i = 0; i < ileRazy; i++)
+            using (var ctx = new Kontekst())
+            {
+                for (int i = 0; i < ileRazy; i++)
             {
                 Decimal x1 = szukane[i].XMin;
                 Decimal y1 = szukane[i].YMin;
@@ -140,17 +141,20 @@ namespace RMVB_konsola
                         .Any(w => ostatnieUrzadzenia.Contains(w.UrzadzenieID)))
                     .ToList();
 
+
                 foreach (Pomiar p in pomiary)
                 {
                     ile[i]++;
                     resultDB[i] += p.Wartosc;
                     Out[i] += p.Wartosc + "+";
                 }
-                
+
+
                 if (ile[i] != 0)
                     resultDB[i] /= ile[i];
                 else
                     resultDB[i] = 0;
+            }
             }
             long wynik = sw.ElapsedMilliseconds;
 
@@ -291,39 +295,44 @@ namespace RMVB_konsola
             sw = Stopwatch.StartNew();
             List<int> liczby = new List<int>();
             List<int> id = new List<int>();
-            for (int i = 0; i < ileRazy; i++)
+
+
+            using (var ctx = new Kontekst())
             {
-                (Decimal x, Decimal y) = wspolrzedne[i];
-                wynikBD.Add(0);
-                liczby.Add(0);
-                id.Add(-1);
-                id[i] = ctx.Urzadzenia
-                    .AsNoTracking()
-                    .Where(u => u.Szerokosc == y)
-                    .Where(u => u.Dlugosc == x)
-                    .First()
-                    .UrzadzenieID;
-
-                if (id[i] != -1)
+                for (int i = 0; i < ileRazy; i++)
                 {
-                    int aktualne_id = id[i];
-                    List<Pomiar> pomiary = ctx.Pomiary
-                                            .AsNoTracking()
-                                            .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == aktualne_id)
-                                            .Where(p => p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0)) //zparametryzowac
-                                            .ToList();
-                    liczby[i] += pomiary.Count;
-                    foreach (Pomiar p in pomiary) wynikBD[i] += p.Wartosc;
+                    (Decimal x, Decimal y) = wspolrzedne[i];
+                    wynikBD.Add(0);
+                    liczby.Add(0);
+                    id.Add(-1);
 
-                    if (liczby[i] != 0)
-                        wynikBD[i] /= liczby[i];
+                    id[i] = ctx.Urzadzenia
+                        .AsNoTracking()
+                        .Where(u => u.Szerokosc == y)
+                        .Where(u => u.Dlugosc == x)
+                        .First()
+                        .UrzadzenieID;
+
+                    if (id[i] != -1)
+                    {
+                        int aktualne_id = id[i];
+                        List<Pomiar> pomiary = ctx.Pomiary
+                                                .AsNoTracking()
+                                                .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == aktualne_id)
+                                                .ToList();
+                        liczby[i] += pomiary.Count;
+                        foreach (Pomiar p in pomiary) wynikBD[i] += p.Wartosc;
+
+                        if (liczby[i] != 0)
+                            wynikBD[i] /= liczby[i];
+                        else
+                            wynikBD[i] = 0;
+                    }
                     else
-                        wynikBD[i] = 0;
-                }
-                else
-                {
-                    Console.WriteLine("Urzadzenie o wsp. " + x + " " + y + " nie istnieje w bazie");
-                    blad = true;
+                    {
+                        Console.WriteLine("Urzadzenie o wsp. " + x + " " + y + " nie istnieje w bazie");
+                        blad = true;
+                    }
                 }
             }
             long czasBD = sw.ElapsedMilliseconds;
@@ -389,24 +398,29 @@ namespace RMVB_konsola
             Stopwatch sw;
             sw = Stopwatch.StartNew();
             List<List<Urzadzenie>> cnt_1 = new List<List<Urzadzenie>>();
-            for (int i = 0; i < ileRazy; i++)
+
+
+            using (var ctx = new Kontekst())
             {
-                Rectangle rect = searchRect[i];
-                cnt_1.Add(ctx.Urzadzenia
-                .AsNoTracking()
-                //contain zawiera intrsects, wyszukujemy punkty, a nie tylko porstokaty
-                /* //intersects
-                 .Where(u => rect.XMin < u.Dlugosc)
-                 .Where(u => rect.XMax > u.Dlugosc)
-                 .Where(u => rect.YMin < u.Szerokosc)
-                 .Where(u => rect.YMax > u.Szerokosc)
-                 */
-                 //contains
-                .Where(u => rect.XMin <= u.Dlugosc)
-                .Where(u => rect.YMin <= u.Szerokosc)
-                .Where(u => rect.XMax >= u.Dlugosc)
-                .Where(u => rect.YMax >= u.Szerokosc)
-                .ToList());
+                for (int i = 0; i < ileRazy; i++)
+                {
+                    Rectangle rect = searchRect[i];
+                    cnt_1.Add(ctx.Urzadzenia
+                    .AsNoTracking()
+                    //contain zawiera intrsects, wyszukujemy punkty, a nie tylko porstokaty
+                    /* //intersects
+                     .Where(u => rect.XMin < u.Dlugosc)
+                     .Where(u => rect.XMax > u.Dlugosc)
+                     .Where(u => rect.YMin < u.Szerokosc)
+                     .Where(u => rect.YMax > u.Szerokosc)
+                     */
+                    //contains
+                    .Where(u => rect.XMin <= u.Dlugosc)
+                    .Where(u => rect.YMin <= u.Szerokosc)
+                    .Where(u => rect.XMax >= u.Dlugosc)
+                    .Where(u => rect.YMax >= u.Szerokosc)
+                    .ToList());
+                }
             }
             long wynik = sw.ElapsedMilliseconds;
 
@@ -481,22 +495,29 @@ namespace RMVB_konsola
             List<Wersja> odnalezione_rmvb = new List<Wersja>();
 
             sw = Stopwatch.StartNew();
-            for (int i = 0; i < ileRazy; i++) {
-                int id = szukane_wersje[i].UrzadzenieID;
-                DateTime dt = szukane_wersje[i].dataOstatniejModyfikacji;
-                Wersja szukana = ctx.Wersje
-                    .AsNoTracking()
-                    .Where(u => u.dataOstatniejModyfikacji <= dt)
-                    .Where(u => u.dataWygasniecia > dt)
-                    .Where(u => u.UrzadzenieID == id)
-                    .FirstOrDefault(); //czasami nie dziala:/
-                if (szukana == null)
+
+
+            using (var ctx = new Kontekst())
+            {
+                for (int i = 0; i < ileRazy; i++)
                 {
-                    Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
-                    blad = true;
-                }
-                else { 
-                    odnalezione_baza.Add(szukana);
+                    int id = szukane_wersje[i].UrzadzenieID;
+                    DateTime dt = szukane_wersje[i].dataOstatniejModyfikacji;
+                    Wersja szukana = ctx.Wersje
+                        .AsNoTracking()
+                        .Where(u => u.dataOstatniejModyfikacji <= dt)
+                        .Where(u => u.dataWygasniecia > dt)
+                        .Where(u => u.UrzadzenieID == id)
+                        .FirstOrDefault(); //czasami nie dziala:/
+                    if (szukana == null)
+                    {
+                        Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
+                        blad = true;
+                    }
+                    else
+                    {
+                        odnalezione_baza.Add(szukana);
+                    }
                 }
             }
             long czas_baza = sw.ElapsedMilliseconds;
@@ -600,19 +621,24 @@ namespace RMVB_konsola
 
             Wersja? szukana = null;
             sw = Stopwatch.StartNew();
-            for (int i = 0; i < ileRazy; i++) {
-                int id = szukane_id[i];
-                szukana = ctx.Wersje
-                    .AsNoTracking() //nie uzywamy zbuforowanych (wynikow poprzednich wykonan)
-                    .Where(u => u.UrzadzenieID == id)
-                    .OrderByDescending(u => u.WersjaID)
-                    .FirstOrDefault();
-                if (szukana == null)
+
+            using (var ctx = new Kontekst())
+            {
+                for (int i = 0; i < ileRazy; i++)
                 {
-                    Console.WriteLine("Uwaga: Baza nie odnalazla rekordu o id " + id + ".");
-                    komunikaty_bledow.Add("Baza nie odnalazla rekordu o id " + id + ".");
-                    komunikaty_bledow.Add("");
-                    blad_baza = true;
+                    int id = szukane_id[i];
+                    szukana = ctx.Wersje
+                        .AsNoTracking() //nie uzywamy zbuforowanych (wynikow poprzednich wykonan)
+                        .Where(u => u.UrzadzenieID == id)
+                        .OrderByDescending(u => u.WersjaID)
+                        .FirstOrDefault();
+                    if (szukana == null)
+                    {
+                        Console.WriteLine("Uwaga: Baza nie odnalazla rekordu o id " + id + ".");
+                        komunikaty_bledow.Add("Baza nie odnalazla rekordu o id " + id + ".");
+                        komunikaty_bledow.Add("");
+                        blad_baza = true;
+                    }
                 }
             }
             long czas_baza = sw.ElapsedMilliseconds;
@@ -669,23 +695,26 @@ namespace RMVB_konsola
             //>
             List<Wersja?> znalezione_baza = new List<Wersja>();
             sw = Stopwatch.StartNew();
-            for (int i = 0; i < szukane_id_v.Count(); i++)
+
+            using (var ctx = new Kontekst())
             {
-                znalezione_baza.Add(null);
-                int id = szukane_id_v[i].Item1;
-                int v = szukane_id_v[i].Item2;
-
-                znalezione_baza[i] = ctx.Wersje
-                .AsNoTracking()
-                .FirstOrDefault(u => u.UrzadzenieID == id && u.WersjaID == v);
-
-                if (znalezione_baza[i] == null)
+                for (int i = 0; i < szukane_id_v.Count(); i++)
                 {
-                    Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
-                    blad = true;
+                    znalezione_baza.Add(null);
+                    int id = szukane_id_v[i].Item1;
+                    int v = szukane_id_v[i].Item2;
+
+                    znalezione_baza[i] = ctx.Wersje
+                    .AsNoTracking()
+                    .FirstOrDefault(u => u.UrzadzenieID == id && u.WersjaID == v);
+
+                    if (znalezione_baza[i] == null)
+                    {
+                        Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
+                        blad = true;
+                    }
                 }
             }
-
             long czas_baza = sw.ElapsedMilliseconds;
                 
 
@@ -755,84 +784,99 @@ namespace RMVB_konsola
 
         //wyszukiwanie wersji urządzeń aktywnych w losowym oknie czasowym
         public bool testDataData(int ileRazy) {
-            bool blad = false;            
+            bool blad = false;
             //najwczesniejsza data poczatku
-            DateTime poczatek = ctx.Wersje.OrderBy(u=>u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji;
-            //najpozniejsza data konca, wyszukujemy tylko z martwych urzadzen
-            DateTime koniec_nie_9999 = ctx.Wersje.Where(u=>u.dataWygasniecia != DateTime.MaxValue).OrderByDescending(u => u.dataWygasniecia).Select(u => u.dataWygasniecia).First();
 
-            List<(DateTime, DateTime)> losowe_przedzialy = wylosujPrzedzialy(poczatek, koniec_nie_9999, ileRazy);
-            
 
-            var szukane_wersje = new List<Wersja>();
-            var szukane_wersje_mvb = new List<Wersja>();
-
-            //Console.WriteLine(poczatek.Ticks + "-" + koniec.Ticks);
-            sw = Stopwatch.StartNew();
-            for (int i = 0; i < ileRazy; i++)
+            using (var ctx = new Kontekst())
             {
-                DateTime start = losowe_przedzialy[i].Item1;
-                DateTime end = losowe_przedzialy[i].Item2;
-                szukane_wersje.AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= start).Where(u => u.dataWygasniecia < end).ToList());
-            }
-            long czas_baza = sw.ElapsedMilliseconds;
-            Console.WriteLine("Baza: " + szukane_wersje.Count + " w czasie: " + czas_baza + " ms.");
-            
-            sw = Stopwatch.StartNew();
-            for (int i = 0; i < ileRazy; i++)
-            {
-                DateTime start = losowe_przedzialy[i].Item1;
-                DateTime end = losowe_przedzialy[i].Item2; 
-                szukane_wersje_mvb.AddRange(rmvb.szukaj(start, end));
-            }
-            long czas_mvb = sw.ElapsedMilliseconds;
+                DateTime poczatek = ctx.Wersje.OrderBy(u => u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji;
+                //najpozniejsza data konca, wyszukujemy tylko z martwych urzadzen
+                DateTime koniec_nie_9999 = ctx.Wersje.Where(u => u.dataWygasniecia != DateTime.MaxValue).OrderByDescending(u => u.dataWygasniecia).Select(u => u.dataWygasniecia).First();
 
-            if (szukane_wersje.Count != szukane_wersje_mvb.Count)
-            {
-                bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji aktualnych w zadany przedziale czasu. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
-                bledy.Add("Komunikat(y) błędu(ów): \n");
+                List<(DateTime, DateTime)> losowe_przedzialy = wylosujPrzedzialy(poczatek, koniec_nie_9999, ileRazy);
 
-                /*                var duplicates = szukane_wersje_mvb
-                                .GroupBy(i => i)
-                                .Where(g => g.Count() > 1)
-                                .Select(g => g.Key).ToList();*/
-                //except nie zadziala
-                var nieznalezione = szukane_wersje
-                                    .Where(d => !szukane_wersje_mvb.Any(mvb =>
-                                        mvb.UrzadzenieID == d.UrzadzenieID &&
-                                        mvb.WersjaID == d.WersjaID))
-                                    .ToList();
 
-                if (nieznalezione.Count != 0)
+                var szukane_wersje = new List<List<Wersja>>();
+                var szukane_wersje_mvb = new List<List<Wersja>>();
+
+                //Console.WriteLine(poczatek.Ticks + "-" + koniec.Ticks);
+                sw = Stopwatch.StartNew();
+                for (int i = 0; i < ileRazy; i++)
                 {
-                    bledy.Add("MVB znalazlo następujących urządzeń: ");
-                    Console.WriteLine("Nie znaleziono następujących urządzeń: ");
-                    foreach (var u in nieznalezione)
-                    {
-                        Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                        bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                    }
+                    szukane_wersje.Add(new List<Wersja>());
+                    DateTime start = losowe_przedzialy[i].Item1;
+                    DateTime end = losowe_przedzialy[i].Item2;
+                    szukane_wersje[i].AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= start).Where(u => u.dataWygasniecia < end).ToList());
                 }
+                long czas_baza = sw.ElapsedMilliseconds;
+                Console.WriteLine("Baza: " + szukane_wersje.Count + " w czasie: " + czas_baza + " ms.");
 
-                if (szukane_wersje_mvb.Distinct().Count() != szukane_wersje_mvb.Count())
+                sw = Stopwatch.StartNew();
+                for (int i = 0; i < ileRazy; i++)
                 {
-                    bledy.Add("Baza nie znalazła następujących urządzeń: ");
-                    Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
-                    List<Wersja> nadmiarowe = new List<Wersja>(szukane_wersje_mvb);
-                    foreach (var elem in szukane_wersje_mvb.Distinct())
-                        nadmiarowe.Remove(elem);
-                    foreach (var u in nadmiarowe)
-                    {
-                        Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                        bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                    }
+                    szukane_wersje_mvb.Add(new List<Wersja>());
+                    DateTime start = losowe_przedzialy[i].Item1;
+                    DateTime end = losowe_przedzialy[i].Item2;
+                    szukane_wersje_mvb[i].AddRange(rmvb.szukaj(start, end));
                 }
-
-                    blad = true;
-            }
-            else {
+                long czas_mvb = sw.ElapsedMilliseconds;
                 Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
-                wyniki.Add("MVB | wyszukiwanie wersji urządzeń aktywnych w losowym oknie czasowym | " + czas_baza + " | " + czas_mvb );
+
+                for (int i = 0; i < ileRazy; i++)
+                {
+                    if (szukane_wersje[i].Count != szukane_wersje_mvb[i].Count)
+                    {
+                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji aktualnych w zadany przedziale czasu. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
+                        bledy.Add("Komunikat(y) błędu(ów): \n");
+
+                        /*                var duplicates = szukane_wersje_mvb
+                                        .GroupBy(i => i)
+                                        .Where(g => g.Count() > 1)
+                                        .Select(g => g.Key).ToList();*/
+                        //except nie zadziala
+                        var nieznalezione = szukane_wersje[i]
+                                            .Where(d => !szukane_wersje_mvb[i].Any(mvb =>
+                                                mvb.UrzadzenieID == d.UrzadzenieID &&
+                                                mvb.WersjaID == d.WersjaID))
+                                            .ToList();
+
+                        if (nieznalezione.Count != 0)
+                        {
+                            bledy.Add("MVB znalazlo następujących urządzeń: ");
+                            Console.WriteLine("Nie znaleziono następujących urządzeń: ");
+                            foreach (var u in nieznalezione)
+                            {
+                                Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                                bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                            }
+                        }
+                        int liczba_roznych_urzadzen = szukane_wersje_mvb[i].DistinctBy(x => new { x.UrzadzenieID, x.WersjaID }).Count();
+                        int liczba_urzadzen = szukane_wersje_mvb[i].Count();
+                        if (liczba_roznych_urzadzen != liczba_urzadzen)
+                        {
+                            bledy.Add("MVB znalazło nadmiarowe (powstarzające się) urządzenia: ");
+                            Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
+                            List<Wersja> nadmiarowe = new List<Wersja>(szukane_wersje_mvb[i]);
+
+                            foreach (var elem in szukane_wersje_mvb[i].Distinct())
+                                nadmiarowe.Remove(elem);
+
+                            //zostaja same duble, wychodzi nam cos niemozliwego...
+                            foreach (var u in nadmiarowe)
+                            {
+                                Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                                bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                            }
+                        }
+
+                        blad = true;
+                    }
+                    else
+                    {
+                       wyniki.Add("MVB | wyszukiwanie wersji urządzeń aktywnych w losowym oknie czasowym | " + czas_baza + " | " + czas_mvb);
+                    }
+                }
             }
             return blad;
         }

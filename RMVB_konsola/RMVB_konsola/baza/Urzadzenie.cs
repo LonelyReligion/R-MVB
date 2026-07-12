@@ -12,7 +12,6 @@ namespace RMVB_konsola
     {
         public static int nastepne_wolne_id = 0;
         public static Repo repo;
-        public static Kontekst ctx;
         [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int UrzadzenieID { get; set; }

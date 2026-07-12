@@ -10,15 +10,13 @@ namespace RMVB_konsola
 {
     internal class RMVB
     {
-        private Kontekst ctx;
         private DrzewoMVB MVB;
         private RTreeAdapter R;
         private Repo repo;
-        internal RMVB(Kontekst ctx) {
-            this.ctx = ctx;
+        internal RMVB() {
             repo = new Repo();
-            MVB = new DrzewoMVB(repo, ctx);
-            R = new RTreeAdapter(new RTree(repo, ctx));
+            MVB = new DrzewoMVB(repo);
+            R = new RTreeAdapter(new RTree(repo));
         }
 
         internal Repo zwrocRepo() { return repo; }
@@ -125,8 +123,8 @@ namespace RMVB_konsola
 
         public void Reset() { 
             repo.Reset();
-            MVB = new DrzewoMVB(repo, ctx);
-            R = new RTreeAdapter(new RTree(repo, ctx));
+            MVB = new DrzewoMVB(repo);
+            R = new RTreeAdapter(new RTree(repo));
         }
     }
 }
