@@ -828,6 +828,8 @@ namespace RMVB_konsola
                     if (szukane_wersje[i].Count != szukane_wersje_mvb[i].Count)
                     {
                         bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji aktualnych w zadany przedziale czasu. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
+                        bledy.Add("Przedzial: " + losowe_przedzialy[i].Item1.Ticks + "-" + losowe_przedzialy[i].Item2.Ticks);
+                        Console.WriteLine("Przedzial: " + losowe_przedzialy[i].Item1.Ticks + "-" + losowe_przedzialy[i].Item2.Ticks);
                         bledy.Add("Komunikat(y) błędu(ów): \n");
 
                         /*                var duplicates = szukane_wersje_mvb
@@ -871,6 +873,10 @@ namespace RMVB_konsola
                         }
 
                         blad = true;
+
+                        DateTime start = losowe_przedzialy[i].Item1;
+                        DateTime end = losowe_przedzialy[i].Item2;
+                        rmvb.szukaj(start, end);
                     }
                     else
                     {
