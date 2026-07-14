@@ -202,7 +202,18 @@ namespace RMVB_konsola.MVB
                             { 
                                 //kopiujemy zywe
                                 Wersja kopia = new Wersja(urzadzenie, (Repo)repo, rmvb);
-                                urzadzenie.dataWygasniecia = DateTime.Now;
+
+                                DateTime dt = DateTime.Now;
+
+                                using (var ctx = new Kontekst())
+                                {
+                                    ctx.Wersje.Attach(urzadzenie);
+                                    ctx.Entry(urzadzenie).State = EntityState.Modified;
+
+                                    urzadzenie.dataWygasniecia = dt;
+                                    ctx.SaveChanges();
+                                }
+
                                 kopia.dataOstatniejModyfikacji = DateTime.Now;
                                 zywe.Add(kopia);
                                 repo.saveVersion(kopia);
@@ -331,12 +342,22 @@ namespace RMVB_konsola.MVB
                     sasiad = this.wpisy[wezel_zawierający.id - 65 - 1].Item2.wezel;
 
                 List<Wersja> kopie = new List<Wersja>(); //zawiera zywe
-                foreach (var urzadzenie in wezel_zawierający.urzadzenia.Concat(sasiad.urzadzenia))
+                foreach (var (id, urzadzenie) in wezel_zawierający.urzadzenia.Concat(sasiad.urzadzenia))
                 {
-                    if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
+                    if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
                     { //kopiujemy zywe
-                        Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo, rmvb);
-                        urzadzenie.Item2.dataWygasniecia = DateTime.Now;
+                        Wersja kopia = new Wersja(urzadzenie, (Repo)repo, rmvb);
+
+                        DateTime dt =  DateTime.Now;
+                        using (var ctx = new Kontekst())
+                        {
+                            ctx.Wersje.Attach(urzadzenie);
+                            ctx.Entry(urzadzenie).State = EntityState.Modified;
+
+                            urzadzenie.dataWygasniecia = dt;
+                            ctx.SaveChanges();
+                        }
+
                         kopia.dataOstatniejModyfikacji = DateTime.Now;
                         kopie.Add(kopia);
 
