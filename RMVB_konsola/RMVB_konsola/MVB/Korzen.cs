@@ -2,6 +2,7 @@
 using RMVB_konsola.R;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Diagnostics.Metrics;
 using System.Drawing.Printing;
@@ -140,12 +141,23 @@ namespace RMVB_konsola.MVB
             //version split
             List<Wersja> kopie = new List<Wersja>();
             if (u != null) kopie.Add(u);
-            foreach (var urzadzenie in wpisy[numer_wezla].Item2.wezel.urzadzenia) 
+            foreach (var (id, urzadzenie) in wpisy[numer_wezla].Item2.wezel.urzadzenia) 
             {
-                if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
+                if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
                 { //kopiujemy zywe
-                    Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo, rmvb); 
-                    urzadzenie.Item2.dataWygasniecia = DateTime.Now;
+                    Wersja kopia = new Wersja(urzadzenie, (Repo)repo, rmvb); 
+                    DateTime dt = DateTime.Now;
+
+
+
+                    using (var ctx = new Kontekst()) {
+                        ctx.Wersje.Attach(urzadzenie);
+                        ctx.Entry(urzadzenie).State = EntityState.Modified;
+
+                        urzadzenie.dataWygasniecia = dt;
+                        ctx.SaveChanges();
+                    }
+
                     kopia.dataOstatniejModyfikacji = DateTime.Now;
                     kopie.Add(kopia);
 

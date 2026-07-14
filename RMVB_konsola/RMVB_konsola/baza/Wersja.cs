@@ -79,7 +79,7 @@ namespace RMVB_konsola
             DateTime data_wprowadzenia_zmiany = DateTime.Now;
             dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
 
-            w.dataWygasniecia = data_wprowadzenia_zmiany;
+            //w.dataWygasniecia = data_wprowadzenia_zmiany;
             
             dataWygasniecia = DateTime.MaxValue;
             
