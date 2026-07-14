@@ -842,6 +842,9 @@ namespace RMVB_konsola
                                                 mvb.UrzadzenieID == d.UrzadzenieID &&
                                                 mvb.WersjaID == d.WersjaID))
                                             .ToList();
+                        int liczba_roznych_urzadzen = szukane_wersje_mvb[i].DistinctBy(x => new { x.UrzadzenieID, x.WersjaID }).Count();
+                        int liczba_urzadzen = szukane_wersje_mvb[i].Count();
+
 
                         if (nieznalezione.Count != 0)
                         {
@@ -849,13 +852,17 @@ namespace RMVB_konsola
                             Console.WriteLine("Nie znaleziono następujących urządzeń: ");
                             foreach (var u in nieznalezione)
                             {
-                                Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                                Console.WriteLine("BAZA: " + u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                                Console.WriteLine("MVB: " + u.UrzadzenieID + "v" + u.WersjaID + " " + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji.Ticks + "-" + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks);
+
                                 bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
                             }
                         }
-                        int liczba_roznych_urzadzen = szukane_wersje_mvb[i].DistinctBy(x => new { x.UrzadzenieID, x.WersjaID }).Count();
-                        int liczba_urzadzen = szukane_wersje_mvb[i].Count();
-                        if (liczba_roznych_urzadzen != liczba_urzadzen)
+                        else if (szukane_wersje[i].Count < szukane_wersje_mvb[i].Count && liczba_roznych_urzadzen == liczba_urzadzen) {
+                            Console.WriteLine("MVB odnalazlo wiecej urzadzen niz baza...");
+                        }
+
+                         if (liczba_roznych_urzadzen != liczba_urzadzen)
                         {
                             bledy.Add("MVB znalazło nadmiarowe (powstarzające się) urządzenia: ");
                             Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
@@ -867,7 +874,9 @@ namespace RMVB_konsola
                             //zostaja same duble, wychodzi nam cos niemozliwego...
                             foreach (var u in nadmiarowe)
                             {
-                                Console.WriteLine(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                                Console.WriteLine("BAZA: " + u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                                Console.WriteLine("MVB: " + u.UrzadzenieID + "v" + u.WersjaID + " " + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji.Ticks + "-" + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks);
+
                                 bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
                             }
                         }
