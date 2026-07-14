@@ -100,7 +100,7 @@ rmvb.dodajUrzadzenie(testowe);
 
 Pomiar testowy = new Pomiar(0, DateTime.Now);
 
-Wersja alfa = new Wersja(rmvb.zwrocRepo());
+Wersja alfa = new Wersja(rmvb.zwrocRepo(), rmvb);
 alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
 
 //alfa.dodajPomiar(testowy);
@@ -109,7 +109,7 @@ rmvb.dodajPomiar(testowe.UrzadzenieID, testowy, alfa);
 ///
 
 // Urzadzenie 0v1
-Wersja beta = new Wersja(alfa, rmvb.zwrocRepo()); //to deazktywuje alfe
+Wersja beta = new Wersja(alfa, rmvb.zwrocRepo(), rmvb); //to deazktywuje alfe
 beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, ale zachowujemy go w bazie
 
 rmvb.usunWersje(beta);
@@ -123,7 +123,7 @@ for (int i = 0; i < liczbaUrzadzen; i++)
         Urzadzenie testowe1 = new Urzadzenie(generator.zwrocNoweWspolrzedneDeterministyczne());//new Urzadzenie(id, generator.generujWspolrzedne());
         rmvb.dodajUrzadzenie(testowe1);
     }
-    Wersja tmp = new Wersja(id, rmvb.zwrocRepo());
+    Wersja tmp = new Wersja(id, rmvb.zwrocRepo(), rmvb);
 
     rmvb.dodajWersje(tmp);
 
@@ -133,7 +133,7 @@ for (int i = 0; i < liczbaUrzadzen; i++)
         Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
 
         int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
-        Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo());
+        Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo(), rmvb);
 
         rmvb.dodajWersje(losowa);
         rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
@@ -147,7 +147,7 @@ for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
     Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0)) / 100;
     Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
 
-    Wersja losowa = new Wersja(i, rmvb.zwrocRepo());
+    Wersja losowa = new Wersja(i, rmvb.zwrocRepo(), rmvb);
 
     rmvb.dodajWersje(losowa);
     rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);

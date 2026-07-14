@@ -14,19 +14,19 @@ namespace RMVB_konsola
 
         //zmienic na przechowywanie samych id urzadzen i wersji
         //list, bo często sięgamy do ostatniego (największego) elementu
-        private Dictionary<int, List<Wersja>> urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
+        private Dictionary<int, List<int>> urzadzenia_wersje = new Dictionary<int, List<int>>();
         private Dictionary<int, Urzadzenie> urzadzenia = new Dictionary<int, Urzadzenie>();
         //do zwrocenia wszystkich
         private List<Wersja> wersje = new List<Wersja>();
 
-        internal Dictionary<int, List<Wersja>>  zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
+        internal Dictionary<int, List<int>>  zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
 
         public void saveDevice(Urzadzenie device) {
 
             using (var ctx = new Kontekst())
             {
                 ctx.Urzadzenia.Add(device);
-                urzadzenia_wersje.Add(device.UrzadzenieID, new List<Wersja>());
+                urzadzenia_wersje.Add(device.UrzadzenieID, new List<int>());
                 urzadzenia.Add(device.UrzadzenieID, device);
                 ctx.SaveChanges();
             }
@@ -48,7 +48,7 @@ namespace RMVB_konsola
                 ctx.SaveChanges();
             }
 
-            urzadzenia_wersje[v.UrzadzenieID].Add(v);
+            urzadzenia_wersje[v.UrzadzenieID].Add(v.WersjaID);
             this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
         }
 
@@ -60,8 +60,8 @@ namespace RMVB_konsola
             if (!urzadzenia.ContainsKey(UrzadzenieID))
                 return false;
             else 
-                foreach (Wersja w in urzadzenia_wersje[UrzadzenieID]) 
-                    if(w.WersjaID == WersjaID)
+                foreach (int w in urzadzenia_wersje[UrzadzenieID]) 
+                    if(w == WersjaID)
                         return  true;
             return false;
         }
@@ -75,7 +75,7 @@ namespace RMVB_konsola
         }
 
         public void Reset() {
-            urzadzenia_wersje = new Dictionary<int, List<Wersja>>();
+            urzadzenia_wersje = new Dictionary<int, List<int>>();
             urzadzenia = new Dictionary<int, Urzadzenie>();
             wersje = new List<Wersja>();
         }

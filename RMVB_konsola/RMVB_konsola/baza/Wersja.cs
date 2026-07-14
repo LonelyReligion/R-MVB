@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace RMVB_konsola
 {
@@ -23,6 +25,7 @@ namespace RMVB_konsola
         public virtual Urzadzenie UrzadzenieRodzic { get; set; }
 
         private Repo repo;
+        private RMVB _mvb;
 
         //potrzebne do firstordefualt
         public Wersja() 
@@ -32,31 +35,40 @@ namespace RMVB_konsola
             dataWygasniecia = DateTime.MaxValue;
             Aktywne = true;
         }
-        public Wersja(Repo r) : this()
+        public Wersja(Repo r, RMVB mvb) : this()
         {
             repo = r;
+            _mvb = mvb;
         }
 
-        public Wersja(int UrzadzenieID, Repo r) : this(r)
+        public Wersja(int UrzadzenieID, Repo r, RMVB mvb) : this(r, mvb)
         {
             this.UrzadzenieID = UrzadzenieID;
             if (r.czyUrzadzenieIstnieje(UrzadzenieID) && r.zwroc_urzadzenie_wersje()[UrzadzenieID].Count() != 0)
             {
-                Wersja w = r.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
-                foreach (var element in w.Pomiary)
-                    this.Pomiary.Add(element);
+                Wersja w;
+                using (var ctx = new Kontekst())
+                {
+                    int id_wersji = r.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
+                    w = ctx.Wersje.Include(x => x.Pomiary).First(x => x.UrzadzenieID == UrzadzenieID && x.WersjaID == id_wersji);
 
-                DateTime data_wprowadzenia_zmiany = DateTime.Now;
-                dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
-                w.dataWygasniecia = data_wprowadzenia_zmiany;
-                dataWygasniecia = DateTime.MaxValue;
+                    r.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
+                    foreach (var element in w.Pomiary)
+                        this.Pomiary.Add(element);
 
-                ustalWersje(this.UrzadzenieID, r);
+                    DateTime data_wprowadzenia_zmiany = DateTime.Now;
+
+                    dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
+
+                    dataWygasniecia = DateTime.MaxValue;
+
+                    ustalWersje(this.UrzadzenieID, r);
+                }
             }
         }
 
         //konstruktor kopiujący
-        public Wersja(Wersja w, Repo r) : this(r) {
+        public Wersja(Wersja w, Repo r, RMVB mvb) : this(r, mvb) {
             this.UrzadzenieID = w.UrzadzenieID;
             
             ustalWersje(this.UrzadzenieID, repo);
@@ -66,21 +78,24 @@ namespace RMVB_konsola
 
             DateTime data_wprowadzenia_zmiany = DateTime.Now;
             dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
+
             w.dataWygasniecia = data_wprowadzenia_zmiany;
+            
             dataWygasniecia = DateTime.MaxValue;
             
         }
 
         //przetestowac, ograniczyc
         //nie używać bezpośrednio!! tylko poprzez mvb
-        internal void dezaktywuj()
+        internal void dezaktywuj(DateTime moment)
         {
             this.Aktywne = false;
-            dataWygasniecia = DateTime.Now;
+            dataWygasniecia = moment;
         }
 
         private void ustalWersje(int UrzadzenieID, Repo repo)
         {
+            DateTime moment = DateTime.Now;
             var wersje = repo.zwroc_urzadzenie_wersje()[UrzadzenieID];
             if (!wersje.Any())
             {
@@ -89,12 +104,13 @@ namespace RMVB_konsola
             else
             {
                 var ostatni_element = wersje.Last();
-                this.WersjaID = ostatni_element.WersjaID + 1;
+                this.WersjaID = ostatni_element + 1;
 
                 using (var ctx = new Kontekst())
                 {
-                    Wersja wersja = ctx.Wersje.Where(w => (w.UrzadzenieID == UrzadzenieID && w.WersjaID == ostatni_element.WersjaID)).First();
-                    wersja.dezaktywuj();
+                    Wersja wersja = ctx.Wersje.Where(w => (w.UrzadzenieID == UrzadzenieID && w.WersjaID == ostatni_element)).First();
+                    wersja.dezaktywuj(moment);
+                    _mvb.szukaj(UrzadzenieID, ostatni_element).dezaktywuj(moment);
                     ctx.SaveChanges();
                 }
             }

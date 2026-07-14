@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace RMVB_konsola
 {
-    internal class RMVB
+    public class RMVB
     {
         private DrzewoMVB MVB;
         private RTreeAdapter R;
         private Repo repo;
         internal RMVB() {
             repo = new Repo();
-            MVB = new DrzewoMVB(repo);
+            MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
         }
 
@@ -123,7 +123,7 @@ namespace RMVB_konsola
 
         public void Reset() { 
             repo.Reset();
-            MVB = new DrzewoMVB(repo);
+            MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
         }
     }

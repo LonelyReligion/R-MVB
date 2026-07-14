@@ -17,19 +17,20 @@ namespace RMVB_konsola.MVB
         public static decimal granica_przezywalnosci;
         public static int min_urzadzen_korzen;
         Repo repo;
-
+        RMVB rmvb;
         List<(int, Wpis)> wpisy; //po to zeby mozna bylo znalezc ostatni wezel szybko np.
 
         int liczba_urzadzen = 0;
         //parametry drzewa, sa zdefiniowane w klasie drzewa
         static double Pversion;
 
-        internal Korzen(Repo repo, double pversion)
+        internal Korzen(Repo repo, double pversion, RMVB rMVB)
         {
             wpisy = new List<(int, Wpis)>();
             this.repo = repo;
 
             Pversion = pversion;
+            this.rmvb = rMVB;
         }
         public decimal zwrocPrzezywalnosc() { 
             int liczba_zywych = 0;
@@ -143,7 +144,7 @@ namespace RMVB_konsola.MVB
             {
                 if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
                 { //kopiujemy zywe
-                    Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo); 
+                    Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo, rmvb); 
                     urzadzenie.Item2.dataWygasniecia = DateTime.Now;
                     kopia.dataOstatniejModyfikacji = DateTime.Now;
                     kopie.Add(kopia);
@@ -188,7 +189,7 @@ namespace RMVB_konsola.MVB
                             if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
                             { 
                                 //kopiujemy zywe
-                                Wersja kopia = new Wersja(urzadzenie, (Repo)repo);
+                                Wersja kopia = new Wersja(urzadzenie, (Repo)repo, rmvb);
                                 urzadzenie.dataWygasniecia = DateTime.Now;
                                 kopia.dataOstatniejModyfikacji = DateTime.Now;
                                 zywe.Add(kopia);
@@ -298,8 +299,9 @@ namespace RMVB_konsola.MVB
         //potrzebne sprawdzenie weakVersionUnderflow
         internal void usun(Wersja u)
         {
+            DateTime teraz = DateTime.Now;
             //dezaktywuj
-            u.dezaktywuj();
+            u.dezaktywuj(teraz);
 
             //znajdz wersje
             Wezel wezel_zawierający = szukaj(u.UrzadzenieID, u.WersjaID).Item2;
@@ -321,7 +323,7 @@ namespace RMVB_konsola.MVB
                 {
                     if (urzadzenie.Item2.dataWygasniecia == DateTime.MaxValue)
                     { //kopiujemy zywe
-                        Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo);
+                        Wersja kopia = new Wersja(urzadzenie.Item2, (Repo)repo, rmvb);
                         urzadzenie.Item2.dataWygasniecia = DateTime.Now;
                         kopia.dataOstatniejModyfikacji = DateTime.Now;
                         kopie.Add(kopia);
@@ -368,58 +370,65 @@ namespace RMVB_konsola.MVB
             Stack<(int, Wpis)> do_przejrzenia = new Stack<(int, Wpis)>();
             HashSet<int> odwiedzone = new HashSet<int>(); //powinno naprawic nieskonczona petle
 
-            do_przejrzenia.Push(wpisy[poczatkowy_indeks]);
-            int najwyzsza_wersja = -1;
-            while (do_przejrzenia.Count != 0){
-                (int indeks, Wpis w) = do_przejrzenia.Pop();
-                if (w.minKlucz <= id && w.maxKlucz >= id) {
-                    var wpisy_wezla = w.wezel.urzadzenia;
-                    for (int i = 0; i < wpisy_wezla.Count; i++) {
-                        if (wpisy_wezla[i].Item1 == id)
-                        {
-                            int wersja = wpisy_wezla[i].Item2.WersjaID;
-                            if (wersja == v) {
-                                return (0,w.wezel, wpisy_wezla[i].Item2);
-                            }
-                            najwyzsza_wersja = wersja;
-                        }
-                        else if (wpisy_wezla[i].Item1 > id)
-                            break;
-                    }
-                }
-                //nie odnaleziono
-                if (najwyzsza_wersja == -1) 
+            if (dlugosc_listy != 0)
+            {
+                do_przejrzenia.Push(wpisy[poczatkowy_indeks]);
+                int najwyzsza_wersja = -1;
+                while (do_przejrzenia.Count != 0)
                 {
-                    if (indeks + 1 < wpisy.Count && !odwiedzone.Contains(indeks + 1))
+                    (int indeks, Wpis w) = do_przejrzenia.Pop();
+                    if (w.minKlucz <= id && w.maxKlucz >= id)
                     {
-                        do_przejrzenia.Push(wpisy[indeks + 1]);
-                        odwiedzone.Add(indeks + 1);
+                        var wpisy_wezla = w.wezel.urzadzenia;
+                        for (int i = 0; i < wpisy_wezla.Count; i++)
+                        {
+                            if (wpisy_wezla[i].Item1 == id)
+                            {
+                                int wersja = wpisy_wezla[i].Item2.WersjaID;
+                                if (wersja == v)
+                                {
+                                    return (0, w.wezel, wpisy_wezla[i].Item2);
+                                }
+                                najwyzsza_wersja = wersja;
+                            }
+                            else if (wpisy_wezla[i].Item1 > id)
+                                break;
+                        }
                     }
-                    if (indeks - 1 >= 0 && !odwiedzone.Contains(indeks - 1))
+                    //nie odnaleziono
+                    if (najwyzsza_wersja == -1)
                     {
-                        do_przejrzenia.Push(wpisy[indeks - 1]);
-                        odwiedzone.Add(indeks - 1);
+                        if (indeks + 1 < wpisy.Count && !odwiedzone.Contains(indeks + 1))
+                        {
+                            do_przejrzenia.Push(wpisy[indeks + 1]);
+                            odwiedzone.Add(indeks + 1);
+                        }
+                        if (indeks - 1 >= 0 && !odwiedzone.Contains(indeks - 1))
+                        {
+                            do_przejrzenia.Push(wpisy[indeks - 1]);
+                            odwiedzone.Add(indeks - 1);
+                        }
                     }
-                }
-                else {
-                    //mniejsza niz szukana, ale rozna niz -1
-                    if (najwyzsza_wersja < v && indeks + 1 < wpisy.Count)
+                    else
                     {
-                        do_przejrzenia.Push(wpisy[indeks + 1]);
-                        odwiedzone.Add(indeks + 1);
+                        //mniejsza niz szukana, ale rozna niz -1
+                        if (najwyzsza_wersja < v && indeks + 1 < wpisy.Count)
+                        {
+                            do_przejrzenia.Push(wpisy[indeks + 1]);
+                            odwiedzone.Add(indeks + 1);
 
-                        status = 1;
-                    }
-                    //else, czyli większa
-                    else if (indeks - 1 >= 0 && !odwiedzone.Contains(indeks - 1))
-                    {
-                        do_przejrzenia.Push(wpisy[indeks - 1]);
-                        odwiedzone.Add(indeks - 1);
-                        status = 2;
+                            status = 1;
+                        }
+                        //else, czyli większa
+                        else if (indeks - 1 >= 0 && !odwiedzone.Contains(indeks - 1))
+                        {
+                            do_przejrzenia.Push(wpisy[indeks - 1]);
+                            odwiedzone.Add(indeks - 1);
+                            status = 2;
+                        }
                     }
                 }
             }
-
             return (status, null, null); //nie znaleziono
         }
 

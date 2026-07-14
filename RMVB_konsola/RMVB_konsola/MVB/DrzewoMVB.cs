@@ -18,16 +18,17 @@ namespace RMVB_konsola.MVB
         private Repo Repo;
 
         private List<DeskryptorKorzenia> desk = new List<DeskryptorKorzenia>(); // "List of tree descriptors. Descriptors for all roots in the tree are connected in a list(or other structures) according to growing, separable life spans."
-
-        internal DrzewoMVB(Repo repo)
+        private RMVB rmvb;
+        internal DrzewoMVB(Repo repo, RMVB rmvb)
         {
-            Korzen k = new Korzen(repo, Pversion);
+            Korzen k = new Korzen(repo, Pversion, rmvb);
 
             Wezel.Psvu = Psvu;
             Wezel.Psvo = Psvo;
 
             desk.Add(new DeskryptorKorzenia(DateTime.Now, DateTime.MaxValue, k));
             this.Repo = repo;
+            this.rmvb = rmvb;
         }
 
         internal List<string> drukujDrzewo() 
@@ -60,7 +61,7 @@ namespace RMVB_konsola.MVB
                 
                 //zabic te w starym korzeniu z data wyzej
                 //zywe maja miec to jako date ostatniej modyfikacji w nowym korzeniu
-                Korzen nowy = new Korzen(Repo, Pversion);
+                Korzen nowy = new Korzen(Repo, Pversion, rmvb);
                 Wezel.aktualne_id = 'A';
                 desk.Add(new DeskryptorKorzenia(czas_zmiany, DateTime.MaxValue, nowy));
 
@@ -68,9 +69,10 @@ namespace RMVB_konsola.MVB
                 List<Wersja> do_dodania = new List<Wersja>();
                 foreach (Wersja w in zywe)
                 {
-                    w.dezaktywuj();
+                    DateTime teraz = DateTime.Now;
+                    w.dezaktywuj(teraz);
                     
-                    Wersja kopia = new Wersja(w.UrzadzenieID, (Repo)Repo);
+                    Wersja kopia = new Wersja(w.UrzadzenieID, (Repo)Repo, rmvb);
                     kopia.dataOstatniejModyfikacji = czas_zmiany;
                     Repo.saveVersion(kopia);
                     do_dodania.Add(kopia);
