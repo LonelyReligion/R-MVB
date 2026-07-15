@@ -99,17 +99,38 @@ namespace UrzadzeniaSImScottplot
 
                 wyniki_pomiarow.Text = tekst + ". Drzewo RMVB zrealizowalo zapytanie dziesięciokrotnie w czasie " + okno.czas_drzewo10.ToString() + " ms." + ", a baza w czasie " + okno.czas_baza10.ToString() + " ms.";
                 //TabelaWynikow.Items.Add(okno.odnalezione_urzadzenia);
+                TabelaWynikow.AutoGenerateColumns = true;
                 TabelaWynikow.ItemsSource = okno.odnalezione_urzadzenia;
             }
         }
 
         private void przycisk_wyszukaj_srednia_Click(object sender, RoutedEventArgs e)
         {
-            wyszukaj_srednia okno = new wyszukaj_srednia();
+            wyszukaj_srednia okno = new wyszukaj_srednia(_rmvb);
             okno.ShowDialog();
 
-            if (okno.sukces) { 
-            
+            if (okno.sukces)
+            {
+                if (okno.blad)
+                {
+                    TabelaWynikow.AutoGenerateColumns = false;
+
+                    TabelaWynikow.Columns.Add(new DataGridTextColumn
+                    {
+                        Header = "Błąd",
+                        Binding = new Binding(".")  
+                    });
+
+                    TabelaWynikow.ItemsSource = okno.bledy;
+                }
+                else
+                {
+                    wyniki_pomiarow.Text = "Średnia pomiarów urządzeń znajdujących się na obszarze: xMin(" + okno.szukany.XMin + ")," + " " + "yMin(" + okno.szukany.YMin + "), " + "xMax(" + okno.szukany.XMax + "), " + "yMax(" + okno.szukany.YMax + ") to " + okno.srednia.ToString() + ".";
+
+                }
+            }
+            else {
+                //Anulowano
             }
         }
 

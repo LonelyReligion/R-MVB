@@ -23,11 +23,19 @@ namespace UrzadzeniaSImScottplot
     public partial class wyszukaj_srednia : Window, INotifyPropertyChanged
     {
         public bool sukces = false;
+        public bool blad = false;
 
         private int? _maxId = null;
 
         public event PropertyChangedEventHandler? PropertyChanged;
+        private RMVB _rmvb;
 
+        public List<string> bledy = new List<string>();
+
+        public decimal czas_bd;
+        public decimal czas_rmvb;
+        public decimal srednia;
+        public Rectangle szukany;
         public int? maxId
         {
             get { return _maxId; }
@@ -58,18 +66,18 @@ namespace UrzadzeniaSImScottplot
                 }
             }
         }
-        public wyszukaj_srednia()
+        public wyszukaj_srednia(RMVB rmvb)
         {
             DataContext = this;
             InitializeComponent();
             _inicjujKontrolki();
             this.ContentRendered += _sprawdzCzyMamyUrzadzenia;
+            _rmvb = rmvb;
         }
 
         private void Przeslij1_Click(object sender, RoutedEventArgs e) //wariant z prostokatem
         {
-            bool blad = false;
-            Rectangle szukany = new Rectangle(prostkat.Ymin, prostkat.Xmin, prostkat.Ymax, prostkat.Xmax);
+            szukany = new Rectangle(prostkat.Ymin, prostkat.Xmin, prostkat.Ymax, prostkat.Xmax);
 
             List<Decimal> resultDB = new List<Decimal>();
             List<Decimal> resultRTree = new List<Decimal>();
@@ -80,7 +88,7 @@ namespace UrzadzeniaSImScottplot
             List<int> ile = new List<int>();
             int cnt_1 = 0;
 
-            /*using (var ctx = new Kontekst())
+            using (var ctx = new Kontekst())
             {
                 for (int i = 0; i < 10; i++)
                 {
@@ -125,7 +133,7 @@ namespace UrzadzeniaSImScottplot
                         resultDB[i] = 0;
                     cnt_1 = cnt;
                 }
-                long wynik = sw.ElapsedMilliseconds;
+                czas_bd = sw.ElapsedMilliseconds;
             }
 
             sw = Stopwatch.StartNew();
@@ -133,12 +141,12 @@ namespace UrzadzeniaSImScottplot
             List<Decimal> ile_r = new List<Decimal>();
             for (int i = 0; i < 10; i++)
             {
-                (Decimal liczba_elementow, Decimal srednia) = rmvb.szukajAgregatu(szukany);
+                (Decimal liczba_elementow, Decimal srednia) = _rmvb.szukajAgregatu(szukany);
                 resultRTree.Add(srednia);
                 ile_r.Add(liczba_elementow);
 
             }
-            long wynik3 = sw.ElapsedMilliseconds;
+            czas_rmvb = sw.ElapsedMilliseconds;
 
             Console.WriteLine("**********************************");
             for (int i = 0; i < 10; i++)
@@ -159,8 +167,7 @@ namespace UrzadzeniaSImScottplot
                     Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
                         ile_r[i] + " (r)");
                     blad = true;
-                    rmvb.szukajAgregatu(szukany);
-
+                   
                     bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
                         ile_r[i] + " (r)");
                     bledy.Add("Współrzędne prostokąta: " + "xMin(" + szukany.XMin + "), " + "yMin(" + szukany.YMin + "), " +
@@ -176,6 +183,7 @@ namespace UrzadzeniaSImScottplot
                         bledy.Add("Obliczone wartości: " + "Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
                     }
                 }
+
                 else if (resultDB[i] != resultRTree[i])
                 {
                     if (blad == false) //powinno wykonać się tylko raz :)
@@ -188,8 +196,7 @@ namespace UrzadzeniaSImScottplot
                         resultRTree[i] + " (r)");
                     //rmvb.szukajAgregatu(szukany);
                     blad = true;
-                    rmvb.szukajAgregatu(szukany);
-
+                    
                     bledy.Add("Mamy rozbieznosc miedzy wartościami agregatu: " + "Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
                     bledy.Add("Współrzędne prostokąta: " + "xMin(" + szukany.XMin + "), " + "yMin(" + szukany.YMin + "), " +
                     "xMax(" + szukany.YMin + "), " + "yMax(" + szukany.YMax + ")");
@@ -200,13 +207,9 @@ namespace UrzadzeniaSImScottplot
                 Console.WriteLine("**********************************");
             }
 
-            if (!blad)
-            {
-                Console.WriteLine("CZASY:    Recznie: " + wynik + " vs " + "RMVB: " + wynik3);
-                wyniki.Add("R | wyszukuje agregaty powierzchniowe losowego prostokata | " + wynik + " | " + wynik3);
-            }
-*/
-            sukces = !blad;
+            srednia = resultRTree[0]; // jezeli !blad to sa rowne
+
+            sukces = true;
             Close();
         }
 
