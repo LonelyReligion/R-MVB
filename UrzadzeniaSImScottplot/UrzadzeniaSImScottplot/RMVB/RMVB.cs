@@ -8,23 +8,23 @@ namespace UrzadzeniaSImScottplot
 {
     public class RMVB
     {
-/*        private DrzewoMVB MVB;*/
+        private DrzewoMVB MVB;
         private RTreeAdapter R;
         private Repo repo;
         internal RMVB() {
             repo = new Repo();
-/*            MVB = new DrzewoMVB(repo, ctx);*/
+            MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
         }
 
         internal Repo zwrocRepo() { return repo; }
         internal bool czyUrzadzenieIstnieje(int id) { return repo.czyUrzadzenieIstnieje(id); }
-/*        internal DrzewoMVB zwrocMVB() { return MVB; }*/
-/*        internal void wypiszMVB() 
-        { 
-            foreach(String linijka in MVB.drukujDrzewo())
+        internal DrzewoMVB zwrocMVB() { return MVB; }
+        internal void wypiszMVB()
+        {
+            foreach (String linijka in MVB.drukujDrzewo())
                 Console.WriteLine(linijka);
-        }*/
+        }
         //dodaj
         internal void dodajUrzadzenie(Urzadzenie u) {
             repo.saveDevice(u);
@@ -34,7 +34,7 @@ namespace UrzadzeniaSImScottplot
         internal void dodajWersje(Wersja w)
         {
             repo.saveVersion(w);
-            //MVB.dodajUrzadzenie(w);
+            MVB.dodajUrzadzenie(w);
         }
 
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
@@ -46,34 +46,37 @@ namespace UrzadzeniaSImScottplot
         }
 
         //usun
-        /*        internal void usunWersje(Wersja w) {
-                    MVB.dodajUrzadzenie(w); //musi zostac zapisana najpierw
-                    MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
-                    repo.saveVersion(w);
-                }
+        internal void usunWersje(Wersja w)
+        {
+            MVB.dodajUrzadzenie(w); //musi zostac zapisana najpierw
+            MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
+            repo.saveVersion(w);
+        }
 
-                //szukaj
-                //wyszukiwanie wersji o UrządzenieID równym id i WersjaID równym v
-                internal Wersja szukaj(int id, int v) { 
-                    return MVB.szukaj(id, v);
-                }
+        //szukaj
+        //wyszukiwanie wersji o UrządzenieID równym id i WersjaID równym v
+        internal Wersja szukaj(int id, int v)
+        {
+            return MVB.szukaj(id, v);
+        }
 
-                //wyszukiwanie wersji urządzenia o UrzadzenieID aktualnej w chwili dt
-                internal Wersja szukaj(int id, DateTime dt)
-                {
-                    return MVB.szukaj(id, dt);
-                }
+        //wyszukiwanie wersji urządzenia o UrzadzenieID aktualnej w chwili dt
+        internal Wersja szukaj(int id, DateTime dt)
+        {
+            return MVB.szukaj(id, dt);
+        }
 
-                //wyszukiwanie ostatniej wersji o UrzadzenieID równym id
-                internal Wersja szukaj(int id)
-                {
-                    return MVB.szukaj(id);
-                }
+        //wyszukiwanie ostatniej wersji o UrzadzenieID równym id
+        internal Wersja szukaj(int id)
+        {
+            return MVB.szukaj(id);
+        }
 
-                //wyszukiwanie wersji aktualnych w podanym przedziale czasowym
-                internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) { 
-                    return MVB.szukaj(poczatek, koniec);
-                }*/
+        //wyszukiwanie wersji aktualnych w podanym przedziale czasowym
+        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec)
+        {
+            return MVB.szukaj(poczatek, koniec);
+        }
 
         //zwraca listę urządzeń znajdujących się w zadanym prostokącie
         internal List<Urzadzenie> szukaj(Rectangle rect)
@@ -115,7 +118,7 @@ namespace UrzadzeniaSImScottplot
 
         public void Reset() { 
             repo.Reset();
-/*            MVB = new DrzewoMVB(repo, ctx);*/
+/*            MVB = new DrzewoMVB(repo, this);*/
             R = new RTreeAdapter(new RTree(repo));
         }
     }

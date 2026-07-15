@@ -20,6 +20,9 @@ namespace UrzadzeniaSImScottplot
 
         internal Dictionary<int, List<int>> zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
         
+        //do zwrocenia wszystkich
+        private List<Wersja> wersje = new List<Wersja>();
+
         public void saveDevice(Urzadzenie device)
         {
             using (var ctx = new Kontekst())
@@ -43,26 +46,31 @@ namespace UrzadzeniaSImScottplot
                 ctx.SaveChanges();
             }
         }
+        public Dictionary<int, Urzadzenie> pobierzUrzadzenia()
+        {
+            return urzadzenia;
+        }
+
 
         public void saveVersion(Wersja v)
         {
-   
+
             using (var ctx = new Kontekst())
             {
-
-                //TAK MUSI BYC BO WSPOLDZIELIMY POMIARY MIEDZY WERSJAMI (I WERSJE MIĘDZY POMIARAMI?)
                 foreach (var p in v.Pomiary)
                 {
                     ctx.Entry(p).State = EntityState.Unchanged;
                 }
 
-
                 ctx.Entry(v).State = EntityState.Added;
+
+
+                wersje.Add(v);
                 ctx.SaveChanges();
             }
 
             urzadzenia_wersje[v.UrzadzenieID].Add(v.WersjaID);
-
+            this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
         }
 
         public bool czyUrzadzenieIstnieje(int UrzadzenieID)
@@ -128,6 +136,11 @@ namespace UrzadzeniaSImScottplot
                 ctx.SpaceAggregates.Add(spaceAggregate);
                 ctx.SaveChanges();
             }
+        }
+
+        public List<Wersja> pobierzWersje()
+        {
+            return wersje;
         }
     }
 }

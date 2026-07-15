@@ -24,6 +24,7 @@ namespace UrzadzeniaSImScottplot
         public virtual Urzadzenie UrzadzenieRodzic { get; set; }
 
         private Repo repo;
+        private RMVB _rmvb;
 
         //potrzebne do firstordefualt
         public Wersja() 
@@ -33,12 +34,13 @@ namespace UrzadzeniaSImScottplot
             dataWygasniecia = DateTime.MaxValue;
             Aktywne = true;
         }
-        public Wersja(Repo r) : this()
+        public Wersja(Repo r, RMVB rmvb) : this()
         {
             repo = r;
+            _rmvb = rmvb;
         }
 
-        public Wersja(int UrzadzenieID, Repo r) : this(r)
+        public Wersja(int UrzadzenieID, Repo r, RMVB mvb) : this(r, mvb)
         {
             this.UrzadzenieID = UrzadzenieID;
             if (r.czyUrzadzenieIstnieje(UrzadzenieID) && r.zwroc_urzadzenie_wersje()[UrzadzenieID].Count() != 0)
@@ -47,26 +49,28 @@ namespace UrzadzeniaSImScottplot
                 using (var ctx = new Kontekst())
                 {
                     int id_wersji = r.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
-                    w = ctx.Wersje.Include(x => x.Pomiary).First(x => x.UrzadzenieID == UrzadzenieID&& x.WersjaID == id_wersji);
+                    w = ctx.Wersje.Include(x => x.Pomiary).First(x => x.UrzadzenieID == UrzadzenieID && x.WersjaID == id_wersji);
 
-
+                    r.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
                     foreach (var element in w.Pomiary)
                         this.Pomiary.Add(element);
 
                     DateTime data_wprowadzenia_zmiany = DateTime.Now;
-                    dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
-                    w.dataWygasniecia = data_wprowadzenia_zmiany;
-                    
-                    ctx.SaveChanges();
-                }
-                dataWygasniecia = DateTime.MaxValue;
 
-                ustalWersje(this.UrzadzenieID, r);
+                    dataOstatniejModyfikacji = data_wprowadzenia_zmiany;
+
+
+
+
+                    dataWygasniecia = DateTime.MaxValue;
+
+                    ustalWersje(this.UrzadzenieID, r);
+                }
             }
         }
 
         //konstruktor kopiujący
-        public Wersja(Wersja w, Repo r) : this(r) {
+        public Wersja(Wersja w, Repo r, RMVB rmvb) : this(r, rmvb) {
             this.UrzadzenieID = w.UrzadzenieID;
             
             ustalWersje(this.UrzadzenieID, repo);
@@ -83,14 +87,15 @@ namespace UrzadzeniaSImScottplot
 
         //przetestowac, ograniczyc
         //nie używać bezpośrednio!! tylko poprzez mvb
-        internal void dezaktywuj()
+        internal void dezaktywuj(DateTime moment)
         {
             this.Aktywne = false;
-            dataWygasniecia = DateTime.Now;
+            dataWygasniecia = moment;
         }
 
         private void ustalWersje(int UrzadzenieID, Repo repo)
         {
+            DateTime moment = DateTime.Now;
             var wersje = repo.zwroc_urzadzenie_wersje()[UrzadzenieID];
             if (!wersje.Any())
             {
@@ -104,7 +109,8 @@ namespace UrzadzeniaSImScottplot
                 using (var ctx = new Kontekst())
                 {
                     Wersja wersja = ctx.Wersje.Where(w => (w.UrzadzenieID == UrzadzenieID && w.WersjaID == ostatni_element)).First();
-                    wersja.dezaktywuj();
+                    wersja.dezaktywuj(moment);
+                    _rmvb.szukaj(UrzadzenieID, ostatni_element).dezaktywuj(moment);
                     ctx.SaveChanges();
                 }
             }
