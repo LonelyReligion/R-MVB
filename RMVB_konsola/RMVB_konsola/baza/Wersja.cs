@@ -24,8 +24,8 @@ namespace RMVB_konsola
         public virtual ICollection<Pomiar> Pomiary { get; set; }
         public virtual Urzadzenie UrzadzenieRodzic { get; set; }
 
-        private Repo repo;
-        private RMVB _mvb;
+        private Repo _repo;
+        private RMVB _rmvb;
 
         //potrzebne do firstordefualt
         public Wersja() 
@@ -37,8 +37,8 @@ namespace RMVB_konsola
         }
         public Wersja(Repo r, RMVB mvb) : this()
         {
-            repo = r;
-            _mvb = mvb;
+            _repo = r;
+            _rmvb = mvb;
         }
 
         public Wersja(int UrzadzenieID, Repo r, RMVB mvb) : this(r, mvb)
@@ -71,7 +71,7 @@ namespace RMVB_konsola
         public Wersja(Wersja w, Repo r, RMVB mvb) : this(r, mvb) {
             this.UrzadzenieID = w.UrzadzenieID;
             
-            ustalWersje(this.UrzadzenieID, repo);
+            ustalWersje(this.UrzadzenieID, _repo);
 
             foreach (var element in w.Pomiary)
                 this.Pomiary.Add(element);
@@ -110,7 +110,7 @@ namespace RMVB_konsola
                 {
                     Wersja wersja = ctx.Wersje.Where(w => (w.UrzadzenieID == UrzadzenieID && w.WersjaID == ostatni_element)).First();
                     wersja.dezaktywuj(moment);
-                    _mvb.szukaj(UrzadzenieID, ostatni_element).dezaktywuj(moment);
+                    _rmvb.szukaj(UrzadzenieID, ostatni_element).dezaktywuj(moment);
                     ctx.SaveChanges();
                 }
             }
