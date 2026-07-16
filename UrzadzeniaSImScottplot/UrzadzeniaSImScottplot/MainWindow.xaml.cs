@@ -111,18 +111,27 @@ namespace UrzadzeniaSImScottplot
 
             //TabelaWynikow.Items.Clear();
             if (okno.sukces) {
-                //wyswietlic czasy i liczby odnalezionych urzadzen, jezeli sa zgodne to odnalezione urzadzenia w tabeli
-                int liczba = okno.odnalezione_urzadzenia.Count();
+                if (!okno.blad)
+                {
+                    //wyswietlic czasy i liczby odnalezionych urzadzen, jezeli sa zgodne to odnalezione urzadzenia w tabeli
+                    int liczba = okno.odnalezione_urzadzenia.Count();
 
-                string tekst = $"Zapytanie zwróciło {liczba} " +
-                               (liczba == 1 ? "urządzenie" :
-                                liczba >= 2 && liczba <= 4 ? "urządzenia" :
-                                "urządzeń");
+                    string tekst = $"Zapytanie zwróciło {liczba} " +
+                                   (liczba == 1 ? "urządzenie znajdujące się na obszarze: " :
+                                    liczba >= 2 && liczba <= 4 ? "urządzenia znajdujące się na obszarze: " :
+                                    "urządzeń znajdujących się na obszarze: ");
 
-                wyniki_pomiarow.Text = tekst + ". Drzewo RMVB zrealizowalo zapytanie dziesięciokrotnie w czasie " + okno.czas_drzewo10.ToString() + " ms." + ", a baza w czasie " + okno.czas_baza10.ToString() + " ms.";
-                //TabelaWynikow.Items.Add(okno.odnalezione_urzadzenia);
-                TabelaWynikow.AutoGenerateColumns = true;
-                TabelaWynikow.ItemsSource = okno.odnalezione_urzadzenia;
+                    wyniki_pomiarow.Text = tekst + "xMin(" + okno.rect.XMin + ")," + " " + "yMin(" + okno.rect.YMin + "), " + "xMax(" + okno.rect.XMax + "), " + "yMax(" + okno.rect.YMax + ")" +
+                        ". Drzewo RMVB zrealizowalo zapytanie dziesięciokrotnie w czasie " + okno.czas_drzewo10.ToString() + " ms." + ", a baza w czasie " + okno.czas_baza10.ToString() + " ms.";
+
+                    //TabelaWynikow.Items.Add(okno.odnalezione_urzadzenia);
+                    TabelaWynikow.AutoGenerateColumns = true;
+                    TabelaWynikow.ItemsSource = okno.odnalezione_urzadzenia;
+                }
+                else {
+                    wyniki_pomiarow.Text = okno.rodzaj_bledu;
+                    TabelaWynikow.ItemsSource = okno.nadmiarowe;
+                }
             }
         }
 

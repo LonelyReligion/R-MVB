@@ -32,6 +32,10 @@ namespace UrzadzeniaSImScottplot
         public decimal czas_baza10;
 
         public List<Urzadzenie> odnalezione_urzadzenia;
+        public Rectangle rect;
+
+        public String rodzaj_bledu;
+        public List<Urzadzenie> nadmiarowe =  new List<Urzadzenie>();
 
         public wyszukaj_urzadzenia(Generatory gen, RMVB drzewo)
         {
@@ -73,7 +77,7 @@ namespace UrzadzeniaSImScottplot
         {
             //tu wykonamy test i przekazemy wynik do MainWindow
 
-            Rectangle rect = new Rectangle(prostkat.Ymin, prostkat.Xmin, prostkat.Ymax, prostkat.Xmax);
+            rect = new Rectangle(prostkat.Ymin, prostkat.Xmin, prostkat.Ymax, prostkat.Xmax);
             Stopwatch sw;
             sw = Stopwatch.StartNew();
             List<List<Urzadzenie>> cnt_1 = new List<List<Urzadzenie>>();
@@ -107,32 +111,56 @@ namespace UrzadzeniaSImScottplot
             System.Diagnostics.Debug.WriteLine("Prostokat: " + rect.XMin + " " + rect.XMax + "(x) " + rect.YMin + " " + rect.YMax + "(y)");
             odnalezione_urzadzenia = null;
 
-            for (int i = 0; i < 10; i++)
-            {
-                System.Diagnostics.Debug.WriteLine("Znaleziono " + cnt_r[i].Count.ToString() + "(rt) " + cnt_1[i].Count.ToString() + "(zapytanie w bazie)");
-                if (cnt_r[i].Count != cnt_1[i].Count) //a co jezeli znalazla inne, ale liczba się zgadza?
-                {
 
-                    List<Urzadzenie> nadmiarowe = new List<Urzadzenie>();
-                    if (cnt_r[i].Count > cnt_1[i].Count)
+
+            System.Diagnostics.Debug.WriteLine("Znaleziono " + cnt_r[0].Count.ToString() + "(rt) " + cnt_1[0].Count.ToString() + "(zapytanie w bazie)");
+            if (cnt_r[0].Count != cnt_1[0].Count) //a co jezeli znalazla inne, ale liczba się zgadza?
+            {
+                blad = true;
+                if (cnt_r[0].Count > cnt_1[0].Count)
+                {
+                    nadmiarowe = (cnt_r[0].Where(u => !cnt_1[0].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
+
+                    if (nadmiarowe.Count == 0)
                     {
-                        System.Diagnostics.Debug.WriteLine("R-drzewo dodatkowo znalazło następujące urządzenia: ");
-                        nadmiarowe = (cnt_r[i].Where(u => !cnt_1[i].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
+                        HashSet<Urzadzenie> bez_powtorek = new HashSet<Urzadzenie>(cnt_r[0]);
+                        foreach(Urzadzenie u in bez_powtorek.ToList())
+                            cnt_r[0].Remove(u);
+                        nadmiarowe = cnt_r[0];
+
+                        rodzaj_bledu = "Drzewo RMVB znalazło duplikat(y): ";
                     }
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine("Baza dodatkowo znalazła następujące urządzenia: ");
-                        nadmiarowe = (cnt_1[i].Where(u => !cnt_r[i].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
+                        rodzaj_bledu = "Drzewo RMVB dodatkowo znalazło następujące urządzenia: ";
                     }
-
-                    foreach (Urzadzenie u in nadmiarowe)
-                    {
-                        System.Diagnostics.Debug.WriteLine("UrzadzenieID: " + u.UrzadzenieID + " x: " + u.Dlugosc + " y: " + u.Szerokosc);
-                    }
-                    throw new Exception("blad w wyszukaj_urzadzenia");
+                         
                 }
-                System.Diagnostics.Debug.WriteLine("");
+                else
+                {
+                    nadmiarowe = (cnt_1[0].Where(u => !cnt_r[0].Any(u1 => (u1.UrzadzenieID == u.UrzadzenieID))).ToList());
+
+                    if (nadmiarowe.Count == 0)
+                    {
+                        HashSet<Urzadzenie> bez_powtorek = new HashSet<Urzadzenie>(cnt_1[0]);
+                        foreach (Urzadzenie u in bez_powtorek.ToList())
+                            cnt_r[0].Remove(u);
+                        nadmiarowe = cnt_r[0];
+
+                        rodzaj_bledu = "Baza znalazła duplikat(y): ";
+                    }
+                    else {
+                        rodzaj_bledu = "Baza dodatkowo znalazła następujące urządzenia: ";
+                    }
+                }
+
+                foreach (Urzadzenie u in nadmiarowe)
+                {
+                    System.Diagnostics.Debug.WriteLine("UrzadzenieID: " + u.UrzadzenieID + " x: " + u.Dlugosc + " y: " + u.Szerokosc);
+                }
             }
+            System.Diagnostics.Debug.WriteLine("");
+            
 
             if (blad)
             {
@@ -142,7 +170,7 @@ namespace UrzadzeniaSImScottplot
                 odnalezione_urzadzenia = cnt_r.Last();
             }
 
-            sukces = !blad;
+            sukces = true;
             Close();
         }
 
