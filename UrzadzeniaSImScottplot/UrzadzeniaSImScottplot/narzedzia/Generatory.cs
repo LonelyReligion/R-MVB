@@ -160,7 +160,7 @@ namespace UrzadzeniaSImScottplot
 
         public Pomiar generujLosowyPomiar()
         {
-            Decimal temp = (Decimal)(rnd.NextDouble() * (40.5 - (-41.1)) - 41.0);
+            Decimal temp = Math.Round((Decimal)(rnd.NextDouble() * (40.5 - (-41.1)) - 41.0), 2);
             Pomiar testowy = new Pomiar(temp, DateTime.Now);
             return testowy;
         }
