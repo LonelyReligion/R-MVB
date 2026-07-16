@@ -158,6 +158,7 @@ namespace UrzadzeniaSImScottplot
                 {
                     wyniki_pomiarow.Text = "Średnia pomiarów urządzeń znajdujących się na obszarze: xMin(" + okno.szukany.XMin + ")," + " " + "yMin(" + okno.szukany.YMin + "), " + "xMax(" + okno.szukany.XMax + "), " + "yMax(" + okno.szukany.YMax + ") to " + okno.srednia.ToString() + ".";
 
+                    TabelaWynikow.AutoGenerateColumns = false;
                 }
             }
             else {
