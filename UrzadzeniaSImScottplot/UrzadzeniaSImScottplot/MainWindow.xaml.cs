@@ -27,6 +27,7 @@ namespace UrzadzeniaSImScottplot
             {
                 SiatkaUrzadzen.ItemsSource = ctx.Urzadzenia.ToList();
                 SiatkaUrzadzen.AutoGeneratingColumn += generowanieKolumn;
+                TabelaWynikow.AutoGeneratingColumn += generowanieKolumn;
                 DataGridTextColumn liczba_pomiarow =  new DataGridTextColumn();
                 liczba_pomiarow.Header = "Liczba pomiarów";
                 liczba_pomiarow.Binding = new Binding("LiczbaPomiarow");
@@ -42,6 +43,27 @@ namespace UrzadzeniaSImScottplot
             {
                 e.Column.Visibility = Visibility.Collapsed;
             }
+
+            else if (e.PropertyName == "rTimeAggregate")
+            {
+                e.Column.Header = "Średnia";
+            }
+
+            else if (e.PropertyName == "Szerokosc") 
+            {
+                e.Column.Header = "Szerokość";
+            }
+
+            else if (e.PropertyName == "Dlugosc")
+            {
+                e.Column.Header = "Długość";
+            }
+
+            else if (e.PropertyName == "LiczbaPomiarow")
+            {
+                e.Column.Header = "Liczba pomiarów";
+            }
+
         }
         public void AktualizujSiatkeUrzadzen() {
             using (var ctx = new Kontekst())
