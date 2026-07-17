@@ -157,9 +157,15 @@ namespace UrzadzeniaSImScottplot
                 }
                 else
                 {
-                    wyniki_pomiarow.Text = "Średnia pomiarów urządzeń znajdujących się na obszarze: xMin(" + okno.szukany.XMin + ")," + " " + "yMin(" + okno.szukany.YMin + "), " + "xMax(" + okno.szukany.XMax + "), " + "yMax(" + okno.szukany.YMax + ") to " + okno.srednia.ToString() + ".";
-
                     TabelaWynikow.AutoGenerateColumns = false;
+                    if (!okno.wariant)
+                    {
+                        wyniki_pomiarow.Text = "Średnia pomiarów urządzeń znajdujących się na obszarze: xMin(" + okno.szukany.XMin + ")," + " " + "yMin(" + okno.szukany.YMin + "), " + "xMax(" + okno.szukany.XMax + "), " + "yMax(" + okno.szukany.YMax + ") to " + okno.srednia.ToString() + ".";
+                    }
+                    else 
+                    { 
+                        wyniki_pomiarow.Text = "Średnia z pomiarów urządzenia o id: " + okno.id.ToString() + "to " + okno.srednia + ".";
+                    }
                 }
             }
             else {

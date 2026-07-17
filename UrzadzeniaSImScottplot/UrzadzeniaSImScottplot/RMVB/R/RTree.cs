@@ -91,21 +91,21 @@ namespace UrzadzeniaSImScottplot
                 if (ctx.Pomiary.Count() != 0)
                 {
                     //Stopwatch stopwatch = Stopwatch.StartNew();
-                    
+
                     root.SpaceAggregate(repository);
-                    
+
                     //long czas = stopwatch.ElapsedMilliseconds;
                     //Console.WriteLine("Czas potrzebny na agregowanie powierzchniowe: " + czas);
                 }
             }
-        }
+        }*/
 
-        public Decimal GetTimeAggregate(Decimal x, Decimal y)
+        public (int, Decimal) GetTimeAggregate(Decimal x, Decimal y)
         {
             Urzadzenie dev = SearchBy(x, y);
             Decimal result = dev.GetTimeAggregate();
-            return result;
-        }*/
+            return (dev.get_liczba_suma().Item1, result);
+        }
 
         public int GtDeviceCout()
         {

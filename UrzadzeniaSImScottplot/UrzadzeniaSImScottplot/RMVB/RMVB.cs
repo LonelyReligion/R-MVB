@@ -97,24 +97,26 @@ namespace UrzadzeniaSImScottplot
         }
 
         //zwraca agregat czasowy urzadzenia
-/*        internal Decimal szukajAgregatuCzasowego(Decimal x, Decimal y) {
+        internal (int, Decimal) szukajAgregatuCzasowego(Decimal x, Decimal y)
+        {
             return R.szukajAgregatuCzasowego(x, y);
         }
 
         //oblicza agregaty powierzchniowe
-        internal void obliczAgregaty() { 
-            R.obliczAgregaty();
+/*        internal void obliczAgregaty()
+        {
+            R.obliczAgregaty(); //po co to jest??
         }*/
 
-/*        internal void zapiszMVB(string v)
-        {
-            List<string> linijki = MVB.drukujDrzewo();
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "MVB.txt")))
-            {
-                foreach (string linijka in linijki)
-                    outputFile.WriteLine(linijka);
-            }
-        }*/
+        /*        internal void zapiszMVB(string v)
+                {
+                    List<string> linijki = MVB.drukujDrzewo();
+                    using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "MVB.txt")))
+                    {
+                        foreach (string linijka in linijki)
+                            outputFile.WriteLine(linijka);
+                    }
+                }*/
 
         public void Reset() { 
             repo.Reset();

@@ -52,11 +52,13 @@ namespace UrzadzeniaSImScottplot
         }
 
         //zwraca agregat czasowy
-/*        public Decimal szukajAgregatuCzasowego(Decimal x, Decimal y) {
+        public (int, Decimal) szukajAgregatuCzasowego(Decimal x, Decimal y)
+        {
             return drzewo.GetTimeAggregate(x, y);
         }
 
-        public void obliczAgregaty() {
+/*        public void obliczAgregaty()
+        {
             drzewo.SpaceAggregate();
         }*/
     }

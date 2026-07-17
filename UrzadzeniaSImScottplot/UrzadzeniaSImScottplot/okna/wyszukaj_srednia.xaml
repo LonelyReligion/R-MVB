@@ -52,7 +52,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Content="Wybierz ID Urządzenia:"  Grid.Column="0" />
-                        <xctk:IntegerUpDown x:Name="id_urzadzenia" ValueChanged="id_urzadzenia_ValueChanged" Grid.Column="1" Height="20" Width="80" Grid.Row="0" Minimum="0" Maximum="{Binding maxId}" AllowTextInput="False"/>
+                        <xctk:IntegerUpDown x:Name="id_urzadzenia" ValueChanged="id_urzadzenia_ValueChanged" Grid.Column="1" Height="20" Width="80" Grid.Row="0" Minimum="0" Value="0" Maximum="{Binding maxId}" AllowTextInput="False"/>
 
                     </Grid>
 

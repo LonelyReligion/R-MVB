@@ -37,6 +37,9 @@ namespace UrzadzeniaSImScottplot
         public decimal czas_rmvb;
         public decimal srednia;
         public Rectangle szukany;
+        public int id = -1;
+
+        public bool wariant = false; //false to prostokat, a true to urzadzenie 
         public int? maxId
         {
             get { return _maxId; }
@@ -74,6 +77,18 @@ namespace UrzadzeniaSImScottplot
             _inicjujKontrolki();
             this.ContentRendered += _sprawdzCzyMamyUrzadzenia;
             _rmvb = rmvb;
+
+            this.Loaded += Wyszukaj_srednia_Loaded;
+        }
+
+        private void Wyszukaj_srednia_Loaded(object sender, RoutedEventArgs e)
+        {
+            using (var ctx = new Kontekst())
+            {
+                Urzadzenie zerowe = ctx.Urzadzenia.Where(u => u.UrzadzenieID == 0).First();
+                dlugosc.Content = zerowe.Dlugosc.ToString();
+                szerokosc.Content = zerowe.Szerokosc.ToString();
+            }
         }
 
         private void Przeslij1_Click(object sender, RoutedEventArgs e) //wariant z prostokatem
@@ -201,46 +216,39 @@ namespace UrzadzeniaSImScottplot
 
         private void Przeslij2_Click(object sender, RoutedEventArgs e)//wariant z id
         {
+            wariant = true;
             sukces = true;
-            int id = (int)id_urzadzenia.Value;
-
-/*            List<(Decimal, Decimal)> wspolrzedne = new List<(Decimal, Decimal)>();
-            for (int i = 0; i < 10; i++)
-                wspolrzedne.Add(generator.wylosujWspolrzedne());
-
+            (Decimal, Decimal) wspolrzedne = (Convert.ToDecimal(dlugosc.Content), Convert.ToDecimal(szerokosc.Content));
+            
             List<Decimal> wynikBD = new List<Decimal>();
-            List<Decimal> wynikR = new List<Decimal>();
+            Decimal wynikR = 0;
 
             Stopwatch sw;
             int cnt_1 = 0;
 
             sw = Stopwatch.StartNew();
             List<int> liczby = new List<int>();
-            List<int> id = new List<int>();
-
 
             using (var ctx = new Kontekst())
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    (Decimal x, Decimal y) = wspolrzedne[i];
+                    (Decimal x, Decimal y) = wspolrzedne;
                     wynikBD.Add(0);
                     liczby.Add(0);
-                    id.Add(-1);
 
-                    id[i] = ctx.Urzadzenia
+                    id = ctx.Urzadzenia
                         .AsNoTracking()
                         .Where(u => u.Szerokosc == y)
                         .Where(u => u.Dlugosc == x)
                         .First()
                         .UrzadzenieID;
 
-                    if (id[i] != -1)
+                    if (id != -1)
                     {
-                        int aktualne_id = id[i];
                         List<Pomiar> pomiary = ctx.Pomiary
                                                 .AsNoTracking()
-                                                .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == aktualne_id)
+                                                .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == id)
                                                 .ToList();
                         liczby[i] += pomiary.Count;
                         foreach (Pomiar p in pomiary) wynikBD[i] += p.Wartosc;
@@ -262,20 +270,22 @@ namespace UrzadzeniaSImScottplot
             sw = Stopwatch.StartNew();
 
             List<Urzadzenie> resDevices = new List<Urzadzenie>();
+            int liczba = 0;
             sw = Stopwatch.StartNew();
             for (int i = 0; i < 10; i++)
             {
-                (Decimal x, Decimal y) = wspolrzedne[i];
-                wynikR.Add(rmvb.szukajAgregatuCzasowego(x, y));
+                (Decimal x, Decimal y) = wspolrzedne;
+                (liczba, wynikR) =_rmvb.szukajAgregatuCzasowego(x, y);
             }
             long czas = sw.ElapsedMilliseconds;
-            Console.WriteLine("**********************************");
             for (int i = 0; i < 10; i++)
             {
-                (Decimal x, Decimal y) = wspolrzedne[i];
-                Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id[i].ToString());
-                Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
-                if (wynikBD[i] != wynikR[i] || repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 != liczby[i])
+                (Decimal x, Decimal y) = wspolrzedne;
+                Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id.ToString());
+                Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR);
+
+
+                if (wynikBD[i] != wynikR || liczba != liczby[i])
                 {
                     if (!blad)
                     {
@@ -284,29 +294,28 @@ namespace UrzadzeniaSImScottplot
                     }
                     blad = true;
 
-                    if (wynikBD[i] != wynikR[i])
+                    if (wynikBD[i] != wynikR)
                     {
-                        bledy.Add("Mamy rozbieznosc miedzy obliczonymi wartościami: " + wynikR[i] + "(R) " + wynikBD[i] + "(ręcznie)");
+                        bledy.Add("Mamy rozbieznosc miedzy obliczonymi wartościami: " + wynikR + "(R) " + wynikBD[i] + "(ręcznie)");
                         Console.WriteLine("Mamy rozbieznosc miedzy obliczonymi wartościami.");
                     }
 
-                    if (repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 != liczby[i])
+                    if (liczba != liczby[i])
                     {
                         bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + liczby[i] + " (baza) " +
-                            repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (r)");
+                            liczba + " (r)");
 
                         Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu czasowego urządzenia o współrzędnych: (" +
-                            wspolrzedne[i].Item1 + "," + wspolrzedne[i].Item2 + ") i id: " + id[i]);
-                        Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
+                            wspolrzedne.Item1 + "," + wspolrzedne.Item2 + ") i id: " + id);
+                        Console.WriteLine("Na podstawie " + liczba + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
                     }
                     bledy.Add("");
 
                 }
                 Console.WriteLine("**********************************");
             }
-            Console.WriteLine("CZASY: Baza: " + czasBD + " vs " + "Rtree: " + czas);
-            wyniki.Add("R | wyszukuje agregat czasowy losowego urządzenia | " + czasBD + " | " + czas);*/
 
+            srednia = wynikR;
 
             sukces = true;
             Close();
@@ -320,6 +329,9 @@ namespace UrzadzeniaSImScottplot
 
         private void id_urzadzenia_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (!IsLoaded)
+                return;
+
             using (var ctx = new Kontekst()) {
                 Urzadzenie wybrane = ctx.Urzadzenia.Where(u => u.UrzadzenieID == (int)id_urzadzenia.Value).First();
                 dlugosc.Content = wybrane.Dlugosc.ToString(); 
