@@ -202,6 +202,113 @@ namespace UrzadzeniaSImScottplot
         private void Przeslij2_Click(object sender, RoutedEventArgs e)//wariant z id
         {
             sukces = true;
+            int id = (int)id_urzadzenia.Value;
+
+/*            List<(Decimal, Decimal)> wspolrzedne = new List<(Decimal, Decimal)>();
+            for (int i = 0; i < 10; i++)
+                wspolrzedne.Add(generator.wylosujWspolrzedne());
+
+            List<Decimal> wynikBD = new List<Decimal>();
+            List<Decimal> wynikR = new List<Decimal>();
+
+            Stopwatch sw;
+            int cnt_1 = 0;
+
+            sw = Stopwatch.StartNew();
+            List<int> liczby = new List<int>();
+            List<int> id = new List<int>();
+
+
+            using (var ctx = new Kontekst())
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    (Decimal x, Decimal y) = wspolrzedne[i];
+                    wynikBD.Add(0);
+                    liczby.Add(0);
+                    id.Add(-1);
+
+                    id[i] = ctx.Urzadzenia
+                        .AsNoTracking()
+                        .Where(u => u.Szerokosc == y)
+                        .Where(u => u.Dlugosc == x)
+                        .First()
+                        .UrzadzenieID;
+
+                    if (id[i] != -1)
+                    {
+                        int aktualne_id = id[i];
+                        List<Pomiar> pomiary = ctx.Pomiary
+                                                .AsNoTracking()
+                                                .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == aktualne_id)
+                                                .ToList();
+                        liczby[i] += pomiary.Count;
+                        foreach (Pomiar p in pomiary) wynikBD[i] += p.Wartosc;
+
+                        if (liczby[i] != 0)
+                            wynikBD[i] /= liczby[i];
+                        else
+                            wynikBD[i] = 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Urzadzenie o wsp. " + x + " " + y + " nie istnieje w bazie");
+                        blad = true;
+                    }
+                }
+            }
+            long czasBD = sw.ElapsedMilliseconds;
+
+            sw = Stopwatch.StartNew();
+
+            List<Urzadzenie> resDevices = new List<Urzadzenie>();
+            sw = Stopwatch.StartNew();
+            for (int i = 0; i < 10; i++)
+            {
+                (Decimal x, Decimal y) = wspolrzedne[i];
+                wynikR.Add(rmvb.szukajAgregatuCzasowego(x, y));
+            }
+            long czas = sw.ElapsedMilliseconds;
+            Console.WriteLine("**********************************");
+            for (int i = 0; i < 10; i++)
+            {
+                (Decimal x, Decimal y) = wspolrzedne[i];
+                Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id[i].ToString());
+                Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
+                if (wynikBD[i] != wynikR[i] || repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 != liczby[i])
+                {
+                    if (!blad)
+                    {
+                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu agregatu czasowego. Poprzednie testy przebiegły pomyślnie, kolejne nie zostały zrealizowane.");
+                        bledy.Add("Komunikat(y) błędu(ów): \n");
+                    }
+                    blad = true;
+
+                    if (wynikBD[i] != wynikR[i])
+                    {
+                        bledy.Add("Mamy rozbieznosc miedzy obliczonymi wartościami: " + wynikR[i] + "(R) " + wynikBD[i] + "(ręcznie)");
+                        Console.WriteLine("Mamy rozbieznosc miedzy obliczonymi wartościami.");
+                    }
+
+                    if (repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 != liczby[i])
+                    {
+                        bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + liczby[i] + " (baza) " +
+                            repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (r)");
+
+                        Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu czasowego urządzenia o współrzędnych: (" +
+                            wspolrzedne[i].Item1 + "," + wspolrzedne[i].Item2 + ") i id: " + id[i]);
+                        Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
+                    }
+                    bledy.Add("");
+
+                }
+                Console.WriteLine("**********************************");
+            }
+            Console.WriteLine("CZASY: Baza: " + czasBD + " vs " + "Rtree: " + czas);
+            wyniki.Add("R | wyszukuje agregat czasowy losowego urządzenia | " + czasBD + " | " + czas);*/
+
+
+            sukces = true;
             Close();
         }
 
@@ -209,6 +316,15 @@ namespace UrzadzeniaSImScottplot
         {
             sukces = false;
             Close();
+        }
+
+        private void id_urzadzenia_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            using (var ctx = new Kontekst()) {
+                Urzadzenie wybrane = ctx.Urzadzenia.Where(u => u.UrzadzenieID == (int)id_urzadzenia.Value).First();
+                dlugosc.Content = wybrane.Dlugosc.ToString(); 
+                szerokosc.Content = wybrane.Szerokosc.ToString();
+            }
         }
     }
 }
