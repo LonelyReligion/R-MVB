@@ -153,6 +153,7 @@ namespace UrzadzeniaSImScottplot
                     });
 
                     TabelaWynikow.ItemsSource = okno.bledy;
+                    wyniki_pomiarow.Text = okno.komunikat_bledu;
                 }
                 else
                 {

@@ -31,6 +31,7 @@ namespace UrzadzeniaSImScottplot
         private RMVB _rmvb;
 
         public List<string> bledy = new List<string>();
+        public String komunikat_bledu;
 
         public decimal czas_bd;
         public decimal czas_rmvb;
@@ -148,64 +149,49 @@ namespace UrzadzeniaSImScottplot
             }
             czas_rmvb = sw.ElapsedMilliseconds;
 
-            Console.WriteLine("**********************************");
-            for (int i = 0; i < 10; i++)
+            if (ile[0] != ile_r[0])
             {
-                Console.WriteLine("Szukanie agregatu powierzchniowego dla obszaru: xMin(" + szukany.XMin + "), " + "yMin(" + szukany.YMin + "), " +
-                    "xMax(" + szukany.XMax + "), " + "yMax(" + szukany.YMax + "), ");
-                Console.WriteLine("WARTOŚCI: Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
-                Console.WriteLine(Out[i] + ")/" + ile[i]);
-
-
-                if (ile[i] != ile_r[i])
+                if (blad == false) //powinno wykonać się tylko raz :)
                 {
-                    if (blad == false) //powinno wykonać się tylko raz :)
-                    {
-                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu agregatu powierzchniowego. Poprzednie testy przebiegły pomyślnie, kolejne nie zostały zrealizowane.");
-                        bledy.Add("Komunikat(y) błędu(ów): \n");
-                    }
-                    Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
-                        ile_r[i] + " (r)");
-                    blad = true;
+                    komunikat_bledu = "Wyszukiwanie agregatu powierzchniowego dla obszaru: xMin(" + szukany.XMin + "), " + "yMin(" + szukany.YMin + "), " +
+                    "xMax(" + szukany.XMax + "), " + "yMax(" + szukany.YMax + ") nie powiodło się. \nKomunikat(y) błędu(ów): ";
+                }
+                Console.WriteLine("Rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[0] + " (baza) " +
+                    ile_r[0] + " (r)");
+                blad = true;
                    
-                    bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
-                        ile_r[i] + " (r)");
-                    bledy.Add("Współrzędne prostokąta: " + "xMin(" + szukany.XMin + "), " + "yMin(" + szukany.YMin + "), " +
-                    "xMax(" + szukany.XMax + "), " + "yMax(" + szukany.YMax + ")");
+                bledy.Add("Rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[0] + " (baza) " +
+                    ile_r[0] + " (r)");
 
-                    if (resultDB[i] == resultRTree[i])
-                    {
-                        Console.WriteLine("Obliczone wartości SĄ ZBIEŻNE");
-                        bledy.Add("Obliczone wartości SĄ ZBIEŻNE");
-                    }
-                    else
-                    {
-                        bledy.Add("Obliczone wartości: " + "Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
-                    }
-                }
-
-                else if (resultDB[i] != resultRTree[i])
+                if (resultDB[0] == resultRTree[0])
                 {
-                    if (blad == false) //powinno wykonać się tylko raz :)
-                    {
-                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu agregatu powierzchniowego. Poprzednie testy przebiegły pomyślnie, kolejne nie zostały zrealizowane.");
-                        bledy.Add("Komunikat(y) błędu(ów): \n");
-                    }
+                    Console.WriteLine("Obliczone wartości SĄ ZBIEŻNE");
+                    bledy.Add("Obliczone wartości SĄ ZBIEŻNE");
+                }
+                else
+                {
+                    bledy.Add("Obliczone wartości: " + "Recznie: " + resultDB[0] + " vs " + "RMVB: " + resultRTree[0] + "\n");
+                }
+            }
 
-                    Console.WriteLine("Mamy rozbieznosc miedzy wartościami agregatu: " + resultDB[i] + " (baza) " +
-                        resultRTree[i] + " (r)");
-                    //rmvb.szukajAgregatu(szukany);
-                    blad = true;
-                    
-                    bledy.Add("Mamy rozbieznosc miedzy wartościami agregatu: " + "Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
-                    bledy.Add("Współrzędne prostokąta: " + "xMin(" + szukany.XMin + "), " + "yMin(" + szukany.YMin + "), " +
-                    "xMax(" + szukany.YMin + "), " + "yMax(" + szukany.YMax + ")");
-                    bledy.Add("Liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i]);
-
+            else if (resultDB[0] != resultRTree[0])
+            {
+                if (blad == false) //powinno wykonać się tylko raz :)
+                {
+                    komunikat_bledu = "Wyszukiwanie agregatu powierzchniowego dla obszaru: xMin(" + +szukany.XMin + "), " + "yMin(" + szukany.YMin + "), " +
+                    "xMax(" + szukany.XMax + "), " + "yMax(" + szukany.YMax + ") nie powiodło się. \nKomunikat(y) błędu(ów): ";
                 }
 
-                Console.WriteLine("**********************************");
+                Console.WriteLine("Rozbieznosc miedzy wartościami agregatu: " + resultDB[0] + " (baza) " +
+                    resultRTree[0] + " (r)");
+                //rmvb.szukajAgregatu(szukany);
+                blad = true;
+                    
+                bledy.Add("Rozbieznosc miedzy wartościami agregatu: " + "Recznie: " + resultDB[0] + " vs " + "RMVB: " + resultRTree[0]);
+                bledy.Add("Liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[0]);
+
             }
+            
 
             srednia = resultRTree[0]; // jezeli !blad to sa rowne
 
