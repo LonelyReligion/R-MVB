@@ -25,7 +25,7 @@ namespace UrzadzeniaSImScottplot
         public bool sukces = false;
         public bool blad = false;
 
-        private int? _maxId = null;
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private RMVB _rmvb;
@@ -40,6 +40,8 @@ namespace UrzadzeniaSImScottplot
         public int id = -1;
 
         public bool wariant = false; //false to prostokat, a true to urzadzenie 
+        
+        private int? _maxId = null;
         public int? maxId
         {
             get { return _maxId; }
