@@ -117,7 +117,7 @@ namespace UrzadzeniaSImScottplot
             devices.Remove(devToAdd);
         }
 
-/*        public override (double, int) SpaceAggregate(TreeRepository repository)
+        public override (double, int) SpaceAggregate(Repo repository)
         {
             double sum = 0;
             int counter = 0;
@@ -136,7 +136,7 @@ namespace UrzadzeniaSImScottplot
                 repository.saveSpaceAggregate(spaceAggregate);
             }
             return (sum, counter);
-        }*/
+        }
 
         public override List<Urzadzenie> SearchBy(Rectangle rect)
         {

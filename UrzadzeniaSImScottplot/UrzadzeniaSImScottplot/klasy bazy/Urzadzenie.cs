@@ -81,7 +81,7 @@ namespace UrzadzeniaSImScottplot
             return (liczba_uwzglednionych, suma);
         }
 
-/*        
+
         public Pomiar LastMeasurement()
         {
             // test
@@ -103,12 +103,12 @@ namespace UrzadzeniaSImScottplot
             // test
             using (var ctx = new Kontekst())
                 return ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First().Wersje.Last().Pomiary.Count > 0;
-            
+
             //
             //return Wersje.Last().Pomiary.Count > 0;
             //return repo.zwroc_urzadzenie_wersje()[UrzadzenieID].Last().Pomiary.Count > 0;
         }
-*/
+
 
         public bool IsTimeAggregateValid()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -103,24 +104,24 @@ namespace UrzadzeniaSImScottplot
         }
 
         //oblicza agregaty powierzchniowe
-/*        internal void obliczAgregaty()
+        internal void obliczAgregaty()
         {
             R.obliczAgregaty(); //po co to jest??
-        }*/
+        }
 
-        /*        internal void zapiszMVB(string v)
-                {
-                    List<string> linijki = MVB.drukujDrzewo();
-                    using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "MVB.txt")))
-                    {
-                        foreach (string linijka in linijki)
-                            outputFile.WriteLine(linijka);
-                    }
-                }*/
+        internal void zapiszMVB(string v)
+        {
+            List<string> linijki = MVB.drukujDrzewo();
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "MVB.txt")))
+            {
+                foreach (string linijka in linijki)
+                    outputFile.WriteLine(linijka);
+            }
+        }
 
         public void Reset() { 
             repo.Reset();
-/*            MVB = new DrzewoMVB(repo, this);*/
+            MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
         }
     }

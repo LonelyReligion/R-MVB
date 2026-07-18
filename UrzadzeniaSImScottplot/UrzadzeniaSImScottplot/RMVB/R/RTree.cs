@@ -84,7 +84,7 @@ namespace UrzadzeniaSImScottplot
                 return (0m, 0m);
         }
 
-/*        public void SpaceAggregate()
+        public void SpaceAggregate()
         {
             using (var ctx = new Kontekst())
             {
@@ -98,7 +98,7 @@ namespace UrzadzeniaSImScottplot
                     //Console.WriteLine("Czas potrzebny na agregowanie powierzchniowe: " + czas);
                 }
             }
-        }*/
+        }
 
         public (int, Decimal) GetTimeAggregate(Decimal x, Decimal y)
         {

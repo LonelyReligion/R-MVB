@@ -57,9 +57,9 @@ namespace UrzadzeniaSImScottplot
             return drzewo.GetTimeAggregate(x, y);
         }
 
-/*        public void obliczAgregaty()
+        public void obliczAgregaty()
         {
             drzewo.SpaceAggregate();
-        }*/
+        }
     }
 }
