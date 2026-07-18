@@ -164,7 +164,7 @@ namespace UrzadzeniaSImScottplot
                     }
                     else 
                     { 
-                        wyniki_pomiarow.Text = "Średnia z pomiarów urządzenia o id: " + okno.id.ToString() + "to " + okno.srednia + ".";
+                        wyniki_pomiarow.Text = "Średnia z pomiarów urządzenia o id: " + okno.id.ToString() + " to " + okno.srednia + ".";
                     }
                 }
             }

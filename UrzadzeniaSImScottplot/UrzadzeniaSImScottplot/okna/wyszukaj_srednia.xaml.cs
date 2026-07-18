@@ -220,27 +220,28 @@ namespace UrzadzeniaSImScottplot
             sukces = true;
             (Decimal, Decimal) wspolrzedne = (Convert.ToDecimal(dlugosc.Content), Convert.ToDecimal(szerokosc.Content));
             
-            List<Decimal> wynikBD = new List<Decimal>();
-            Decimal wynikR = 0;
+            Decimal wynikBD = 0;
+            Decimal wynikRMVB = 0;
 
             Stopwatch sw;
             int cnt_1 = 0;
 
             sw = Stopwatch.StartNew();
-            List<int> liczby = new List<int>();
+            int liczby = 0;
 
             using (var ctx = new Kontekst())
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    (Decimal x, Decimal y) = wspolrzedne;
-                    wynikBD.Add(0);
-                    liczby.Add(0);
+                    wynikBD = 0;
+                    liczby = 0;
 
+                    (Decimal xx, Decimal yy) = wspolrzedne;
+                    
                     id = ctx.Urzadzenia
                         .AsNoTracking()
-                        .Where(u => u.Szerokosc == y)
-                        .Where(u => u.Dlugosc == x)
+                        .Where(u => u.Szerokosc == yy)
+                        .Where(u => u.Dlugosc == xx)
                         .First()
                         .UrzadzenieID;
 
@@ -250,17 +251,17 @@ namespace UrzadzeniaSImScottplot
                                                 .AsNoTracking()
                                                 .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == id)
                                                 .ToList();
-                        liczby[i] += pomiary.Count;
-                        foreach (Pomiar p in pomiary) wynikBD[i] += p.Wartosc;
+                        liczby += pomiary.Count;
+                        foreach (Pomiar p in pomiary) wynikBD += p.Wartosc;
 
-                        if (liczby[i] != 0)
-                            wynikBD[i] /= liczby[i];
+                        if (liczby != 0)
+                            wynikBD /= liczby;
                         else
-                            wynikBD[i] = 0;
+                            wynikBD = 0;
                     }
                     else
                     {
-                        Console.WriteLine("Urzadzenie o wsp. " + x + " " + y + " nie istnieje w bazie");
+                        Console.WriteLine("Urzadzenie o wsp. " + xx + " " + yy + " nie istnieje w bazie");
                         blad = true;
                     }
                 }
@@ -274,48 +275,36 @@ namespace UrzadzeniaSImScottplot
             sw = Stopwatch.StartNew();
             for (int i = 0; i < 10; i++)
             {
-                (Decimal x, Decimal y) = wspolrzedne;
-                (liczba, wynikR) =_rmvb.szukajAgregatuCzasowego(x, y);
+                (Decimal xx, Decimal yy) = wspolrzedne;
+                (liczba, wynikRMVB) =_rmvb.szukajAgregatuCzasowego(xx, yy);
             }
             long czas = sw.ElapsedMilliseconds;
-            for (int i = 0; i < 10; i++)
+
+            (Decimal x, Decimal y) = wspolrzedne;
+
+            if (wynikBD != wynikRMVB || liczba != liczby)
             {
-                (Decimal x, Decimal y) = wspolrzedne;
-                Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id.ToString());
-                Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR);
-
-
-                if (wynikBD[i] != wynikR || liczba != liczby[i])
+                if (!blad)
                 {
-                    if (!blad)
-                    {
-                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu agregatu czasowego. Poprzednie testy przebiegły pomyślnie, kolejne nie zostały zrealizowane.");
-                        bledy.Add("Komunikat(y) błędu(ów): \n");
-                    }
-                    blad = true;
+                    komunikat_bledu = "Wyszukiwanie agregatu czasowego nie powiodło się. \nKomunikat(y) błędu(ów): ";
+                }
+                blad = true;
 
-                    if (wynikBD[i] != wynikR)
-                    {
-                        bledy.Add("Mamy rozbieznosc miedzy obliczonymi wartościami: " + wynikR + "(R) " + wynikBD[i] + "(ręcznie)");
-                        Console.WriteLine("Mamy rozbieznosc miedzy obliczonymi wartościami.");
-                    }
+                if (wynikBD != wynikRMVB)
+                {
+                    bledy.Add("Mamy rozbieznosc miedzy obliczonymi wartościami: " + wynikRMVB + "(R) " + wynikBD + "(ręcznie)");
+                }
 
-                    if (liczba != liczby[i])
-                    {
-                        bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + liczby[i] + " (baza) " +
-                            liczba + " (r)");
-
-                        Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu czasowego urządzenia o współrzędnych: (" +
-                            wspolrzedne.Item1 + "," + wspolrzedne.Item2 + ") i id: " + id);
-                        Console.WriteLine("Na podstawie " + liczba + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
-                    }
-                    bledy.Add("");
+                if (liczba != liczby)
+                {
+                    bledy.Add("Mamy rozbieznosc miedzy liczbą pomiarow wykorzystanych do policzenia agregatu czasowego urządzenia o współrzędnych: (" + wspolrzedne.Item1 + "," + wspolrzedne.Item2 + ") i id: " + id);
+                    bledy.Add(liczby + " (baza) " + liczba + " (r)");
 
                 }
-                Console.WriteLine("**********************************");
-            }
 
-            srednia = wynikR;
+            }
+        
+            srednia = wynikRMVB;
 
             sukces = true;
             Close();
