@@ -13,10 +13,12 @@ namespace RMVB_konsola.Indeks.R
     {
 
         private RootHandler rootHandler;
+        Repo _repo;
 
-        public TreeWalker(RootHandler rh)
+        public TreeWalker(RootHandler rh, Repo repo)
         {
             rootHandler = rh;
+            _repo = repo;
         }
 
         public void Split(RNode node)
@@ -27,7 +29,7 @@ namespace RMVB_konsola.Indeks.R
 
             if (node == root)
             {
-                RBranch newRoot = new RBranch(RTree.ROOTMBR);
+                RBranch newRoot = new RBranch(RTree.ROOTMBR, _repo);
                 newRoot.Add(newNodes.Item1);
                 newRoot.Add(newNodes.Item2);
                 rootHandler.UpdateRoot(newRoot);

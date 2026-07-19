@@ -13,19 +13,20 @@ namespace RMVB_konsola.Indeks.R
         private List<RNode> children = new List<RNode>();
         SpaceAggregate? ostatni_agregat_czasowy;
         int? liczba_elementów;
+        Repo _repo;
 
         public override int zwrocLiczbeDzieci()
         {
             return children.Count;
         }
-        public RBranch(decimal xmin, decimal ymin, decimal xmax, decimal ymax) : base(xmin, ymin, xmax, ymax)
+        public RBranch(decimal xmin, decimal ymin, decimal xmax, decimal ymax, Repo repo) : base(xmin, ymin, xmax, ymax)
         {
-
+            _repo = repo;
         }
 
-        public RBranch(Rectangle r) : base(r)
+        public RBranch(Rectangle r, Repo repo) : base(r)
         {
-
+            _repo = repo;
         }
 
         public void AddChild(RNode child)
@@ -40,7 +41,7 @@ namespace RMVB_konsola.Indeks.R
 
         public override RNode Clone()
         {
-            return new RBranch(0, 0, 0, 0);
+            return new RBranch(0, 0, 0, 0, _repo);
         }
 
         public override RNode MoveEntry(RNode destination, int index)
@@ -229,10 +230,32 @@ namespace RMVB_konsola.Indeks.R
         {
             if (rect.Intersects(mbr) || mbr.Contains(rect))
             {
-                if (rect == mbr) {
+                if (rect == mbr)
+                {
+                    if (ostatni_agregat_czasowy != null)
+                        return (Convert.ToDecimal(liczba_elementów), ostatni_agregat_czasowy.sAValue);
+                    else 
+                    {
+                        double suma = SpaceAggregate(_repo).Item1;
+                        int ctr = SpaceAggregate(_repo).Item2;
+                        return (Convert.ToDecimal(ctr), Convert.ToDecimal(suma/(ctr*1.0)));
+                    }
+                }
+                else
+                {
+                    decimal liczba = 0;
+                    decimal suma = 0;
+
+                    foreach (RNode ch in children)
+                    {
+                        liczba += ch.FindSpaceAggregate(rect).Item1;
+                        suma += ch.FindSpaceAggregate(rect).Item2;
+                    }
+
+                    if (liczba != 0)
+                        return (liczba, liczba / suma);
                     return (0m, 0m);
                 }
-                return (0m, 0m); //tmp, zeby sprawdzic czy sie kompiluje
             }
             else {
                 return (0m, 0m);   

@@ -24,7 +24,7 @@ namespace RMVB_konsola.Indeks.R
 
         public void Insert(Urzadzenie dev)
         {
-            root.Insert(dev, new TreeWalker(this));
+            root.Insert(dev, new TreeWalker(this, repository));
         }
 
         public void AddMeasure(int id, Pomiar p)
