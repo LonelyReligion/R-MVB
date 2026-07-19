@@ -1,19 +1,20 @@
-﻿using RMVB_konsola.MVB;
-using RMVB_konsola.R;
+﻿using RMVB_konsola.Indeks.MVB;
+using RMVB_konsola.Indeks.R;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola
+namespace RMVB_konsola.Indeks
 {
     public class RMVB
     {
         private DrzewoMVB MVB;
         private RTreeAdapter R;
         private Repo repo;
-        internal RMVB() {
+        internal RMVB()
+        {
             repo = new Repo();
             MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
@@ -22,23 +23,26 @@ namespace RMVB_konsola
         internal Repo zwrocRepo() { return repo; }
         internal bool czyUrzadzenieIstnieje(int id) { return repo.czyUrzadzenieIstnieje(id); }
         internal DrzewoMVB zwrocMVB() { return MVB; }
-        internal void wypiszMVB() 
-        { 
-            foreach(String linijka in MVB.drukujDrzewo())
+        internal void wypiszMVB()
+        {
+            foreach (string linijka in MVB.drukujDrzewo())
                 Console.WriteLine(linijka);
         }
         //dodaj
-        internal void dodajUrzadzenie(Urzadzenie u) {
+        internal void dodajUrzadzenie(Urzadzenie u)
+        {
             repo.saveDevice(u);
             R.dodajUrzadzenie(u);
         }
 
-        internal void dodajWersje(Wersja w) {
+        internal void dodajWersje(Wersja w)
+        {
             repo.saveVersion(w);
             MVB.dodajUrzadzenie(w);
         }
 
-        internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa) {
+        internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
+        {
 
             using (var ctx = new Kontekst())
             {
@@ -54,7 +58,8 @@ namespace RMVB_konsola
         }
 
         //usun
-        internal void usunWersje(Wersja w) {
+        internal void usunWersje(Wersja w)
+        {
             MVB.dodajUrzadzenie(w); //musi zostac zapisana najpierw
             MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
             repo.saveVersion(w);
@@ -62,7 +67,8 @@ namespace RMVB_konsola
 
         //szukaj
         //wyszukiwanie wersji o UrządzenieID równym id i WersjaID równym v
-        internal Wersja szukaj(int id, int v) { 
+        internal Wersja szukaj(int id, int v)
+        {
             return MVB.szukaj(id, v);
         }
 
@@ -79,7 +85,8 @@ namespace RMVB_konsola
         }
 
         //wyszukiwanie wersji aktualnych w podanym przedziale czasowym
-        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec) { 
+        internal List<Wersja> szukaj(DateTime poczatek, DateTime koniec)
+        {
             return MVB.szukaj(poczatek, koniec);
         }
 
@@ -90,24 +97,26 @@ namespace RMVB_konsola
         }
 
         //zwraca urządzenie w podanym punkcie
-        internal Urzadzenie szukaj(Decimal x, Decimal y)
+        internal Urzadzenie szukaj(decimal x, decimal y)
         {
-            return R.szukaj((Decimal)x, (Decimal)y);
+            return R.szukaj(x, y);
         }
 
         //zwraca liczbę pomiarów i agregat czasowy (z czego?)
-        internal (List<int> ids, Decimal, Decimal) szukajAgregatu(Rectangle rect)
+        internal (List<int> ids, decimal, decimal) szukajAgregatu(Rectangle rect)
         {
             return R.szukajAgregatuPowierzchniowego(rect);
         }
 
         //zwraca agregat czasowy urzadzenia
-        internal Decimal szukajAgregatuCzasowego(Decimal x, Decimal y) {
+        internal decimal szukajAgregatuCzasowego(decimal x, decimal y)
+        {
             return R.szukajAgregatuCzasowego(x, y);
         }
 
         //oblicza agregaty powierzchniowe
-        internal void obliczAgregaty() { 
+        internal void obliczAgregaty()
+        {
             R.obliczAgregaty();
         }
 
@@ -121,7 +130,8 @@ namespace RMVB_konsola
             }
         }
 
-        public void Reset() { 
+        public void Reset()
+        {
             repo.Reset();
             MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));

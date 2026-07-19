@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace RMVB_konsola.MVB
+namespace RMVB_konsola.Indeks.MVB
 {
     //"object that contains information about the time range in which the root is valid and the root identificator."
     internal class DeskryptorKorzenia
@@ -22,15 +22,18 @@ namespace RMVB_konsola.MVB
             this.korzen = korzen;
         }
 
-        public Korzen zwrocKorzen() { 
+        public Korzen zwrocKorzen()
+        {
             return korzen;
         }
 
-        public void ustawPoczatek(DateTime dt) { 
+        public void ustawPoczatek(DateTime dt)
+        {
             poczatek = dt;
         }
 
-        public void ustawKoniec(DateTime dt) { 
+        public void ustawKoniec(DateTime dt)
+        {
             koniec = dt;
         }
 

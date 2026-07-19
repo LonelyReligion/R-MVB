@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using RMVB_konsola.Indeks;
 
 namespace RMVB_konsola
 {

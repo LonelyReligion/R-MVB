@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola.R
+namespace RMVB_konsola.Indeks.R
 {
     public class SpaceAggregate
     {
@@ -14,21 +14,21 @@ namespace RMVB_konsola.R
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int spaceAggregateId { get; set; }
 
-        public Decimal xMin { get; set; }
-        public Decimal yMin { get; set; }
-        public Decimal xMax { get; set; }
-        public Decimal yMax { get; set; }
+        public decimal xMin { get; set; }
+        public decimal yMin { get; set; }
+        public decimal xMax { get; set; }
+        public decimal yMax { get; set; }
 
-        private Rectangle mbr {  get; set; }
+        private Rectangle mbr { get; set; }
         public DateTime sATime { get; set; }
-        public Decimal sAValue { get; set; }
+        public decimal sAValue { get; set; }
 
-        public SpaceAggregate(Rectangle r, DateTime dt, Decimal v)
+        public SpaceAggregate(Rectangle r, DateTime dt, decimal v)
         {
             mbr = r;
-            xMin = r.XMin; 
-            yMin = r.YMin; 
-            xMax = r.XMax; 
+            xMin = r.XMin;
+            yMin = r.YMin;
+            xMax = r.XMax;
             yMax = r.YMax;
             sATime = dt;
             sAValue = v;

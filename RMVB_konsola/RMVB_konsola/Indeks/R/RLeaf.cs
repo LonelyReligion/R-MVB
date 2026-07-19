@@ -5,17 +5,18 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola.R
+namespace RMVB_konsola.Indeks.R
 {
     internal class RLeaf : RNode
     {
 
         private List<Urzadzenie> devices = new List<Urzadzenie>();
 
-        public override int zwrocLiczbeDzieci() {
+        public override int zwrocLiczbeDzieci()
+        {
             return 0;
         }
-        public RLeaf(Decimal xmin, Decimal ymin, Decimal xmax, Decimal ymax) : base(xmin, ymin, xmax, ymax)
+        public RLeaf(decimal xmin, decimal ymin, decimal xmax, decimal ymax) : base(xmin, ymin, xmax, ymax)
         {
         }
 
@@ -53,10 +54,10 @@ namespace RMVB_konsola.R
             return this;
         }
 
-        public override Decimal Distance(int i, int j)
+        public override decimal Distance(int i, int j)
         {
-            Decimal xDistance = Math.Max(devices[i].Dlugosc, devices[j].Dlugosc);
-            Decimal yDistance = Math.Max(devices[i].Szerokosc, devices[j].Szerokosc); 
+            decimal xDistance = Math.Max(devices[i].Dlugosc, devices[j].Dlugosc);
+            decimal yDistance = Math.Max(devices[i].Szerokosc, devices[j].Szerokosc);
             return xDistance + yDistance;
         }
 
@@ -72,10 +73,10 @@ namespace RMVB_konsola.R
 
         public override void UpdateMBR()
         {
-            mbr.XMin = Decimal.MaxValue;
-            mbr.YMin = Decimal.MaxValue;
-            mbr.XMax = Decimal.MinValue;
-            mbr.YMax = Decimal.MinValue;
+            mbr.XMin = decimal.MaxValue;
+            mbr.YMin = decimal.MaxValue;
+            mbr.XMax = decimal.MinValue;
+            mbr.YMax = decimal.MinValue;
 
             foreach (Urzadzenie dev in devices)
             {
@@ -89,15 +90,15 @@ namespace RMVB_konsola.R
 
         public override void SplitEntries(RNode pNode, RNode kNode)
         {
-            Decimal maxDiff = Decimal.MinValue;
+            decimal maxDiff = decimal.MinValue;
             Urzadzenie devToAdd = null;
             RLeaf destination = (RLeaf)pNode;
 
             foreach (Urzadzenie dev in devices)
             {
-                Decimal distP = pNode.mbr.EnlargedBy(dev.Szerokosc, dev.Dlugosc).Area() - pNode.mbr.Area();
-                Decimal distK = kNode.mbr.EnlargedBy(dev.Szerokosc, dev.Dlugosc).Area() - kNode.mbr.Area();
-                Decimal diff = Math.Abs(distP - distK);
+                decimal distP = pNode.mbr.EnlargedBy(dev.Szerokosc, dev.Dlugosc).Area() - pNode.mbr.Area();
+                decimal distK = kNode.mbr.EnlargedBy(dev.Szerokosc, dev.Dlugosc).Area() - kNode.mbr.Area();
+                decimal diff = Math.Abs(distP - distK);
 
                 if (diff > maxDiff)
                 {
@@ -131,7 +132,7 @@ namespace RMVB_konsola.R
             }
             if (counter > 0)
             {
-                Decimal valueSpaceAggregate = (Decimal)sum / counter;
+                decimal valueSpaceAggregate = (decimal)sum / counter;
                 spaceAggregate = new SpaceAggregate(mbr, DateTime.Now, valueSpaceAggregate);
                 repository.saveSpaceAggregate(spaceAggregate);
             }
@@ -152,7 +153,7 @@ namespace RMVB_konsola.R
             return result;
         }
 
-        public override Urzadzenie SearchBy(Decimal x, Decimal y)
+        public override Urzadzenie SearchBy(decimal x, decimal y)
         {
             Urzadzenie result = null;
             foreach (Urzadzenie dev in devices)

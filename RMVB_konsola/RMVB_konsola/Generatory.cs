@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
-using RMVB_konsola.R;
+using RMVB_konsola.Indeks.R;
 
 namespace RMVB_konsola
 {

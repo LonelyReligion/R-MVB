@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola.R
+namespace RMVB_konsola.Indeks.R
 {
     internal class RTreeAdapter
     {
@@ -16,45 +16,54 @@ namespace RMVB_konsola.R
 
         //wypisz
         //dodaj
-        internal void dodajUrzadzenie(Urzadzenie u) {
+        internal void dodajUrzadzenie(Urzadzenie u)
+        {
             drzewo.Insert(u);
         }
 
-        internal void dodajPomiar(int id, Pomiar p) {
+        internal void dodajPomiar(int id, Pomiar p)
+        {
             drzewo.AddMeasure(id, p);
         }
 
-        internal void dodajPomiar(int ix, DateTime t, Decimal v) {
+        internal void dodajPomiar(int ix, DateTime t, decimal v)
+        {
             drzewo.AddMeasure(ix, t, v);
         }
 
         //usun -- nie istnieje
-        internal void usunUrzadzenie(Urzadzenie u) { 
+        internal void usunUrzadzenie(Urzadzenie u)
+        {
             throw new NotImplementedException();
         }
 
         //szukaj
         //zwraca listę urządzeń znajdujących się w zadanym prostokącie
-        internal List<Urzadzenie> szukaj(Rectangle rect) {
+        internal List<Urzadzenie> szukaj(Rectangle rect)
+        {
             return drzewo.SearchBy(rect);
         }
 
         //zwraca urządzenie w podanym punkcie
-        internal Urzadzenie szukaj(Decimal x, Decimal y) { 
+        internal Urzadzenie szukaj(decimal x, decimal y)
+        {
             return drzewo.SearchBy(x, y);
         }
 
         //zwraca liczbę pomiarów i agregat powierzchniowy (z czego?)
-        internal (List<int> ids, Decimal, Decimal) szukajAgregatuPowierzchniowego(Rectangle rect) { 
+        internal (List<int> ids, decimal, decimal) szukajAgregatuPowierzchniowego(Rectangle rect)
+        {
             return drzewo.FindSpaceAggregate(rect);
         }
 
         //zwraca agregat czasowy
-        public Decimal szukajAgregatuCzasowego(Decimal x, Decimal y) {
+        public decimal szukajAgregatuCzasowego(decimal x, decimal y)
+        {
             return drzewo.GetTimeAggregate(x, y);
         }
 
-        public void obliczAgregaty() {
+        public void obliczAgregaty()
+        {
             drzewo.SpaceAggregate();
         }
     }

@@ -4,21 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola.R
+namespace RMVB_konsola.Indeks.R
 {
     public class Rectangle
     {
-        public Decimal XMin;
+        public decimal XMin;
 
-        public Decimal YMin;
+        public decimal YMin;
 
-        public Decimal XMax;
+        public decimal XMax;
 
-        public Decimal YMax;
+        public decimal YMax;
 
-        public Rectangle(Decimal yMin, Decimal xMin, Decimal yMax, Decimal xMax)
+        public Rectangle(decimal yMin, decimal xMin, decimal yMax, decimal xMax)
         {
-            if ((xMin > xMax) || (yMin > yMax)) {
+            if (xMin > xMax || yMin > yMax)
+            {
                 throw new ArgumentException("\"min\" coordinates must be less than the \"max\" ones");
             }
             XMin = xMin;
@@ -29,24 +30,24 @@ namespace RMVB_konsola.R
 
         public bool Contains(Rectangle other)
         {
-            return (XMin <= other.XMin) && (YMin <= other.YMin) && (XMax >= other.XMax) && (YMax >= other.YMax);
+            return XMin <= other.XMin && YMin <= other.YMin && XMax >= other.XMax && YMax >= other.YMax;
         }
 
-        public bool Contains(Decimal x, Decimal y)
+        public bool Contains(decimal x, decimal y)
         {
-            return (XMin <= x) && (YMin <= y) && (XMax >= x) && (YMax >= y);
+            return XMin <= x && YMin <= y && XMax >= x && YMax >= y;
         }
 
         public bool Intersects(Rectangle other)
         {
-            return (XMin < other.XMax) && (XMax > other.XMin) && (YMin < other.YMax) && (YMax > other.YMin);
+            return XMin < other.XMax && XMax > other.XMin && YMin < other.YMax && YMax > other.YMin;
         }
 
 
-        public Decimal Distance(Rectangle r)
+        public decimal Distance(Rectangle r)
         {
-            Decimal xDistance = Math.Max(0, Math.Max(XMin, r.XMin) - Math.Min(XMax, r.XMax));
-            Decimal yDistance = Math.Max(0, Math.Max(YMin, r.YMin) - Math.Min(YMax, r.YMax));
+            decimal xDistance = Math.Max(0, Math.Max(XMin, r.XMin) - Math.Min(XMax, r.XMax));
+            decimal yDistance = Math.Max(0, Math.Max(YMin, r.YMin) - Math.Min(YMax, r.YMax));
             return xDistance + yDistance;
         }
 
@@ -60,7 +61,7 @@ namespace RMVB_konsola.R
             );
         }
 
-        public Rectangle EnlargedBy(Decimal x, Decimal y)
+        public Rectangle EnlargedBy(decimal x, decimal y)
         {
             return new Rectangle(
                 Math.Min(XMin, x),
@@ -70,14 +71,15 @@ namespace RMVB_konsola.R
             );
         }
 
-        public void Enlarge (Rectangle other) {
+        public void Enlarge(Rectangle other)
+        {
             XMin = Math.Min(XMin, other.XMin);
             YMin = Math.Min(YMin, other.YMin);
             XMax = Math.Max(XMax, other.XMax);
             YMax = Math.Max(YMax, other.YMax);
         }
 
-        public void Enlarge(Decimal x, Decimal y)
+        public void Enlarge(decimal x, decimal y)
         {
             XMin = Math.Min(XMin, x);
             YMin = Math.Min(YMin, y);
@@ -85,7 +87,7 @@ namespace RMVB_konsola.R
             YMax = Math.Max(YMax, y);
         }
 
-        public Decimal Area()
+        public decimal Area()
         {
             return (XMax - XMin) * (YMax - YMin);
         }

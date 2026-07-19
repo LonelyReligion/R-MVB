@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using RMVB_konsola.R;
 
-namespace RMVB_konsola.R
+namespace RMVB_konsola.Indeks.R
 {
     public class RTree : RootHandler
     {
@@ -35,7 +36,7 @@ namespace RMVB_konsola.R
             }
         }
 
-        public void AddMeasure(int ix, DateTime t, Decimal v)
+        public void AddMeasure(int ix, DateTime t, decimal v)
         {
             Urzadzenie dev = repository.pobierzUrzadzenia()[ix];
             if (dev != null)
@@ -59,17 +60,17 @@ namespace RMVB_konsola.R
             return root.SearchBy(rect);
         }
 
-        public Urzadzenie SearchBy(Decimal x, Decimal y)
+        public Urzadzenie SearchBy(decimal x, decimal y)
         {
             return root.SearchBy(x, y);
         }
 
-        public (List<int>, Decimal, Decimal) FindSpaceAggregate(Rectangle rect)
+        public (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect)
         {
             List<Urzadzenie> devicesInRect = SearchBy(rect);
 
-            Decimal sum = 0;
-            Decimal liczba_pomiarow = 0;
+            decimal sum = 0;
+            decimal liczba_pomiarow = 0;
 
             foreach (Urzadzenie device in devicesInRect)
             {
@@ -91,19 +92,19 @@ namespace RMVB_konsola.R
                 if (ctx.Pomiary.Count() != 0)
                 {
                     //Stopwatch stopwatch = Stopwatch.StartNew();
-                    
+
                     root.SpaceAggregate(repository);
-                    
+
                     //long czas = stopwatch.ElapsedMilliseconds;
                     //Console.WriteLine("Czas potrzebny na agregowanie powierzchniowe: " + czas);
                 }
             }
         }
 
-        public Decimal GetTimeAggregate(Decimal x, Decimal y)
+        public decimal GetTimeAggregate(decimal x, decimal y)
         {
             Urzadzenie dev = SearchBy(x, y);
-            Decimal result = dev.GetTimeAggregate();
+            decimal result = dev.GetTimeAggregate();
             return result;
         }
 

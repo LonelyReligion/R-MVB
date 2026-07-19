@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola.R
+namespace RMVB_konsola.Indeks.R
 {
     public interface RootHandler
     {
-        RNode ProvideRoot ();
+        RNode ProvideRoot();
 
-        void UpdateRoot (RNode root);
+        void UpdateRoot(RNode root);
     }
 }

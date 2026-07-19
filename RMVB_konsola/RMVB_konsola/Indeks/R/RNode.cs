@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 
 
-namespace RMVB_konsola.R
+namespace RMVB_konsola.Indeks.R
 {
 
     abstract public class RNode
@@ -21,7 +21,7 @@ namespace RMVB_konsola.R
 
         //zwraca liczbe dzieci albo 0 jezeli to lisc
         public abstract int zwrocLiczbeDzieci();
-        public RNode(Decimal xmin, Decimal ymin, Decimal xmax, Decimal ymax)
+        public RNode(decimal xmin, decimal ymin, decimal xmax, decimal ymax)
         {
             mbr = new Rectangle(xmin, ymin, xmax, ymax);
         }
@@ -42,7 +42,7 @@ namespace RMVB_konsola.R
 
         public abstract int EntriesCount();
 
-        public abstract Decimal Distance(int i, int j);
+        public abstract decimal Distance(int i, int j);
 
         public abstract RNode Clone();
 
@@ -56,6 +56,6 @@ namespace RMVB_konsola.R
 
         abstract public List<Urzadzenie> SearchBy(Rectangle rect);
 
-        abstract public Urzadzenie SearchBy(Decimal x, Decimal y);
+        abstract public Urzadzenie SearchBy(decimal x, decimal y);
     }
 }

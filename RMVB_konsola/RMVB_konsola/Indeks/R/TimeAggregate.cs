@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola.R
+namespace RMVB_konsola.Indeks.R
 {
     public class TimeAggregate
     {
@@ -14,12 +14,12 @@ namespace RMVB_konsola.R
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TimeAggregateID { get; set; }
 
-        public Decimal tAValue { get; set; }
+        public decimal tAValue { get; set; }
         public DateTime tADateTime { get; set; }
 
         public int DeviceId { get; set; }
 
-        public TimeAggregate(Decimal v, DateTime dt, int devId)
+        public TimeAggregate(decimal v, DateTime dt, int devId)
         {
             tAValue = v;
             tADateTime = dt;

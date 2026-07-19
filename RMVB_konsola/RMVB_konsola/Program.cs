@@ -3,12 +3,13 @@ using System.Xml;
 //
 
 using RMVB_konsola;
-using RMVB_konsola.MVB; //aby nie przejmować się folderami
 using RMVB_konsola.R;
 
 using System.Diagnostics;
 using System.Configuration;
 using System.Globalization;
+using RMVB_konsola.Indeks.MVB;
+using RMVB_konsola.Indeks;
 
 //Setup
 string sciezkaFolderuWyjsciowego;

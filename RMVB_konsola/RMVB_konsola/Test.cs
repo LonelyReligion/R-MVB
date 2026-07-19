@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using RMVB_konsola.MVB;
+using RMVB_konsola.Indeks.MVB;
 using System.Data;
 using System.Collections;
-using RMVB_konsola.R;
 using System.Diagnostics.Metrics;
 using System.Diagnostics.Eventing.Reader;
+using RMVB_konsola.Indeks;
+using RMVB_konsola.Indeks.R;
 
 //singleton, test bedzie wykonywany jednowatkowo stąd brak dodatkowego zabezpieczenia
 namespace RMVB_konsola
