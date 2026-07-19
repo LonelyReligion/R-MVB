@@ -57,5 +57,7 @@ namespace RMVB_konsola.Indeks.R
         abstract public List<Urzadzenie> SearchBy(Rectangle rect);
 
         abstract public Urzadzenie SearchBy(decimal x, decimal y);
+
+        abstract public (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect);
     }
 }

@@ -10,6 +10,8 @@ using System.Configuration;
 using System.Globalization;
 using RMVB_konsola.Indeks.MVB;
 using RMVB_konsola.Indeks;
+using System.Drawing;
+using Rectangle = RMVB_konsola.Indeks.R.Rectangle;
 
 //Setup
 string sciezkaFolderuWyjsciowego;
@@ -33,7 +35,8 @@ try
     liczbaUrzadzen = int.Parse(liczbaUrzadzenStr);
     Generatory.liczba_urzadzen = liczbaUrzadzen;
 }
-catch {
+catch
+{
     Console.WriteLine("Podana liczba urządzeń nie jest liczbą całkowitą.");
     Console.WriteLine("Podaj poprawną liczbę urządzeń i spróbuj ponownie.");
     return 0;
@@ -61,7 +64,8 @@ try
     int minimalnaLiczbaUrzadzenWKorzeniu_int = int.Parse(minimalnaLiczbaUrzadzenWKorzeniu);
     Korzen.min_urzadzen_korzen = minimalnaLiczbaUrzadzenWKorzeniu_int;
 }
-catch {
+catch
+{
     Console.WriteLine("Minimalna liczba urządzeń w korzeniu nie jest liczbą całkowitą.");
     Console.WriteLine("Podaj poprawną liczbę urządzeń w korzeniu i spróbuj ponownie.");
     return 0;
@@ -74,7 +78,7 @@ using (var ctx = new Kontekst())
 
 //
 Random rnd = new Random();
-RMVB rmvb = new RMVB( );
+RMVB rmvb = new RMVB();
 Generatory generator = new Generatory(rmvb.zwrocRepo());
 
 Test.repo = rmvb.zwrocRepo();
@@ -86,7 +90,7 @@ Urzadzenie.repo = rmvb.zwrocRepo();
 
 Console.WriteLine("Uwaga, wszystkie pliki znajdujące się w folderze " + sciezkaFolderuWyjsciowego + " zostaną trwale usunięte.");
 string[] sciezkiPlikow = Directory.GetFiles(sciezkaFolderuWyjsciowego);
-foreach (var plik in sciezkiPlikow) 
+foreach (var plik in sciezkiPlikow)
 {
     File.Delete(plik);
 }

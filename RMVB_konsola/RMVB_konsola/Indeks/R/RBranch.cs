@@ -218,5 +218,19 @@ namespace RMVB_konsola.Indeks.R
             }
             return null;
         }
+
+        public override (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect)
+        {
+            if (rect.Intersects(mbr) || mbr.Contains(rect))
+            {
+                if (rect == mbr) { 
+                
+                }
+                return (new List<int>(), 0m, 0m); //tmp, zeby sprawdzic czy sie kompiluje
+            }
+            else {
+                return (new List<int>(), 0m, 0m);   
+            }
+        }
     }
 }

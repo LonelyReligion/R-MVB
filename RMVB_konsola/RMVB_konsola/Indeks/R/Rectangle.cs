@@ -28,6 +28,17 @@ namespace RMVB_konsola.Indeks.R
             YMax = yMax;
         }
 
+        public static bool operator ==(Rectangle a, Rectangle b) {
+            bool wynik = (a.XMin == b.XMin) && (a.XMax == b.XMax) && (a.YMin == b.YMin) && (a.YMax == b.YMax);
+            return wynik;
+        }
+
+        public static bool operator !=(Rectangle a, Rectangle b)
+        {
+            bool wynik = (a.XMin != b.XMin) || (a.XMax != b.XMax) || (a.YMin != b.YMin) || (a.YMax != b.YMax);
+            return wynik;
+        }
+
         public bool Contains(Rectangle other)
         {
             return XMin <= other.XMin && YMin <= other.YMin && XMax >= other.XMax && YMax >= other.YMax;
