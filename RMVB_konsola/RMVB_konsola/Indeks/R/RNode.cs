@@ -58,6 +58,6 @@ namespace RMVB_konsola.Indeks.R
 
         abstract public Urzadzenie SearchBy(decimal x, decimal y);
 
-        abstract public (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect);
+        abstract public (decimal, decimal) FindSpaceAggregate(Rectangle rect);
     }
 }

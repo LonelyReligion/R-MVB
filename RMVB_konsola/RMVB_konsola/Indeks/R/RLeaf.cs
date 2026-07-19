@@ -166,7 +166,7 @@ namespace RMVB_konsola.Indeks.R
             return result;
         }
 
-        public override (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect)
+        public override (decimal, decimal) FindSpaceAggregate(Rectangle rect)
         {
             throw new NotImplementedException();
         }

@@ -165,10 +165,10 @@ namespace RMVB_konsola
             List<List<int>> id_urzadzen_r = new List<List<int>>();
             for (int i = 0; i < ileRazy; i++)
             {
-                (List<int> ids, Decimal liczba_elementow, Decimal srednia) = rmvb.szukajAgregatu(szukane[i]);
+                (/*List<int> ids,*/ Decimal liczba_elementow, Decimal srednia) = rmvb.szukajAgregatu(szukane[i]);
                 resultRTree.Add(srednia);
                 ile_r.Add(liczba_elementow);
-                id_urzadzen_r.Add(ids);
+                //id_urzadzen_r.Add(ids);
 
             }
             long wynik3 = sw.ElapsedMilliseconds;

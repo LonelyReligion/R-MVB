@@ -65,7 +65,8 @@ namespace RMVB_konsola.Indeks.R
             return root.SearchBy(x, y);
         }
 
-/*        public (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect)
+        //liczona w inny sposob, ba agregatow, zwraca wiecej informacji
+        public (List<int>, decimal, decimal) FindSpaceAggregateDEBUG(Rectangle rect)
         {
             List<Urzadzenie> devicesInRect = SearchBy(rect);
 
@@ -83,10 +84,10 @@ namespace RMVB_konsola.Indeks.R
                 return (ids, liczba_pomiarow, sum / liczba_pomiarow);
             else
                 return (ids, 0m, 0m);
-        }*/
+        }
 
-        //
-        public (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect)
+        // (liczba pomiarow, wynik)
+        public (decimal, decimal) FindSpaceAggregate(Rectangle rect)
         {
             return root.FindSpaceAggregate(rect);
         }

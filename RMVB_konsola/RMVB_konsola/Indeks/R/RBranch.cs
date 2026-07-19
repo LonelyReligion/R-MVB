@@ -11,6 +11,8 @@ namespace RMVB_konsola.Indeks.R
     public class RBranch : RNode
     {
         private List<RNode> children = new List<RNode>();
+        SpaceAggregate? ostatni_agregat_czasowy;
+        int? liczba_elementów;
 
         public override int zwrocLiczbeDzieci()
         {
@@ -185,6 +187,10 @@ namespace RMVB_konsola.Indeks.R
             {
                 decimal valueSpaceAggregate = (decimal)sum / counter;
                 SpaceAggregate spaceAggregate = new SpaceAggregate(mbr, DateTime.Now, valueSpaceAggregate);
+                
+                ostatni_agregat_czasowy = spaceAggregate;
+                liczba_elementów = counter;
+
                 repository.saveSpaceAggregate(spaceAggregate);
             }
 
@@ -218,18 +224,18 @@ namespace RMVB_konsola.Indeks.R
             }
             return null;
         }
-
-        public override (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect)
+        //(liczba pomiarow, wynik)
+        public override (decimal, decimal) FindSpaceAggregate(Rectangle rect)
         {
             if (rect.Intersects(mbr) || mbr.Contains(rect))
             {
-                if (rect == mbr) { 
-                
+                if (rect == mbr) {
+                    return (0m, 0m);
                 }
-                return (new List<int>(), 0m, 0m); //tmp, zeby sprawdzic czy sie kompiluje
+                return (0m, 0m); //tmp, zeby sprawdzic czy sie kompiluje
             }
             else {
-                return (new List<int>(), 0m, 0m);   
+                return (0m, 0m);   
             }
         }
     }
