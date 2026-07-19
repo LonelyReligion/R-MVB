@@ -3,9 +3,10 @@ Aplikacja konsolowa symulująca działanie urządzeń mierzących temperaturę p
 Aplikacja umożliwia porównanie czasów realizacji typowych zapytań w bazie danych oraz za pomocą indeksu.
 
 ## Technologie
-* EF6
 * C#
 * LINQ
+w tym pakiety:
+* EF6
 
 ## Instrukcja obsługi
 ### Pliki wynikowe
@@ -23,7 +24,13 @@ Efektem działania programu są następujące pliki:
 Interfejs graficzny &mdash; w budowie.
 
 ## Technologie
-* EF6
 * C#
 * LINQ
 * WPF
+w tym pakiety:
+* EF6 6.5.2
+* Extended.Wpf.Toolkit 5.1.2
+* ScottPlot.WPF 5.1.58
+
+# Symulacja strumieni
+*w budowie...*
