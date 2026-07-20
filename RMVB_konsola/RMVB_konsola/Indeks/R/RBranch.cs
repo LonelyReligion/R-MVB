@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -238,8 +239,7 @@ namespace RMVB_konsola.Indeks.R
                         return ((decimal)liczba_elementów, (decimal)(liczba_elementów * ostatni_agregat_czasowy));
                     else 
                     {
-                        double suma = SpaceAggregate(_repo).Item1;
-                        int ctr = SpaceAggregate(_repo).Item2;
+                        (double suma, int ctr) = SpaceAggregate(_repo); ;
                         return (Convert.ToDecimal(ctr), Convert.ToDecimal(suma));
                     }
                 }
@@ -250,8 +250,9 @@ namespace RMVB_konsola.Indeks.R
 
                     foreach (RNode ch in children)
                     {
-                        liczba += ch.FindSpaceAggregate(rect).Item1;
-                        suma += ch.FindSpaceAggregate(rect).Item2;
+                        (decimal liczba_elementow, decimal suma_czesciowa) = ch.FindSpaceAggregate(rect);
+                        liczba += liczba_elementow;
+                        suma += suma_czesciowa;
                     }
 
                     if (liczba != 0)
