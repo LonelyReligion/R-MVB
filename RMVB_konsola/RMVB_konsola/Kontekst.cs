@@ -44,6 +44,11 @@ namespace RMVB_konsola
                 .HasColumnType("Decimal")
                 .HasPrecision(4, 2);
 
+            modelBuilder.Entity<SpaceAggregate>()
+                .Property(e => e.sAValue)
+                .HasColumnType("Decimal")
+                .HasPrecision(4, 2);
+
             //potrzebne żeby się skompilowało, i tak nie będziemy usuwać ¯\_(ツ)_/¯
             modelBuilder.Entity<Wersja>()
             .HasRequired(w => w.UrzadzenieRodzic)

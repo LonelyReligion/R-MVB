@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
@@ -11,8 +12,8 @@ namespace RMVB_konsola.Indeks.R
     {
 
         private List<Urzadzenie> devices = new List<Urzadzenie>();
-        SpaceAggregate? ostatni_agregat;
-        int? liczba;
+        Decimal? ostatni_agregat;
+        Decimal? liczba;
         public override int zwrocLiczbeDzieci()
         {
             return 0;
@@ -136,6 +137,9 @@ namespace RMVB_konsola.Indeks.R
                 decimal valueSpaceAggregate = (decimal)sum / counter;
                 spaceAggregate = new SpaceAggregate(mbr, DateTime.Now, valueSpaceAggregate);
                 repository.saveSpaceAggregate(spaceAggregate);
+                
+                ostatni_agregat = valueSpaceAggregate;
+                liczba = counter;
             }
             return (sum, counter);
         }
@@ -169,7 +173,32 @@ namespace RMVB_konsola.Indeks.R
 
         public override (decimal, decimal) FindSpaceAggregate(Rectangle rect)
         {
-            throw new NotImplementedException();
+            if (rect.Intersects(mbr) || mbr.Contains(rect)){
+                //jezeli mbr jest rowny lub rect zawiera mbr, tzn wszystkie urzadzenia naleza do rect
+                if (mbr == rect || rect.Contains(mbr))
+                {
+                    return ((decimal)liczba, (decimal)(ostatni_agregat * liczba));
+                }
+                else
+                {
+                    List<Urzadzenie> urzadzenia = SearchBy(rect);
+                    decimal sum = 0;
+                    decimal counter = 0;
+                    foreach (Urzadzenie dev in urzadzenia)
+                    {
+                        if (dev.IsMeasurementValid())
+                        {
+                            sum += dev.LastMeasurement().Wartosc;
+                            counter++;
+                        }
+                    }
+                    if(counter != 0)
+                        return (counter, sum);
+                }
+            }
+            return (0m, 0m);
         }
+
+
     }
 }

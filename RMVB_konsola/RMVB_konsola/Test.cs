@@ -136,10 +136,21 @@ namespace RMVB_konsola
 
                 List<int> ostatnieUrzadzenia = id_urzadzen_bd.Last();
 
-                List<Pomiar> pomiary = ctx.Pomiary
+                var pomiary = ctx.Pomiary
                     .AsNoTracking()
-                    .Where(p => p.WersjeUrzadzenia
-                        .Any(w => ostatnieUrzadzenia.Contains(w.UrzadzenieID)))
+                    .SelectMany(
+                        p => p.WersjeUrzadzenia,
+                        (p, w) => new
+                        {
+                            Pomiar = p,
+                            w.UrzadzenieID
+                        })
+                    .Where(x => ostatnieUrzadzenia.Contains(x.UrzadzenieID))
+                    .GroupBy(x => x.UrzadzenieID)
+                    .Select(g => g
+                        .OrderByDescending(x => x.Pomiar.dtpomiaru) 
+                        .Select(x => x.Pomiar)
+                        .FirstOrDefault())
                     .ToList();
 
 
@@ -165,8 +176,11 @@ namespace RMVB_konsola
             List<List<int>> id_urzadzen_r = new List<List<int>>();
             for (int i = 0; i < ileRazy; i++)
             {
-                (/*List<int> ids,*/ Decimal liczba_elementow, Decimal srednia) = rmvb.szukajAgregatu(szukane[i]);
-                resultRTree.Add(srednia);
+                (/*List<int> ids,*/ Decimal liczba_elementow, Decimal suma) = rmvb.szukajAgregatu(szukane[i]);
+                if (liczba_elementow != 0)
+                    resultRTree.Add(suma / liczba_elementow);
+                else
+                    resultRTree.Add(0);
                 ile_r.Add(liczba_elementow);
                 //id_urzadzen_r.Add(ids);
 
@@ -219,7 +233,6 @@ namespace RMVB_konsola
 
                     Console.WriteLine("Mamy rozbieznosc miedzy wartościami agregatu: " + resultDB[i] + " (baza) " +
                         resultRTree[i] + " (r)");
-                    //rmvb.szukajAgregatu(szukane[i]);
                     blad = true;
                     rmvb.szukajAgregatu(szukane[i]);
 
@@ -234,7 +247,7 @@ namespace RMVB_konsola
                     Console.WriteLine(("Szukanie agregatu powierzchniowego dla obszaru: xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
                     "xMax(" + szukane[i].XMax + "), " + "yMax(" + szukane[i].YMax + "), "));
 
-                    if (id_urzadzen_r[i].Count != id_urzadzen_bd[i].Count) 
+/*                    if (id_urzadzen_r[i].Count != id_urzadzen_bd[i].Count) 
                     {
 
                         List<int> nadmiarowe = new List<int>();
@@ -264,7 +277,7 @@ namespace RMVB_konsola
 
                         bledy.Add("\n");
 
-                    }
+                    }*/
                 }
                 Console.WriteLine("**********************************");
             }

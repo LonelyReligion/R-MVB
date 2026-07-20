@@ -11,8 +11,10 @@ namespace RMVB_konsola.Indeks.R
     public class RBranch : RNode
     {
         private List<RNode> children = new List<RNode>();
-        SpaceAggregate? ostatni_agregat_czasowy;
-        int? liczba_elementów;
+
+        decimal? ostatni_agregat_czasowy;
+        decimal? liczba_elementów;
+        
         Repo _repo;
 
         public override int zwrocLiczbeDzieci()
@@ -189,7 +191,7 @@ namespace RMVB_konsola.Indeks.R
                 decimal valueSpaceAggregate = (decimal)sum / counter;
                 SpaceAggregate spaceAggregate = new SpaceAggregate(mbr, DateTime.Now, valueSpaceAggregate);
                 
-                ostatni_agregat_czasowy = spaceAggregate;
+                ostatni_agregat_czasowy = valueSpaceAggregate;
                 liczba_elementów = counter;
 
                 repository.saveSpaceAggregate(spaceAggregate);
@@ -225,20 +227,20 @@ namespace RMVB_konsola.Indeks.R
             }
             return null;
         }
-        //(liczba pomiarow, wynik)
+        //(liczba pomiarow, suma)
         public override (decimal, decimal) FindSpaceAggregate(Rectangle rect)
         {
             if (rect.Intersects(mbr) || mbr.Contains(rect))
             {
-                if (rect == mbr)
+                if (rect == mbr || rect.Contains(mbr))
                 {
                     if (ostatni_agregat_czasowy != null)
-                        return (Convert.ToDecimal(liczba_elementów), ostatni_agregat_czasowy.sAValue);
+                        return ((decimal)liczba_elementów, (decimal)(liczba_elementów * ostatni_agregat_czasowy));
                     else 
                     {
                         double suma = SpaceAggregate(_repo).Item1;
                         int ctr = SpaceAggregate(_repo).Item2;
-                        return (Convert.ToDecimal(ctr), Convert.ToDecimal(suma/(ctr*1.0)));
+                        return (Convert.ToDecimal(ctr), Convert.ToDecimal(suma));
                     }
                 }
                 else
@@ -253,7 +255,7 @@ namespace RMVB_konsola.Indeks.R
                     }
 
                     if (liczba != 0)
-                        return (liczba, liczba / suma);
+                        return (liczba, suma);
                     return (0m, 0m);
                 }
             }
@@ -261,5 +263,6 @@ namespace RMVB_konsola.Indeks.R
                 return (0m, 0m);   
             }
         }
+
     }
 }
