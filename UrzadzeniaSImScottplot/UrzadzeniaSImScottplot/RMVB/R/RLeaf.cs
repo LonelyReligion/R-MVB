@@ -11,6 +11,8 @@ namespace UrzadzeniaSImScottplot
     {
 
         private List<Urzadzenie> devices = new List<Urzadzenie>();
+        SpaceAggregate? ostatni_agregat;
+        int? liczba;
 
         public override int zwrocLiczbeDzieci() {
             return 0;
