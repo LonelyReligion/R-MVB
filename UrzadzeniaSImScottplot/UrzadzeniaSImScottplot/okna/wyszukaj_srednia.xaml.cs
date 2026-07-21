@@ -99,7 +99,6 @@ namespace UrzadzeniaSImScottplot
 
             List<Decimal> resultDB = new List<Decimal>();
             List<Decimal> resultRTree = new List<Decimal>();
-            List<string> Out = new List<string>();
 
             Stopwatch sw;
             sw = Stopwatch.StartNew();
@@ -133,16 +132,27 @@ namespace UrzadzeniaSImScottplot
                     .ToList());
 
 
-                    Out.Add("(");
+                    var pomiary = ctx.Pomiary
+                        .AsNoTracking()
+                        .SelectMany(
+                            p => p.WersjeUrzadzenia,
+                            (p, w) => new
+                            {
+                                Pomiar = p,
+                                w.UrzadzenieID
+                            })
+                        .Where(x => ids.Contains(x.UrzadzenieID))
+                        .GroupBy(x => x.UrzadzenieID)
+                        .Select(g => g
+                            .OrderByDescending(x => x.Pomiar.dtpomiaru)
+                            .Select(x => x.Pomiar)
+                            .FirstOrDefault())
+                        .ToList();
 
-                    List<Pomiar> aktualne_pomiary = ctx.Pomiary.AsNoTracking().Where(p => ids.Contains(p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID))
-                        .Where(p => p.dtpomiaru > new DateTime(2024, 7, 18, 0, 0, 0)).ToList();
-
-                    foreach (Pomiar p in aktualne_pomiary)
+                    foreach (Pomiar p in pomiary)
                     {
                         ile[i]++;
                         resultDB[i] += p.Wartosc;
-                        Out[i] += p.Wartosc + "+";
                     }
 
                     if (ile[i] != 0)
@@ -159,8 +169,11 @@ namespace UrzadzeniaSImScottplot
             List<Decimal> ile_r = new List<Decimal>();
             for (int i = 0; i < 10; i++)
             {
-                (Decimal liczba_elementow, Decimal srednia) = _rmvb.szukajAgregatu(szukany);
-                resultRTree.Add(srednia);
+                (Decimal liczba_elementow, Decimal suma) = _rmvb.szukajAgregatu(szukany);
+                if (liczba_elementow != 0)
+                    resultRTree.Add(suma / liczba_elementow);
+                else
+                    resultRTree.Add(0);
                 ile_r.Add(liczba_elementow);
 
             }

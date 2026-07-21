@@ -102,8 +102,12 @@ namespace UrzadzeniaSImScottplot
         {
             // test
             using (var ctx = new Kontekst())
-                return ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First().Wersje.Last().Pomiary.Count > 0;
-
+            {
+                Urzadzenie to_urzadzenie = ctx.Urzadzenia.Where(u => u.UrzadzenieID == this.UrzadzenieID).First();
+                Wersja ostatnia_wersja_urzadzenia = to_urzadzenie.Wersje.Last();
+                List<Pomiar> pomiary_urzadzenia = ostatnia_wersja_urzadzenia.Pomiary.ToList();
+                return pomiary_urzadzenia.Count > 0;
+            }
             //
             //return Wersje.Last().Pomiary.Count > 0;
             //return repo.zwroc_urzadzenie_wersje()[UrzadzenieID].Last().Pomiary.Count > 0;
