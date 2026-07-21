@@ -92,7 +92,7 @@ namespace UrzadzeniaSImScottplot
         }
 
         //zwraca liczbę pomiarów i agregat czasowy (z czego?)
-        internal (Decimal, Decimal) szukajAgregatu(Rectangle rect)
+        internal (List<int>, Decimal, Decimal) szukajAgregatu(Rectangle rect)
         {
             return R.szukajAgregatuPowierzchniowego(rect);
         }

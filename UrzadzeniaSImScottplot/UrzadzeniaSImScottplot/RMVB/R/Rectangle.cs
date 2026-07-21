@@ -90,6 +90,16 @@ namespace UrzadzeniaSImScottplot
             return (XMax - XMin) * (YMax - YMin);
         }
 
+        public static bool operator ==(Rectangle a, Rectangle b)
+        {
+            bool wynik = (a.XMin == b.XMin) && (a.XMax == b.XMax) && (a.YMin == b.YMin) && (a.YMax == b.YMax);
+            return wynik;
+        }
 
+        public static bool operator !=(Rectangle a, Rectangle b)
+        {
+            bool wynik = (a.XMin != b.XMin) || (a.XMax != b.XMax) || (a.YMin != b.YMin) || (a.YMax != b.YMax);
+            return wynik;
+        }
     }
 }

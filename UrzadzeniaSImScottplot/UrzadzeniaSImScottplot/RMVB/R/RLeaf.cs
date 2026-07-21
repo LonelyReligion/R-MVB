@@ -164,5 +164,10 @@ namespace UrzadzeniaSImScottplot
             }
             return result;
         }
+
+        public override (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

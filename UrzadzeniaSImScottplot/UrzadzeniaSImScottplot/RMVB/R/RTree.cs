@@ -66,23 +66,30 @@ namespace UrzadzeniaSImScottplot
             return root.SearchBy(x, y);
         }
 
-        public (Decimal, Decimal) FindSpaceAggregate(Rectangle rect)
+        /*        public (Decimal, Decimal) FindSpaceAggregate(Rectangle rect)
+                {
+                    List<Urzadzenie> devicesInRect = SearchBy(rect);
+                    Decimal sum = 0;
+                    Decimal liczba_pomiarow = 0;
+
+                    foreach (Urzadzenie device in devicesInRect)
+                    {
+                        sum += device.get_liczba_suma().Item2;
+                        liczba_pomiarow += device.get_liczba_suma().Item1;
+                    }
+
+                    if (liczba_pomiarow != 0)
+                        return (liczba_pomiarow, sum / liczba_pomiarow);
+                    else
+                        return (0m, 0m);
+                }*/
+
+        //
+        public (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect)
         {
-            List<Urzadzenie> devicesInRect = SearchBy(rect);
-            Decimal sum = 0;
-            Decimal liczba_pomiarow = 0;
-
-            foreach (Urzadzenie device in devicesInRect)
-            {
-                sum += device.get_liczba_suma().Item2;
-                liczba_pomiarow += device.get_liczba_suma().Item1;
-            }
-
-            if (liczba_pomiarow != 0)
-                return (liczba_pomiarow, sum / liczba_pomiarow);
-            else
-                return (0m, 0m);
+            return root.FindSpaceAggregate(rect);
         }
+        //
 
         public void SpaceAggregate()
         {
