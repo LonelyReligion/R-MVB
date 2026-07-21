@@ -159,7 +159,7 @@ namespace UrzadzeniaSImScottplot
             List<Decimal> ile_r = new List<Decimal>();
             for (int i = 0; i < 10; i++)
             {
-                (List<int> ids, Decimal liczba_elementow, Decimal srednia) = _rmvb.szukajAgregatu(szukany);
+                (Decimal liczba_elementow, Decimal srednia) = _rmvb.szukajAgregatu(szukany);
                 resultRTree.Add(srednia);
                 ile_r.Add(liczba_elementow);
 

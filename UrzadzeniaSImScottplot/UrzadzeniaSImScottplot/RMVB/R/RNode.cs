@@ -58,6 +58,7 @@ namespace UrzadzeniaSImScottplot
 
         abstract public Urzadzenie SearchBy(Decimal x, Decimal y);
 
-        abstract public (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect);
+        //liczba, suma
+        abstract public (decimal, decimal) FindSpaceAggregate(Rectangle rect);
     }
 }

@@ -84,8 +84,8 @@ namespace UrzadzeniaSImScottplot
                         return (0m, 0m);
                 }*/
 
-        //
-        public (List<int>, decimal, decimal) FindSpaceAggregate(Rectangle rect)
+        // liczba, suma
+        public (decimal, decimal) FindSpaceAggregate(Rectangle rect)
         {
             return root.FindSpaceAggregate(rect);
         }

@@ -47,7 +47,7 @@ namespace UrzadzeniaSImScottplot
         }
 
         //zwraca liczbę pomiarów i agregat powierzchniowy (z czego?)
-        internal (List<int>, Decimal, Decimal) szukajAgregatuPowierzchniowego(Rectangle rect) { 
+        internal (Decimal, Decimal) szukajAgregatuPowierzchniowego(Rectangle rect) { 
             return drzewo.FindSpaceAggregate(rect);
         }
 
