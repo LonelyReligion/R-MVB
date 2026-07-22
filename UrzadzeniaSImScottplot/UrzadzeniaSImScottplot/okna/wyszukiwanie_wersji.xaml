@@ -6,25 +6,63 @@
         xmlns:local="clr-namespace:UrzadzeniaSImScottplot.okna"
                 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="wyszukiwanie_wersji" Height="450" Width="800">
+        Title="wyszukiwanie_wersji" Height="450" Width="400">
     <Grid>
-        <TabControl>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="749*"/>
+            <ColumnDefinition Width="51*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl Grid.ColumnSpan="2">
             <TabItem Header="Najnowsza wersja">
-                <Grid Background="White"/>
-            </TabItem>
-            
-            <TabItem Header="Wersja o id">
-                <Grid Background="White"/>
-            </TabItem>
-            
-            <TabItem Header="Z przedziału czasowego">
                 <Grid Background="White">
-                    <xctk:IntegerUpDown x:Name="id_urzadzenia" ValueChanged="id_urzadzenia_ValueChanged" Grid.Column="1" Height="20" Width="80" Grid.Row="0" Minimum="0" Value="0" Maximum="{Binding maxId}" AllowTextInput="False"/>
-                    <DatePicker HorizontalAlignment="Left" Margin="151,167,0,0" VerticalAlignment="Top"/>
-                    <DatePicker HorizontalAlignment="Left" Margin="560,167,0,0" VerticalAlignment="Top"/>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Background="#C9DABA">
+                        <TextBlock Text="Wyszukuje ostatnią wersję urządzenia o podanym ID." Margin="50,10,50,10"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="50,50,50,10">
+                        <xctk:IntegerUpDown HorizontalAlignment="Right" VerticalAlignment="Top" ValueChanged="id_urzadzenia_ValueChanged" Height="20" Width="80" Grid.Row="0" Minimum="0" Value="0" AllowTextInput="False" />
+                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="ID urządzenia" VerticalAlignment="Top"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Margin="50,10,50,10">
+                        <Button x:Name="Anuluj1" Content="Anuluj" Width="100" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                        <Button x:Name="Przeslij1"  Content="Prześlij" Width="100" HorizontalAlignment="Right"  VerticalAlignment="Top" />
+                    </Grid>
+
+
                 </Grid>
             </TabItem>
-            
+
+            <TabItem Header="Wersja o id">
+                <Grid Background="White">
+                    <TextBlock HorizontalAlignment="Left" Margin="78,41,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="78,83,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="78,309,0,0" VerticalAlignment="Top"/>
+                    <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="260,314,0,0"/>
+                    <xctk:IntegerUpDown ValueChanged="id_urzadzenia_ValueChanged" Height="20" Width="80" Grid.Row="0" Minimum="0" Value="0" AllowTextInput="False" Margin="197,83,117,303" />
+                    <xctk:IntegerUpDown ValueChanged="id_urzadzenia_ValueChanged" Height="20" Width="80" Grid.Row="0" Minimum="0" Value="0" AllowTextInput="False" Margin="197,39,117,347" />
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Z przedziału czasowego">
+                <Grid Background="White" Margin="1,0,-1,0">
+                    <DatePicker HorizontalAlignment="Left" Margin="167,56,0,0" VerticalAlignment="Top"/>
+                    <DatePicker HorizontalAlignment="Left" Margin="167,117,0,0" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="48,56,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="48,121,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="268,351,0,0"/>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="40,351,0,0" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+
         </TabControl>
 
     </Grid>
