@@ -20,10 +20,11 @@ namespace UrzadzeniaSImScottplot.okna
     /// </summary>
     public partial class wyszukiwanie_wersji : Window, INotifyPropertyChanged
     {
-        private int? _maxId = null;
+        public bool sukces = false;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        private int? _maxId = null;
         public int? maxId
         {
             get { return _maxId; }
@@ -34,6 +35,7 @@ namespace UrzadzeniaSImScottplot.okna
             }
 
         }
+
 
         private void _inicjujKontrolki()
         {
@@ -48,10 +50,40 @@ namespace UrzadzeniaSImScottplot.okna
             DataContext = this;
             InitializeComponent();
             _inicjujKontrolki();
+            this.ContentRendered += _sprawdzCzyMamyUrzadzenia;
         }
 
-        private void id_urzadzenia_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void _sprawdzCzyMamyUrzadzenia(object sender, EventArgs e)
         {
+            using (var ctx = new Kontekst())
+            {
+                bool istnieje = ctx.Urzadzenia.Any();
+
+                if (!istnieje)
+                {
+                    Window dialog = (Window)new brak_urzadzen_w_bazie(this);
+                    dialog.ShowDialog();
+                    Close();
+                }
+            }
+        }
+
+        private void IntegerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            //max id wersji dla urzadzenia o danym id, zaciagnac z bazy
+            //maxVer =
+        }
+
+        private int? _maxVer = null;
+        //aktualizowac po zmianie wartosci id-ka
+        public int? maxVer
+        {
+            get { return _maxVer; }
+            set
+            {
+                _maxVer = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("maxVer"));
+            }
 
         }
     }

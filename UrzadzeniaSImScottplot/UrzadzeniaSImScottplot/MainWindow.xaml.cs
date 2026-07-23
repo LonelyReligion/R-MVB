@@ -190,7 +190,15 @@ namespace UrzadzeniaSImScottplot
 
         }
 
+        private void przycisk_wyszukaj_wersje_Click(object sender, RoutedEventArgs e)
+        {
+            wyszukiwanie_wersji okno = new wyszukiwanie_wersji();
+            okno.ShowDialog();
 
-
+            if (okno.sukces)
+            { 
+            
+            }
+        }
     }
 }
