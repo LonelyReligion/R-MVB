@@ -15,7 +15,7 @@
         <TabControl Grid.ColumnSpan="2">
             <TabItem Header="Najnowsza wersja">
                 <Grid Background="White">
-                    
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition/>
@@ -23,15 +23,15 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0" Background="#C9DABA">
-                        <TextBlock Text="Wyszukuje ostatnią wersję urządzenia o podanym ID." Margin="50,10,50,10"/>
+                        <TextBlock Text="Wyszukuje ostatnią wersję urządzenia o podanym ID." VerticalAlignment="Center" Margin="50,10,50,10"/>
                     </Grid>
 
                     <Grid Grid.Row="1" Margin="50,50,50,10">
-                        <xctk:IntegerUpDown HorizontalAlignment="Right" VerticalAlignment="Top" ValueChanged="id_urzadzenia_ValueChanged" Height="20" Width="80" Grid.Row="0" Minimum="0" Value="0" AllowTextInput="False" />
+                        <xctk:IntegerUpDown HorizontalAlignment="Right" VerticalAlignment="Top" ValueChanged="id_urzadzenia_ValueChanged" Height="20" Width="80" Minimum="0" Value="0" AllowTextInput="False" />
                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="ID urządzenia" VerticalAlignment="Top"/>
                     </Grid>
 
-                    <Grid Grid.Row="2" Margin="50,10,50,10">
+                    <Grid Grid.Row="2" Margin="50,10,50,50" VerticalAlignment="Bottom">
                         <Button x:Name="Anuluj1" Content="Anuluj" Width="100" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
                         <Button x:Name="Przeslij1"  Content="Prześlij" Width="100" HorizontalAlignment="Right"  VerticalAlignment="Top" />
                     </Grid>
@@ -42,24 +42,63 @@
 
             <TabItem Header="Wersja o id">
                 <Grid Background="White">
-                    <TextBlock HorizontalAlignment="Left" Margin="78,41,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="78,83,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-                    <Button Content="Button" HorizontalAlignment="Left" Margin="78,309,0,0" VerticalAlignment="Top"/>
-                    <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="260,314,0,0"/>
-                    <xctk:IntegerUpDown ValueChanged="id_urzadzenia_ValueChanged" Height="20" Width="80" Grid.Row="0" Minimum="0" Value="0" AllowTextInput="False" Margin="197,83,117,303" />
-                    <xctk:IntegerUpDown ValueChanged="id_urzadzenia_ValueChanged" Height="20" Width="80" Grid.Row="0" Minimum="0" Value="0" AllowTextInput="False" Margin="197,39,117,347" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Background="#C9DABA" >
+                        <TextBlock Text="Wyszukuje wersje urządzenia o podanym ID." VerticalAlignment="Center" Margin="50,10,50,10"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="50,50,50,10">
+                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="ID urządzenia:" VerticalAlignment="Top"/>
+                        <xctk:IntegerUpDown VerticalAlignment="Top" HorizontalAlignment="Right" ValueChanged="id_urzadzenia_ValueChanged" Height="20" Width="80" Minimum="0" Value="0" AllowTextInput="False"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Margin="50,10,50,10">
+                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="ID wersji:" VerticalAlignment="Top"/>
+                        <xctk:IntegerUpDown VerticalAlignment="Top" HorizontalAlignment="Right" ValueChanged="id_urzadzenia_ValueChanged" Height="20" Width="80" Minimum="0" Value="0" AllowTextInput="False"/>
+                    </Grid>
+
+                    <Grid Grid.Row="3" Margin="50,10,50,50" VerticalAlignment="Bottom">
+                        <Button x:Name="Anuluj2" Content="Anuluj" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100"/>
+                        <Button x:Name="Przeslij2" Content="Prześlij" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100"/>
+                    </Grid>
 
                 </Grid>
             </TabItem>
 
             <TabItem Header="Z przedziału czasowego">
-                <Grid Background="White" Margin="1,0,-1,0">
-                    <DatePicker HorizontalAlignment="Left" Margin="167,56,0,0" VerticalAlignment="Top"/>
-                    <DatePicker HorizontalAlignment="Left" Margin="167,117,0,0" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="48,56,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="48,121,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-                    <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="268,351,0,0"/>
-                    <Button Content="Button" HorizontalAlignment="Left" Margin="40,351,0,0" VerticalAlignment="Top"/>
+                <Grid Background="White">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Background="#C9DABA" >
+                        <TextBlock HorizontalAlignment="Center" Margin="50,10,50,10" TextWrapping="Wrap" Text="Wyszukuje wszystkie wersje aktualne w podanym przedziale czasowym." VerticalAlignment="Top"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="50,10,50,10">
+                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Od:" VerticalAlignment="Top"/>
+                        <DatePicker HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Margin="50,10,50,10">
+                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Do:" VerticalAlignment="Top"/>
+                        <DatePicker HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    </Grid>
+
+                    <Grid Grid.Row="3" Margin="50,10,50,50" VerticalAlignment="Bottom">
+                        <Button x:Name="Anuluj3" Content="Anuluj" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Button x:Name="Przeslij3" Content="Przeslij" Width="100" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    </Grid>
+                    
                 </Grid>
             </TabItem>
 
