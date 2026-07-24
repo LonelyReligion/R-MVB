@@ -42,6 +42,22 @@ namespace UrzadzeniaSImScottplot.okna
             using (var ctx = new Kontekst())
             {
                 maxId = ctx.Urzadzenia.Max(u => (int?)u.UrzadzenieID);
+
+                if (maxId != null)
+                {
+                    Urzadzenie oMaxId = ctx.Urzadzenia.Where(u => u.UrzadzenieID == maxId).First();
+                    maxVer = oMaxId.Wersje.Last().WersjaID;
+                }
+
+                int? minId = ctx.Urzadzenia.Min(u => (int?)u.UrzadzenieID);
+
+                if (minId != null) {
+                    Urzadzenie oMinId = ctx.Urzadzenia.Where(u => u.UrzadzenieID == minId).First();
+                    minVer = oMinId.Wersje.First().WersjaID;
+
+                    idWersji.Value = minVer;
+                }
+
             }
         }
 
@@ -85,6 +101,55 @@ namespace UrzadzeniaSImScottplot.okna
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("maxVer"));
             }
 
+        }
+
+        private int? _minVer = null;
+        //aktualizowac po zmianie wartosci id-ka
+        public int? minVer
+        {
+            get { return _minVer; }
+            set
+            {
+                _minVer = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("minVer"));
+            }
+
+        }
+
+        private void Anuluj1_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = false;
+            Close();
+        }
+
+        
+        private void Anuluj2_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = false;
+            Close();
+        }
+        private void Anuluj3_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = false;
+            Close();
+        }
+
+        private void Przeslij1_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = true;
+            Close();
+        }
+
+        private void Przeslij2_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = true;
+            Close();
+        }
+
+        private void Przeslij3_Click(object sender, RoutedEventArgs e)
+        {
+            sukces = true;
+            Close();
         }
     }
 }

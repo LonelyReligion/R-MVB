@@ -85,8 +85,13 @@ namespace UrzadzeniaSImScottplot
         private void GenerujLosowy_Click(object sender, RoutedEventArgs e)
         {
             (decimal dlugosc, decimal szerokosc) = _generator.generujWspolrzedne();
-            Urzadzenie u = new Urzadzenie((dlugosc, szerokosc));
+            
+            Urzadzenie u = new Urzadzenie((dlugosc, szerokosc));            
+            _rmvb.dodajUrzadzenie(u); //dodaje tez do bazy
 
+            Wersja pierwsza = new Wersja(u.UrzadzenieID, _repozytorium, _rmvb);
+            _rmvb.dodajWersje(pierwsza);
+            
             double dlugosc_w_systemie_dziesietnym = (int)dlugosc + (double)(dlugosc - (int)dlugosc) * 100 / 60;
             double szerokosc_w_systemie_dziesietnym = (int)szerokosc + (double)(szerokosc - (int)szerokosc) * 100 / 60;
 
@@ -97,8 +102,7 @@ namespace UrzadzeniaSImScottplot
             sp.Color = ScottPlot.Color.FromHex("#6F9942");
             plot.Refresh();
 
-            _rmvb.dodajUrzadzenie(u); //dodaje tez do bazy
-
+            
             AktualizujSiatkeUrzadzen();
         }
 
