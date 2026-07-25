@@ -38,7 +38,7 @@ try
 catch
 {
     Console.WriteLine("Podana liczba urządzeń nie jest liczbą całkowitą.");
-    Console.WriteLine("Podaj poprawną liczbę urządzeń i spróbuj ponownie.");
+    Console.WriteLine("Podaj poprawną liczbę urządzeń id spróbuj ponownie.");
     return 0;
 }
 
@@ -54,7 +54,7 @@ catch
 {
     Console.WriteLine("Podana granica przeżywalności urządzeń nie jest poprawna.");
     Console.WriteLine("Czy użyłeś/aś kropki (.) zamiast przecinka (,)?");
-    Console.WriteLine("Podaj poprawną granicę przeżywalności i spróbuj ponownie.");
+    Console.WriteLine("Podaj poprawną granicę przeżywalności id spróbuj ponownie.");
     return 0;
 }
 
@@ -67,7 +67,7 @@ try
 catch
 {
     Console.WriteLine("Minimalna liczba urządzeń w korzeniu nie jest liczbą całkowitą.");
-    Console.WriteLine("Podaj poprawną liczbę urządzeń w korzeniu i spróbuj ponownie.");
+    Console.WriteLine("Podaj poprawną liczbę urządzeń w korzeniu id spróbuj ponownie.");
     return 0;
 }
 
@@ -147,16 +147,16 @@ for (int i = 0; i < liczbaUrzadzen; i++)
 }
 
 
-for (int i = 0; i < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); i++)
+for (int id = 0; id < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); id++)
 {
     Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0)) / 100;
-    Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
+    Pomiar losowyPomiar = new Pomiar(losowaTemp, DateTime.Now);
 
-    Wersja losowa = new Wersja(i, rmvb.zwrocRepo(), rmvb);
+    Wersja losowaWersja = new Wersja(id, rmvb.zwrocRepo(), rmvb);
 
-    rmvb.dodajWersje(losowa);
-    rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
-    losowe.Add(losowa);
+    rmvb.dodajWersje(losowaWersja);
+    rmvb.dodajPomiar(id, losowyPomiar, losowaWersja);
+    losowe.Add(losowaWersja);
 }
 
 rmvb.obliczAgregaty();
