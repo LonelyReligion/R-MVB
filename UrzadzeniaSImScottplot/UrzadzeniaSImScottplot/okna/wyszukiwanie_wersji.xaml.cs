@@ -36,6 +36,18 @@ namespace UrzadzeniaSImScottplot.okna
 
         }
 
+        void zaktualizujWersje(int id)
+        {
+            using (var ctx = new Kontekst()) {        
+                Urzadzenie oMaxId = ctx.Urzadzenia.Where(u => u.UrzadzenieID == id).First();
+                
+                maxVer = oMaxId.Wersje.Last().WersjaID; 
+                minVer = oMaxId.Wersje.First().WersjaID;
+                idWersji.Value = minVer;
+
+            }
+
+        }
 
         private void _inicjujKontrolki()
         {
@@ -43,23 +55,9 @@ namespace UrzadzeniaSImScottplot.okna
             {
                 //maksymalne id urzadzenia
                 maxId = ctx.Urzadzenia.Max(u => (int?)u.UrzadzenieID);
-                Urzadzenie? oMaxId = null;
-
-                if (maxId != null)
-                {
-                    oMaxId = ctx.Urzadzenia.Where(u => u.UrzadzenieID == maxId).First();
-                    //maksymalny numer wersji urzadzenia o maxid
-                    maxVer = oMaxId.Wersje.Last().WersjaID;
+                if (maxId != null) {
+                    zaktualizujWersje((int)maxId);
                 }
-
-                int? minId = ctx.Urzadzenia.Min(u => (int?)u.UrzadzenieID);
-
-                if (minId != null) {
-                    minVer = oMaxId.Wersje.First().WersjaID;
-
-                    idWersji.Value = minVer;
-                }
-
             }
         }
 
@@ -86,6 +84,7 @@ namespace UrzadzeniaSImScottplot.okna
             }
         }
 
+
         private void IntegerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (!IsLoaded)
@@ -94,28 +93,13 @@ namespace UrzadzeniaSImScottplot.okna
             //max id wersji dla urzadzenia o danym id, zaciagnac z bazy
             //maxVer =
 
-            using (var ctx = new Kontekst())
+            int Id = (int)IdUrzadzenia2.Value;
+
+            if (Id != null)
             {
-                //maksymalne id urzadzenia
-                int Id = (int)IdUrzadzenia2.Value;
-                Urzadzenie? oId = null;
-
-                if (Id != null)
-                {
-                    oId = ctx.Urzadzenia.Where(u => u.UrzadzenieID == Id).First();
-                    //maksymalny numer wersji urzadzenia o maxid
-                    maxVer = oId.Wersje.Last().WersjaID;
-                }
-
-                int? minId = ctx.Urzadzenia.Min(u => (int?)u.UrzadzenieID);
-
-                if (minId != null)
-                {
-                    minVer = oId.Wersje.First().WersjaID;
-
-                    idWersji.Value = minVer;
-                }
+                zaktualizujWersje(Id);
             }
+
         }
 
         private int? _maxVer = null;

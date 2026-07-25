@@ -103,11 +103,10 @@ namespace UrzadzeniaSImScottplot
         public void InicjujBazeDanych() {
             using (var ctx = new Kontekst())
             {
-                ctx.Database.ExecuteSqlCommand("DELETE FROM Urzadzenies");
-                ctx.Database.ExecuteSqlCommand("DELETE FROM Wersjas");
                 ctx.Database.ExecuteSqlCommand("DELETE FROM Pomiars");
+                ctx.Database.ExecuteSqlCommand("DELETE FROM Wersjas");
                 ctx.Database.ExecuteSqlCommand("DELETE FROM TimeAggregates");
-
+                ctx.Database.ExecuteSqlCommand("DELETE FROM Urzadzenies");
                 ctx.Urzadzenia.FirstOrDefault(); //ma przyspieszyc pierwsze zapytanie
             }
         }
