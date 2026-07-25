@@ -196,12 +196,30 @@ namespace UrzadzeniaSImScottplot
 
         private void przycisk_wyszukaj_wersje_Click(object sender, RoutedEventArgs e)
         {
-            wyszukiwanie_wersji okno = new wyszukiwanie_wersji();
+            wyszukiwanie_wersji okno = new wyszukiwanie_wersji(_rmvb);
             okno.ShowDialog();
 
             if (okno.sukces)
-            { 
-            
+            {
+                if (okno.blad) 
+                {
+                    TabelaWynikow.AutoGenerateColumns = false;
+
+                    TabelaWynikow.Columns.Add(new DataGridTextColumn
+                    {
+                        Header = "Błąd",
+                        Binding = new Binding(".")
+                    });
+
+                    TabelaWynikow.ItemsSource = okno.bledy;
+                    wyniki_pomiarow.Text = okno.komunikat_bledu;
+                }
+                else
+                {
+                    //tu dodac wypisywanie czasow wyzej
+                    TabelaWynikow.AutoGenerateColumns = true;
+                    TabelaWynikow.ItemsSource = okno.odnalezione_wersje;
+                }
             }
         }
     }

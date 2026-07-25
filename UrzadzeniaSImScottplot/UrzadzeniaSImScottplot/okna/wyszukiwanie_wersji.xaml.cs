@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +22,17 @@ namespace UrzadzeniaSImScottplot.okna
     /// </summary>
     public partial class wyszukiwanie_wersji : Window, INotifyPropertyChanged
     {
+        // te zmienne przechowuja efekty dzialania okna
         public bool sukces = false;
+        public bool blad = false;
+
+        public List<string> bledy = new List<string>();
+        public String komunikat_bledu;
+
+        public List<Wersja> odnalezione_wersje = new List<Wersja>();
+        //
+
+        private RMVB _rmvb;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -61,8 +73,9 @@ namespace UrzadzeniaSImScottplot.okna
             }
         }
 
-        public wyszukiwanie_wersji()
+        public wyszukiwanie_wersji(RMVB rmvb)
         {
+            _rmvb = rmvb;
             DataContext = this;
             InitializeComponent();
             _inicjujKontrolki();
@@ -148,6 +161,75 @@ namespace UrzadzeniaSImScottplot.okna
 
         private void Przeslij1_Click(object sender, RoutedEventArgs e)
         {
+            bool blad_baza = false;
+            bool blad_mvb = false;
+
+            int szukane_id = (int)IdUrzadzenia1.Value;
+
+            Wersja? szukana_bd = null;
+            Wersja? szukana_rmvb = null;
+
+            Stopwatch sw = Stopwatch.StartNew();
+
+            komunikat_bledu = "";
+           
+            using (var ctx = new Kontekst())
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    int id = szukane_id;
+                    szukana_bd = ctx.Wersje
+                        .AsNoTracking() //nie uzywamy zbuforowanych (wynikow poprzednich wykonan)
+                        .Where(u => u.UrzadzenieID == id)
+                        .OrderByDescending(u => u.WersjaID)
+                        .FirstOrDefault();
+
+                    if (szukana_bd == null && !blad_baza)
+                    {
+                        komunikat_bledu += "Baza nie odnalazla rekordu o id " + id + ". ";
+                        blad_baza = true;
+                    }
+
+                }
+            }
+            long czas_baza = sw.ElapsedMilliseconds;
+            if (!blad_baza)
+            {
+                Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
+            }
+
+
+            sw = Stopwatch.StartNew();
+            for (int i = 0; i < 10; i++)
+            {
+                szukana_rmvb = _rmvb.szukaj(szukane_id);
+                if (szukana_rmvb == null)
+                {
+                    komunikat_bledu += "RMVB nie odnalazlo urzadzenia o id " + szukane_id + ".";
+                    blad_mvb = true;
+                }
+            }
+
+            if (szukana_rmvb != szukana_bd) //wlasny operator zrobic poronania jezeli nie zadziala....
+            {
+                komunikat_bledu += "RMVB i baza danych odnalazły różne wersje urządzenia.";
+                blad_mvb = true;
+                blad_baza = true;
+            }
+
+            long czas_mvb = sw.ElapsedMilliseconds;
+
+            if (blad_baza || blad_mvb)
+            {
+            
+            }
+            else
+            {
+                //sukces
+                odnalezione_wersje.Add(szukana_rmvb);
+            }
+
+            blad = blad_baza || blad_mvb;
             sukces = true;
             Close();
         }
