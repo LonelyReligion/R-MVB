@@ -26,6 +26,23 @@ namespace UrzadzeniaSImScottplot
         private Repo repo;
         private RMVB _rmvb;
 
+        public static bool operator ==(Wersja a, Wersja b)
+        {
+            if (ReferenceEquals(a, b))
+                return true;
+
+            if (a is null || b is null)
+                return false;
+
+            bool wynik = (a.UrzadzenieID == b.UrzadzenieID) && (a.WersjaID == b.WersjaID) && (a.Aktywne == b.Aktywne) && (a.dataOstatniejModyfikacji == b.dataOstatniejModyfikacji) && (a.dataWygasniecia == b.dataWygasniecia);
+            return wynik;
+        }
+
+        public static bool operator !=(Wersja a, Wersja b)
+        {
+            return !(a==b);
+        }
+
         //potrzebne do firstordefualt
         public Wersja() 
         {
