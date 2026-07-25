@@ -27,7 +27,7 @@
                     </Grid>
 
                     <Grid Grid.Row="1" Margin="50,50,50,10">
-                        <xctk:IntegerUpDown HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="80" ValueChanged="IntegerUpDown_ValueChanged" Maximum="{Binding maxId}" Minimum="0" Value="0" AllowTextInput="False" />
+                        <xctk:IntegerUpDown x:Name="IdUrzadzenia1" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="80" Maximum="{Binding maxId}" Minimum="0" Value="0" AllowTextInput="False" />
                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="ID urządzenia" VerticalAlignment="Top"/>
                     </Grid>
 
@@ -55,7 +55,7 @@
 
                     <Grid Grid.Row="1" Margin="50,50,50,10">
                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="ID urządzenia:" VerticalAlignment="Top"/>
-                        <xctk:IntegerUpDown VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="80" Minimum="0" Maximum="{Binding maxId}" Value="0" AllowTextInput="False"/>
+                        <xctk:IntegerUpDown x:Name="IdUrzadzenia2" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="80" Minimum="0" Maximum="{Binding maxId}" ValueChanged="IntegerUpDown_ValueChanged" Value="0" AllowTextInput="False"/>
                     </Grid>
 
                     <Grid Grid.Row="2" Margin="50,10,50,10">

@@ -41,19 +41,21 @@ namespace UrzadzeniaSImScottplot.okna
         {
             using (var ctx = new Kontekst())
             {
+                //maksymalne id urzadzenia
                 maxId = ctx.Urzadzenia.Max(u => (int?)u.UrzadzenieID);
+                Urzadzenie? oMaxId = null;
 
                 if (maxId != null)
                 {
-                    Urzadzenie oMaxId = ctx.Urzadzenia.Where(u => u.UrzadzenieID == maxId).First();
+                    oMaxId = ctx.Urzadzenia.Where(u => u.UrzadzenieID == maxId).First();
+                    //maksymalny numer wersji urzadzenia o maxid
                     maxVer = oMaxId.Wersje.Last().WersjaID;
                 }
 
                 int? minId = ctx.Urzadzenia.Min(u => (int?)u.UrzadzenieID);
 
                 if (minId != null) {
-                    Urzadzenie oMinId = ctx.Urzadzenia.Where(u => u.UrzadzenieID == minId).First();
-                    minVer = oMinId.Wersje.First().WersjaID;
+                    minVer = oMaxId.Wersje.First().WersjaID;
 
                     idWersji.Value = minVer;
                 }
@@ -86,8 +88,34 @@ namespace UrzadzeniaSImScottplot.okna
 
         private void IntegerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (!IsLoaded)
+                return;
+
             //max id wersji dla urzadzenia o danym id, zaciagnac z bazy
             //maxVer =
+
+            using (var ctx = new Kontekst())
+            {
+                //maksymalne id urzadzenia
+                int Id = (int)IdUrzadzenia2.Value;
+                Urzadzenie? oId = null;
+
+                if (Id != null)
+                {
+                    oId = ctx.Urzadzenia.Where(u => u.UrzadzenieID == Id).First();
+                    //maksymalny numer wersji urzadzenia o maxid
+                    maxVer = oId.Wersje.Last().WersjaID;
+                }
+
+                int? minId = ctx.Urzadzenia.Min(u => (int?)u.UrzadzenieID);
+
+                if (minId != null)
+                {
+                    minVer = oId.Wersje.First().WersjaID;
+
+                    idWersji.Value = minVer;
+                }
+            }
         }
 
         private int? _maxVer = null;

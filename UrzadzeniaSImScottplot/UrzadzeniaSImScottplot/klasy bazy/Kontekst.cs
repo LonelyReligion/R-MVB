@@ -44,15 +44,15 @@ namespace UrzadzeniaSImScottplot
                 .HasColumnType("Decimal")
                 .HasPrecision(4, 2);
 
-            //potrzebne żeby się skompilowało, i tak nie będziemy usuwać ¯\_(ツ)_/¯
-/*            modelBuilder.Entity<Wersja>()
+            //klucz zlozony
+            modelBuilder.Entity<Wersja>()
             .HasRequired(w => w.UrzadzenieRodzic)
             .WithMany(u => u.Wersje)
             .HasForeignKey(w => w.UrzadzenieID)
             .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Wersja>()
-            .HasKey(w => new { w.UrzadzenieID, w.WersjaID });*/
+            .HasKey(w => new { w.UrzadzenieID, w.WersjaID });
 
             base.OnModelCreating(modelBuilder);
         }

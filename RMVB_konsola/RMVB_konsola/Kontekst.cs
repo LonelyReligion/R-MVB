@@ -44,7 +44,7 @@ namespace RMVB_konsola
                 .HasColumnType("Decimal")
                 .HasPrecision(4, 2);
 
-            //potrzebne żeby się skompilowało, i tak nie będziemy usuwać ¯\_(ツ)_/¯
+            //klucz zlozony
             modelBuilder.Entity<Wersja>()
             .HasRequired(w => w.UrzadzenieRodzic)
             .WithMany(u => u.Wersje)
