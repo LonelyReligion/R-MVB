@@ -39,7 +39,8 @@ namespace UrzadzeniaSImScottplot
         }
 
         public void generowanieKolumn(object sender, DataGridAutoGeneratingColumnEventArgs e) {
-            if (e.PropertyName == "Wersje")
+            if (e.PropertyName == "Wersje" || e.PropertyName == "Aktywne" ||
+                e.PropertyName == "Pomiary" || e.PropertyName == "UrzadzenieRodzic")
             {
                 e.Column.Visibility = Visibility.Collapsed;
             }
@@ -216,6 +217,9 @@ namespace UrzadzeniaSImScottplot
                 }
                 else
                 {
+                    //ukryc kolumny Aktywne, Pomiary, UrzadzenieRodzic
+                    //zrobic nie do edycji
+
                     //tu dodac wypisywanie czasow wyzej
                     TabelaWynikow.AutoGenerateColumns = true;
                     TabelaWynikow.ItemsSource = okno.odnalezione_wersje;

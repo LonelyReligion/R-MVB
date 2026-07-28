@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,6 +31,8 @@ namespace UrzadzeniaSImScottplot.okna
         public String komunikat_bledu;
 
         public List<Wersja> odnalezione_wersje = new List<Wersja>();
+        public long czasBD;
+        public long czasRMVB;
         //
 
         private RMVB _rmvb;
@@ -159,6 +162,7 @@ namespace UrzadzeniaSImScottplot.okna
             Close();
         }
 
+        //po urzadzeniu
         private void Przeslij1_Click(object sender, RoutedEventArgs e)
         {
             bool blad_baza = false;
@@ -192,12 +196,7 @@ namespace UrzadzeniaSImScottplot.okna
 
                 }
             }
-            long czas_baza = sw.ElapsedMilliseconds;
-            if (!blad_baza)
-            {
-                Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
-            }
-
+            czasBD = sw.ElapsedMilliseconds;
 
             sw = Stopwatch.StartNew();
             for (int i = 0; i < 10; i++)
@@ -210,6 +209,8 @@ namespace UrzadzeniaSImScottplot.okna
                 }
             }
 
+            czasRMVB = sw.ElapsedMilliseconds;
+
             if (szukana_rmvb != szukana_bd) //wlasny operator zrobic poronania jezeli nie zadziala....
             {
                 komunikat_bledu += "RMVB i baza danych odnalazły różne wersje urządzenia.";
@@ -217,7 +218,6 @@ namespace UrzadzeniaSImScottplot.okna
                 blad_baza = true;
             }
 
-            long czas_mvb = sw.ElapsedMilliseconds;
 
             if (blad_baza || blad_mvb)
             {
@@ -234,12 +234,99 @@ namespace UrzadzeniaSImScottplot.okna
             Close();
         }
 
+        //po urzazdzeniu i wersji
         private void Przeslij2_Click(object sender, RoutedEventArgs e)
         {
+
+            /*//doprowadzic spowrotem do porzadku (losowe)
+            List<(int, int)> szukane_id_v = new List<(int, int)>();
+            for (int i = 0; i < 10; i++)
+            {
+                int losowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
+                int losowa_wersja_id = repo.zwroc_urzadzenie_wersje().ElementAt(losowe_urzadzenie_id).Value.ElementAt(rnd.Next(repo.zwroc_urzadzenie_wersje().ElementAt(losowe_urzadzenie_id).Value.Count - 1));
+                szukane_id_v.Add((losowe_urzadzenie_id, losowa_wersja_id));
+            }
+
+            //>
+            List<Wersja?> znalezione_baza = new List<Wersja>();
+            sw = Stopwatch.StartNew();
+
+            using (var ctx = new Kontekst())
+            {
+                for (int i = 0; i < szukane_id_v.Count(); i++)
+                {
+                    znalezione_baza.Add(null);
+                    int id = szukane_id_v[i].Item1;
+                    int v = szukane_id_v[i].Item2;
+
+                    znalezione_baza[i] = ctx.Wersje
+                    .AsNoTracking()
+                    .FirstOrDefault(u => u.UrzadzenieID == id && u.WersjaID == v);
+
+                    if (znalezione_baza[i] == null)
+                    {
+                        Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
+                        blad = true;
+                    }
+                }
+            }
+            long czas_baza = sw.ElapsedMilliseconds;
+
+
+            sw = Stopwatch.StartNew();
+            List<Wersja?> znalezione_rmvb = new List<Wersja?>();
+            for (int i = 0; i < szukane_id_v.Count(); i++)
+            {
+                znalezione_rmvb.Add(null);
+                int id = szukane_id_v[i].Item1;
+                int v = szukane_id_v[i].Item2;
+                znalezione_rmvb[i] = rmvb.szukaj(id, v);
+
+                if (znalezione_rmvb[i] == null)
+                {
+                    Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
+                    //do debuggowania
+                    //znalezione_rmvb[i] = rmvb.szukaj(id, v);
+                    blad = true;
+                }
+            }
+            long czas_mvb = sw.ElapsedMilliseconds;
+            if (!blad)
+            {
+                Console.WriteLine("CZAS WYKONANIA: baza: " + czas_baza + " rmvb: " + czas_mvb);
+                wyniki.Add("MVB | wyszukiwanie losowych urządzeń po id i wersji | " + czas_baza + " | " + czas_mvb);
+            }
+            else
+            {
+                bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji urządzenia o określonym id oraz numerze wersji. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
+                bledy.Add("Komunikat(y) błędu(ów): \n");
+
+                for (int i = 0; i < 10; i++)
+                {
+                    if (znalezione_baza[i] == null && znalezione_rmvb[i] == null)
+                    {
+                        Console.WriteLine("Nie odnaleziono urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                        bledy.Add("Nie odnaleziono urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                    }
+                    else if (znalezione_baza[i] == null)
+                    {
+                        Console.WriteLine("Baza nie odnalazła urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                        bledy.Add("Baza nie odnalazła urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                    }
+                    else if (znalezione_rmvb[i] == null)
+                    {
+                        Console.WriteLine("RMVB nie odnalazło urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                        bledy.Add("MVB nie odnalazło urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                    }
+                    bledy.Add("");
+                }
+            }
+*/
             sukces = true;
             Close();
         }
 
+        //po datach
         private void Przeslij3_Click(object sender, RoutedEventArgs e)
         {
             sukces = true;
