@@ -224,27 +224,18 @@ namespace UrzadzeniaSImScottplot.okna
         private void Przeslij2_Click(object sender, RoutedEventArgs e)
         {
 
-            /*//doprowadzic spowrotem do porzadku (losowe)
-            List<(int, int)> szukane_id_v = new List<(int, int)>();
-            for (int i = 0; i < 10; i++)
-            {
-                int losowe_urzadzenie_id = repo.pobierzUrzadzenia().ElementAt(rnd.Next(repo.pobierzUrzadzenia().Count - 1)).Value.UrzadzenieID;
-                int losowa_wersja_id = repo.zwroc_urzadzenie_wersje().ElementAt(losowe_urzadzenie_id).Value.ElementAt(rnd.Next(repo.zwroc_urzadzenie_wersje().ElementAt(losowe_urzadzenie_id).Value.Count - 1));
-                szukane_id_v.Add((losowe_urzadzenie_id, losowa_wersja_id));
-            }
+            int id = (int)IdUrzadzenia2.Value;
+            int v = (int)idWersji.Value;
 
-            //>
             List<Wersja?> znalezione_baza = new List<Wersja>();
-            sw = Stopwatch.StartNew();
+            Stopwatch sw = Stopwatch.StartNew();
 
             using (var ctx = new Kontekst())
             {
-                for (int i = 0; i < szukane_id_v.Count(); i++)
+                for (int i = 0; i < 10; i++)
                 {
                     znalezione_baza.Add(null);
-                    int id = szukane_id_v[i].Item1;
-                    int v = szukane_id_v[i].Item2;
-
+                    
                     znalezione_baza[i] = ctx.Wersje
                     .AsNoTracking()
                     .FirstOrDefault(u => u.UrzadzenieID == id && u.WersjaID == v);
@@ -261,12 +252,11 @@ namespace UrzadzeniaSImScottplot.okna
 
             sw = Stopwatch.StartNew();
             List<Wersja?> znalezione_rmvb = new List<Wersja?>();
-            for (int i = 0; i < szukane_id_v.Count(); i++)
+            for (int i = 0; i < 10; i++)
             {
                 znalezione_rmvb.Add(null);
-                int id = szukane_id_v[i].Item1;
-                int v = szukane_id_v[i].Item2;
-                znalezione_rmvb[i] = rmvb.szukaj(id, v);
+
+                znalezione_rmvb[i] = _rmvb.szukaj(id, v);
 
                 if (znalezione_rmvb[i] == null)
                 {
@@ -280,7 +270,7 @@ namespace UrzadzeniaSImScottplot.okna
             if (!blad)
             {
                 Console.WriteLine("CZAS WYKONANIA: baza: " + czas_baza + " rmvb: " + czas_mvb);
-                wyniki.Add("MVB | wyszukiwanie losowych urządzeń po id i wersji | " + czas_baza + " | " + czas_mvb);
+                //wyniki.Add("MVB | wyszukiwanie losowych urządzeń po id i wersji | " + czas_baza + " | " + czas_mvb);
             }
             else
             {
@@ -291,23 +281,23 @@ namespace UrzadzeniaSImScottplot.okna
                 {
                     if (znalezione_baza[i] == null && znalezione_rmvb[i] == null)
                     {
-                        Console.WriteLine("Nie odnaleziono urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
-                        bledy.Add("Nie odnaleziono urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                        Console.WriteLine("Nie odnaleziono urzadzenia o id " + id + " i wersji " + v);
+                        bledy.Add("Nie odnaleziono urzadzenia o id " + id + " i wersji " + v);
                     }
                     else if (znalezione_baza[i] == null)
                     {
-                        Console.WriteLine("Baza nie odnalazła urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
-                        bledy.Add("Baza nie odnalazła urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                        Console.WriteLine("Baza nie odnalazła urzadzenia o id " + id + " i wersji " + v);
+                        bledy.Add("Baza nie odnalazła urzadzenia o id " + id + " i wersji " + v);
                     }
                     else if (znalezione_rmvb[i] == null)
                     {
-                        Console.WriteLine("RMVB nie odnalazło urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
-                        bledy.Add("MVB nie odnalazło urzadzenia o id " + szukane_id_v[i].Item1 + " i wersji " + szukane_id_v[i].Item2);
+                        Console.WriteLine("RMVB nie odnalazło urzadzenia o id " + id + " i wersji " + v);
+                        bledy.Add("MVB nie odnalazło urzadzenia o id " + id + " i wersji " + v);
                     }
                     bledy.Add("");
                 }
             }
-*/
+
             sukces = true;
             Close();
         }
