@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Windows;
+using UrzadzeniaSImScottplot.narzedzia;
+using UrzadzeniaSImScottplot.okna;
 
-namespace UrzadzeniaSImScottplot
+namespace UrzadzeniaSImScottplot.okna
 {
     /// <summary>
     /// Logika interakcji dla klasy wyszukaj_urzadzenia.xaml

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace UrzadzeniaSImScottplot
+namespace UrzadzeniaSImScottplot.kontrolki
 {
     /// <summary>
     /// Logika interakcji dla klasy wybor_prostokata.xaml

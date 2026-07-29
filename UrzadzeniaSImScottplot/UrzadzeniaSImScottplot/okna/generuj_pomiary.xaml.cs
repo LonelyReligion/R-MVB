@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using UrzadzeniaSImScottplot.narzedzia;
 
 namespace UrzadzeniaSImScottplot.okna
 {

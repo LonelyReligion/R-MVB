@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using UrzadzeniaSImScottplot.okna;
+using UrzadzeniaSImScottplot.narzedzia;
+using UrzadzeniaSImScottplot.repo;
 
 namespace UrzadzeniaSImScottplot
 {

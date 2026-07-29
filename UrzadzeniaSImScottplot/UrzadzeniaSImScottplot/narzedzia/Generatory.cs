@@ -1,6 +1,6 @@
-﻿//using RMVB_konsola.R;
+﻿using UrzadzeniaSImScottplot.repo;
 
-namespace UrzadzeniaSImScottplot
+namespace UrzadzeniaSImScottplot.narzedzia
 {
     //singleton?
     public class Generatory

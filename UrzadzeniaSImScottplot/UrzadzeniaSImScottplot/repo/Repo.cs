@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace UrzadzeniaSImScottplot
+namespace UrzadzeniaSImScottplot.repo
 {
     public class Repo
     {

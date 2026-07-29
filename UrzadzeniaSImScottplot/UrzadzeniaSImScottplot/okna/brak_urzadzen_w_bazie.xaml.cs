@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace UrzadzeniaSImScottplot
+namespace UrzadzeniaSImScottplot.okna
 {
     /// <summary>
     /// Logika interakcji dla klasy brak_urzadzen_w_bazie.xaml

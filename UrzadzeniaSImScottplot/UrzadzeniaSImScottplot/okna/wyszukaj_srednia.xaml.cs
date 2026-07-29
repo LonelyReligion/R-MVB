@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using UrzadzeniaSImScottplot.kontrolki;
 
-namespace UrzadzeniaSImScottplot
+namespace UrzadzeniaSImScottplot.okna
 {
     /// <summary>
     /// Logika interakcji dla klasy wyszukaj_srednia.xaml
