@@ -213,7 +213,7 @@ namespace UrzadzeniaSImScottplot
                 else
                 {
                     if(okno.wariant_tesktu == 0)
-                        wyniki_pomiarow.Text = "";
+                        wyniki_pomiarow.Text = "Odnaleziono ostatnią wersję urządzenia o id: " + ((int)okno.szukane_id).ToString() + ". Baza zrealizowała zapytanie dziesięciokrotnie w czasie " + okno.czasBD + " ms., a drzewo RMVB w czasie " + okno.czasRMVB + " ms.";
                     if (okno.wariant_tesktu == 1)
                         wyniki_pomiarow.Text = "";
                     if (okno.wariant_tesktu == 2)

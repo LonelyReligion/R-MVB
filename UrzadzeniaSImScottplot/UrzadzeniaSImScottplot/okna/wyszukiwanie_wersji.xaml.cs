@@ -17,9 +17,14 @@ namespace UrzadzeniaSImScottplot.okna
         public String komunikat_bledu;
 
         public List<Wersja> odnalezione_wersje = new List<Wersja>();
+        
         public long czasBD;
         public long czasRMVB;
+
         public int wariant_tesktu = 0;
+
+        //do wariantu 0
+        public int? szukane_id = null;
         //
 
         private RMVB _rmvb;
@@ -157,7 +162,7 @@ namespace UrzadzeniaSImScottplot.okna
             bool blad_baza = false;
             bool blad_mvb = false;
 
-            int szukane_id = (int)IdUrzadzenia1.Value;
+            szukane_id = IdUrzadzenia1.Value;
 
             Wersja? szukana_bd = null;
             Wersja? szukana_rmvb = null;
@@ -170,7 +175,7 @@ namespace UrzadzeniaSImScottplot.okna
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    int id = szukane_id;
+                    int id = (int)szukane_id;
                     szukana_bd = ctx.Wersje
                         .AsNoTracking() //nie uzywamy zbuforowanych (wynikow poprzednich wykonan)
                         .Where(u => u.UrzadzenieID == id)
@@ -190,7 +195,7 @@ namespace UrzadzeniaSImScottplot.okna
             sw = Stopwatch.StartNew();
             for (int i = 0; i < 10; i++)
             {
-                szukana_rmvb = _rmvb.szukaj(szukane_id);
+                szukana_rmvb = _rmvb.szukaj((int)szukane_id);
                 if (szukana_rmvb == null)
                 {
                     komunikat_bledu += "RMVB nie odnalazlo urzadzenia o id " + szukane_id + ".";
