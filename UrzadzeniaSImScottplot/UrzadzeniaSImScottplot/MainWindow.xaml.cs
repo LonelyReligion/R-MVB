@@ -212,8 +212,12 @@ namespace UrzadzeniaSImScottplot
                 }
                 else
                 {
-                    //ukryc kolumny Aktywne, Pomiary, UrzadzenieRodzic
-                    //zrobic nie do edycji
+                    if(okno.wariant_tesktu == 0)
+                        wyniki_pomiarow.Text = "";
+                    if (okno.wariant_tesktu == 1)
+                        wyniki_pomiarow.Text = "";
+                    if (okno.wariant_tesktu == 2)
+                        wyniki_pomiarow.Text = "";
 
                     //tu dodac wypisywanie czasow wyzej
                     TabelaWynikow.AutoGenerateColumns = true;

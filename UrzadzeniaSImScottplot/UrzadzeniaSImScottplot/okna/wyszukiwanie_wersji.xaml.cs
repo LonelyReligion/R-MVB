@@ -19,6 +19,7 @@ namespace UrzadzeniaSImScottplot.okna
         public List<Wersja> odnalezione_wersje = new List<Wersja>();
         public long czasBD;
         public long czasRMVB;
+        public int wariant_tesktu = 0;
         //
 
         private RMVB _rmvb;
@@ -151,6 +152,8 @@ namespace UrzadzeniaSImScottplot.okna
         //po urzadzeniu
         private void Przeslij1_Click(object sender, RoutedEventArgs e)
         {
+            wariant_tesktu = 0;
+
             bool blad_baza = false;
             bool blad_mvb = false;
 
@@ -223,42 +226,49 @@ namespace UrzadzeniaSImScottplot.okna
         //po urzazdzeniu i wersji
         private void Przeslij2_Click(object sender, RoutedEventArgs e)
         {
+            wariant_tesktu = 1;
 
             int id = (int)IdUrzadzenia2.Value;
             int v = (int)idWersji.Value;
 
-            List<Wersja?> znalezione_baza = new List<Wersja>();
+            Wersja? znaleziona_baza = null;
             Stopwatch sw = Stopwatch.StartNew();
 
             using (var ctx = new Kontekst())
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    znalezione_baza.Add(null);
-                    
-                    znalezione_baza[i] = ctx.Wersje
+                    znaleziona_baza = null;
+
+                    var znalezione = ctx.Wersje
                     .AsNoTracking()
                     .FirstOrDefault(u => u.UrzadzenieID == id && u.WersjaID == v);
 
-                    if (znalezione_baza[i] == null)
+                    
+
+                    if (znalezione is null)
                     {
                         Console.WriteLine("Uwaga: Baza nie odnalazla rekordu.");
                         blad = true;
                     }
+                    else
+                    {
+                        znaleziona_baza = znalezione;
+                    }
                 }
             }
-            long czas_baza = sw.ElapsedMilliseconds;
+            czasBD = sw.ElapsedMilliseconds;
 
 
             sw = Stopwatch.StartNew();
-            List<Wersja?> znalezione_rmvb = new List<Wersja?>();
+            Wersja? znaleziona_rmvb = null;
             for (int i = 0; i < 10; i++)
             {
-                znalezione_rmvb.Add(null);
+                znaleziona_rmvb = null;
 
-                znalezione_rmvb[i] = _rmvb.szukaj(id, v);
+                znaleziona_rmvb = _rmvb.szukaj(id, v);
 
-                if (znalezione_rmvb[i] == null)
+                if (znaleziona_rmvb is null)
                 {
                     Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
                     //do debuggowania
@@ -266,11 +276,12 @@ namespace UrzadzeniaSImScottplot.okna
                     blad = true;
                 }
             }
-            long czas_mvb = sw.ElapsedMilliseconds;
+            czasRMVB = sw.ElapsedMilliseconds;
             if (!blad)
             {
-                Console.WriteLine("CZAS WYKONANIA: baza: " + czas_baza + " rmvb: " + czas_mvb);
-                //wyniki.Add("MVB | wyszukiwanie losowych urządzeń po id i wersji | " + czas_baza + " | " + czas_mvb);
+                //to ze nie ma null sprawdzilismy wyzej
+                if(znaleziona_baza != null)
+                    odnalezione_wersje.Add((Wersja)znaleziona_baza);
             }
             else
             {
@@ -279,17 +290,17 @@ namespace UrzadzeniaSImScottplot.okna
 
                 for (int i = 0; i < 10; i++)
                 {
-                    if (znalezione_baza[i] == null && znalezione_rmvb[i] == null)
+                    if (znaleziona_baza is null && znaleziona_rmvb is null)
                     {
                         Console.WriteLine("Nie odnaleziono urzadzenia o id " + id + " i wersji " + v);
                         bledy.Add("Nie odnaleziono urzadzenia o id " + id + " i wersji " + v);
                     }
-                    else if (znalezione_baza[i] == null)
+                    else if (znaleziona_baza is null)
                     {
                         Console.WriteLine("Baza nie odnalazła urzadzenia o id " + id + " i wersji " + v);
                         bledy.Add("Baza nie odnalazła urzadzenia o id " + id + " i wersji " + v);
                     }
-                    else if (znalezione_rmvb[i] == null)
+                    else if (znaleziona_rmvb is null)
                     {
                         Console.WriteLine("RMVB nie odnalazło urzadzenia o id " + id + " i wersji " + v);
                         bledy.Add("MVB nie odnalazło urzadzenia o id " + id + " i wersji " + v);
@@ -305,6 +316,8 @@ namespace UrzadzeniaSImScottplot.okna
         //po datach
         private void Przeslij3_Click(object sender, RoutedEventArgs e)
         {
+            wariant_tesktu = 2;
+
             sukces = true;
             Close();
         }
