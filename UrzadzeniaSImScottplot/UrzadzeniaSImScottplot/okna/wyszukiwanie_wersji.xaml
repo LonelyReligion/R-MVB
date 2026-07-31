@@ -86,12 +86,12 @@
 
                     <Grid Grid.Row="1" Margin="50,50,50,10">
                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Od:" VerticalAlignment="Top"/>
-                        <DatePicker x:Name="ui_poczatek" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <xctk:DateTimePicker x:Name="ui_poczatek" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                     </Grid>
 
                     <Grid Grid.Row="2" Margin="50,10,50,10">
                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Do:" VerticalAlignment="Top"/>
-                        <DatePicker x:Name="ui_koniec" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <xctk:DateTimePicker x:Name="ui_koniec" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                     </Grid>
 
                     <Grid Grid.Row="3" Margin="50,10,50,50" VerticalAlignment="Bottom">

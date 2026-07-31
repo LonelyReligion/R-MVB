@@ -328,110 +328,103 @@ namespace UrzadzeniaSImScottplot.okna
 
             using (var ctx = new Kontekst())
             {
-                DateTime poczatek = (DateTime)ui_poczatek.SelectedDate.Value;
-                DateTime koniec_nie_9999 = (DateTime)ui_koniec.SelectedDate.Value;
+                DateTime? poczatek = (DateTime?)ui_poczatek.Value;
+                DateTime? koniec = (DateTime?)ui_koniec.Value;
 
-                List<(DateTime, DateTime)> losowe_przedzialy = new List<(DateTime, DateTime)>(){ (poczatek, koniec_nie_9999) };
+                if (poczatek is null || koniec is null)
+                    return;
 
-
-                /*var szukane_wersje = new List<List<Wersja>>();
-                var szukane_wersje_mvb = new List<List<Wersja>>();
+                var szukane_wersje = new List<Wersja>();
+                var szukane_wersje_mvb = new List<Wersja>();
 
                 //Console.WriteLine(poczatek.Ticks + "-" + koniec.Ticks);
-                sw = Stopwatch.StartNew();
-                for (int i = 0; i < ileRazy; i++)
+                Stopwatch sw = Stopwatch.StartNew();
+                for (int i = 0; i < 10; i++)
                 {
-                    szukane_wersje.Add(new List<Wersja>());
-                    DateTime start = losowe_przedzialy[i].Item1;
-                    DateTime end = losowe_przedzialy[i].Item2;
-                    szukane_wersje[i].AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= start).Where(u => u.dataWygasniecia < end).ToList());
+                    szukane_wersje = new List<Wersja>();
+                    szukane_wersje.AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList());
                 }
-                long czas_baza = sw.ElapsedMilliseconds;
-                Console.WriteLine("Baza: " + szukane_wersje.Count + " w czasie: " + czas_baza + " ms.");
+                czasBD = sw.ElapsedMilliseconds;
+                Console.WriteLine("Baza: " + szukane_wersje.Count + " w czasie: " + czasBD + " ms.");
 
                 sw = Stopwatch.StartNew();
-                for (int i = 0; i < ileRazy; i++)
+                for (int i = 0; i < 10; i++)
                 {
-                    szukane_wersje_mvb.Add(new List<Wersja>());
-                    DateTime start = losowe_przedzialy[i].Item1;
-                    DateTime end = losowe_przedzialy[i].Item2;
-                    szukane_wersje_mvb[i].AddRange(rmvb.szukaj(start, end));
+                    szukane_wersje_mvb = new List<Wersja>();
+                    szukane_wersje_mvb.AddRange(_rmvb.szukaj((DateTime)poczatek, (DateTime)koniec));
                 }
-                long czas_mvb = sw.ElapsedMilliseconds;
-                Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
+                czasRMVB = sw.ElapsedMilliseconds;
+                Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czasRMVB + " ms.");
 
-                for (int i = 0; i < ileRazy; i++)
+
+                if (szukane_wersje.Count != szukane_wersje_mvb.Count)
                 {
-                    if (szukane_wersje[i].Count != szukane_wersje_mvb[i].Count)
+                    bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji aktualnych w zadany przedziale czasu. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
+                    bledy.Add("Przedzial: " + ((DateTime)poczatek).Ticks + "-" + ((DateTime)koniec).Ticks);
+                    Console.WriteLine("Przedzial: " + ((DateTime)poczatek).Ticks + "-" + ((DateTime)koniec).Ticks);
+                    bledy.Add("Komunikat(y) błędu(ów): \n");
+
+                    var duplicates = szukane_wersje_mvb
+                    .GroupBy(i => i)
+                    .Where(g => g.Count() > 1)
+                    .Select(g => g.Key).ToList();
+                    //except nie zadziala
+                    var nieznalezione = szukane_wersje
+                                        .Where(d => !szukane_wersje_mvb.Any(mvb =>
+                                            mvb.UrzadzenieID == d.UrzadzenieID &&
+                                            mvb.WersjaID == d.WersjaID))
+                                        .ToList();
+                    int liczba_roznych_urzadzen = szukane_wersje_mvb.DistinctBy(x => new { x.UrzadzenieID, x.WersjaID }).Count();
+                    int liczba_urzadzen = szukane_wersje_mvb.Count();
+
+
+                    if (nieznalezione.Count != 0)
                     {
-                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji aktualnych w zadany przedziale czasu. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
-                        bledy.Add("Przedzial: " + losowe_przedzialy[i].Item1.Ticks + "-" + losowe_przedzialy[i].Item2.Ticks);
-                        Console.WriteLine("Przedzial: " + losowe_przedzialy[i].Item1.Ticks + "-" + losowe_przedzialy[i].Item2.Ticks);
-                        bledy.Add("Komunikat(y) błędu(ów): \n");
-
-                        var duplicates = szukane_wersje_mvb
-                        .GroupBy(i => i)
-                        .Where(g => g.Count() > 1)
-                        .Select(g => g.Key).ToList();
-                        //except nie zadziala
-                        var nieznalezione = szukane_wersje[i]
-                                            .Where(d => !szukane_wersje_mvb[i].Any(mvb =>
-                                                mvb.UrzadzenieID == d.UrzadzenieID &&
-                                                mvb.WersjaID == d.WersjaID))
-                                            .ToList();
-                        int liczba_roznych_urzadzen = szukane_wersje_mvb[i].DistinctBy(x => new { x.UrzadzenieID, x.WersjaID }).Count();
-                        int liczba_urzadzen = szukane_wersje_mvb[i].Count();
-
-
-                        if (nieznalezione.Count != 0)
+                        bledy.Add("MVB znalazlo następujących urządzeń: ");
+                        Console.WriteLine("Nie znaleziono następujących urządzeń: ");
+                        foreach (var u in nieznalezione)
                         {
-                            bledy.Add("MVB znalazlo następujących urządzeń: ");
-                            Console.WriteLine("Nie znaleziono następujących urządzeń: ");
-                            foreach (var u in nieznalezione)
-                            {
-                                Console.WriteLine("BAZA: " + u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                                Console.WriteLine("MVB: " + u.UrzadzenieID + "v" + u.WersjaID + " " + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji.Ticks + "(" + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji + ")"
-                                    + "-" + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks + "(" + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia + ")");
+                            Console.WriteLine("BAZA: " + u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                            Console.WriteLine("MVB: " + u.UrzadzenieID + "v" + u.WersjaID + " " + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji.Ticks + "(" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji + ")"
+                                + "-" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks + "(" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia + ")");
 
-                                bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                            }
+                            bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
                         }
-                        else if (szukane_wersje[i].Count < szukane_wersje_mvb[i].Count && liczba_roznych_urzadzen == liczba_urzadzen)
-                        {
-                            Console.WriteLine("MVB odnalazlo wiecej urzadzen niz baza...");
-                        }
-
-                        if (liczba_roznych_urzadzen != liczba_urzadzen)
-                        {
-                            bledy.Add("MVB znalazło nadmiarowe (powstarzające się) urządzenia: ");
-                            Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
-                            List<Wersja> nadmiarowe = new List<Wersja>(szukane_wersje_mvb[i]);
-
-                            foreach (var elem in szukane_wersje_mvb[i].Distinct())
-                                nadmiarowe.Remove(elem);
-
-                            //zostaja same duble, wychodzi nam cos niemozliwego...
-                            foreach (var u in nadmiarowe)
-                            {
-                                Console.WriteLine("BAZA: " + u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                                Console.WriteLine("MVB: " + u.UrzadzenieID + "v" + u.WersjaID + " " + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji.Ticks + "(" + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji + ")" +
-                                    "-" + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks + "(" + rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks + ")");
-
-                                bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                            }
-                        }
-
-                        blad = true;
-
-                        DateTime start = losowe_przedzialy[i].Item1;
-                        DateTime end = losowe_przedzialy[i].Item2;
-                        rmvb.szukaj(start, end);
                     }
-                    else
+                    else if (szukane_wersje.Count < szukane_wersje_mvb.Count && liczba_roznych_urzadzen == liczba_urzadzen)
                     {
-                        //bez bledu
+                        Console.WriteLine("MVB odnalazlo wiecej urzadzen niz baza...");
                     }
-                }*/
+
+                    if (liczba_roznych_urzadzen != liczba_urzadzen)
+                    {
+                        bledy.Add("MVB znalazło nadmiarowe (powstarzające się) urządzenia: ");
+                        Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
+                        List<Wersja> nadmiarowe = new List<Wersja>(szukane_wersje_mvb);
+
+                        foreach (var elem in szukane_wersje_mvb.Distinct())
+                            nadmiarowe.Remove(elem);
+
+                        //zostaja same duble, wychodzi nam cos niemozliwego...
+                        foreach (var u in nadmiarowe)
+                        {
+                            Console.WriteLine("BAZA: " + u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                            Console.WriteLine("MVB: " + u.UrzadzenieID + "v" + u.WersjaID + " " + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji.Ticks + "(" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji + ")" +
+                                "-" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks + "(" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks + ")");
+
+                            bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
+                        }
+                    }
+
+                    blad = true;
+
+                    _rmvb.szukaj((DateTime)poczatek, (DateTime)koniec);
+                }
+                else
+                {
+                    //bez bledu
+                }
+
             }
             sukces = true;
             Close();
