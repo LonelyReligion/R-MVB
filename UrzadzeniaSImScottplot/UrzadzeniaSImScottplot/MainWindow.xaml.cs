@@ -213,11 +213,12 @@ namespace UrzadzeniaSImScottplot
                 else
                 {
                     if(okno.wariant_tesktu == 0)
-                        wyniki_pomiarow.Text = "Odnaleziono ostatnią wersję urządzenia o id: " + ((int)okno.szukane_id).ToString() + ". Baza zrealizowała zapytanie dziesięciokrotnie w czasie " + okno.czasBD + " ms., a drzewo RMVB w czasie " + okno.czasRMVB + " ms.";
+                        wyniki_pomiarow.Text = "Odnaleziono ostatnią wersję urządzenia o id: " + ((int)okno.szukane_id).ToString() + ".";
                     if (okno.wariant_tesktu == 1)
-                        wyniki_pomiarow.Text = "";
+                        wyniki_pomiarow.Text = "Odnaleziono wersję urządzenia o UrządzenieID: " + ((int)okno.szukane_id).ToString() + " i WersjaID: " + okno.szukane_v + ".";
                     if (okno.wariant_tesktu == 2)
                         wyniki_pomiarow.Text = "";
+                    wyniki_pomiarow.Text += " Baza zrealizowała zapytanie dziesięciokrotnie w czasie " + okno.czasBD + " ms., a drzewo RMVB w czasie " + okno.czasRMVB + " ms.";
 
                     //tu dodac wypisywanie czasow wyzej
                     TabelaWynikow.AutoGenerateColumns = true;
