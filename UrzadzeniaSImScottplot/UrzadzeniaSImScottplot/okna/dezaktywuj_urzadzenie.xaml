@@ -1,0 +1,30 @@
+﻿<Window x:Class="UrzadzeniaSImScottplot.okna.dezaktywuj_urzadzenie"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UrzadzeniaSImScottplot.okna"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="dezaktywuj_urzadzenie" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <xctk:IntegerUpDown x:Name="IdUrzadzenia" Height="20" Width="80" Minimum="0" Maximum="{Binding maxId}" ValueChanged="IdUrzadzenia_ValueChanged" Value="0" AllowTextInput="False"/>
+            <TextBlock Text="ID urządzenia:"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <DataGrid/>
+        </Grid>
+        
+        <Grid>
+        </Grid>
+        
+        </Grid>
+</Window>

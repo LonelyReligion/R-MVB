@@ -33,7 +33,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" x:Name="GenerujLosowy" Content="Dodaj urzadzenie"  Height="30" Width="120" VerticalAlignment="Center"  Click="GenerujLosowy_Click"/>
-                <Button Grid.Column="1" x:Name="Dezaktywuj" Content="Dezaktywuj urządzenie" Height="30" Width="130" VerticalAlignment="Center"  Click="Dezaktywuj_Click"/>
+                <Button Grid.Column="1" x:Name="Dezaktywuj" Content="(Dez)aktywuj urządzenie" Height="30" Width="130" VerticalAlignment="Center"  Click="Dezaktywuj_Click"/>
                 <Button Grid.Column="2" x:Name="GenerujPomiary" Content="Generuj pomiary" Height="30" Width="120" VerticalAlignment="Center" Click="GenerujPomiary_Click"/>
             
             </Grid>
