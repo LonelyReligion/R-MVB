@@ -25,8 +25,14 @@ namespace UrzadzeniaSImScottplot.okna
 
         //do wariantu 0 i 1
         public int? szukane_id = null;
+
         //do wariantu 1
         public int? szukane_v = null;
+
+        //do wariantu 3
+        public List<Wersja> nadmiarowe_nieodnalezione = new List<Wersja>();
+        public DateTime? poczatek;
+        public DateTime? koniec;
 
         //
 
@@ -323,21 +329,20 @@ namespace UrzadzeniaSImScottplot.okna
         {
             wariant_tesktu = 2;
             bool blad = false;
-            //najwczesniejsza data poczatku
+
+            poczatek = (DateTime?)ui_poczatek.Value;
+            koniec = (DateTime?)ui_koniec.Value;
 
 
             using (var ctx = new Kontekst())
             {
-                DateTime? poczatek = (DateTime?)ui_poczatek.Value;
-                DateTime? koniec = (DateTime?)ui_koniec.Value;
-
+                
                 if (poczatek is null || koniec is null)
                     return;
 
                 var szukane_wersje = new List<Wersja>();
                 var szukane_wersje_mvb = new List<Wersja>();
 
-                //Console.WriteLine(poczatek.Ticks + "-" + koniec.Ticks);
                 Stopwatch sw = Stopwatch.StartNew();
                 for (int i = 0; i < 10; i++)
                 {
@@ -345,8 +350,7 @@ namespace UrzadzeniaSImScottplot.okna
                     szukane_wersje.AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList());
                 }
                 czasBD = sw.ElapsedMilliseconds;
-                Console.WriteLine("Baza: " + szukane_wersje.Count + " w czasie: " + czasBD + " ms.");
-
+                
                 sw = Stopwatch.StartNew();
                 for (int i = 0; i < 10; i++)
                 {
@@ -354,20 +358,16 @@ namespace UrzadzeniaSImScottplot.okna
                     szukane_wersje_mvb.AddRange(_rmvb.szukaj((DateTime)poczatek, (DateTime)koniec));
                 }
                 czasRMVB = sw.ElapsedMilliseconds;
-                Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czasRMVB + " ms.");
-
 
                 if (szukane_wersje.Count != szukane_wersje_mvb.Count)
                 {
-                    bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji aktualnych w zadany przedziale czasu. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
-                    bledy.Add("Przedzial: " + ((DateTime)poczatek).Ticks + "-" + ((DateTime)koniec).Ticks);
-                    Console.WriteLine("Przedzial: " + ((DateTime)poczatek).Ticks + "-" + ((DateTime)koniec).Ticks);
-                    bledy.Add("Komunikat(y) błędu(ów): \n");
-
+                    komunikat_bledu = "Wszukiwanie wersji aktualnych w zadanym przedziale czasu od " + ((DateTime)poczatek).Ticks.ToString() + "(tików) do " + ((DateTime)koniec).Ticks.ToString() + " nie powiodło się.";
+                    
                     var duplicates = szukane_wersje_mvb
                     .GroupBy(i => i)
                     .Where(g => g.Count() > 1)
                     .Select(g => g.Key).ToList();
+
                     //except nie zadziala
                     var nieznalezione = szukane_wersje
                                         .Where(d => !szukane_wersje_mvb.Any(mvb =>
@@ -380,49 +380,34 @@ namespace UrzadzeniaSImScottplot.okna
 
                     if (nieznalezione.Count != 0)
                     {
-                        bledy.Add("MVB znalazlo następujących urządzeń: ");
-                        Console.WriteLine("Nie znaleziono następujących urządzeń: ");
-                        foreach (var u in nieznalezione)
-                        {
-                            Console.WriteLine("BAZA: " + u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                            Console.WriteLine("MVB: " + u.UrzadzenieID + "v" + u.WersjaID + " " + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji.Ticks + "(" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji + ")"
-                                + "-" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks + "(" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia + ")");
-
-                            bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                        }
+                        komunikat_bledu += "\nRMVB nie znalazlo następujących urządzeń:";
+                        nadmiarowe_nieodnalezione.AddRange(nieznalezione);
                     }
                     else if (szukane_wersje.Count < szukane_wersje_mvb.Count && liczba_roznych_urzadzen == liczba_urzadzen)
                     {
-                        Console.WriteLine("MVB odnalazlo wiecej urzadzen niz baza...");
+                        komunikat_bledu += "RMVB odnalazlo wiecej urzadzen niz baza";
                     }
 
                     if (liczba_roznych_urzadzen != liczba_urzadzen)
                     {
-                        bledy.Add("MVB znalazło nadmiarowe (powstarzające się) urządzenia: ");
-                        Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
+                        bledy.Add("RMVB znalazło nadmiarowe (powstarzające się) urządzenia: ");
                         List<Wersja> nadmiarowe = new List<Wersja>(szukane_wersje_mvb);
 
                         foreach (var elem in szukane_wersje_mvb.Distinct())
                             nadmiarowe.Remove(elem);
 
                         //zostaja same duble, wychodzi nam cos niemozliwego...
-                        foreach (var u in nadmiarowe)
-                        {
-                            Console.WriteLine("BAZA: " + u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                            Console.WriteLine("MVB: " + u.UrzadzenieID + "v" + u.WersjaID + " " + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji.Ticks + "(" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataOstatniejModyfikacji + ")" +
-                                "-" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks + "(" + _rmvb.szukaj(u.UrzadzenieID, u.WersjaID).dataWygasniecia.Ticks + ")");
-
-                            bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
-                        }
+                        nadmiarowe_nieodnalezione.AddRange(nadmiarowe);
                     }
 
                     blad = true;
 
-                    _rmvb.szukaj((DateTime)poczatek, (DateTime)koniec);
+                    //_rmvb.szukaj((DateTime)poczatek, (DateTime)koniec);
                 }
                 else
                 {
                     //bez bledu
+                    odnalezione_wersje = szukane_wersje;
                 }
 
             }

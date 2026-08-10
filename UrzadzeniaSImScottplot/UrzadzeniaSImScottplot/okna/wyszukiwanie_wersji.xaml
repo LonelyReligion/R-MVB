@@ -81,17 +81,33 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0" Background="#C9DABA" >
-                        <TextBlock HorizontalAlignment="Center" Margin="50,10,50,10" TextWrapping="Wrap" Text="Wyszukuje wszystkie wersje aktualne w podanym przedziale czasowym." VerticalAlignment="Top"/>
+                        <TextBlock HorizontalAlignment="Center" Margin="20,10,20,10" TextWrapping="Wrap" Text="Wyszukuje wszystkie wersje aktualne w podanym przedziale czasowym." VerticalAlignment="Top"/>
                     </Grid>
 
-                    <Grid Grid.Row="1" Margin="50,50,50,10">
-                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Od:" VerticalAlignment="Top"/>
-                        <xctk:DateTimePicker x:Name="ui_poczatek" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Grid Grid.Row="1" Margin="20,50,20,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Od:" VerticalAlignment="Top"/>
+                        <xctk:DateTimePicker Grid.Column="1" x:Name="ui_poczatek" HorizontalAlignment="Right" Width="100" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="poczatku_checkbox" Grid.Column="2" Content="początku" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+
                     </Grid>
 
-                    <Grid Grid.Row="2" Margin="50,10,50,10">
-                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Do:" VerticalAlignment="Top"/>
-                        <xctk:DateTimePicker x:Name="ui_koniec" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Grid Grid.Row="2" Margin="20,10,20,10">
+                        
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                
+                        <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="Do:" VerticalAlignment="Top"/>
+                        <xctk:DateTimePicker Margin="10,0,0,0" Grid.Column="1" x:Name="ui_koniec" VerticalAlignment="Top"  Width="100"  HorizontalAlignment="Right"/>
+                        <CheckBox x:Name="konca_checkbox" Grid.Column="2" Content="końca" Grid.Row="2" VerticalAlignment="Top" Margin="10,0,0,0" HorizontalAlignment="Left"/>
                     </Grid>
 
                     <Grid Grid.Row="3" Margin="50,10,50,50" VerticalAlignment="Bottom">
