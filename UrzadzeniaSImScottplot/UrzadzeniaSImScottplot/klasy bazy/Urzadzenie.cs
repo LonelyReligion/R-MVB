@@ -134,5 +134,24 @@ namespace UrzadzeniaSImScottplot
                 }
             }
         }
+
+        [NotMapped]
+        public bool Aktywne {
+            get
+            {
+                using (var ctx = new Kontekst())
+                {
+                    if (ctx.Wersje.Where(u => u.UrzadzenieID == UrzadzenieID) == null ||
+                        ctx.Wersje.Where(u => u.UrzadzenieID == UrzadzenieID).Count() == 0)
+                        return false;
+
+                    return ctx.Wersje
+                        .Where(u => u.UrzadzenieID == UrzadzenieID)
+                        .OrderByDescending(w => w.WersjaID)
+                        .First()
+                        .Aktywne;
+                }
+            }
+        }
     }
 }

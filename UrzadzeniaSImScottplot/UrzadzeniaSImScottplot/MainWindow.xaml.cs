@@ -23,9 +23,14 @@ namespace UrzadzeniaSImScottplot
                 SiatkaUrzadzen.ItemsSource = ctx.Urzadzenia.ToList();
                 SiatkaUrzadzen.AutoGeneratingColumn += generowanieKolumn;
                 TabelaWynikow.AutoGeneratingColumn += generowanieKolumn;
+                
                 DataGridTextColumn liczba_pomiarow =  new DataGridTextColumn();
                 liczba_pomiarow.Header = "Liczba pomiarów";
                 liczba_pomiarow.Binding = new Binding("LiczbaPomiarow");
+
+                DataGridTextColumn aktywne = new DataGridTextColumn();
+                liczba_pomiarow.Header = "Aktywne";
+                liczba_pomiarow.Binding = new Binding("Aktywne");
 
                 plot.Plot.Axes.SetLimits(14.11, 24.15, 49, 54.83);
                 plot.UserInputProcessor.Disable();
@@ -34,7 +39,7 @@ namespace UrzadzeniaSImScottplot
         }
 
         public void generowanieKolumn(object sender, DataGridAutoGeneratingColumnEventArgs e) {
-            if (e.PropertyName == "Wersje" || e.PropertyName == "Aktywne" ||
+            if (e.PropertyName == "Wersje" ||
                 e.PropertyName == "Pomiary" || e.PropertyName == "UrzadzenieRodzic")
             {
                 e.Column.Visibility = Visibility.Collapsed;
@@ -58,6 +63,12 @@ namespace UrzadzeniaSImScottplot
             else if (e.PropertyName == "LiczbaPomiarow")
             {
                 e.Column.Header = "Liczba pomiarów";
+            }
+
+
+            else if (e.PropertyName == "Aktywne")
+            {
+                e.Column.IsReadOnly = true;
             }
 
         }
@@ -233,6 +244,11 @@ namespace UrzadzeniaSImScottplot
                     TabelaWynikow.ItemsSource = okno.odnalezione_wersje;
                 }
             }
+        }
+
+        private void Dezaktywuj_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
