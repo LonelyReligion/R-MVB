@@ -509,15 +509,16 @@ namespace UrzadzeniaSImScottplot
             List<Wersja> wynikowa = new List<Wersja>();
             for (int i = 0; i < wpisy.Count; i++) {
                 Wpis wpis = wpisy[i].Item2;
+                
                 //do sprawdzenia
                 if ((wpis.minData < poczatek && wpis.maxData < poczatek)||(wpis.minData >= koniec && wpis.maxData >= koniec))
                     ;
-                else if (wpis.minData == poczatek && wpis.maxData < koniec)
+                else if (wpis.minData == poczatek && ((wpis.maxData < koniec) || (wpis.maxData == DateTime.MaxValue && koniec == DateTime.MaxValue)))
                     wynikowa.AddRange(wpis.wezel.zwrocUrzadzenia());
                 else {
                     var urzadzenia = wpis.wezel.urzadzenia;
                     for (int j = 0; j < urzadzenia.Count(); j++) {
-                        if (urzadzenia[j].Item2.dataOstatniejModyfikacji >= poczatek && urzadzenia[j].Item2.dataWygasniecia < koniec)
+                        if (urzadzenia[j].Item2.dataOstatniejModyfikacji >= poczatek && (urzadzenia[j].Item2.dataWygasniecia < koniec || (urzadzenia[j].Item2.dataWygasniecia == DateTime.MaxValue && koniec == DateTime.MaxValue)))
                             wynikowa.Add(urzadzenia[j].Item2);
                     }
                 }

@@ -93,7 +93,7 @@
                         
                         <TextBlock Grid.Column="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Od:" VerticalAlignment="Top"/>
                         <xctk:DateTimePicker Grid.Column="1" x:Name="ui_poczatek" HorizontalAlignment="Right" Width="100" VerticalAlignment="Top" IsEnabled="{Binding poczatku_checkbox.IsChecked}"/>
-                        <CheckBox x:Name="poczatku_checkbox" Grid.Column="2" Content="początku" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                        <CheckBox x:Name="poczatku_checkbox" Grid.Column="2" Content="początku" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,0,0,0" Click="poczatku_checkbox_Click"/>
 
                     </Grid>
 
@@ -107,7 +107,7 @@
                 
                         <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="Do:" VerticalAlignment="Top"/>
                         <xctk:DateTimePicker Margin="10,0,0,0" Grid.Column="1" x:Name="ui_koniec" VerticalAlignment="Top"  Width="100"  HorizontalAlignment="Right"/>
-                        <CheckBox x:Name="konca_checkbox" Grid.Column="2" Content="końca" Grid.Row="2" VerticalAlignment="Top" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                        <CheckBox x:Name="konca_checkbox" Grid.Column="2" Content="końca" Grid.Row="2" VerticalAlignment="Top" Margin="5,0,0,0" HorizontalAlignment="Left" Click="konca_checkbox_Click"/>
                     </Grid>
 
                     <Grid Grid.Row="3" Margin="50,10,50,50" VerticalAlignment="Bottom">

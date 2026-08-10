@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Text;
 using System.Windows;
 
 namespace UrzadzeniaSImScottplot.okna
@@ -330,8 +331,23 @@ namespace UrzadzeniaSImScottplot.okna
             wariant_tesktu = 2;
             bool blad = false;
 
-            poczatek = (DateTime?)ui_poczatek.Value;
-            koniec = (DateTime?)ui_koniec.Value;
+            if (((bool)poczatku_checkbox.IsChecked))
+            {
+                poczatek = DateTime.MinValue;
+            }
+            else
+            {
+                poczatek = (DateTime?)ui_poczatek.Value;
+            }
+
+            if (((bool)konca_checkbox.IsChecked)) { 
+                koniec = DateTime.MaxValue;
+            }
+            else
+            {
+                koniec = (DateTime?)ui_koniec.Value;
+
+            }
 
 
             using (var ctx = new Kontekst())
@@ -347,7 +363,14 @@ namespace UrzadzeniaSImScottplot.okna
                 for (int i = 0; i < 10; i++)
                 {
                     szukane_wersje = new List<Wersja>();
-                    szukane_wersje.AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList());
+
+                    if (koniec != DateTime.MaxValue)
+                    {
+                        szukane_wersje.AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList());
+                    }
+                    else {
+                        szukane_wersje.AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia <= koniec).ToList());
+                    }
                 }
                 czasBD = sw.ElapsedMilliseconds;
                 
@@ -413,6 +436,23 @@ namespace UrzadzeniaSImScottplot.okna
             }
             sukces = true;
             Close();
+        }
+
+        private void poczatku_checkbox_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsLoaded)
+                return;
+
+            //gdy odczytujamy jest jeszcze niezaznaczone?
+            ui_poczatek.IsReadOnly = ((bool)poczatku_checkbox.IsChecked);
+        }
+
+        private void konca_checkbox_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsLoaded)
+                return;
+
+            ui_koniec.IsReadOnly = ((bool)konca_checkbox.IsChecked);
         }
     }
 }
