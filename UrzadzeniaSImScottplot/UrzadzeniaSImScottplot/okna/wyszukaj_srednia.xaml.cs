@@ -73,8 +73,12 @@ namespace UrzadzeniaSImScottplot.okna
 
         private void Wyszukaj_srednia_Loaded(object sender, RoutedEventArgs e)
         {
+
             using (var ctx = new Kontekst())
             {
+                if (!ctx.Urzadzenia.Any())
+                    return;
+
                 Urzadzenie zerowe = ctx.Urzadzenia.Where(u => u.UrzadzenieID == 0).First();
                 dlugosc.Content = zerowe.Dlugosc.ToString();
                 szerokosc.Content = zerowe.Szerokosc.ToString();

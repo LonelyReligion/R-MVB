@@ -23,10 +23,10 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0" Background="#C9DABA">
-                        <TextBlock Text="Wyszukuje ostatnią wersję urządzenia o podanym ID." VerticalAlignment="Center" Margin="50,10,50,10"/>
+                        <TextBlock Text="Wyszukuje ostatnią wersję urządzenia o podanym ID." VerticalAlignment="Center" Margin="20,10,20,10"/>
                     </Grid>
 
-                    <Grid Grid.Row="1" Margin="50,50,50,10">
+                    <Grid Grid.Row="1" Margin="20,50,20,10">
                         <xctk:IntegerUpDown x:Name="IdUrzadzenia1" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="80" Maximum="{Binding maxId}" Minimum="0" Value="0" AllowTextInput="False" />
                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="ID urządzenia" VerticalAlignment="Top"/>
                     </Grid>
@@ -50,15 +50,15 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0" Background="#C9DABA" >
-                        <TextBlock Text="Wyszukuje wersje urządzenia o podanym ID." VerticalAlignment="Center" Margin="50,10,50,10"/>
+                        <TextBlock Text="Wyszukuje wersje urządzenia o podanym ID." VerticalAlignment="Center" Margin="20,10,20,10"/>
                     </Grid>
 
-                    <Grid Grid.Row="1" Margin="50,50,50,10">
+                    <Grid Grid.Row="1" Margin="20,50,20,10">
                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="ID urządzenia:" VerticalAlignment="Top"/>
                         <xctk:IntegerUpDown x:Name="IdUrzadzenia2" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="80" Minimum="0" Maximum="{Binding maxId}" ValueChanged="IntegerUpDown_ValueChanged" Value="0" AllowTextInput="False"/>
                     </Grid>
 
-                    <Grid Grid.Row="2" Margin="50,10,50,10">
+                    <Grid Grid.Row="2" Margin="20,10,20,10">
                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="ID wersji:" VerticalAlignment="Top"/>
                         <xctk:IntegerUpDown x:Name="idWersji" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="80" Minimum="{Binding minVer}" Maximum="{Binding maxVer}" Value="0" AllowTextInput="False"/>
                     </Grid>
@@ -92,7 +92,7 @@
                         </Grid.ColumnDefinitions>
                         
                         <TextBlock Grid.Column="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Od:" VerticalAlignment="Top"/>
-                        <xctk:DateTimePicker Grid.Column="1" x:Name="ui_poczatek" HorizontalAlignment="Right" Width="100" VerticalAlignment="Top"/>
+                        <xctk:DateTimePicker Grid.Column="1" x:Name="ui_poczatek" HorizontalAlignment="Right" Width="100" VerticalAlignment="Top" IsEnabled="{Binding poczatku_checkbox.IsChecked}"/>
                         <CheckBox x:Name="poczatku_checkbox" Grid.Column="2" Content="początku" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0"/>
 
                     </Grid>
