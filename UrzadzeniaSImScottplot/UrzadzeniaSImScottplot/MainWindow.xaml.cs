@@ -248,8 +248,9 @@ namespace UrzadzeniaSImScottplot
 
         private void Dezaktywuj_Click(object sender, RoutedEventArgs e)
         {
-            dezaktywuj_urzadzenie okno = new dezaktywuj_urzadzenie();
+            dezaktywuj_urzadzenie okno = new dezaktywuj_urzadzenie(_rmvb);
             okno.ShowDialog();
+            AktualizujSiatkeUrzadzen();
         }
     }
 }

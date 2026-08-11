@@ -21,6 +21,8 @@ namespace UrzadzeniaSImScottplot.okna
     public partial class dezaktywuj_urzadzenie : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private RMVB _rmvb;
         
         private int? _maxId;
         public int? maxId
@@ -48,12 +50,13 @@ namespace UrzadzeniaSImScottplot.okna
             }
         }
 
-        public dezaktywuj_urzadzenie()
+        public dezaktywuj_urzadzenie(RMVB rmvb)
         {
             DataContext = this;
             InitializeComponent();
             _inicjujKontrolki();
             this.ContentRendered += _sprawdzCzyMamyUrzadzenia;
+            _rmvb = rmvb;
         }
 
         private void _sprawdzCzyMamyUrzadzenia(object sender, EventArgs e)
@@ -116,6 +119,22 @@ namespace UrzadzeniaSImScottplot.okna
         private void Zapisz_Click(object sender, RoutedEventArgs e)
         {
             //logika zapisywania
+            using (var ctx = new Kontekst()) {
+                Wersja w = ctx.Wersje
+                        .Where(u => u.UrzadzenieID == (int)IdUrzadzenia.Value)
+                        .OrderByDescending(w => w.WersjaID)
+                        .First();
+
+                DateTime data_zm = DateTime.Now;
+                w.dezaktywuj(data_zm); //tu nie dezaktywuj bo moze byc tez aktywowanie zczytac tick
+                _rmvb.szukaj(w.UrzadzenieID, w.WersjaID).dezaktywuj(data_zm);
+
+                ctx.SaveChanges();
+
+
+                Wersja mvb = _rmvb.szukaj(w.UrzadzenieID, w.WersjaID);
+            }
+
             Close();
         }
     }
