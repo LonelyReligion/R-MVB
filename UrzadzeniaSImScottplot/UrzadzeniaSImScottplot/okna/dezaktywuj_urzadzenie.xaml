@@ -6,24 +6,37 @@
         xmlns:local="clr-namespace:UrzadzeniaSImScottplot.okna"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="dezaktywuj_urzadzenie" Height="450" Width="800">
+        Title="dezaktywuj_urzadzenie" Height="450" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <xctk:IntegerUpDown x:Name="IdUrzadzenia" Height="20" Width="80" Minimum="0" Maximum="{Binding maxId}" ValueChanged="IdUrzadzenia_ValueChanged" Value="0" AllowTextInput="False"/>
-            <TextBlock Text="ID urządzenia:"/>
+        <Grid Grid.Row="0" Background="#C9DABA" >
+            <TextBlock Text="Podaj ID urządzenia aby je aktywować lub dezaktywować." VerticalAlignment="Center" Margin="20,10,20,10"/>
         </Grid>
 
-        <Grid Grid.Row="1">
-            <DataGrid/>
-        </Grid>
+        <Grid Grid.Row="1" Margin="20,10,20,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="ID urządzenia:" VerticalAlignment="Center"/>
+            <xctk:IntegerUpDown Grid.Column="1" HorizontalAlignment="Right" x:Name="IdUrzadzenia" Height="20" Width="80" Minimum="0" Maximum="{Binding maxId}" ValueChanged="IdUrzadzenia_ValueChanged" Value="0" AllowTextInput="False"/>
         
-        <Grid>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="20,10,20,10">
+            <DataGrid x:Name="Urzadzenie_DF" d:ItemsSource="{d:SampleData ItemCount=1}"/>
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="50,10,50,50" VerticalAlignment="Bottom">
+            <Button x:Name="Anuluj" Content="Anuluj" Width="100" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Anuluj_Click"/>
+            <Button x:Name="Zapisz"  Content="Zapisz" Width="100" HorizontalAlignment="Right"  VerticalAlignment="Top" Click="Zapisz_Click"/>
         </Grid>
         
         </Grid>

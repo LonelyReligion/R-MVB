@@ -35,22 +35,88 @@ namespace UrzadzeniaSImScottplot.okna
         }
         private void _inicjujKontrolki()
         {
+            Urzadzenie_DF.AutoGeneratingColumn += generowanieKolumn;
             using (var ctx = new Kontekst())
             {
                 //maksymalne id urzadzenia
                 maxId = ctx.Urzadzenia.Max(u => (int?)u.UrzadzenieID);
+                List<Wersja> wersja = new List<Wersja>(){ctx.Wersje
+                        .Where(u => u.UrzadzenieID == (int)IdUrzadzenia.Value)
+                        .OrderByDescending(w => w.WersjaID)
+                        .ToList()[0]};
+                Urzadzenie_DF.ItemsSource = wersja;
             }
         }
 
         public dezaktywuj_urzadzenie()
         {
+            DataContext = this;
             InitializeComponent();
             _inicjujKontrolki();
+            this.ContentRendered += _sprawdzCzyMamyUrzadzenia;
+        }
+
+        private void _sprawdzCzyMamyUrzadzenia(object sender, EventArgs e)
+        {
+            using (var ctx = new Kontekst())
+            {
+                bool istnieje = ctx.Urzadzenia.Any();
+
+                if (!istnieje)
+                {
+                    Window dialog = (Window)new brak_urzadzen_w_bazie(this);
+                    dialog.ShowDialog();
+                    Close();
+                }
+            }
+        }
+
+        public void generowanieKolumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyName == "UrzadzenieID" ||
+                e.PropertyName == "Pomiary" || e.PropertyName == "UrzadzenieRodzic")
+            {
+                e.Column.Visibility = Visibility.Collapsed;
+            }
+
+            if (e.PropertyName == "Aktywne")
+            {
+                e.Column.IsReadOnly = false;
+            }
+            else {
+                e.Column.IsReadOnly = true;
+            }
+
         }
 
         private void IdUrzadzenia_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (!IsLoaded)
+                return;
 
+            if (IdUrzadzenia.Value == null)
+                return;
+
+            using (var ctx = new Kontekst())
+            {
+                List<Wersja> wersja = new List<Wersja>(){ctx.Wersje
+                        .Where(u => u.UrzadzenieID == (int)IdUrzadzenia.Value)
+                        .OrderByDescending(w => w.WersjaID)
+                        .ToList()[0]};
+                Urzadzenie_DF.ItemsSource = wersja;
+            }
+
+        }
+
+        private void Anuluj_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Zapisz_Click(object sender, RoutedEventArgs e)
+        {
+            //logika zapisywania
+            Close();
         }
     }
 }
