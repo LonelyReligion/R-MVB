@@ -52,7 +52,7 @@ namespace UrzadzeniaSImScottplot
         {
             MVB.dodajUrzadzenie(w); //musi zostac zapisana najpierw
             MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
-            repo.saveVersion(w);
+            repo.modifyVersion(w);
         }
 
         //szukaj

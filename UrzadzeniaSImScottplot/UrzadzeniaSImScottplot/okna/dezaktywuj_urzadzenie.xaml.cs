@@ -118,21 +118,36 @@ namespace UrzadzeniaSImScottplot.okna
 
         private void Zapisz_Click(object sender, RoutedEventArgs e)
         {
+            Wersja w;
+            Wersja oryginalna;
+            bool aktywne_nieaktywne;
+
             //logika zapisywania
-            using (var ctx = new Kontekst()) {
-                Wersja w = ctx.Wersje
-                        .Where(u => u.UrzadzenieID == (int)IdUrzadzenia.Value)
-                        .OrderByDescending(w => w.WersjaID)
-                        .First();
+            using (var ctx = new Kontekst())
+            {
+                w = ctx.Wersje
+                    .Where(u => u.UrzadzenieID == (int)IdUrzadzenia.Value)
+                    .OrderByDescending(w => w.WersjaID)
+                    .First();
 
-                DateTime data_zm = DateTime.Now;
-                w.dezaktywuj(data_zm); //tu nie dezaktywuj bo moze byc tez aktywowanie zczytac tick
-                _rmvb.szukaj(w.UrzadzenieID, w.WersjaID).dezaktywuj(data_zm);
+                Wersja wybrana = Urzadzenie_DF.Items[0] as Wersja;
+                aktywne_nieaktywne = wybrana.Aktywne;
+                oryginalna = _rmvb.szukaj(w.UrzadzenieID, w.WersjaID);
+            }
 
-                ctx.SaveChanges();
+            if (!oryginalna.Aktywne && aktywne_nieaktywne)
+            {
+                //tu tworzymy nowa wersje aktywna od teraz
+            }
+            else if (oryginalna.Aktywne && !aktywne_nieaktywne)
+            {
+                _rmvb.usunWersje(oryginalna);
 
-
-                Wersja mvb = _rmvb.szukaj(w.UrzadzenieID, w.WersjaID);
+                using (var ctx = new Kontekst())
+                {
+                    w.dezaktywuj(oryginalna.dataWygasniecia);
+                    ctx.SaveChanges();
+                }
             }
 
             Close();

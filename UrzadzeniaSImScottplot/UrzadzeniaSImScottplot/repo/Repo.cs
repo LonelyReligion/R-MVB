@@ -67,6 +67,27 @@ namespace UrzadzeniaSImScottplot.repo
             this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
         }
 
+        public void modifyVersion(Wersja v)
+        {
+
+            using (var ctx = new Kontekst())
+            {
+                foreach (var p in v.Pomiary)
+                {
+                    ctx.Entry(p).State = EntityState.Unchanged;
+                }
+
+                ctx.Entry(v).State = EntityState.Modified; 
+
+
+                wersje.Add(v);
+                ctx.SaveChanges();
+            }
+
+            urzadzenia_wersje[v.UrzadzenieID].Add(v.WersjaID);
+            this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
+        }
+
         public bool czyUrzadzenieIstnieje(int UrzadzenieID)
         {
             using (var ctx = new Kontekst())
