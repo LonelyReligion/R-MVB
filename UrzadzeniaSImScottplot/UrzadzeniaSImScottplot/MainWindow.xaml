@@ -53,7 +53,7 @@
             </Grid>
             
             <Grid Grid.Row="4">
-                <DataGrid x:Name="TabelaWynikow"  d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,10"/>
+                <DataGrid x:Name="TabelaWynikow"  d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,10" IsReadOnly="True"/>
             </Grid>
             
         </Grid>

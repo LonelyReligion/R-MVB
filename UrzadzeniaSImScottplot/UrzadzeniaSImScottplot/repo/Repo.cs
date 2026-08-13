@@ -67,6 +67,7 @@ namespace UrzadzeniaSImScottplot.repo
             this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
         }
 
+        //uzywane tylko do dezaktywowania
         public void modifyVersion(Wersja v)
         {
 
@@ -77,10 +78,16 @@ namespace UrzadzeniaSImScottplot.repo
                     ctx.Entry(p).State = EntityState.Unchanged;
                 }
 
-                ctx.Entry(v).State = EntityState.Modified; 
+                ctx.Entry(v).State = EntityState.Modified;
 
 
-                wersje.Add(v);
+                for (int i = 0; i < wersje.Count(); i++)
+                {
+                    Wersja obecnie_rozeznawana = wersje[wersje.Count() - 1 - i];
+                    if (obecnie_rozeznawana.UrzadzenieID == v.UrzadzenieID && obecnie_rozeznawana.WersjaID == v.WersjaID)
+                        wersje[wersje.Count() - 1 - i] = v;
+                }
+                
                 ctx.SaveChanges();
             }
 

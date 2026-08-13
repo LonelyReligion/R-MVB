@@ -329,7 +329,7 @@ namespace UrzadzeniaSImScottplot.okna
         private void Przeslij3_Click(object sender, RoutedEventArgs e)
         {
             wariant_tesktu = 2;
-            bool blad = false;
+            blad = false;
 
             if (((bool)poczatku_checkbox.IsChecked))
             {
@@ -369,7 +369,7 @@ namespace UrzadzeniaSImScottplot.okna
                         szukane_wersje.AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia < koniec).ToList());
                     }
                     else {
-                        szukane_wersje.AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).Where(u => u.dataWygasniecia <= koniec).ToList());
+                        szukane_wersje.AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= poczatek).ToList());
                     }
                 }
                 czasBD = sw.ElapsedMilliseconds;
