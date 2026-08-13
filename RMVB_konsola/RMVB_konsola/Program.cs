@@ -119,7 +119,7 @@ beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, 
 
 rmvb.usunWersje(beta);
 //
-/*List<Wersja> losowe = new List<Wersja>(); //do debuggowania, potrzebne nam do odtworzenia scenariusza
+List<Wersja> losowe = new List<Wersja>(); //do debuggowania, potrzebne nam do odtworzenia scenariusza
 for (int i = 0; i < liczbaUrzadzen; i++)
 {
     int id = i % liczbaUrzadzen;
@@ -157,7 +157,7 @@ for (int id = 0; id < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); id++)
     rmvb.dodajWersje(losowaWersja);
     rmvb.dodajPomiar(id, losowyPomiar, losowaWersja);
     losowe.Add(losowaWersja);
-}*/
+}
 
 rmvb.obliczAgregaty();
 
