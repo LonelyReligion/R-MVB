@@ -138,6 +138,8 @@ namespace UrzadzeniaSImScottplot.okna
             if (!oryginalna.Aktywne && aktywne_nieaktywne)
             {
                 //tu tworzymy nowa wersje aktywna od teraz
+                Wersja nowa = new Wersja(oryginalna, _rmvb.zwrocRepo(), _rmvb);
+                _rmvb.dodajWersje(nowa); //_rmvb rozmawia z repo rozmawia z baza 
             }
             else if (oryginalna.Aktywne && !aktywne_nieaktywne)
             {
