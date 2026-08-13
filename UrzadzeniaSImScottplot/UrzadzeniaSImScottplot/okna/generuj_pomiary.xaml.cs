@@ -33,6 +33,17 @@ namespace UrzadzeniaSImScottplot.okna
             using (var ctx = new Kontekst())
             {
                 maxId = ctx.Urzadzenia.Max(u => (int?)u.UrzadzenieID);
+
+                if (!ctx.Wersje
+                        .Where(u => u.UrzadzenieID == IdUrzadzenia.Value)
+                        .OrderByDescending(w => w.WersjaID)
+                        .First()
+                        .Aktywne)
+                {
+                    Przeslij.IsEnabled = false;
+                    //wyswietl komunikat
+                    komunikat.Text = "Przed generowaniem pomiarów upewnij się, że urządzenie jest \naktywne.";
+                }
             }
         }
 
@@ -87,9 +98,10 @@ namespace UrzadzeniaSImScottplot.okna
 
         }
 
+        //to jest ID
         private void ZmienionoWartoscPola(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            Waliduj();
+            Waliduj(); 
         }
 
         private void PodajWartosc_Checked(object sender, RoutedEventArgs e)
@@ -102,22 +114,41 @@ namespace UrzadzeniaSImScottplot.okna
             Waliduj();
         }
 
-        private void Waliduj() {
+        private void Waliduj()
+        {
             if (!IsLoaded)
                 return;
 
-            bool mamy_id = (IdUrzadzenia.Value != null);
-            bool mamy_wartosc = (bool)(PodajWartosc.IsChecked == true) && Wartosc.Value != null;
-            bool mamy_liczbe = (bool)(PodajLiczbe.IsChecked == true) && Liczba.Value != null;
+            using (var ctx = new Kontekst()) {
+                
+                if (ctx.Wersje
+                        .Where(u => u.UrzadzenieID == IdUrzadzenia.Value)
+                        .OrderByDescending(w => w.WersjaID)
+                        .First()
+                        .Aktywne)
+                {
 
-            if (!mamy_id || (!mamy_wartosc && !mamy_liczbe))
-            {
-                Przeslij.IsEnabled = false;
+                    bool mamy_id = (IdUrzadzenia.Value != null);
+                    bool mamy_wartosc = (bool)(PodajWartosc.IsChecked == true) && Wartosc.Value != null;
+                    bool mamy_liczbe = (bool)(PodajLiczbe.IsChecked == true) && Liczba.Value != null;
+
+                    if (!mamy_id || (!mamy_wartosc && !mamy_liczbe))
+                    {
+                        Przeslij.IsEnabled = false;
+                    }
+                    else
+                    {
+                        Przeslij.IsEnabled = true;
+                    }
+                }
+                else {
+                    Przeslij.IsEnabled = false;
+                    //wyswietl komunikat
+                    komunikat.Text = "Przed generowaniem pomiarów upewnij się, że urządzenie jest \naktywne.";
+                }
+
             }
-            else
-            {
-                Przeslij.IsEnabled = true;
-            }
+        
         }
 
 

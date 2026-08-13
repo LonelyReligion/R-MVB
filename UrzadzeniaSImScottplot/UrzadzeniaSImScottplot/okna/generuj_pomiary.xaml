@@ -6,13 +6,14 @@
         xmlns:local="clr-namespace:UrzadzeniaSImScottplot.okna"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="generuj_pomiary" Height="300" Width="400">
+        Title="generuj_pomiary" Height="350" Width="400">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Margin="10,20,10,0">
@@ -34,8 +35,12 @@
                                 Height="20" Width="80" Minimum="1" Maximum="100" Value="1"  IsEnabled="{Binding IsChecked, ElementName=PodajLiczbe}"  
                                  ValueChanged="ZmienionoWartoscPola" />
         </Grid>
-
+        
         <Grid Grid.Row="3" Margin="10,10,10,0">
+            <TextBlock x:Name="komunikat" Foreground="IndianRed"/>
+        </Grid>
+        
+        <Grid Grid.Row="4" Margin="10,10,10,0">
             <Button x:Name="Anuluj" Click="Anuluj_Click" Content="Anuluj" Width="100"  HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="-0.032,0.73"/>
             <Button x:Name="Przeslij" Click="Przeslij_Click"  Content="Przeslij" Width="100" HorizontalAlignment="Right"  VerticalAlignment="Top"/>
         </Grid>
