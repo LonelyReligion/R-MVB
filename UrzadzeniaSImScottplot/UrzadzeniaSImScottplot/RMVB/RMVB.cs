@@ -50,7 +50,8 @@ namespace UrzadzeniaSImScottplot
         //usun
         internal void usunWersje(Wersja w)
         {
-            MVB.dodajUrzadzenie(w); //musi zostac zapisana najpierw
+            //MVB.szukaj(w.UrzadzenieID, w.WersjaID)
+            //MVB.dodajUrzadzenie(w); //musi zostac zapisana najpierw
             MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
             repo.modifyVersion(w);
         }
