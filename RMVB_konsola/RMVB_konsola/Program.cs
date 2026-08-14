@@ -117,7 +117,9 @@ rmvb.dodajPomiar(testowe.UrzadzenieID, testowy, alfa);
 Wersja beta = new Wersja(alfa, rmvb.zwrocRepo(), rmvb); //to deazktywuje alfe
 beta.usunPomiar(testowy); // sytuacja usuwamy pomiar w nowej wersji urzadzenia, ale zachowujemy go w bazie
 
-rmvb.usunWersje(beta);
+rmvb.dodajWersje(beta);//dodajemy
+
+rmvb.usunWersje(beta);//dezaktywujemy
 //
 List<Wersja> losowe = new List<Wersja>(); //do debuggowania, potrzebne nam do odtworzenia scenariusza
 for (int i = 0; i < liczbaUrzadzen; i++)

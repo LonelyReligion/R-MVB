@@ -807,8 +807,16 @@ namespace RMVB_konsola
                 {
                     szukane_wersje.Add(new List<Wersja>());
                     DateTime start = losowe_przedzialy[i].Item1;
-                    DateTime end = losowe_przedzialy[i].Item2;
-                    szukane_wersje[i].AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= start).Where(u => u.dataWygasniecia < end).ToList());
+                    DateTime koniec = losowe_przedzialy[i].Item2;
+
+                    if (koniec != DateTime.MaxValue)
+                    {
+                        szukane_wersje[i].AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= start).Where(u => u.dataWygasniecia < koniec).ToList());
+                    }
+                    else
+                    {
+                        szukane_wersje[i].AddRange(ctx.Wersje.AsNoTracking().Where(u => u.dataOstatniejModyfikacji >= start).ToList());
+                    }
                 }
                 long czas_baza = sw.ElapsedMilliseconds;
                 Console.WriteLine("Baza: " + szukane_wersje.Count + " w czasie: " + czas_baza + " ms.");

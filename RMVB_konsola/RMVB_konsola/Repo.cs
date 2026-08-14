@@ -52,6 +52,33 @@ namespace RMVB_konsola
             this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
         }
 
+        public void modifyVersion(Wersja v)
+        {
+
+            using (var ctx = new Kontekst())
+            {
+                foreach (var p in v.Pomiary)
+                {
+                    ctx.Entry(p).State = EntityState.Unchanged;
+                }
+
+                ctx.Entry(v).State = EntityState.Modified;
+
+
+                for (int i = 0; i < wersje.Count(); i++)
+                {
+                    Wersja obecnie_rozeznawana = wersje[wersje.Count() - 1 - i];
+                    if (obecnie_rozeznawana.UrzadzenieID == v.UrzadzenieID && obecnie_rozeznawana.WersjaID == v.WersjaID)
+                        wersje[wersje.Count() - 1 - i] = v;
+                }
+
+                ctx.SaveChanges();
+            }
+
+            urzadzenia_wersje[v.UrzadzenieID].Add(v.WersjaID);
+            this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
+        }
+
         public bool czyUrzadzenieIstnieje(int UrzadzenieID) {
             return urzadzenia.ContainsKey(UrzadzenieID);
         }
