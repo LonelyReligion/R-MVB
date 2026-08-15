@@ -20,6 +20,8 @@ namespace UrzadzeniaSImScottplot
         public void InicjujKontrolki() {
             using (var ctx = new Kontekst())
             {
+                generuj_pomiary.aktualizujTabele += AktualizujSiatkeUrzadzen;
+
                 SiatkaUrzadzen.ItemsSource = ctx.Urzadzenia.ToList();
                 SiatkaUrzadzen.AutoGeneratingColumn += generowanieKolumn;
                 TabelaWynikow.AutoGeneratingColumn += generowanieKolumn;
@@ -39,8 +41,9 @@ namespace UrzadzeniaSImScottplot
         }
 
         public void generowanieKolumn(object sender, DataGridAutoGeneratingColumnEventArgs e) {
-            if (e.PropertyName == "Wersje" ||
-                e.PropertyName == "Pomiary" || e.PropertyName == "UrzadzenieRodzic")
+            if (e.PropertyName == "Wersje" ||e.PropertyName == "Pomiary" || 
+                e.PropertyName == "UrzadzenieRodzic" || e.PropertyName == "Aktywne" ||
+                e.PropertyName == "Generujemy")
             {
                 e.Column.Visibility = Visibility.Collapsed;
             }

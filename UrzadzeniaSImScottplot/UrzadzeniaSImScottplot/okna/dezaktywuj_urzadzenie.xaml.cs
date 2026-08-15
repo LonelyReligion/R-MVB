@@ -42,6 +42,9 @@ namespace UrzadzeniaSImScottplot.okna
             {
                 //maksymalne id urzadzenia
                 maxId = ctx.Urzadzenia.Max(u => (int?)u.UrzadzenieID);
+                if (maxId == null)
+                    return;
+
                 List<Wersja> wersja = new List<Wersja>(){ctx.Wersje
                         .Where(u => u.UrzadzenieID == (int)IdUrzadzenia.Value)
                         .OrderByDescending(w => w.WersjaID)
@@ -76,8 +79,9 @@ namespace UrzadzeniaSImScottplot.okna
 
         public void generowanieKolumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            if (e.PropertyName == "UrzadzenieID" ||
-                e.PropertyName == "Pomiary" || e.PropertyName == "UrzadzenieRodzic")
+            if (e.PropertyName == "UrzadzenieID" || e.PropertyName == "Status" ||
+                e.PropertyName == "Pomiary" || e.PropertyName == "UrzadzenieRodzic" ||
+                 e.PropertyName == "Generujemy")
             {
                 e.Column.Visibility = Visibility.Collapsed;
             }

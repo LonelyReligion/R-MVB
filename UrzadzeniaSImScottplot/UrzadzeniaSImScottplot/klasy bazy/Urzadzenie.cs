@@ -25,6 +25,7 @@ namespace UrzadzeniaSImScottplot
         //metody
         protected Urzadzenie() {
             Wersje = new HashSet<Wersja>();
+            Generujemy = false;
         }
         public Urzadzenie((Decimal, Decimal) dlugosc_szerokosc) : this()
         {
@@ -153,5 +154,30 @@ namespace UrzadzeniaSImScottplot
                 }
             }
         }
+
+        public bool Generujemy { get; set; }
+
+        [NotMapped]
+        public String Stan
+        {
+            get
+            {
+                using (var ctx = new Kontekst())
+                {
+                    if(!Aktywne)
+                        return "Nieaktywne";
+                    
+                    if (Aktywne && Generujemy)
+                        return "Mierzy";
+
+                    if (Aktywne)
+                        return "Aktywne";
+
+                    return "Wystąpił błąd";
+                }
+            }
+        }
+
+
     }
 }

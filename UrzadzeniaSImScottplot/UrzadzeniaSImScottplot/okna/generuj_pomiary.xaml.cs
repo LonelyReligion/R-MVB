@@ -9,6 +9,8 @@ namespace UrzadzeniaSImScottplot.okna
     /// </summary>
     public partial class generuj_pomiary : Window, INotifyPropertyChanged
     {
+        public static event Action aktualizujTabele;
+
         Generatory _gen;
         public  List<(int,Pomiar)> wygenerowane = new List<(int,Pomiar)>();
         public bool sukces = false;
@@ -33,6 +35,12 @@ namespace UrzadzeniaSImScottplot.okna
             using (var ctx = new Kontekst())
             {
                 maxId = ctx.Urzadzenia.Max(u => (int?)u.UrzadzenieID);
+
+                if (maxId == null)
+                    return;
+
+                _aktualizujStatus(0, true);
+
 
                 if (!ctx.Wersje
                         .Where(u => u.UrzadzenieID == IdUrzadzenia.Value)
@@ -75,6 +83,7 @@ namespace UrzadzeniaSImScottplot.okna
         private void Anuluj_Click(object sender, RoutedEventArgs e)
         {
             sukces = false;
+
             Close();
         }
 
@@ -98,10 +107,30 @@ namespace UrzadzeniaSImScottplot.okna
 
         }
 
+        private void _aktualizujStatus(int id, bool wartosc) {
+            using (var ctx = new Kontekst())
+            {
+                if (ctx.Wersje
+                .Where(u => u.UrzadzenieID == IdUrzadzenia.Value)
+                .OrderByDescending(w => w.WersjaID)
+                .First()
+                .Aktywne)
+                {
+                    ctx.Urzadzenia.Where(u => u.UrzadzenieID == id).First().Generujemy = wartosc;
+                    ctx.SaveChanges();
+                    aktualizujTabele.Invoke();
+                }
+            }
+        }
+
+        int poprzednie_id = 0;
         //to jest ID
         private void ZmienionoWartoscPola(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            Waliduj(); 
+            _aktualizujStatus(poprzednie_id, false);
+            Waliduj();
+            _aktualizujStatus((int)IdUrzadzenia.Value, true);
+            poprzednie_id = (int)IdUrzadzenia.Value;
         }
 
         private void PodajWartosc_Checked(object sender, RoutedEventArgs e)
@@ -151,6 +180,9 @@ namespace UrzadzeniaSImScottplot.okna
         
         }
 
-
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            _aktualizujStatus((int)IdUrzadzenia.Value, false);
+        }
     }
 }

@@ -38,8 +38,8 @@
             
             </Grid>
 
-            <Grid Grid.Row="1"> 
-                <DataGrid x:Name="SiatkaUrzadzen" Margin ="10,10,10,10" />
+            <Grid Grid.Row="1">
+                <DataGrid x:Name="SiatkaUrzadzen" Margin ="10,10,10,10" CanUserAddRows="False"/>
             </Grid>
 
             <Grid Grid.Row="2">
@@ -53,7 +53,7 @@
             </Grid>
             
             <Grid Grid.Row="4">
-                <DataGrid x:Name="TabelaWynikow"  d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,10" IsReadOnly="True"/>
+                <DataGrid x:Name="TabelaWynikow"  d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,10" IsReadOnly="True" CanUserAddRows="False"/>
             </Grid>
             
         </Grid>

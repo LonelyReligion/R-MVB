@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UrzadzeniaSImScottplot.okna"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="dezaktywuj_urzadzenie" Height="450" Width="400">
+        Title="dezaktywuj_urzadzenie" Height="450" Width="470">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -31,7 +31,7 @@
         </Grid>
 
         <Grid Grid.Row="2" Margin="20,10,20,10">
-            <DataGrid x:Name="Urzadzenie_DF" d:ItemsSource="{d:SampleData ItemCount=1}"/>
+            <DataGrid x:Name="Urzadzenie_DF" d:ItemsSource="{d:SampleData ItemCount=1}" CanUserAddRows="False"/>
         </Grid>
 
         <Grid Grid.Row="3" Margin="50,10,50,50" VerticalAlignment="Bottom">

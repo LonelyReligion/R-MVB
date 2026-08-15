@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UrzadzeniaSImScottplot.okna"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="generuj_pomiary" Height="350" Width="400">
+        Title="generuj_pomiary" Height="350" Width="400" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
