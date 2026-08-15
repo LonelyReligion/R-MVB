@@ -13,13 +13,14 @@ namespace Symulacja_strumieni
         public static void Main()
         {
             BlockingCollection<int> kolekcja = new BlockingCollection<int>();
-
+            
             List<Producent> producenci = new List<Producent>();
             
             Konsument konsument = new Konsument(kolekcja);
             Producent producent = new Producent(kolekcja);
             
             producent.Produkuj();
+
             konsument.Konsumuj();
         }
     }

@@ -23,5 +23,6 @@ namespace Symulacja_strumieni
             Console.WriteLine("Z tej strony producent nr. " + id.ToString() + ". Produkuję.");
             kolekcja.Add(this.id);
         }
+
     }
 }
