@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RMVB_konsola.Indeks.MVB
+namespace Symulacja_strumieni.rmvb.mvb
 {
     //"object that contains information about the time range in which the root is valid and the root identificator."
     internal class DeskryptorKorzenia

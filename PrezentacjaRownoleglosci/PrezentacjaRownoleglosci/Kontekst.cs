@@ -1,4 +1,6 @@
-﻿using RMVB_konsola.Indeks.R;
+﻿using Symulacja_strumieni.rmvb.r;
+using Symulacja_strumieni.model;
+
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola
+namespace Symulacja_strumieni
 {
     public class Kontekst : DbContext
     {

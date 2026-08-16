@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Symulacja_strumieni.model;
 
-namespace RMVB_konsola.Indeks.MVB
+namespace Symulacja_strumieni.rmvb.mvb
 {
     internal class DrzewoMVB
     {
@@ -36,7 +37,7 @@ namespace RMVB_konsola.Indeks.MVB
                 wyjsciowa.Add("\n");
             }
 
-            wyjsciowa.Add("Liczba korzeni MVB: " + desk.Count);
+            wyjsciowa.Add("Liczba korzeni mvb: " + desk.Count);
             return wyjsciowa;
         }
 

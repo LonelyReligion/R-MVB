@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System;
-using RMVB_konsola.Indeks.MVB;
-using RMVB_konsola;
+using Symulacja_strumieni.rmvb.mvb;
+using Symulacja_strumieni;
 using System.Diagnostics.CodeAnalysis;
-using RMVB_konsola.Indeks.R;
+using Symulacja_strumieni.rmvb.r;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace RMVB_konsola
+namespace Symulacja_strumieni.model
 {
     public class Urzadzenie
     {

@@ -1,4 +1,4 @@
-﻿namespace RMVB_konsola.Indeks.R
+﻿namespace Symulacja_strumieni.rmvb.r
 {
     public class TreeWalker
     {

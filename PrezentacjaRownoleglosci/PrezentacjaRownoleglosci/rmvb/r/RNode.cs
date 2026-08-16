@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using Symulacja_strumieni.model;
 
-
-namespace RMVB_konsola.Indeks.R
+namespace Symulacja_strumieni.rmvb.r
 {
 
     abstract public class RNode

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using Symulacja_strumieni.model;
 
-namespace RMVB_konsola.Indeks.MVB
+namespace Symulacja_strumieni.rmvb.mvb
 {
     internal class Korzen
     {

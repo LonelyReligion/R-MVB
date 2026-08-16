@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Symulacja_strumieni.model;
 
-namespace RMVB_konsola.Indeks.R
+namespace Symulacja_strumieni.rmvb.r
 {
     public class RTree : RootHandler
     {

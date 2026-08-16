@@ -5,8 +5,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using Symulacja_strumieni.model;
 
-namespace RMVB_konsola.Indeks.R
+namespace Symulacja_strumieni.rmvb.r
 {
     public class RBranch : RNode
     {

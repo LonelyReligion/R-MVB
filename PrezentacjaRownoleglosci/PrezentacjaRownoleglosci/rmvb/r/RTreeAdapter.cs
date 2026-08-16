@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Symulacja_strumieni.model;
 
-namespace RMVB_konsola.Indeks.R
+namespace Symulacja_strumieni.rmvb.r
 {
     internal class RTreeAdapter
     {

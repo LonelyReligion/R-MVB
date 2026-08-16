@@ -1,5 +1,6 @@
-﻿using RMVB_konsola.Indeks.MVB;
-using RMVB_konsola.Indeks.R;
+﻿using Symulacja_strumieni.rmvb.mvb;
+using Symulacja_strumieni.rmvb.r;
+using Symulacja_strumieni.model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola.Indeks
+namespace Symulacja_strumieni.rmvb
 {
     public class RMVB
     {
@@ -123,7 +124,7 @@ namespace RMVB_konsola.Indeks
         internal void zapiszMVB(string v)
         {
             List<string> linijki = MVB.drukujDrzewo();
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "MVB.txt")))
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "mvb.txt")))
             {
                 foreach (string linijka in linijki)
                     outputFile.WriteLine(linijka);

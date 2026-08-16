@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace RMVB_konsola
+namespace Symulacja_strumieni.model
 {
     public class Pomiar
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMVB_konsola.Indeks.MVB
+namespace Symulacja_strumieni.rmvb.mvb
 {
     internal class Wpis
     {

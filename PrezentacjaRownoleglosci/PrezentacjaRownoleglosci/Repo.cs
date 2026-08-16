@@ -1,4 +1,4 @@
-﻿using RMVB_konsola.Indeks.R;
+﻿using Symulacja_strumieni.rmvb.r;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -6,8 +6,9 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Symulacja_strumieni.model;
 
-namespace RMVB_konsola
+namespace Symulacja_strumieni
 {
     public class Repo
     {

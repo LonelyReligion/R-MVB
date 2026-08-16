@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
-using RMVB_konsola.Indeks;
+using Symulacja_strumieni.rmvb;
 
-namespace RMVB_konsola
+namespace Symulacja_strumieni.model
 {
     public class Wersja
     {
