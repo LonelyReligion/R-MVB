@@ -9,8 +9,8 @@ namespace Symulacja_strumieni
 {
     public abstract class Konsument
     {
-        BlockingCollection<int> kolekcja = new BlockingCollection<int>();
-        public Konsument(BlockingCollection<int> k) {
+        protected BlockingCollection<object> kolekcja = new BlockingCollection<object>();
+        public Konsument(BlockingCollection<object> k) {
             kolekcja = k;
         }
 

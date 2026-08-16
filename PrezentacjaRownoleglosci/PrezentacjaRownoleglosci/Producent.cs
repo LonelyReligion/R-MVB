@@ -9,10 +9,10 @@ namespace Symulacja_strumieni
 {
     public abstract class Producent
     {
-        BlockingCollection<int> kolekcja;
+        protected BlockingCollection<object> kolekcja;
         static int najwyzsze_id = 1;
         
-        public Producent(BlockingCollection<int> kolekcja)
+        public Producent(BlockingCollection<object> kolekcja)
         {
             this.kolekcja = kolekcja;
         }

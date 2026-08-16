@@ -16,7 +16,7 @@ namespace Symulacja_strumieni.rmvb
         private DrzewoMVB MVB;
         private RTreeAdapter R;
         private Repo repo;
-        internal RMVB(BlockingCollection<int> k) : base(k)
+        internal RMVB(BlockingCollection<object> k) : base(k)
         {
             repo = new Repo();
             MVB = new DrzewoMVB(repo, this);
@@ -141,7 +141,19 @@ namespace Symulacja_strumieni.rmvb
 
         public override void Konsumuj()
         {
-            throw new NotImplementedException();
+            object last = base.kolekcja.Take();
+            if (last != null)
+            {
+                try
+                {
+                    Urzadzenie urzadzenie = (Urzadzenie)last;
+                    this.dodajUrzadzenie(urzadzenie);
+                    Console.WriteLine("Odebrano urządzenie o id " + urzadzenie.UrzadzenieID + ".");
+                }
+                catch {
+                    Console.WriteLine("Nie udalo sie odczytac danych urzadzenia.");
+                }
+            }
         }
     }
 }
