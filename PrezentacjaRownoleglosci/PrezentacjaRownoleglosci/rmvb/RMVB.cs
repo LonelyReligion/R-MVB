@@ -7,15 +7,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace Symulacja_strumieni.rmvb
 {
-    public class RMVB
+    public class RMVB : Konsument
     {
         private DrzewoMVB MVB;
         private RTreeAdapter R;
         private Repo repo;
-        internal RMVB()
+        internal RMVB(BlockingCollection<int> k) : base(k)
         {
             repo = new Repo();
             MVB = new DrzewoMVB(repo, this);
@@ -136,6 +137,11 @@ namespace Symulacja_strumieni.rmvb
             repo.Reset();
             MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
+        }
+
+        public override void Konsumuj()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using Symulacja_strumieni.rmvb.r;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Symulacja_strumieni.model
 {

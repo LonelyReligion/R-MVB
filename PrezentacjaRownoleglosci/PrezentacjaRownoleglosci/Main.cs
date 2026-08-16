@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.Threading;
+using PrezentacjaRownoleglosci;
+using Symulacja_strumieni.rmvb;
 
 namespace Symulacja_strumieni
 {
@@ -16,8 +18,9 @@ namespace Symulacja_strumieni
             
             List<Producent> producenci = new List<Producent>();
             
-            Konsument konsument = new Konsument(kolekcja);
-            Producent producent = new Producent(kolekcja);
+            RMVB konsument = new RMVB(kolekcja);
+            Symulacja producent =  new Symulacja(kolekcja);
+
             
             producent.Produkuj();
 
