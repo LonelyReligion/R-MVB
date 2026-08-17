@@ -16,21 +16,12 @@ namespace Symulacja_strumieni
         {
             BlockingCollection<object> kolekcja = new BlockingCollection<object>();
             
-            List<Producent> producenci = new List<Producent>();
-            
             RMVB konsument = new RMVB(kolekcja);
 
-            for (int i = 0; i < 10; i++)
-            {
-                Symulacja producent = new Symulacja(kolekcja); //moze producentm powinna byc jednosta jakas symulujaca pojedyncze urzadzemnie, mialoby to wiecej sensu
-                producenci.Add(producent);
-            }
-
-            List<Task> task_producenci = new List<Task>(); //albo cos takiego
-            foreach (var producent in producenci)
-            {
-                producent.Produkuj(); //tu odpalac ale jako taski
-            }
+            Symulacja producent = new Symulacja(kolekcja); //moze producentm powinna byc jednosta jakas symulujaca pojedyncze urzadzemnie, mialoby to wiecej sensu
+            producent.zdefiniujLiczbeUrzadzen(10);
+            producent.zdefiniujLiczbePomiarow(10);
+            producent.Produkuj();
 
             konsument.Konsumuj(); //tez w tle, konczyc tokenem?
 
