@@ -12,12 +12,10 @@ namespace PrezentacjaRownoleglosci
     internal class Symulacja : Producent
     {
         int _liczbaPomiarow;
-        Repo _repo;
         List<Thread> ts = new List<Thread>();
 
         public Symulacja(BlockingCollection<object> kolekcja, int _liczbaUrzadzen) : base(kolekcja)
         { 
-            _repo = new Repo();
             for (int i = 0; i < _liczbaUrzadzen; i++)
             {
                 var t = new Thread(zadanie);

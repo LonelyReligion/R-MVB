@@ -17,9 +17,6 @@ namespace Symulacja_strumieni
             int liczba_urzadzen = 10;
             int liczba_pomiarow = 10;
 
-            CancellationTokenSource zrodlo = new CancellationTokenSource();
-            CancellationToken token = zrodlo.Token;
-
             BlockingCollection<object> kolekcja = new BlockingCollection<object>();
             
             RMVB konsument = new RMVB(kolekcja, liczba_urzadzen + (liczba_urzadzen * liczba_pomiarow));
