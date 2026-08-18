@@ -13,6 +13,7 @@ namespace Symulacja_strumieni.model
 {
     public class Urzadzenie
     {
+        //thread-safe
         private static long _nastepne_wolne_id = 0;
         public static long nastepne_wolne_id {
             get { 
@@ -22,6 +23,7 @@ namespace Symulacja_strumieni.model
                 Interlocked.Exchange(ref _nastepne_wolne_id, value);
             }   
         }
+        //
 
         public static Repo repo;
         [Key, Column(Order = 0)]
