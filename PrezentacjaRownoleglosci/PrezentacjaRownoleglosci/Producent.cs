@@ -19,5 +19,7 @@ namespace Symulacja_strumieni
 
         public abstract void Produkuj();
 
+        public abstract void ZakonczProdukcje();
+
     }
 }

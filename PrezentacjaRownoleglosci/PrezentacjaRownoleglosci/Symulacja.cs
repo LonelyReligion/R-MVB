@@ -11,34 +11,29 @@ namespace PrezentacjaRownoleglosci
 {
     internal class Symulacja : Producent
     {
-        int _liczbaUrzadzen;
         int _liczbaPomiarow;
         Repo _repo;
+        List<Thread> ts = new List<Thread>();
 
-        public Symulacja(BlockingCollection<object> kolekcja) : base(kolekcja)
+        public Symulacja(BlockingCollection<object> kolekcja, int _liczbaUrzadzen) : base(kolekcja)
         { 
             _repo = new Repo();
-        }
-
-        public override void Produkuj()
-        {
-
-            //dla kazdego urzadzenia: 
-            // - generujemy i dodajemy urzadzenie
-            // - generujemy i dodajemy wersje i pomiary
-            // - tyle pomiarow ile w zmiennej
-
-            List<Thread> ts = new List<Thread>();
             for (int i = 0; i < _liczbaUrzadzen; i++)
             {
                 var t = new Thread(zadanie);
                 ts.Add(t);
             }
+        }
 
+        public override void Produkuj()
+        {
             foreach (var t in ts) { 
                 t.Start();
             }
+        }
 
+        public override void ZakonczProdukcje()
+        {
             foreach (var t in ts)
             {
                 t.Join();
@@ -48,21 +43,17 @@ namespace PrezentacjaRownoleglosci
         private void zadanie() {
             Urzadzenie nowe = new Urzadzenie(generujWspolrzedne());
             Console.WriteLine("Tu urzadzenie o id: " + nowe.UrzadzenieID + ". Zaczynam pracę.");
-            
-            for (int i = 0; i < _liczbaPomiarow; i++) {
+            base.kolekcja.Add(nowe);
+
+            for (int i = 0; i < _liczbaPomiarow; i++)
+            {
                 (int, Pomiar) nowy = (nowe.UrzadzenieID, generujLosowyPomiar());
                 //przy tworzeniu wersji rozmawiamy zarowno z repo jak i z rmvb, to musi robic juz konsument
+                base.kolekcja.Add(nowy);
             }
-
-            base.kolekcja.Add(nowe);
 
             Console.WriteLine("Tu urzadzenie o id: " + nowe.UrzadzenieID + ". Kończę pracę.");
 
-        }
-
-        internal void zdefiniujLiczbeUrzadzen(int v)
-        {
-            _liczbaUrzadzen = v;
         }
 
         internal void zdefiniujLiczbePomiarow(int v) {
