@@ -14,15 +14,18 @@ namespace Symulacja_strumieni
     {
         public static void Main()
         {
+            int liczba_urzadzen = 10;
+            int liczba_pomiarow = 10;
+
             CancellationTokenSource zrodlo = new CancellationTokenSource();
             CancellationToken token = zrodlo.Token;
 
             BlockingCollection<object> kolekcja = new BlockingCollection<object>();
             
-            RMVB konsument = new RMVB(kolekcja, (10 + (10*10)));
+            RMVB konsument = new RMVB(kolekcja, liczba_urzadzen + (liczba_urzadzen * liczba_pomiarow)));
 
-            Symulacja producent = new Symulacja(kolekcja, 10); //moze producentm powinna byc jednosta jakas symulujaca pojedyncze urzadzemnie, mialoby to wiecej sensu
-            producent.zdefiniujLiczbePomiarow(10);
+            Symulacja producent = new Symulacja(kolekcja, liczba_urzadzen); //moze producentm powinna byc jednosta jakas symulujaca pojedyncze urzadzemnie, mialoby to wiecej sensu
+            producent.zdefiniujLiczbePomiarow(liczba_pomiarow);
 
             Thread watek_konsumenta = new Thread(konsument.Konsumuj);
             producent.Produkuj();

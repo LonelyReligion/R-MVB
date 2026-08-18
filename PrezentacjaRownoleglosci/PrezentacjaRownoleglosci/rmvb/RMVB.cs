@@ -158,7 +158,16 @@ namespace Symulacja_strumieni.rmvb
                     }
                     catch
                     {
-                        Console.WriteLine("Nie udalo sie odczytac danych urzadzenia.");
+                        try
+                        {
+                            (int id, Pomiar pomiar) = ((int, Pomiar)) last;
+                            Console.WriteLine("Odebrano pomiar " + pomiar.Wartosc + "st. C przypisany do Urzadzenia o id " + id + ".");
+                        }
+                        catch 
+                        {
+                            Console.WriteLine("Nie udalo sie odczytac danych.");
+                        }
+
                     }
                 }
                 _liczba_danych_do_przeslania--;
