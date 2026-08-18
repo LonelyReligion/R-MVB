@@ -13,7 +13,16 @@ namespace Symulacja_strumieni.model
 {
     public class Urzadzenie
     {
-        public static int nastepne_wolne_id = 0;
+        private static long _nastepne_wolne_id = 0;
+        public static long nastepne_wolne_id {
+            get { 
+                return Interlocked.Read(ref _nastepne_wolne_id); 
+            }
+            set {
+                Interlocked.Exchange(ref _nastepne_wolne_id, value);
+            }   
+        }
+
         public static Repo repo;
         [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -38,7 +47,7 @@ namespace Symulacja_strumieni.model
             Dlugosc = dlugosc_szerokosc.Item1;
             Szerokosc = dlugosc_szerokosc.Item2;
 
-            this.UrzadzenieID = nastepne_wolne_id++;
+            this.UrzadzenieID = (int)Interlocked.Increment(ref _nastepne_wolne_id);
         }
 
         public Urzadzenie(int UrzadzenieID) : this() {
