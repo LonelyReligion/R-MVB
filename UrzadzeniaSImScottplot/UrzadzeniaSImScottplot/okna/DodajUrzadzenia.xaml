@@ -57,13 +57,13 @@
 
                     <Grid Grid.Row="1" Margin="20,10,20,10">
                         <TextBlock Text="Długość:"/>
-                        <xctk:DecimalUpDown x:Name="dlugosc" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="80" Maximum="24.09" Minimum="14.07" DefaultValue="14.07" Value="14.07" 
+                        <xctk:DecimalUpDown x:Name="dlugosc_spin" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="80" Maximum="24.09" Minimum="14.07" DefaultValue="14.07" Value="{Binding dlugosc}" 
                                             Increment="0.01" AllowTextInput="False" AllowSpin="True"/>
                     </Grid>
 
                     <Grid Grid.Row="2" Margin="20,10,20,10">
                         <TextBlock Text="Szerokość:"/>
-                        <xctk:DecimalUpDown x:Name="szerokosc" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="80" Maximum="54.50" Minimum="49" Value="49"  DefaultValue="49" 
+                        <xctk:DecimalUpDown x:Name="szerokosc_spin" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="80" Maximum="54.50" Minimum="49"  DefaultValue="49" Value="{Binding szerokosc}" 
                                             Increment="0.01" AllowTextInput="False" AllowSpin="True"/>
                     </Grid>
 

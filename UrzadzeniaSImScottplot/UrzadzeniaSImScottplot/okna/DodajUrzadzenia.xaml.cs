@@ -48,7 +48,7 @@ namespace UrzadzeniaSImScottplot.okna
             get => _liczba_urzadzen;
             set { 
                 _liczba_urzadzen = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("liczba_urzadzen"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("liczba_urzadzen"));
             }
         }
 
@@ -65,6 +65,22 @@ namespace UrzadzeniaSImScottplot.okna
             Close();
         }
 
+        private decimal _dlugosc = 14.07m;
+        public decimal dlugosc { 
+            get => _dlugosc;
+            set {
+                _dlugosc = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("dlugosc"));
+            }
+        }
+        private decimal _szerokosc = 49m;
+        public decimal szerokosc { 
+            get => _szerokosc;
+            set { 
+                _szerokosc=value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("szerokosc"));
+            }
+        } 
         //konkretny
         private void Przeslij1_Click(object sender, RoutedEventArgs e)
         {
