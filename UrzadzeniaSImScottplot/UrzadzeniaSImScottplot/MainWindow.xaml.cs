@@ -92,27 +92,40 @@ namespace UrzadzeniaSImScottplot
             InicjujKontrolki();
         }
 
+        private double do_dziesietnego(decimal wartosc) {
+            return (int)wartosc + (double)(wartosc - (int)wartosc) * 100 / 60;
+        }
         private void GenerujLosowy_Click(object sender, RoutedEventArgs e)
         {
-            (decimal dlugosc, decimal szerokosc) = _generator.generujWspolrzedne();
+            DodajUrzadzenia okno_generowania = new DodajUrzadzenia(_repozytorium);
+            okno_generowania.ShowDialog();
+
+            if (okno_generowania.sukces)
+            {
+                foreach (Urzadzenie u in okno_generowania.wygenerowane) {
+                    var dlugosc = u.Dlugosc;
+                    var szerokosc = u.Szerokosc;
+
+                    _rmvb.dodajUrzadzenie(u); //dodaje tez do bazy
+                    Wersja pierwsza = new Wersja(u.UrzadzenieID, _repozytorium, _rmvb);
+                    _rmvb.dodajWersje(pierwsza);
+
+                    double dlugosc_w_systemie_dziesietnym = do_dziesietnego(dlugosc);
+                    double szerokosc_w_systemie_dziesietnym = do_dziesietnego(szerokosc);
+
+                    double[] x = { dlugosc_w_systemie_dziesietnym };
+                    double[] y = { szerokosc_w_systemie_dziesietnym };
+
+                    var sp = plot.Plot.Add.Scatter(x, y);
+                    sp.Color = ScottPlot.Color.FromHex("#6F9942");
+                }
+            }
+            else 
+            { 
             
-            Urzadzenie u = new Urzadzenie((dlugosc, szerokosc));            
-            _rmvb.dodajUrzadzenie(u); //dodaje tez do bazy
+            }
 
-            Wersja pierwsza = new Wersja(u.UrzadzenieID, _repozytorium, _rmvb);
-            _rmvb.dodajWersje(pierwsza);
-            
-            double dlugosc_w_systemie_dziesietnym = (int)dlugosc + (double)(dlugosc - (int)dlugosc) * 100 / 60;
-            double szerokosc_w_systemie_dziesietnym = (int)szerokosc + (double)(szerokosc - (int)szerokosc) * 100 / 60;
-
-            double[] x = { dlugosc_w_systemie_dziesietnym };
-            double[] y = { szerokosc_w_systemie_dziesietnym };
-
-            var sp = plot.Plot.Add.Scatter(x, y);
-            sp.Color = ScottPlot.Color.FromHex("#6F9942");
             plot.Refresh();
-
-            
             AktualizujSiatkeUrzadzen();
         }
 

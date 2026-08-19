@@ -29,13 +29,13 @@
 
                     <Grid Grid.Row="1" Margin="20,10,20,10" Grid.ColumnSpan="2">
                         <TextBlock Text="Liczba urządzeń:"></TextBlock>
-                        <xctk:IntegerUpDown x:Name="IdUrzadzenia1" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="80" Maximum="100" Minimum="0" Value="0" AllowTextInput="True" />
+                        <xctk:IntegerUpDown x:Name="IdUrzadzenia1" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="80" Maximum="100" Minimum="1" Value="{Binding liczba_urzadzen}" AllowTextInput="True" />
                     </Grid>
 
 
                     <Grid Grid.Row="2" Margin="50,0,50,50" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
-                        <Button x:Name="Anuluj" Content="Anuluj" Width="100" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
-                        <Button x:Name="Przeslij"  Content="Prześlij" Width="100" HorizontalAlignment="Right"  VerticalAlignment="Top"/>
+                        <Button x:Name="Anuluj" Content="Anuluj" Width="100" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Anuluj_Click"/>
+                        <Button x:Name="Przeslij0"  Content="Prześlij" Width="100" HorizontalAlignment="Right"  VerticalAlignment="Top" Click="Przeslij0_Click"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -70,8 +70,8 @@
                     </Grid>
                     
                     <Grid Grid.Row="4" Margin="50,10,50,50" VerticalAlignment="Bottom">
-                        <Button x:Name="Anuluj1" Content="Anuluj" Width="100" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
-                        <Button x:Name="Przeslij1"  Content="Prześlij" Width="100" HorizontalAlignment="Right"  VerticalAlignment="Top"/>
+                        <Button x:Name="Anuluj1" Content="Anuluj" Width="100" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Anuluj_Click"/>
+                        <Button x:Name="Przeslij1"  Content="Prześlij" Width="100" HorizontalAlignment="Right"  VerticalAlignment="Top" Click="Przeslij1_Click"/>
                     </Grid>
                     
                 </Grid>
