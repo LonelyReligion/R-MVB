@@ -12,33 +12,28 @@ namespace PrezentacjaRownoleglosci
     internal class Symulacja : Producent
     {
         int _liczbaPomiarow;
-        List<Thread> ts = new List<Thread>();
-
-        public Symulacja(BlockingCollection<object> kolekcja, int _liczbaUrzadzen) : base(kolekcja)
-        { 
-            for (int i = 0; i < _liczbaUrzadzen; i++)
-            {
-                var t = new Thread(zadanie);
-                ts.Add(t);
-            }
+        List<Task> ts = new List<Task>();
+        int _liczbaurzadzen;
+        public Symulacja(BlockingCollection<object> kolekcja, int liczbaUrzadzen) : base(kolekcja)
+        {
+            _liczbaurzadzen = liczbaUrzadzen;
         }
 
         public override void Produkuj()
         {
-            foreach (var t in ts) { 
-                t.Start();
+            for (int i = 0; i < _liczbaurzadzen; i++)
+            {
+                ts.Add(Task.Run(zadanie));
             }
         }
 
         public override void ZakonczProdukcje()
         {
-            foreach (var t in ts)
-            {
-                t.Join();
-            }
+            Task.WaitAll(ts.ToArray());
+            kolekcja.CompleteAdding();
         }
 
-        private void zadanie() {
+        private async Task zadanie() {
             Urzadzenie nowe = new Urzadzenie(generujWspolrzedne());
             Console.WriteLine("Tu urzadzenie o id: " + nowe.UrzadzenieID + ". Zaczynam pracę.");
             base.kolekcja.Add(nowe);
@@ -48,6 +43,8 @@ namespace PrezentacjaRownoleglosci
                 (int, Pomiar) nowy = (nowe.UrzadzenieID, generujLosowyPomiar());
                 //przy tworzeniu wersji rozmawiamy zarowno z repo jak i z rmvb, to musi robic juz konsument
                 base.kolekcja.Add(nowy);
+                await Task.Delay(500); // pol selundy
+                
             }
 
             Console.WriteLine("Tu urzadzenie o id: " + nowe.UrzadzenieID + ". Kończę pracę.");

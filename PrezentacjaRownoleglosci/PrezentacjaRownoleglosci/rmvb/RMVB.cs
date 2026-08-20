@@ -16,13 +16,11 @@ namespace Symulacja_strumieni.rmvb
         private DrzewoMVB MVB;
         private RTreeAdapter R;
         private Repo repo;
-        private int _liczba_danych_do_przeslania;
-        internal RMVB(BlockingCollection<object> k, int liczba_danych_do_przeslania) : base(k)
+        internal RMVB(BlockingCollection<object> k) : base(k)
         {
             repo = new Repo();
             MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
-            _liczba_danych_do_przeslania = liczba_danych_do_przeslania;
         }
 
         internal Repo zwrocRepo() { return repo; }
@@ -144,38 +142,35 @@ namespace Symulacja_strumieni.rmvb
         public override void Konsumuj()
         {
             //jakos inaczej ofc, ale to nie teraz
-
-            while (_liczba_danych_do_przeslania != 0)
+            foreach (var last in kolekcja.GetConsumingEnumerable())
             {
-                object last = base.kolekcja.Take();
-                if (last != null)
+                try
+                {
+                    Urzadzenie urzadzenie = (Urzadzenie)last;
+                    this.dodajUrzadzenie(urzadzenie);
+                    Console.WriteLine("Odebrano urządzenie o id " + urzadzenie.UrzadzenieID + ".");
+                }
+                catch
                 {
                     try
                     {
-                        Urzadzenie urzadzenie = (Urzadzenie)last;
-                        this.dodajUrzadzenie(urzadzenie);
-                        Console.WriteLine("Odebrano urządzenie o id " + urzadzenie.UrzadzenieID + ".");
+                        (int id, Pomiar pomiar) = ((int, Pomiar))last;
+                        Console.WriteLine("Odebrano pomiar " + pomiar.Wartosc + " st. C przypisany do Urzadzenia o id " + id + ".");
+                        Wersja wersja = new Wersja(id, repo, this);
+                        this.dodajWersje(wersja);
+                        this.dodajPomiar(id, pomiar, wersja);
                     }
                     catch
                     {
-                        try
-                        {
-                            (int id, Pomiar pomiar) = ((int, Pomiar)) last;
-                            Console.WriteLine("Odebrano pomiar " + pomiar.Wartosc + " st. C przypisany do Urzadzenia o id " + id + ".");
-                            Wersja wersja = new Wersja(id, repo, this);
-                            this.dodajWersje(wersja);
-                            this.dodajPomiar(id, pomiar, wersja);
-                        }
-                        catch 
-                        {
-                            Console.WriteLine("Nie udalo sie odczytac danych.");
-                        }
-
+                        Console.WriteLine("Nie udalo sie odczytac danych.");
                     }
+
                 }
-                _liczba_danych_do_przeslania--;
+                
             }
         }
+
+
 
     }
 }

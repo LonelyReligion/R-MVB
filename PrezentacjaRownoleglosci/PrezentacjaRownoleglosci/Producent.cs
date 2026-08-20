@@ -11,7 +11,7 @@ namespace Symulacja_strumieni
     {
         protected BlockingCollection<object> kolekcja;
         static int najwyzsze_id = 1;
-        
+
         public Producent(BlockingCollection<object> kolekcja)
         {
             this.kolekcja = kolekcja;
