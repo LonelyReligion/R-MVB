@@ -34,14 +34,18 @@ namespace Symulacja_strumieni.rmvb
         //dodaj
         internal void dodajUrzadzenie(Urzadzenie u)
         {
-            repo.saveDevice(u);
-            R.dodajUrzadzenie(u);
+            List<Task> ts = new List<Task>();
+            ts.Add(Task.Run(()=>repo.saveDevice(u)));
+            ts.Add(Task.Run(() => R.dodajUrzadzenie(u)));
+            Task.WaitAll(ts.ToArray());
         }
 
         internal void dodajWersje(Wersja w)
         {
-            repo.saveVersion(w);
-            MVB.dodajUrzadzenie(w);
+            List<Task> ts = new List<Task>();
+            ts.Add(Task.Run(() => repo.saveVersion(w)));
+            ts.Add(Task.Run(() => MVB.dodajUrzadzenie(w)));
+            Task.WaitAll(ts.ToArray());
         }
 
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
