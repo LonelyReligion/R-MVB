@@ -129,5 +129,17 @@ namespace RMVB_konsola
             this.Pomiary.Remove(testowy);
             dataOstatniejModyfikacji = DateTime.Now;
         }
+
+        [NotMapped]
+        private decimal _srednia = 0;
+        public void AktualizujSrednia() {
+            if (Pomiary.Any()) {
+                _srednia = Pomiary.Average(p => p.Wartosc);
+            }
+        }
+
+        public decimal PobierzSrednia() { 
+            return _srednia;
+        }
     }
 }

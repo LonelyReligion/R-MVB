@@ -1,4 +1,5 @@
-﻿using RMVB_konsola.Indeks.MVB;
+﻿using Microsoft.VisualBasic;
+using RMVB_konsola.Indeks.MVB;
 using RMVB_konsola.Indeks.R;
 using System;
 using System.Collections.Generic;
@@ -119,6 +120,11 @@ namespace RMVB_konsola.Indeks
             R.obliczAgregaty();
         }
 
+        // zwracamy srednia z okresu czasu z pomiarow urzadzen znajdujacych sie na podanym obszarze
+        internal decimal zwrocSrednia(decimal x1, decimal x2, decimal y1, decimal y2, DateTime poczatek, DateTime koniec) { 
+            throw new NotImplementedException();
+        }
+
         internal void zapiszMVB(string v)
         {
             List<string> linijki = MVB.drukujDrzewo();
@@ -135,5 +141,6 @@ namespace RMVB_konsola.Indeks
             MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
         }
+
     }
 }
