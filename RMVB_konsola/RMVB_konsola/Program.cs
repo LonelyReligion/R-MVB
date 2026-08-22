@@ -148,6 +148,9 @@ for (int i = 0; i < liczbaUrzadzen; i++)
     }
 }
 
+//
+DateTime do_usuniecia = DateTime.Now;
+//
 
 for (int id = 0; id < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); id++)
 {
@@ -190,6 +193,8 @@ else
 rmvb.Reset();
 rmvb.zapiszMVB(sciezkaFolderuWyjsciowego);
 
-rmvb.zwrocSrednia(new Rectangle(49, 14.07m, 54.5m, 24.09m), DateTime.MinValue, DateTime.MaxValue);
+//
+rmvb.zwrocSrednia(new Rectangle(49, 14.07m, 54.5m, 24.09m), do_usuniecia, DateTime.MaxValue);
+//
 
 return 0;

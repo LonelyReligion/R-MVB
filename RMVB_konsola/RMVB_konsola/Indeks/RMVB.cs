@@ -126,8 +126,8 @@ namespace RMVB_konsola.Indeks
             
             decimal suma = 0;
             decimal liczba_pomiarow = 0;
-            
-            if (poczatek == DateTime.MinValue) 
+
+            if (poczatek == DateTime.MinValue)
             {
                 foreach (var urzadzenie in szukane)
                 {
@@ -136,14 +136,27 @@ namespace RMVB_konsola.Indeks
                     liczba_pomiarow += liczba;
                 }
 
-                if(liczba_pomiarow != 0)
-                    return (suma / liczba_pomiarow);
-                else 
-                    return 0;
+                
+            }
+            else {
+                List<Wersja> wersje = MVB.szukaj(poczatek, koniec); //tu sie wersje beda powtarzac, chodzi nam o ta ostatnia z kazdego urzadzenia
+                wersje = wersje
+                        .GroupBy(x => x.UrzadzenieID)
+                        .Select(g => g.MaxBy(x => x.WersjaID))
+                        .OrderBy(w => w.UrzadzenieID)
+                        .ToList();
+
+                foreach (var wersja in wersje) {
+                    suma += wersja.Pomiary.Sum(p => p.Wartosc);
+                    liczba_pomiarow += wersja.Pomiary.Count;
+                }
+
             }
 
-            throw new NotImplementedException();
-
+            if (liczba_pomiarow != 0)
+                return (suma / liczba_pomiarow);
+            else
+                return 0;
         }
 
         internal void zapiszMVB(string v)
