@@ -190,4 +190,6 @@ else
 rmvb.Reset();
 rmvb.zapiszMVB(sciezkaFolderuWyjsciowego);
 
+rmvb.zwrocSrednia(new Rectangle(49, 14.07m, 54.5m, 24.09m), DateTime.MinValue, DateTime.MaxValue);
+
 return 0;

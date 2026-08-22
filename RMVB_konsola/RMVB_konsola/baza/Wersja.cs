@@ -138,8 +138,8 @@ namespace RMVB_konsola
             }
         }
 
-        public decimal PobierzSrednia() { 
-            return _srednia;
+        public (decimal, decimal) PobierzSredniaIliczbe() { 
+            return (_srednia, Pomiary.Count);
         }
     }
 }
