@@ -54,39 +54,46 @@ namespace RMVB_konsola
             
             Console.WriteLine("Sekcja pierwsza: zapytania realizowane przez MVB");
             Console.WriteLine("# Wyszukiwanie po dacie i id");
-            blad = (blad == true) ? true : testDataId(ileRazy);
+            blad = testDataId(ileRazy);
 
             Console.WriteLine("\n# Wyszukiwanie po id"); //najnowsza wersja urzadzenia
             bool blad1 = testId(ileRazy);
-            blad = (blad == true) ? true : blad1;
+            Console.WriteLine("\n");
 
 
             Console.WriteLine("\n# Wyszukiwanie po id i wersji"); //konkretna wersja urzadzenia
             bool blad2 = testIdV(ileRazy);
-            blad = (blad == true) ? true : blad2;
+            Console.WriteLine("\n");
 
             Console.WriteLine("\n# Wyszukiwanie po dacie i dacie");//wersje urzadzen?
             bool blad3 = testDataData(ileRazy);
-            blad = (blad == true) ? true : blad3;
             Console.WriteLine("\n");
 
             Console.WriteLine("Sekcja druga: zapytania realizowane przez R");
 
             Console.WriteLine("# Wyszukiwanie urzadzen znajdujacych sie w losowym prostokacie"); //urzadzenia
             bool blad4 = testProstokat(ileRazy);
-            blad = (blad == true) ? true : blad4; 
+            Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatow czasowych"); //srednie
             bool blad5 = testAgregatyCzasowe(ileRazy);
-            blad = (blad == true) ? true : blad5; 
             Console.WriteLine("\n");
 
             Console.WriteLine("# Wyszukiwanie agregatów powierzchniowych"); //srednie
             bool blad6 = testAgregatyPowierzchniowe(ileRazy);
-            blad = (blad == true) ? true : blad6;
             Console.WriteLine("\n");
 
+            Console.WriteLine("Sekcja trzecia: zapytanie realizowane za pomocą R i MVB");
+            bool blad7 = false;//testRectDataData(ileRazy);
+            Console.WriteLine("\n");
+
+            blad = blad || blad1 || blad2 || blad3 || blad4 || blad5 || blad6 || blad7;
             return blad;
+        }
+
+        private bool testRectDataData(int ileRazy)
+        {
+            throw new NotImplementedException();
         }
 
         private bool testAgregatyPowierzchniowe(int ileRazy)

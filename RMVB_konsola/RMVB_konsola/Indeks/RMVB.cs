@@ -129,7 +129,7 @@ namespace RMVB_konsola.Indeks
 
             if (poczatek == DateTime.MinValue)
             {
-                foreach (var urzadzenie in szukane)
+                foreach (var urzadzenie in szukane)//moze parallel?
                 {
                     (decimal srednia, decimal liczba) = MVB.szukaj(urzadzenie.UrzadzenieID, koniec).PobierzSredniaIliczbe();
                     suma += srednia * liczba;
