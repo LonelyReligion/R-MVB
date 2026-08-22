@@ -93,7 +93,74 @@ namespace RMVB_konsola
 
         private bool testRectDataData(int ileRazy)
         {
-            throw new NotImplementedException();
+            bool blad = false;
+            
+            List<Rectangle> szukane_prostokaty = new List<Rectangle>();
+            for (int i = 0; i < ileRazy; i++)
+                szukane_prostokaty.Add(generator.generujProstokat());
+
+            using (var ctx = new Kontekst())
+            {
+                DateTime min = ctx.Wersje.OrderBy(u => u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji;
+                
+                //najpozniejsza data konca, wyszukujemy tylko z martwych urzadzen
+                DateTime max = ctx.Wersje.Where(u => u.dataWygasniecia != DateTime.MaxValue).OrderByDescending(u => u.dataWygasniecia).Select(u => u.dataWygasniecia).First();
+
+                List<(DateTime, DateTime)> losowe_przedzialy = wylosujPrzedzialy(min, max, ileRazy);
+
+                Random rnd = new Random();
+                losowe_przedzialy[rnd.Next(losowe_przedzialy.Count - 1)] = (losowe_przedzialy[rnd.Next(losowe_przedzialy.Count - 1)].Item1, DateTime.MaxValue); //zeby rmvb mialo szanse sie popisac wgl 
+
+                sw = Stopwatch.StartNew();
+                for (int i = 0; i < ileRazy; i++) 
+                {
+                    Rectangle rect = szukane_prostokaty[i];
+                    List<Urzadzenie> urzadzenia_w_prostokacie = ctx.Urzadzenia
+                    .AsNoTracking()
+                    .Where(u => rect.XMin <= u.Dlugosc)
+                    .Where(u => rect.YMin <= u.Szerokosc)
+                    .Where(u => rect.XMax >= u.Dlugosc)
+                    .Where(u => rect.YMax >= u.Szerokosc)
+                    .ToList();
+
+                    List<int> id_urzadzen = urzadzenia_w_prostokacie.Select(u => u.UrzadzenieID).ToList();
+
+                    List<Wersja> ostatnie_wersje_urzadzen = ctx.Wersje.Where(w => id_urzadzen.Contains(w.UrzadzenieID))
+                        .GroupBy(x => x.UrzadzenieID)
+                        .Select(g => g.MaxBy(x => x.WersjaID))
+                        .OrderBy(w => w.UrzadzenieID)
+                        .ToList();
+
+                    decimal suma = 0;
+                    decimal liczba_pomiarow = 0;
+
+                    foreach (var wersja in ostatnie_wersje_urzadzen)
+                    {
+                        suma += wersja.Pomiary.Sum(p => p.Wartosc);
+                        liczba_pomiarow += wersja.Pomiary.Count;
+                    }
+
+                    decimal srednia = 0;
+
+                    if (liczba_pomiarow != 0)
+                        srednia = suma / liczba_pomiarow;
+                    //else
+                        //srednia = 0;
+                }
+                long czas_bd = sw.ElapsedMilliseconds;
+
+                sw = Stopwatch.StartNew();
+                for (int i = 0; i < ileRazy; i++)
+                {
+                    (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
+                    rmvb.zwrocSrednia(szukane_prostokaty[i], poczatek, koniec);
+                }
+                long czas_rmvb = sw.ElapsedMilliseconds;
+            }
+
+
+            return blad;
+        
         }
 
         private bool testAgregatyPowierzchniowe(int ileRazy)
