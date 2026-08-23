@@ -84,7 +84,7 @@ namespace RMVB_konsola
             Console.WriteLine("\n");
 
             Console.WriteLine("Sekcja trzecia: zapytanie realizowane za pomocą R i MVB");
-            bool blad7 = false;//testRectDataData(ileRazy);
+            bool blad7 = testRectDataData(ileRazy);
             Console.WriteLine("\n");
 
             blad = blad || blad1 || blad2 || blad3 || blad4 || blad5 || blad6 || blad7;
@@ -111,6 +111,7 @@ namespace RMVB_konsola
                 Random rnd = new Random();
                 losowe_przedzialy[rnd.Next(losowe_przedzialy.Count - 1)] = (losowe_przedzialy[rnd.Next(losowe_przedzialy.Count - 1)].Item1, DateTime.MaxValue); //zeby rmvb mialo szanse sie popisac wgl 
 
+                List<decimal> wyniki_bd = new List<decimal>();
                 sw = Stopwatch.StartNew();
                 for (int i = 0; i < ileRazy; i++) 
                 {
@@ -125,9 +126,10 @@ namespace RMVB_konsola
 
                     List<int> id_urzadzen = urzadzenia_w_prostokacie.Select(u => u.UrzadzenieID).ToList();
 
-                    List<Wersja> ostatnie_wersje_urzadzen = ctx.Wersje.Where(w => id_urzadzen.Contains(w.UrzadzenieID))
-                        .GroupBy(x => x.UrzadzenieID)
-                        .Select(g => g.MaxBy(x => x.WersjaID))
+                    List<Wersja> ostatnie_wersje_urzadzen = ctx.Wersje
+                        .Where(w => id_urzadzen.Contains(w.UrzadzenieID))
+                        .GroupBy(w => w.UrzadzenieID)
+                        .Select(g => g.OrderByDescending(w => w.WersjaID).FirstOrDefault())
                         .OrderBy(w => w.UrzadzenieID)
                         .ToList();
 
@@ -146,18 +148,28 @@ namespace RMVB_konsola
                         srednia = suma / liczba_pomiarow;
                     //else
                         //srednia = 0;
+                    wyniki_bd.Add(srednia);
                 }
                 long czas_bd = sw.ElapsedMilliseconds;
 
+                List<decimal> wyniki_rmvb = new List<decimal>();
                 sw = Stopwatch.StartNew();
                 for (int i = 0; i < ileRazy; i++)
                 {
                     (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
-                    rmvb.zwrocSrednia(szukane_prostokaty[i], poczatek, koniec);
+                    wyniki_rmvb.Add(rmvb.zwrocSrednia(szukane_prostokaty[i], poczatek, koniec));
                 }
                 long czas_rmvb = sw.ElapsedMilliseconds;
-            }
 
+                for (int i = 0; i < ileRazy; i++)
+                {
+                    if (wyniki_bd[i] != wyniki_rmvb[i]) {
+                        Console.WriteLine("Wyniki sie nie zgadzaja " + wyniki_bd[i] + " vs " + wyniki_rmvb[i]); //poprawic zeby ten blad cokolwiek mowil
+                        blad = true;
+                    }
+                }
+
+            }
 
             return blad;
         
