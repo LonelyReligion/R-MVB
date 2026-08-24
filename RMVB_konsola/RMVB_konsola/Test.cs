@@ -116,7 +116,7 @@ namespace RMVB_konsola
                 List<int> liczby_urzadzen_bd = new List<int>();
 
                 sw = Stopwatch.StartNew();
-                for (int i = 0; i < ileRazy; i++) 
+                for (int i = 0; i < ileRazy; i++)
                 {
                     Rectangle rect = szukane_prostokaty[i];
                     List<Urzadzenie> urzadzenia_w_prostokacie = ctx.Urzadzenia
@@ -139,19 +139,28 @@ namespace RMVB_konsola
 
                     decimal suma = 0;
                     decimal liczba_pomiarow = 0;
-
-                    foreach (var wersja in ostatnie_wersje_urzadzen)
-                    {
-                        suma += wersja.Pomiary.Sum(p => p.Wartosc);
-                        liczba_pomiarow += wersja.Pomiary.Count;
-                    }
-
                     decimal srednia = 0;
 
-                    if (liczba_pomiarow != 0)
-                        srednia = suma / liczba_pomiarow;
-                    //else
-                        //srednia = 0;
+                    if (losowe_przedzialy[i].Item1 == DateTime.MinValue)
+                    {
+                        foreach (var wersja in ostatnie_wersje_urzadzen)
+                        {
+                            suma += wersja.Pomiary.Sum(p => p.Wartosc);
+                            liczba_pomiarow += wersja.Pomiary.Count;
+                        }
+
+                        if (liczba_pomiarow != 0)
+                            srednia = suma / liczba_pomiarow;
+                    }
+                    else {
+                        foreach (var wersja in ostatnie_wersje_urzadzen)
+                        {
+                            foreach (var pomiar in wersja.Pomiary) { 
+                                //do zaimplementowania
+                            }
+                        }
+                    }
+
                     wyniki_bd.Add(srednia);
                     liczby_pomiarow_bd.Add((int)liczba_pomiarow);
                 }
