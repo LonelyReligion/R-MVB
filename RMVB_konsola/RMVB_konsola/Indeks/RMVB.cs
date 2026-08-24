@@ -121,9 +121,11 @@ namespace RMVB_konsola.Indeks
         }
 
         // zwracamy srednia z okresu czasu z pomiarow urzadzen znajdujacych sie na podanym obszarze
-        internal (int, decimal) zwrocLiczbePomiarowSrednia(Rectangle prostokat, DateTime poczatek, DateTime koniec) {
+        internal (int,int, decimal) zwrocLiczbeUrzadzenPomiarowSrednia(Rectangle prostokat, DateTime poczatek, DateTime koniec) {
             List<Urzadzenie> szukane = R.szukaj(prostokat);
-            
+            List<int> ids = szukane.Select(u=>u.UrzadzenieID).ToList();
+            int liczba_urzadzen = szukane.Count;
+
             decimal suma = 0;
             int liczba_pomiarow = 0;
 
@@ -141,6 +143,7 @@ namespace RMVB_konsola.Indeks
             else {
                 List<Wersja> wersje = MVB.szukaj(poczatek, koniec); //tu sie wersje beda powtarzac, chodzi nam o ta ostatnia z kazdego urzadzenia
                 wersje = wersje
+                        .Where(p => ids.Contains(p.UrzadzenieID))
                         .GroupBy(x => x.UrzadzenieID)
                         .Select(g => g.MaxBy(x => x.WersjaID))
                         .OrderBy(w => w.UrzadzenieID)
@@ -154,9 +157,9 @@ namespace RMVB_konsola.Indeks
             }
 
             if (liczba_pomiarow != 0)
-                return (liczba_pomiarow, (suma / liczba_pomiarow));
+                return (liczba_urzadzen, liczba_pomiarow, (suma / liczba_pomiarow));
             else
-                return (0,0);
+                return (liczba_urzadzen, 0, 0);
         }
 
         internal void zapiszMVB(string v)

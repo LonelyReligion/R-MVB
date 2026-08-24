@@ -113,6 +113,7 @@ namespace RMVB_konsola
 
                 List<decimal> wyniki_bd = new List<decimal>();
                 List<int> liczby_pomiarow_bd = new List<int>();
+                List<int> liczby_urzadzen_bd = new List<int>();
 
                 sw = Stopwatch.StartNew();
                 for (int i = 0; i < ileRazy; i++) 
@@ -127,6 +128,7 @@ namespace RMVB_konsola
                     .ToList();
 
                     List<int> id_urzadzen = urzadzenia_w_prostokacie.Select(u => u.UrzadzenieID).ToList();
+                    liczby_urzadzen_bd.Add(id_urzadzen.Count);
 
                     List<Wersja> ostatnie_wersje_urzadzen = ctx.Wersje
                         .Where(w => id_urzadzen.Contains(w.UrzadzenieID))
@@ -157,13 +159,17 @@ namespace RMVB_konsola
 
                 List<decimal> wyniki_rmvb = new List<decimal>();
                 List<int> liczby_pomiarow_rmvb = new List<int>();
+                List<int> liczby_urzadzen_rmvb = new List<int>();
+
                 sw = Stopwatch.StartNew();
                 for (int i = 0; i < ileRazy; i++)
                 {
                     (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
-                    (int liczba_pomiarow, decimal srednia) = rmvb.zwrocLiczbePomiarowSrednia(szukane_prostokaty[i], poczatek, koniec);
+                    (int liczba_urzadzen, int liczba_pomiarow, decimal srednia) = rmvb.zwrocLiczbeUrzadzenPomiarowSrednia(szukane_prostokaty[i], poczatek, koniec);
+                    
                     wyniki_rmvb.Add(srednia);
                     liczby_pomiarow_rmvb.Add(liczba_pomiarow);
+                    liczby_urzadzen_rmvb.Add(liczba_urzadzen);
                 }
                 long czas_rmvb = sw.ElapsedMilliseconds;
 
@@ -171,7 +177,8 @@ namespace RMVB_konsola
                 {
                     if (wyniki_bd[i] != wyniki_rmvb[i]) {
                         Console.WriteLine("Wyniki sie nie zgadzaja " + wyniki_bd[i] + " vs " + wyniki_rmvb[i]); //poprawic zeby ten blad cokolwiek mowil
-                        Console.WriteLine("Liczba pomiarow " + liczby_pomiarow_bd[i] + " vs " + liczby_pomiarow_rmvb[i]); 
+                        Console.WriteLine("Liczba pomiarow " + liczby_pomiarow_bd[i] + " vs " + liczby_pomiarow_rmvb[i]);
+                        Console.WriteLine("Liczba urządzen " + liczby_urzadzen_bd[i] + " vs " + liczby_urzadzen_rmvb[i]);
                         blad = true;
                     }
                 }
