@@ -54,6 +54,7 @@ namespace RMVB_konsola
                     w = ctx.Wersje.Include(x => x.Pomiary).First(x => x.UrzadzenieID == UrzadzenieID && x.WersjaID == id_wersji);
 
                     r.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
+
                     foreach (var element in w.Pomiary)
                         this.Pomiary.Add(element);
 
@@ -138,7 +139,7 @@ namespace RMVB_konsola
             }
         }
 
-        public (decimal, decimal) PobierzSredniaIliczbe() { 
+        public (decimal, int) PobierzSredniaIliczbe() { 
             return (_srednia, Pomiary.Count);
         }
     }

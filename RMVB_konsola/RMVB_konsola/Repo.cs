@@ -36,6 +36,7 @@ namespace RMVB_konsola
 
             using (var ctx = new Kontekst())
             {
+
                 foreach (var p in v.Pomiary)
                 {
                     ctx.Entry(p).State = EntityState.Unchanged;

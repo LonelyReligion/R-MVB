@@ -121,17 +121,17 @@ namespace RMVB_konsola.Indeks
         }
 
         // zwracamy srednia z okresu czasu z pomiarow urzadzen znajdujacych sie na podanym obszarze
-        internal decimal zwrocSrednia(Rectangle prostokat, DateTime poczatek, DateTime koniec) {
+        internal (int, decimal) zwrocLiczbePomiarowSrednia(Rectangle prostokat, DateTime poczatek, DateTime koniec) {
             List<Urzadzenie> szukane = R.szukaj(prostokat);
             
             decimal suma = 0;
-            decimal liczba_pomiarow = 0;
+            int liczba_pomiarow = 0;
 
             if (poczatek == DateTime.MinValue)
             {
                 foreach (var urzadzenie in szukane)//moze parallel?
                 {
-                    (decimal srednia, decimal liczba) = MVB.szukaj(urzadzenie.UrzadzenieID, koniec).PobierzSredniaIliczbe();
+                    (decimal srednia, int liczba) = MVB.szukaj(urzadzenie.UrzadzenieID, koniec).PobierzSredniaIliczbe();
                     suma += srednia * liczba;
                     liczba_pomiarow += liczba;
                 }
@@ -154,9 +154,9 @@ namespace RMVB_konsola.Indeks
             }
 
             if (liczba_pomiarow != 0)
-                return (suma / liczba_pomiarow);
+                return (liczba_pomiarow, (suma / liczba_pomiarow));
             else
-                return 0;
+                return (0,0);
         }
 
         internal void zapiszMVB(string v)

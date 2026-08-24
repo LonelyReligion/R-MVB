@@ -105,8 +105,9 @@ rmvb.dodajUrzadzenie(testowe);
 
 Pomiar testowy = new Pomiar(0, DateTime.Now);
 
-Wersja alfa = new Wersja(rmvb.zwrocRepo(), rmvb);
-alfa.UrzadzenieID = testowe.UrzadzenieID; //czy mozna uzyc new Wersja(id, (Repo)repo);?
+Wersja alfa = new Wersja(testowe.UrzadzenieID, rmvb.zwrocRepo(), rmvb);
+
+//alfa.UrzadzenieID = testowe.UrzadzenieID; tak nie może być, bo nie zaciąga z poprzednich wersji pomiarow!
 
 //alfa.dodajPomiar(testowy);
 rmvb.dodajWersje(alfa);
