@@ -91,6 +91,10 @@ namespace RMVB_konsola
             return blad;
         }
 
+        //no dobra, ale to nie liczy tego co nalezy
+        //zawsze liczymy dla przypadku minimalnej wartosci Datetime jako poczatku
+        //jak to poprawimy to zrobic wpisywanie do pliku tak jak pozostale testy 
+        //i spokoj z ta fcja w tym projekcie
         private bool testRectDataData(int ileRazy)
         {
             bool blad = false;
@@ -130,36 +134,29 @@ namespace RMVB_konsola
                     List<int> id_urzadzen = urzadzenia_w_prostokacie.Select(u => u.UrzadzenieID).ToList();
                     liczby_urzadzen_bd.Add(id_urzadzen.Count);
 
-                    List<Wersja> ostatnie_wersje_urzadzen = ctx.Wersje
+                    DateTime poczatek = losowe_przedzialy[i].Item1;
+                    DateTime koniec = losowe_przedzialy[i].Item2;
+                    List<Wersja> z_okresu = ctx.Wersje
                         .Where(w => id_urzadzen.Contains(w.UrzadzenieID))
-                        .GroupBy(w => w.UrzadzenieID)
+                        .Where(p => p.dataOstatniejModyfikacji >= poczatek)
+                        .Where(p => p.dataWygasniecia < koniec)
+                        .GroupBy(w => w.UrzadzenieID) //ale tylko najnowsza wersja urządzenia spełniająca warunek
                         .Select(g => g.OrderByDescending(w => w.WersjaID).FirstOrDefault())
-                        .OrderBy(w => w.UrzadzenieID)
                         .ToList();
 
                     decimal suma = 0;
                     decimal liczba_pomiarow = 0;
                     decimal srednia = 0;
 
-                    if (losowe_przedzialy[i].Item1 == DateTime.MinValue)
+                    foreach (var wersja in z_okresu)
                     {
-                        foreach (var wersja in ostatnie_wersje_urzadzen)
-                        {
-                            suma += wersja.Pomiary.Sum(p => p.Wartosc);
-                            liczba_pomiarow += wersja.Pomiary.Count;
-                        }
+                        suma += wersja.Pomiary.Sum(p => p.Wartosc);
+                        liczba_pomiarow += wersja.Pomiary.Count;
+                    }
 
-                        if (liczba_pomiarow != 0)
-                            srednia = suma / liczba_pomiarow;
-                    }
-                    else {
-                        foreach (var wersja in ostatnie_wersje_urzadzen)
-                        {
-                            foreach (var pomiar in wersja.Pomiary) { 
-                                //do zaimplementowania
-                            }
-                        }
-                    }
+                    if (liczba_pomiarow != 0)
+                        srednia = suma / liczba_pomiarow;
+                    
 
                     wyniki_bd.Add(srednia);
                     liczby_pomiarow_bd.Add((int)liczba_pomiarow);
@@ -185,13 +182,18 @@ namespace RMVB_konsola
                 for (int i = 0; i < ileRazy; i++)
                 {
                     if (wyniki_bd[i] != wyniki_rmvb[i]) {
+                        Console.WriteLine("Wyszukiwanie średniej od " + losowe_przedzialy[i].Item1 + " do " + losowe_przedzialy[i].Item2);
                         Console.WriteLine("Wyniki sie nie zgadzaja " + wyniki_bd[i] + " vs " + wyniki_rmvb[i]); //poprawic zeby ten blad cokolwiek mowil
                         Console.WriteLine("Liczba pomiarow " + liczby_pomiarow_bd[i] + " vs " + liczby_pomiarow_rmvb[i]);
                         Console.WriteLine("Liczba urządzen " + liczby_urzadzen_bd[i] + " vs " + liczby_urzadzen_rmvb[i]);
                         blad = true;
                     }
-                }
 
+                    Console.WriteLine("Szukanie sredniej z pomiarow z urzadzen znajdujacych sie na obszarze " + "xMin(" + szukane_prostokaty[i].XMin + "), " + "yMin(" + szukane_prostokaty[i].YMin + "), " +
+                    "xMax(" + szukane_prostokaty[i].XMax + "), " + "yMax(" + szukane_prostokaty[i].YMax + "), z wersji aktualnych w czasie od " + losowe_przedzialy[i].Item1 + " do " + losowe_przedzialy[i].Item2);
+                    Console.WriteLine("Wynik: " + wyniki_bd[i]);
+                }
+                Console.WriteLine("Zrealizowano w czasie " + czas_bd + " ms. (bd) " + czas_rmvb + " ms. (rmvb)");
             }
 
             return blad;
