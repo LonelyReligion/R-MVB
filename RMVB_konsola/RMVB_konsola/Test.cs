@@ -91,10 +91,6 @@ namespace RMVB_konsola
             return blad;
         }
 
-        //no dobra, ale to nie liczy tego co nalezy
-        //zawsze liczymy dla przypadku minimalnej wartosci Datetime jako poczatku
-        //jak to poprawimy to zrobic wpisywanie do pliku tak jak pozostale testy 
-        //i spokoj z ta fcja w tym projekcie
         private bool testRectDataData(int ileRazy)
         {
             bool blad = false;
@@ -134,8 +130,7 @@ namespace RMVB_konsola
                     List<int> id_urzadzen = urzadzenia_w_prostokacie.Select(u => u.UrzadzenieID).ToList();
                     liczby_urzadzen_bd.Add(id_urzadzen.Count);
 
-                    DateTime poczatek = losowe_przedzialy[i].Item1;
-                    DateTime koniec = losowe_przedzialy[i].Item2;
+                    (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
                     List<Wersja> z_okresu = ctx.Wersje
                         .Where(w => id_urzadzen.Contains(w.UrzadzenieID))
                         .Where(p => p.dataOstatniejModyfikacji >= poczatek)
@@ -150,8 +145,14 @@ namespace RMVB_konsola
 
                     foreach (var wersja in z_okresu)
                     {
-                        suma += wersja.Pomiary.Sum(p => p.Wartosc);
-                        liczba_pomiarow += wersja.Pomiary.Count;
+                        foreach (var pomiar in wersja.Pomiary)
+                        {
+                            if (pomiar.dtpomiaru >= poczatek && pomiar.dtpomiaru < koniec)
+                            {
+                                suma += pomiar.Wartosc;
+                                liczba_pomiarow++;
+                            }
+                        }    
                     }
 
                     if (liczba_pomiarow != 0)
@@ -187,11 +188,54 @@ namespace RMVB_konsola
                         Console.WriteLine("Liczba pomiarow " + liczby_pomiarow_bd[i] + " vs " + liczby_pomiarow_rmvb[i]);
                         Console.WriteLine("Liczba urządzen " + liczby_urzadzen_bd[i] + " vs " + liczby_urzadzen_rmvb[i]);
                         blad = true;
+
+                        Rectangle rect = szukane_prostokaty[i];
+                        List<Urzadzenie> urzadzenia_w_prostokacie = ctx.Urzadzenia
+                        .AsNoTracking()
+                        .Where(u => rect.XMin <= u.Dlugosc)
+                        .Where(u => rect.YMin <= u.Szerokosc)
+                        .Where(u => rect.XMax >= u.Dlugosc)
+                        .Where(u => rect.YMax >= u.Szerokosc)
+                        .ToList();
+
+                        List<int> id_urzadzen = urzadzenia_w_prostokacie.Select(u => u.UrzadzenieID).ToList();
+                        liczby_urzadzen_bd.Add(id_urzadzen.Count);
+
+                        (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
+                        List<Wersja> z_okresu = ctx.Wersje
+                            .Where(w => id_urzadzen.Contains(w.UrzadzenieID))
+                            .Where(p => p.dataOstatniejModyfikacji >= poczatek)
+                            .Where(p => p.dataWygasniecia < koniec)
+                            .GroupBy(w => w.UrzadzenieID) //ale tylko najnowsza wersja urządzenia spełniająca warunek
+                            .Select(g => g.OrderByDescending(w => w.WersjaID).FirstOrDefault())
+                            .ToList();
+
+                        decimal suma = 0;
+                        decimal liczba_pomiarow = 0;
+                        decimal srednia = 0;
+
+                        foreach (var wersja in z_okresu)
+                        {
+                            foreach (var pomiar in wersja.Pomiary)
+                            {
+                                if (pomiar.dtpomiaru >= poczatek && pomiar.dtpomiaru < koniec)
+                                {
+                                    suma += wersja.Pomiary.Sum(p => p.Wartosc);
+                                    liczba_pomiarow += wersja.Pomiary.Count;
+                                }
+                            }
+                        }
+
+                        if (liczba_pomiarow != 0)
+                            srednia = suma / liczba_pomiarow;
+
+
+                        rmvb.zwrocLiczbeUrzadzenPomiarowSrednia(szukane_prostokaty[i], poczatek, koniec);
                     }
 
                     Console.WriteLine("Szukanie sredniej z pomiarow z urzadzen znajdujacych sie na obszarze " + "xMin(" + szukane_prostokaty[i].XMin + "), " + "yMin(" + szukane_prostokaty[i].YMin + "), " +
                     "xMax(" + szukane_prostokaty[i].XMax + "), " + "yMax(" + szukane_prostokaty[i].YMax + "), z wersji aktualnych w czasie od " + losowe_przedzialy[i].Item1 + " do " + losowe_przedzialy[i].Item2);
-                    Console.WriteLine("Wynik: " + wyniki_bd[i]);
+                    Console.WriteLine("Wynik: " + wyniki_bd[i] + "\n");
                 }
                 Console.WriteLine("Zrealizowano w czasie " + czas_bd + " ms. (bd) " + czas_rmvb + " ms. (rmvb)");
             }

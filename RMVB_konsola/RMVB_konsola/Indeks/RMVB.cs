@@ -150,8 +150,14 @@ namespace RMVB_konsola.Indeks
                         .ToList();
 
                 foreach (var wersja in wersje) {
-                    suma += wersja.Pomiary.Sum(p => p.Wartosc);
-                    liczba_pomiarow += wersja.Pomiary.Count;
+                    foreach (var pomiar in wersja.Pomiary) 
+                    {
+                        if (pomiar.dtpomiaru >= poczatek && pomiar.dtpomiaru < koniec)
+                        {
+                            suma += pomiar.Wartosc;
+                            liczba_pomiarow++;
+                        }
+                    }
                 }
 
             }
