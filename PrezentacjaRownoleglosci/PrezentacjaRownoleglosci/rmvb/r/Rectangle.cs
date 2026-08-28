@@ -41,7 +41,7 @@ namespace Symulacja_strumieni.rmvb.r
 
         public bool Contains(Rectangle other)
         {
-            return XMin <= other.XMin && YMin <= other.YMin && XMax >= other.XMax && YMax >= other.YMax;
+            return (other.YMax >= YMin) && (other.YMin <= YMax) && (other.XMax >= XMin) && (other.XMin <= XMax);
         }
 
         public bool Contains(decimal x, decimal y)
