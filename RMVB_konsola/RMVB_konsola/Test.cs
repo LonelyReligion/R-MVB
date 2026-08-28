@@ -333,7 +333,7 @@ namespace RMVB_konsola
             {
                 Console.WriteLine("Szukanie agregatu powierzchniowego dla obszaru: xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
                     "xMax(" + szukane[i].XMax + "), " + "yMax(" + szukane[i].YMax + "), ");
-                Console.WriteLine("WARTOŚCI: Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
+                Console.WriteLine("WARTOŚCI: Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i]);
                 Console.WriteLine(Out[i] + ")/" + ile[i]);
 
 
@@ -347,8 +347,7 @@ namespace RMVB_konsola
                     Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
                         ile_r[i] + " (r)");
                     blad = true;
-                    rmvb.szukajAgregatu(szukane[i]);
-
+                    
                     bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + ile[i] + " (baza) " +
                         ile_r[i] + " (r)");
                     bledy.Add("Współrzędne prostokąta: " + "xMin(" + szukane[i].XMin + "), " + "yMin(" + szukane[i].YMin + "), " +
@@ -363,6 +362,8 @@ namespace RMVB_konsola
                     {
                         bledy.Add("Obliczone wartości: " + "Recznie: " + resultDB[i] + " vs " + "RMVB: " + resultRTree[i] + "\n");
                     }
+
+
                 }
                 else if (resultDB[i] != resultRTree[i])
                 {
@@ -418,6 +419,7 @@ namespace RMVB_konsola
                         }
 
                         bledy.Add("\n");
+                        rmvb.szukajAgregatu(szukane[i]);
 
                     }
                 }
@@ -549,6 +551,7 @@ namespace RMVB_konsola
             bool blad = false;
             List<Rectangle> searchRect = new List<Rectangle>();
             for(int i = 0; i < ileRazy; i++)
+                //searchRect.Add(generator.generujProstokatDeterministycznie());
                 searchRect.Add(generator.generujProstokat()); 
 
             Stopwatch sw;
@@ -628,7 +631,7 @@ namespace RMVB_konsola
                         Console.WriteLine("UrzadzenieID: " + u.UrzadzenieID + " x: " + u.Dlugosc + " y: " + u.Szerokosc);
                     }
 
-                    //rmvb.szukaj(searchRect[i]);
+                    rmvb.szukaj(searchRect[i]);
                     bledy.Add("");
 
                 }

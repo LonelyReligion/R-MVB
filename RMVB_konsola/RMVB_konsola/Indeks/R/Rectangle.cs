@@ -41,7 +41,9 @@ namespace RMVB_konsola.Indeks.R
 
         public bool Contains(Rectangle other)
         {
-            return XMin <= other.XMin && YMin <= other.YMin && XMax >= other.XMax && YMax >= other.YMax;
+            //(rect.YMax >= ch.mbr.YMin) && (rect.YMin <= ch.mbr.YMax) && (rect.XMax >= ch.mbr.XMin) && (rect.XMin <= ch.mbr.XMax)
+            return (other.YMax >= YMin) && (other.YMin <= YMax) && (other.XMax >= XMin) && (other.XMin <= XMax);
+            //return XMin <= other.XMin && YMin <= other.YMin && XMax >= other.XMax && YMax >= other.YMax;
         }
 
         public bool Contains(decimal x, decimal y)

@@ -197,7 +197,13 @@ namespace RMVB_konsola.Indeks.R
 
             foreach (RNode ch in children)
             {
-                if (rect.Intersects(mbr) || mbr.Contains(rect))
+                if(ch.mbr.YMin == 52.00m && ch.mbr.YMax == 52.00m)
+                {
+                    ;
+                }
+                bool intersects = rect.Intersects(ch.mbr);
+                bool contains = ch.mbr.Contains(rect);
+                if ( intersects || contains )
                 {
                     result.AddRange(ch.SearchBy(rect));
                 }
