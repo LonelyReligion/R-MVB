@@ -321,5 +321,57 @@ namespace UrzadzeniaSImScottplot.okna
                 szerokosc.Content = wybrane.Szerokosc.ToString();
             }
         }
+
+        private DateTime? _poczatek = null;
+
+        public DateTime? poczatek { 
+            get { return _poczatek; }
+            set
+            {
+                _poczatek = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("poczatek"));
+            }
+        }
+
+        private DateTime? _koniec = null;
+        public DateTime? koniec
+        {
+            get { return _koniec; }
+            set
+            {
+                _koniec = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("koniec"));
+            }
+        }
+
+        private void konca_checkbox_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsLoaded)
+                return;
+
+            if ((bool)konca_checkbox.IsChecked)
+            {
+                ui_koniec.IsReadOnly = true;
+            }
+            else
+            {
+                ui_koniec.IsReadOnly = false;
+            }
+        }
+
+        private void poczatku_checkbox_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsLoaded)
+                return;
+
+            if ((bool)poczatku_checkbox.IsChecked)
+            {
+                ui_poczatek.IsReadOnly = true;
+            }
+            else
+            {
+                ui_poczatek.IsReadOnly = false;
+            }
+        }
     }
 }
