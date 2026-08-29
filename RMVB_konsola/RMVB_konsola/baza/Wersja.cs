@@ -123,12 +123,15 @@ namespace RMVB_konsola
             testowy.WersjeUrzadzenia.Add(this);
             this.Pomiary.Add(testowy);
             dataOstatniejModyfikacji = DateTime.Now;
+            AktualizujSrednia();
+
         }
 
         public void usunPomiar(Pomiar testowy)
         {
             this.Pomiary.Remove(testowy);
             dataOstatniejModyfikacji = DateTime.Now;
+            AktualizujSrednia();
         }
 
         [NotMapped]

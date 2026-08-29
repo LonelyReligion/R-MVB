@@ -44,6 +44,7 @@ namespace RMVB_konsola.Indeks
 
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
         {
+            //alfa.dodajPomiar(p);
 
             using (var ctx = new Kontekst())
             {

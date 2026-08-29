@@ -13,7 +13,8 @@ namespace UrzadzeniaSImScottplot
         private DrzewoMVB MVB;
         private RTreeAdapter R;
         private Repo repo;
-        internal RMVB() {
+        internal RMVB()
+        {
             repo = new Repo();
             MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
@@ -28,7 +29,8 @@ namespace UrzadzeniaSImScottplot
                 Console.WriteLine(linijka);
         }
         //dodaj
-        internal void dodajUrzadzenie(Urzadzenie u) {
+        internal void dodajUrzadzenie(Urzadzenie u)
+        {
             repo.saveDevice(u);
             R.dodajUrzadzenie(u);
         }
@@ -119,10 +121,63 @@ namespace UrzadzeniaSImScottplot
             }
         }
 
-        public void Reset() { 
+        public void Reset()
+        {
             repo.Reset();
             MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
         }
+
+        // zwracamy srednia z okresu czasu z pomiarow urzadzen znajdujacych sie na podanym obszarze
+        internal (int, int, decimal) zwrocLiczbeUrzadzenPomiarowSrednia(Rectangle prostokat, DateTime poczatek, DateTime koniec)
+        {
+            List<Urzadzenie> szukane = R.szukaj(prostokat);
+            List<int> ids = szukane.Select(u => u.UrzadzenieID).ToList();
+            int liczba_urzadzen = szukane.Count;
+
+            decimal suma = 0;
+            int liczba_pomiarow = 0;
+
+            if (poczatek == DateTime.MinValue)
+            {
+                foreach (var urzadzenie in szukane)//moze parallel?
+                {
+                    (decimal srednia, int liczba) = MVB.szukaj(urzadzenie.UrzadzenieID, koniec).PobierzSredniaIliczbe();
+                    suma += srednia * liczba;
+                    liczba_pomiarow += liczba;
+                }
+
+
+            }
+            else
+            {
+                List<Wersja> wersje = MVB.szukaj(poczatek, koniec); //tu sie wersje beda powtarzac, chodzi nam o ta ostatnia z kazdego urzadzenia
+                wersje = wersje
+                        .Where(p => ids.Contains(p.UrzadzenieID))
+                        .GroupBy(x => x.UrzadzenieID)
+                        .Select(g => g.MaxBy(x => x.WersjaID))
+                        .OrderBy(w => w.UrzadzenieID)
+                        .ToList();
+
+                foreach (var wersja in wersje)
+                {
+                    foreach (var pomiar in wersja.Pomiary)
+                    {
+                        if (pomiar.dtpomiaru >= poczatek && pomiar.dtpomiaru < koniec)
+                        {
+                            suma += pomiar.Wartosc;
+                            liczba_pomiarow++;
+                        }
+                    }
+                }
+
+            }
+
+            if (liczba_pomiarow != 0)
+                return (liczba_urzadzen, liczba_pomiarow, (suma / liczba_pomiarow));
+            else
+                return (liczba_urzadzen, 0, 0);
+        }
+
     }
-}
+    }
