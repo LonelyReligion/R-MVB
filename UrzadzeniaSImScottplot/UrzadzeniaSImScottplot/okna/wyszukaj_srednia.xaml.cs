@@ -373,5 +373,160 @@ namespace UrzadzeniaSImScottplot.okna
                 ui_poczatek.IsReadOnly = false;
             }
         }
+
+        private void Przeslij3_Click(object sender, RoutedEventArgs e)
+        {
+            //todo
+
+/*            bool blad = false;
+
+            List<Rectangle> szukane_prostokaty = new List<Rectangle>();
+            for (int i = 0; i < ileRazy; i++)
+                szukane_prostokaty.Add(generator.generujProstokat());
+
+            using (var ctx = new Kontekst())
+            {
+                DateTime min = ctx.Wersje.OrderBy(u => u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji;
+
+                //najpozniejsza data konca, wyszukujemy tylko z martwych urzadzen
+                DateTime max = ctx.Wersje.Where(u => u.dataWygasniecia != DateTime.MaxValue).OrderByDescending(u => u.dataWygasniecia).Select(u => u.dataWygasniecia).First();
+
+                List<(DateTime, DateTime)> losowe_przedzialy = wylosujPrzedzialy(min, max, ileRazy);
+
+                Random rnd = new Random();
+                losowe_przedzialy[rnd.Next(losowe_przedzialy.Count - 1)] = (losowe_przedzialy[rnd.Next(losowe_przedzialy.Count - 1)].Item1, DateTime.MaxValue); //zeby rmvb mialo szanse sie popisac wgl 
+
+                List<decimal> wyniki_bd = new List<decimal>();
+                List<int> liczby_pomiarow_bd = new List<int>();
+                List<int> liczby_urzadzen_bd = new List<int>();
+
+                sw = Stopwatch.StartNew();
+                for (int i = 0; i < ileRazy; i++)
+                {
+                    Rectangle rect = szukane_prostokaty[i];
+                    List<Urzadzenie> urzadzenia_w_prostokacie = ctx.Urzadzenia
+                    .AsNoTracking()
+                    .Where(u => rect.XMin <= u.Dlugosc)
+                    .Where(u => rect.YMin <= u.Szerokosc)
+                    .Where(u => rect.XMax >= u.Dlugosc)
+                    .Where(u => rect.YMax >= u.Szerokosc)
+                    .ToList();
+
+                    List<int> id_urzadzen = urzadzenia_w_prostokacie.Select(u => u.UrzadzenieID).ToList();
+                    liczby_urzadzen_bd.Add(id_urzadzen.Count);
+
+                    (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
+                    List<Wersja> z_okresu = ctx.Wersje
+                        .Where(w => id_urzadzen.Contains(w.UrzadzenieID))
+                        .Where(p => p.dataOstatniejModyfikacji >= poczatek)
+                        .Where(p => p.dataWygasniecia < koniec)
+                        .GroupBy(w => w.UrzadzenieID) //ale tylko najnowsza wersja urządzenia spełniająca warunek
+                        .Select(g => g.OrderByDescending(w => w.WersjaID).FirstOrDefault())
+                        .ToList();
+
+                    decimal suma = 0;
+                    decimal liczba_pomiarow = 0;
+                    decimal srednia = 0;
+
+                    foreach (var wersja in z_okresu)
+                    {
+                        foreach (var pomiar in wersja.Pomiary)
+                        {
+                            if (pomiar.dtpomiaru >= poczatek && pomiar.dtpomiaru < koniec)
+                            {
+                                suma += pomiar.Wartosc;
+                                liczba_pomiarow++;
+                            }
+                        }
+                    }
+
+                    if (liczba_pomiarow != 0)
+                        srednia = suma / liczba_pomiarow;
+
+
+                    wyniki_bd.Add(srednia);
+                    liczby_pomiarow_bd.Add((int)liczba_pomiarow);
+                }
+                long czas_bd = sw.ElapsedMilliseconds;
+
+                List<decimal> wyniki_rmvb = new List<decimal>();
+                List<int> liczby_pomiarow_rmvb = new List<int>();
+                List<int> liczby_urzadzen_rmvb = new List<int>();
+
+                sw = Stopwatch.StartNew();
+                for (int i = 0; i < ileRazy; i++)
+                {
+                    (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
+                    (int liczba_urzadzen, int liczba_pomiarow, decimal srednia) = rmvb.zwrocLiczbeUrzadzenPomiarowSrednia(szukane_prostokaty[i], poczatek, koniec);
+
+                    wyniki_rmvb.Add(srednia);
+                    liczby_pomiarow_rmvb.Add(liczba_pomiarow);
+                    liczby_urzadzen_rmvb.Add(liczba_urzadzen);
+                }
+                long czas_rmvb = sw.ElapsedMilliseconds;
+
+                for (int i = 0; i < ileRazy; i++)
+                {
+                    if (wyniki_bd[i] != wyniki_rmvb[i])
+                    {
+                        Console.WriteLine("Wyszukiwanie średniej od " + losowe_przedzialy[i].Item1 + " do " + losowe_przedzialy[i].Item2);
+                        Console.WriteLine("Wyniki sie nie zgadzaja " + wyniki_bd[i] + " vs " + wyniki_rmvb[i]); //poprawic zeby ten blad cokolwiek mowil
+                        Console.WriteLine("Liczba pomiarow " + liczby_pomiarow_bd[i] + " vs " + liczby_pomiarow_rmvb[i]);
+                        Console.WriteLine("Liczba urządzen " + liczby_urzadzen_bd[i] + " vs " + liczby_urzadzen_rmvb[i]);
+                        blad = true;
+
+                        Rectangle rect = szukane_prostokaty[i];
+                        List<Urzadzenie> urzadzenia_w_prostokacie = ctx.Urzadzenia
+                        .AsNoTracking()
+                        .Where(u => rect.XMin <= u.Dlugosc)
+                        .Where(u => rect.YMin <= u.Szerokosc)
+                        .Where(u => rect.XMax >= u.Dlugosc)
+                        .Where(u => rect.YMax >= u.Szerokosc)
+                        .ToList();
+
+                        List<int> id_urzadzen = urzadzenia_w_prostokacie.Select(u => u.UrzadzenieID).ToList();
+                        liczby_urzadzen_bd.Add(id_urzadzen.Count);
+
+                        (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
+                        List<Wersja> z_okresu = ctx.Wersje
+                            .Where(w => id_urzadzen.Contains(w.UrzadzenieID))
+                            .Where(p => p.dataOstatniejModyfikacji >= poczatek)
+                            .Where(p => p.dataWygasniecia < koniec)
+                            .GroupBy(w => w.UrzadzenieID) //ale tylko najnowsza wersja urządzenia spełniająca warunek
+                            .Select(g => g.OrderByDescending(w => w.WersjaID).FirstOrDefault())
+                            .ToList();
+
+                        decimal suma = 0;
+                        decimal liczba_pomiarow = 0;
+                        decimal srednia = 0;
+
+                        foreach (var wersja in z_okresu)
+                        {
+                            foreach (var pomiar in wersja.Pomiary)
+                            {
+                                if (pomiar.dtpomiaru >= poczatek && pomiar.dtpomiaru < koniec)
+                                {
+                                    suma += wersja.Pomiary.Sum(p => p.Wartosc);
+                                    liczba_pomiarow += wersja.Pomiary.Count;
+                                }
+                            }
+                        }
+
+                        if (liczba_pomiarow != 0)
+                            srednia = suma / liczba_pomiarow;
+
+
+                        rmvb.zwrocLiczbeUrzadzenPomiarowSrednia(szukane_prostokaty[i], poczatek, koniec);
+                    }
+
+                    Console.WriteLine("Szukanie sredniej z pomiarow z urzadzen znajdujacych sie na obszarze " + "xMin(" + szukane_prostokaty[i].XMin + "), " + "yMin(" + szukane_prostokaty[i].YMin + "), " +
+                    "xMax(" + szukane_prostokaty[i].XMax + "), " + "yMax(" + szukane_prostokaty[i].YMax + "), z wersji aktualnych w czasie od " + losowe_przedzialy[i].Item1 + " do " + losowe_przedzialy[i].Item2);
+                    Console.WriteLine("Wynik: " + wyniki_bd[i] + "\n");
+                }
+                Console.WriteLine("Zrealizowano w czasie " + czas_bd + " ms. (bd) " + czas_rmvb + " ms. (rmvb)");
+            }*/
+
+            sukces = !blad;
+        }
     }
 }
