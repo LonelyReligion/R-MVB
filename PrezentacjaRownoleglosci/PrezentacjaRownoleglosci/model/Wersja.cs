@@ -119,15 +119,33 @@ namespace Symulacja_strumieni.model
 
         public void dodajPomiar(Pomiar testowy)
         {
-            testowy.WersjeUrzadzenia.Add(this);
+            /*testowy.WersjeUrzadzenia.Add(this);*/
             this.Pomiary.Add(testowy);
-            dataOstatniejModyfikacji = DateTime.Now;
+            dataOstatniejModyfikacji = testowy.dtpomiaru;
+            AktualizujSrednia();
         }
 
         public void usunPomiar(Pomiar testowy)
         {
             this.Pomiary.Remove(testowy);
             dataOstatniejModyfikacji = DateTime.Now;
+            AktualizujSrednia();
         }
+
+        [NotMapped]
+        private decimal _srednia = 0;
+        public void AktualizujSrednia()
+        {
+            if (Pomiary.Any())
+            {
+                _srednia = Pomiary.Average(p => p.Wartosc);
+            }
+        }
+
+        public (decimal, int) PobierzSredniaIliczbe()
+        {
+            return (_srednia, Pomiary.Count);
+        }
+
     }
 }
