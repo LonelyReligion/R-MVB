@@ -3,6 +3,7 @@ using RMVB_konsola.Indeks.MVB;
 using RMVB_konsola.Indeks.R;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,14 +45,14 @@ namespace RMVB_konsola.Indeks
 
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
         {
-            //alfa.dodajPomiar(p);
+            alfa.dodajPomiar(p);
 
             using (var ctx = new Kontekst())
             {
                 ctx.Wersje.Attach(alfa);
                 ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
+                ctx.Entry(alfa).State = EntityState.Modified;
 
-                alfa.Pomiary.Add(p);
                 ctx.Pomiary.Add(p);
                 ctx.SaveChanges();
             }
