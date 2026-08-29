@@ -678,84 +678,106 @@ namespace RMVB_konsola
                         odnalezione_baza.Add(szukana);
                     }
                 }
-            }
-            long czas_baza = sw.ElapsedMilliseconds;
-            if (!blad)
-            {
-                Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
-            }
 
-            sw = Stopwatch.StartNew();
-            for (int i = 0; i < ileRazy; i++)
-            {
-                int id = szukane_wersje[i].UrzadzenieID;
-                DateTime dt =  szukane_wersje[i].dataOstatniejModyfikacji;
-                Wersja szukana = rmvb.szukaj(id, dt);
-                if (szukana == null)
+                long czas_baza = sw.ElapsedMilliseconds;
+                if (!blad)
                 {
-                    Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
-                    rmvb.szukaj(id, dt);
-                    blad = true;
+                    Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
                 }
-                else { 
-                    odnalezione_rmvb.Add(szukana);
-                }
-            }
-            long czas_mvb = sw.ElapsedMilliseconds;
 
-            if (!blad)
-            {
-                Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
-                wyniki.Add("MVB | wyszukiwanie losowego urządzenia po dacie i id | " + czas_baza + " | " + czas_mvb );
-            }
-            else
-            {
-                bledy.Add("Działanie testów zakończyło się na wyszukiwaniu urządzenia aktualnego w zadanym momencie o określonym id. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
-                bledy.Add("Komunikat(y) błędu(ów): \n");
-                //except nie zadziala
-                int index_baza = 0;
-                int index_rmvb = 0;
-                for (int index = 0; index < szukane_wersje.Count; index++)
+                sw = Stopwatch.StartNew();
+                for (int i = 0; i < ileRazy; i++)
                 {
-                    Wersja wersja = szukane_wersje[index];
-                    int id_urzadzenia = wersja.UrzadzenieID;
-                    int id_wersji = wersja.WersjaID;
-
-                    bool odnaleziono_baza = false;
-                    bool odnaleziono_rmvb = true;
-
-                    if (odnalezione_baza[index_baza].UrzadzenieID == id_urzadzenia &&
-                        odnalezione_baza[index_baza].WersjaID == id_wersji)
+                    int id = szukane_wersje[i].UrzadzenieID;
+                    DateTime dt = szukane_wersje[i].dataOstatniejModyfikacji;
+                    Wersja szukana = rmvb.szukaj(id, dt);
+                    if (szukana == null)
                     {
-                        odnaleziono_baza = true;
-                        index_baza++;
+                        Console.WriteLine("Uwaga: RMVB nie odnalazlo rekordu.");
+                        rmvb.szukaj(id, dt);
+                        blad = true;
                     }
-                    else
-                    {
-                        //nieodnaleziono
+                    else {
+                        odnalezione_rmvb.Add(szukana);
                     }
-
-                    if (odnalezione_rmvb[index_rmvb].UrzadzenieID == id_urzadzenia &&
-                        odnalezione_baza[index_rmvb].WersjaID == id_wersji)
-                    {
-                        odnaleziono_rmvb = true;
-                        index_rmvb++;
-                    }
-                    else
-                    {
-                        //nieodnaleziono
-                    }
-
-                    Console.WriteLine("id: " + id_urzadzenia + " ver: " + id_wersji
-                        + " baza: " + odnaleziono_baza.ToString() + " rmvb: " + odnaleziono_rmvb.ToString());
-
-                    string wynikowa = "Urządzenie o id=" + id_urzadzenia;
-                    wynikowa += odnaleziono_baza ? ", baza odnalazła urządzenie" : ", baza nie odnalazła urządzenia";
-                    wynikowa += odnaleziono_rmvb ? ", MVB odnalazło urządzenie." : ", MVB nie odnalazło urządzenia.";
-                    bledy.Add(wynikowa);
-                    bledy.Add("");
                 }
+                long czas_mvb = sw.ElapsedMilliseconds;
 
+                if (!blad)
+                {
+                    Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
+                    wyniki.Add("MVB | wyszukiwanie losowego urządzenia po dacie i id | " + czas_baza + " | " + czas_mvb);
+                }
+                else
+                {
+                    bledy.Add("Działanie testów zakończyło się na wyszukiwaniu urządzenia aktualnego w zadanym momencie o określonym id. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
+                    bledy.Add("Komunikat(y) błędu(ów): \n");
+                    //except nie zadziala
+                    int index_baza = 0;
+                    int index_rmvb = 0;
+                    for (int index = 0; index < szukane_wersje.Count; index++)
+                    {
+                        Wersja wersja = szukane_wersje[index];
+                        int id_urzadzenia = wersja.UrzadzenieID;
+                        int id_wersji = wersja.WersjaID;
+
+                        bool odnaleziono_baza = false;
+                        bool odnaleziono_rmvb = true;
+
+                        if (odnalezione_baza[index_baza].UrzadzenieID == id_urzadzenia &&
+                            odnalezione_baza[index_baza].WersjaID == id_wersji)
+                        {
+                            odnaleziono_baza = true;
+                            index_baza++;
+                        }
+                        else
+                        {
+                            //nieodnaleziono
+                        }
+
+                        if (odnalezione_rmvb[index_rmvb].UrzadzenieID == id_urzadzenia &&
+                            odnalezione_baza[index_rmvb].WersjaID == id_wersji)
+                        {
+                            odnaleziono_rmvb = true;
+                            index_rmvb++;
+                        }
+                        else
+                        {
+                            //nieodnaleziono
+                        }
+
+                        Console.WriteLine("id: " + id_urzadzenia + " ver: " + id_wersji
+                            + " baza: " + odnaleziono_baza.ToString() + " rmvb: " + odnaleziono_rmvb.ToString());
+
+                        string wynikowa = "Urządzenie o id=" + id_urzadzenia;
+                        wynikowa += odnaleziono_baza ? ", baza odnalazła urządzenie" : ", baza nie odnalazła urządzenia";
+                        wynikowa += odnaleziono_rmvb ? ", MVB odnalazło urządzenie." : ", MVB nie odnalazło urządzenia.";
+
+                        Wersja? bazowana = ctx.Wersje.Where(w=>w.UrzadzenieID == id_urzadzenia).Where(p => p.WersjaID == id_wersji).First();
+                        if (bazowana == null)
+                        {
+                            Console.WriteLine("Nie ma takiej wersji w bazie");
+                            wynikowa += "\nNie ma takiej wersji w bazie.";
+                        }
+                        else
+                        {
+                            if (bazowana.dataOstatniejModyfikacji != odnalezione_rmvb[index_rmvb].dataOstatniejModyfikacji)
+                            {
+                                Console.WriteLine("Maja zapisane inne daty ostatniej modyfikacji!");
+                                wynikowa += "\nMaja zapisane inne daty ostatniej modyfikacji!";
+                            }
+
+                            if (bazowana.dataWygasniecia != odnalezione_rmvb[index_rmvb].dataWygasniecia)
+                            {
+                                Console.WriteLine("Maja zapisane inne daty wygasniecia!");
+                                wynikowa += "\nMaja zapisane inne daty wygasniecia!";
+                            }
+                        }
+                        bledy.Add(wynikowa);
+                        bledy.Add("");
+                    }
+
+                }
             }
             return blad;
         }
@@ -990,15 +1012,20 @@ namespace RMVB_konsola
                 long czas_mvb = sw.ElapsedMilliseconds;
                 Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
 
+                bool once = false;
+
                 for (int i = 0; i < ileRazy; i++)
                 {
                     if (szukane_wersje[i].Count != szukane_wersje_mvb[i].Count)
                     {
-                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji aktualnych w zadany przedziale czasu. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
-                        bledy.Add("Przedzial: " + losowe_przedzialy[i].Item1.Ticks + "-" + losowe_przedzialy[i].Item2.Ticks);
-                        Console.WriteLine("Przedzial: " + losowe_przedzialy[i].Item1.Ticks + "-" + losowe_przedzialy[i].Item2.Ticks);
-                        bledy.Add("Komunikat(y) błędu(ów): \n");
-
+                        if (!once)
+                        {
+                            once = true;
+                            bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji aktualnych w zadanym przedziale czasu. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
+                            bledy.Add("Przedzial: " + losowe_przedzialy[i].Item1.Ticks + "-" + losowe_przedzialy[i].Item2.Ticks);
+                            Console.WriteLine("Przedzial: " + losowe_przedzialy[i].Item1.Ticks + "-" + losowe_przedzialy[i].Item2.Ticks);
+                            bledy.Add("Komunikat(y) błędu(ów): \n");
+                        }
                         /*                var duplicates = szukane_wersje_mvb
                                         .GroupBy(i => i)
                                         .Where(g => g.Count() > 1)

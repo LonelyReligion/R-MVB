@@ -21,8 +21,8 @@ namespace UrzadzeniaSImScottplot.okna
         public List<string> bledy = new List<string>();
         public String komunikat_bledu;
 
-        public decimal czas_bd;
-        public decimal czas_rmvb;
+        public decimal czasBD;
+        public decimal czasRMVB;
         public decimal srednia;
         public Rectangle szukany;
         public int id = -1;
@@ -143,7 +143,7 @@ namespace UrzadzeniaSImScottplot.okna
                         resultDB[i] = 0;
                     cnt_1 = cnt;
                 }
-                czas_bd = sw.ElapsedMilliseconds;
+                czasBD = sw.ElapsedMilliseconds;
             }
 
             sw = Stopwatch.StartNew();
@@ -156,7 +156,7 @@ namespace UrzadzeniaSImScottplot.okna
                 ile_r.Add(liczba_elementow);
 
             }
-            czas_rmvb = sw.ElapsedMilliseconds;
+            czasRMVB = sw.ElapsedMilliseconds;
 
             if (ile[0] != ile_r[0])
             {
@@ -377,7 +377,6 @@ namespace UrzadzeniaSImScottplot.okna
         private void Przeslij3_Click(object sender, RoutedEventArgs e)
         {
             //todo
-
 /*            bool blad = false;
 
             List<Rectangle> szukane_prostokaty = new List<Rectangle>();

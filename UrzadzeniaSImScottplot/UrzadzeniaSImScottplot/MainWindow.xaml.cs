@@ -193,7 +193,8 @@ namespace UrzadzeniaSImScottplot
                     { 
                         wyniki_pomiarow.Text = "Średnia z pomiarów urządzenia o id: " + okno.id.ToString() + " to " + okno.srednia + ".";
                     }
-                    //tu informacja o czasie wykonania!!
+                    wyniki_pomiarow.Text += " Baza zrealizowała zapytanie dziesięciokrotnie w czasie " + okno.czasBD + " ms., a drzewo RMVB w czasie " + okno.czasRMVB + " ms.";
+
                 }
             }
             else {
