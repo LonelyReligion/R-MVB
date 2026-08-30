@@ -207,7 +207,7 @@ namespace UrzadzeniaSImScottplot
         {
             for (int i = 0; i < desk.Count(); i++)
             {
-                if(desk[i].zwrocPoczatek() <= dt && dt < desk[i].zwrocKoniec())
+                if(desk[i].zwrocPoczatek() <= dt && (dt < desk[i].zwrocKoniec() || (dt == DateTime.MaxValue && desk[i].zwrocKoniec() == DateTime.MaxValue)))
                     return desk[i].zwrocKorzen().szukaj(id, dt);
 
             }

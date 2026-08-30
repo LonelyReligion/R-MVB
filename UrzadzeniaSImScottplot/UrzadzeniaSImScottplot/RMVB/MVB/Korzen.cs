@@ -475,8 +475,10 @@ namespace UrzadzeniaSImScottplot
                 if ((wpis.minData <= dt && wpis.maxData > dt) && (wpis.minKlucz <= id && wpis.maxKlucz >= id)) {
                     for (int j = 0; j < wpis.wezel.urzadzenia.Count(); j++) {
                         (int index, Wersja urzadzenie) = wpis.wezel.urzadzenia[j];
-                        if(index == id && urzadzenie.dataOstatniejModyfikacji <= dt && urzadzenie.dataWygasniecia > dt)
+                        if (index == id && urzadzenie.dataOstatniejModyfikacji <= dt && (urzadzenie.dataWygasniecia > dt || (dt == DateTime.MaxValue && urzadzenie.dataWygasniecia == DateTime.MaxValue)))
+                        {
                             return urzadzenie;
+                        }
                     }
                 }
             }
