@@ -384,9 +384,11 @@ namespace UrzadzeniaSImScottplot.okna
             blad = false;
             szukany = new Rectangle(prostkatv2.Ymin, prostkatv2.Xmin, prostkatv2.Ymax, prostkatv2.Xmax);
 
+            //to do wywalenia
             List<Rectangle> szukane_prostokaty = new List<Rectangle>();
             for (int i = 0; i < 10; i++)
                 szukane_prostokaty.Add(szukany);
+            //
 
             if (poczatek == null || koniec == null) {
                 return;
@@ -465,23 +467,23 @@ namespace UrzadzeniaSImScottplot.okna
                 srednia = wyniki_rmvb[0];
 
                 bool pierwszy = false;
-                for (int i = 0; i < 10; i++)
-                {
-                    Console.WriteLine("Wyszukiwanie średniej od " + (DateTime)poczatek + " do " + (DateTime)koniec);
 
-                    if (wyniki_bd[i] != wyniki_rmvb[i])
+
+                    if (wyniki_bd[0] != wyniki_rmvb[0])
                     {
                         if (!pierwszy) {
-                            komunikat_bledu = "Wyszukiwanie sredniej sie nie powiodlo."; //uzupelnic szczegoly
+                            komunikat_bledu = "Wyszukiwanie sredniej z okresu czasu od " + ((DateTime)poczatek).ToString() + " do " + ((DateTime)koniec).ToString() + " na obszarze " +
+                                "xMin(" + szukany.XMin + "), " + "yMin(" + szukany.YMin + "), " +
+                                "xMax(" + szukany.XMax + "), " + "yMax(" + szukany.YMax + ")" + " sie nie powiodlo.\nKomunikaty bledow:"; //uzupelnic szczegoly
                             pierwszy = true;
                         }
 
-                        Console.WriteLine("Wyniki sie nie zgadzaja " + wyniki_bd[i] + " vs " + wyniki_rmvb[i]); //poprawic zeby ten blad cokolwiek mowil
-                        Console.WriteLine("Liczba pomiarow " + liczby_pomiarow_bd[i] + " vs " + liczby_pomiarow_rmvb[i]);
-                        Console.WriteLine("Liczba urządzen " + liczby_urzadzen_bd[i] + " vs " + liczby_urzadzen_rmvb[i]);
+                        bledy.Add("Wyniki sie nie zgadzaja " + wyniki_bd[0] + " vs " + wyniki_rmvb[0]);
+                        bledy.Add("Liczba pomiarow " + liczby_pomiarow_bd[0] + " vs " + liczby_pomiarow_rmvb[0]);
+                        bledy.Add("Liczba urządzen " + liczby_urzadzen_bd[0] + " vs " + liczby_urzadzen_rmvb[0]);
                         blad = true;
 
-                        Rectangle rect = szukane_prostokaty[i];
+                        Rectangle rect = szukane_prostokaty[0];
                         List<Urzadzenie> urzadzenia_w_prostokacie = ctx.Urzadzenia
                         .AsNoTracking()
                         .Where(u => rect.XMin <= u.Dlugosc)
@@ -521,16 +523,12 @@ namespace UrzadzeniaSImScottplot.okna
                             srednia = suma / liczba_pomiarow;
 
 
-                        _rmvb.zwrocLiczbeUrzadzenPomiarowSrednia(szukane_prostokaty[i], (DateTime)poczatek, (DateTime)koniec);
+                        _rmvb.zwrocLiczbeUrzadzenPomiarowSrednia(szukane_prostokaty[0], (DateTime)poczatek, (DateTime)koniec);
                     }
-
-                    Console.WriteLine("Szukanie sredniej z pomiarow z urzadzen znajdujacych sie na obszarze " + "xMin(" + szukane_prostokaty[i].XMin + "), " + "yMin(" + szukane_prostokaty[i].YMin + "), " +
-                    "xMax(" + szukane_prostokaty[i].XMax + "), " + "yMax(" + szukane_prostokaty[i].YMax + "), z wersji aktualnych w czasie od " + (DateTime)poczatek + " do " + (DateTime)koniec);
-                    Console.WriteLine("Wynik: " + wyniki_bd[i] + "\n");
-                }
+                
 
             }
-            
+
             sukces = !blad;
             Close();
         }

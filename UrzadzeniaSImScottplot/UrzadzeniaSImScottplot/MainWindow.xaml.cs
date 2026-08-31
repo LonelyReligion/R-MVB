@@ -258,7 +258,7 @@ namespace UrzadzeniaSImScottplot
                     if (okno.wariant_tesktu == 1)
                         wyniki_pomiarow.Text = "Odnaleziono wersję urządzenia o UrządzenieID: " + ((int)okno.szukane_id).ToString() + " i WersjaID: " + okno.szukane_v + ".";
                     if (okno.wariant_tesktu == 2)
-                        wyniki_pomiarow.Text = "Odnaleziono następujące wersje urządzeń aktualne od " + ((DateTime)okno.poczatek).ToString() + " do " + ((DateTime)okno.koniec).ToString() +".";
+                        wyniki_pomiarow.Text = "Odnaleziono następujące wersje urządzeń aktualne od " + ((DateTime)okno.poczatek).ToString() + " do " + ((DateTime)okno.koniec).ToString() + ".";
 
                     wyniki_pomiarow.Text += " Baza zrealizowała zapytanie dziesięciokrotnie w czasie " + okno.czasBD + " ms., a drzewo RMVB w czasie " + okno.czasRMVB + " ms.";
 
