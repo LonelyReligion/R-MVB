@@ -43,7 +43,7 @@ namespace UrzadzeniaSImScottplot
 
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
         {
-
+            alfa.dodajPomiar(p);
             repo.saveMeasurement(UrzadzenieID, p, alfa);
 
             R.dodajPomiar(UrzadzenieID, p);

@@ -472,7 +472,7 @@ namespace UrzadzeniaSImScottplot
             //zastapic jakas wersja z binary search i stosem?
             for (int i = wpisy.Count - 1; i >= 0; i--) {
                 var wpis = wpisy[i].Item2;
-                if ((wpis.minData <= dt && wpis.maxData > dt) && (wpis.minKlucz <= id && wpis.maxKlucz >= id)) {
+                if ((wpis.minData <= dt && (wpis.maxData > dt || (wpis.maxData == DateTime.MaxValue && dt == DateTime.MaxValue))) && (wpis.minKlucz <= id && wpis.maxKlucz >= id)) {
                     for (int j = 0; j < wpis.wezel.urzadzenia.Count(); j++) {
                         (int index, Wersja urzadzenie) = wpis.wezel.urzadzenia[j];
                         if (index == id && urzadzenie.dataOstatniejModyfikacji <= dt && (urzadzenie.dataWygasniecia > dt || (dt == DateTime.MaxValue && urzadzenie.dataWygasniecia == DateTime.MaxValue)))

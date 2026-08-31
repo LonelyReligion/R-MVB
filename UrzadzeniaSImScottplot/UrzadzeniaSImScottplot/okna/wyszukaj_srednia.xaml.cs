@@ -300,7 +300,7 @@ namespace UrzadzeniaSImScottplot.okna
         
             srednia = wynikRMVB;
 
-            sukces = true;
+            sukces = !blad;
             Close();
         }
 
@@ -381,7 +381,7 @@ namespace UrzadzeniaSImScottplot.okna
         private void Przeslij3_Click(object sender, RoutedEventArgs e)
         {
             wariant = 2;
-            bool blad = false;
+            blad = false;
             szukany = new Rectangle(prostkatv2.Ymin, prostkatv2.Xmin, prostkatv2.Ymax, prostkatv2.Xmax);
 
             List<Rectangle> szukane_prostokaty = new List<Rectangle>();
@@ -464,12 +464,18 @@ namespace UrzadzeniaSImScottplot.okna
                 czasRMVB = sw.ElapsedMilliseconds;
                 srednia = wyniki_rmvb[0];
 
+                bool pierwszy = false;
                 for (int i = 0; i < 10; i++)
                 {
                     Console.WriteLine("Wyszukiwanie średniej od " + (DateTime)poczatek + " do " + (DateTime)koniec);
 
                     if (wyniki_bd[i] != wyniki_rmvb[i])
                     {
+                        if (!pierwszy) {
+                            komunikat_bledu = "Wyszukiwanie sredniej sie nie powiodlo."; //uzupelnic szczegoly
+                            pierwszy = true;
+                        }
+
                         Console.WriteLine("Wyniki sie nie zgadzaja " + wyniki_bd[i] + " vs " + wyniki_rmvb[i]); //poprawic zeby ten blad cokolwiek mowil
                         Console.WriteLine("Liczba pomiarow " + liczby_pomiarow_bd[i] + " vs " + liczby_pomiarow_rmvb[i]);
                         Console.WriteLine("Liczba urządzen " + liczby_urzadzen_bd[i] + " vs " + liczby_urzadzen_rmvb[i]);
@@ -526,6 +532,7 @@ namespace UrzadzeniaSImScottplot.okna
             }
             
             sukces = !blad;
+            Close();
         }
     }
 }

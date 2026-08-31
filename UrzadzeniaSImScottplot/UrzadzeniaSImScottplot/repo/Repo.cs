@@ -34,8 +34,8 @@ namespace UrzadzeniaSImScottplot.repo
             {
                 ctx.Wersje.Attach(alfa);
                 ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
+                ctx.Entry(alfa).State = EntityState.Modified;
 
-                alfa.Pomiary.Add(p);
                 ctx.Pomiary.Add(p);
                 ctx.SaveChanges();
             }

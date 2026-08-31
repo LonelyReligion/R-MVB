@@ -196,7 +196,7 @@ namespace UrzadzeniaSImScottplot
                     else if (okno.wariant == 2) 
                     {
                         wyniki_pomiarow.Text = "Średnia z pomiarów urządzeń znajdujących się na obszarze: xMin(" + okno.szukany.XMin + ")," + " " + "yMin(" + okno.szukany.YMin + "), " + "xMax(" + okno.szukany.XMax + "), " + "yMax(" + okno.szukany.YMax + ")" +
-                            "w okresie czasu od " + okno.poczatek + " do " + okno.koniec + " to " + okno.srednia + ".";
+                             "w okresie czasu od " + okno.poczatek + " do " + okno.koniec + " to " + okno.srednia + ".";
                     }
                     wyniki_pomiarow.Text += " Baza zrealizowała zapytanie dziesięciokrotnie w czasie " + okno.czasBD + " ms., a drzewo RMVB w czasie " + okno.czasRMVB + " ms.";
 
