@@ -138,39 +138,24 @@ namespace UrzadzeniaSImScottplot
             decimal suma = 0;
             int liczba_pomiarow = 0;
 
-            if (poczatek == DateTime.MinValue)
+            List<Wersja> wersje = MVB.szukaj(poczatek, koniec); //tu sie wersje beda powtarzac, chodzi nam o ta ostatnia z kazdego urzadzenia
+            wersje = wersje
+                    .Where(p => ids.Contains(p.UrzadzenieID))
+                    .GroupBy(x => x.UrzadzenieID)
+                    .Select(g => g.MaxBy(x => x.WersjaID))
+                    .OrderBy(w => w.UrzadzenieID)
+                    .ToList();
+
+            foreach (var wersja in wersje)
             {
-                foreach (var urzadzenie in szukane)//moze parallel?
+                foreach (var pomiar in wersja.Pomiary)
                 {
-                    (decimal srednia, int liczba) = MVB.szukaj(urzadzenie.UrzadzenieID, koniec).PobierzSredniaIliczbe();
-                    suma += srednia * liczba;
-                    liczba_pomiarow += liczba;
-                }
-
-
-            }
-            else
-            {
-                List<Wersja> wersje = MVB.szukaj(poczatek, koniec); //tu sie wersje beda powtarzac, chodzi nam o ta ostatnia z kazdego urzadzenia
-                wersje = wersje
-                        .Where(p => ids.Contains(p.UrzadzenieID))
-                        .GroupBy(x => x.UrzadzenieID)
-                        .Select(g => g.MaxBy(x => x.WersjaID))
-                        .OrderBy(w => w.UrzadzenieID)
-                        .ToList();
-
-                foreach (var wersja in wersje)
-                {
-                    foreach (var pomiar in wersja.Pomiary)
+                    if (pomiar.dtpomiaru >= poczatek && pomiar.dtpomiaru < koniec)
                     {
-                        if (pomiar.dtpomiaru >= poczatek && pomiar.dtpomiaru < koniec)
-                        {
-                            suma += pomiar.Wartosc;
-                            liczba_pomiarow++;
-                        }
+                        suma += pomiar.Wartosc;
+                        liczba_pomiarow++;
                     }
                 }
-
             }
 
             if (liczba_pomiarow != 0)
