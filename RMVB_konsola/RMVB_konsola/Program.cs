@@ -102,16 +102,13 @@ foreach (var plik in sciezkiPlikow)
 Urzadzenie testowe = new Urzadzenie(generator.generujWspolrzedne());
 rmvb.dodajUrzadzenie(testowe);
 
-
 Pomiar testowy = new Pomiar(0, DateTime.Now);
 
-Wersja alfa = new Wersja(testowe.UrzadzenieID, rmvb.zwrocRepo(), rmvb);
-
-//alfa.UrzadzenieID = testowe.UrzadzenieID; tak nie może być, bo nie zaciąga z poprzednich wersji pomiarow!
+Wersja alfa = new Wersja(testowe.UrzadzenieID, rmvb.zwrocRepo(), rmvb, testowy.dtpomiaru);
 
 //alfa.dodajPomiar(testowy);
 rmvb.dodajWersje(alfa);
-rmvb.dodajPomiar(testowe.UrzadzenieID, testowy, alfa);
+rmvb.dodajPomiar(testowe.UrzadzenieID, testowy, alfa); //tu modyfikujemy dateostatniej modyfikacji!! *facepalm*
 ///
 
 // Urzadzenie 0v1
@@ -141,7 +138,7 @@ for (int i = 0; i < liczbaUrzadzen; i++)
         Pomiar losowy = new Pomiar(losowaTemp, DateTime.Now);
 
         int id_losowe = rnd.Next(rmvb.zwrocRepo().pobierzUrzadzenia().Count - 1);
-        Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo(), rmvb);
+        Wersja losowa = new Wersja(id_losowe, rmvb.zwrocRepo(), rmvb, losowy.dtpomiaru);
 
         rmvb.dodajWersje(losowa);
         rmvb.dodajPomiar(losowa.UrzadzenieID, losowy, losowa);
@@ -154,7 +151,7 @@ for (int id = 0; id < rmvb.zwrocRepo().pobierzUrzadzenia().Count(); id++)
     Decimal losowaTemp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0)) / 100;
     Pomiar losowyPomiar = new Pomiar(losowaTemp, DateTime.Now);
 
-    Wersja losowaWersja = new Wersja(id, rmvb.zwrocRepo(), rmvb);
+    Wersja losowaWersja = new Wersja(id, rmvb.zwrocRepo(), rmvb, losowyPomiar.dtpomiaru);
 
     rmvb.dodajWersje(losowaWersja);
     rmvb.dodajPomiar(id, losowyPomiar, losowaWersja);
