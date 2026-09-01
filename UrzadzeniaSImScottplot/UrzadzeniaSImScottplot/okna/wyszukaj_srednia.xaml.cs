@@ -378,6 +378,7 @@ namespace UrzadzeniaSImScottplot.okna
             }
         }
 
+
         private void Przeslij3_Click(object sender, RoutedEventArgs e)
         {
             wariant = 2;

@@ -187,17 +187,18 @@ namespace UrzadzeniaSImScottplot
                     TabelaWynikow.AutoGenerateColumns = false;
                     if (okno.wariant == 0)
                     {
-                        wyniki_pomiarow.Text = "Średnia pomiarów urządzeń znajdujących się na obszarze: xMin(" + okno.szukany.XMin + ")," + " " + "yMin(" + okno.szukany.YMin + "), " + "xMax(" + okno.szukany.XMax + "), " + "yMax(" + okno.szukany.YMax + ") to " + okno.srednia.ToString() + ".";
+                        wyniki_pomiarow.Text = "Średnia pomiarów urządzeń znajdujących się na obszarze: xMin(" + okno.szukany.XMin + ")," + " " + "yMin(" + okno.szukany.YMin + "), " + "xMax(" + okno.szukany.XMax + "), " + "yMax(" + okno.szukany.YMax + ")";
                     }
                     else if (okno.wariant == 1)
                     {
-                        wyniki_pomiarow.Text = "Średnia z pomiarów urządzenia o id: " + okno.id.ToString() + " to " + okno.srednia + ".";
+                        wyniki_pomiarow.Text = "Średnia z pomiarów urządzenia o id: " + okno.id.ToString();
                     }
                     else if (okno.wariant == 2) 
                     {
                         wyniki_pomiarow.Text = "Średnia z pomiarów urządzeń znajdujących się na obszarze: xMin(" + okno.szukany.XMin + ")," + " " + "yMin(" + okno.szukany.YMin + "), " + "xMax(" + okno.szukany.XMax + "), " + "yMax(" + okno.szukany.YMax + ")" +
-                             " w okresie czasu od " + okno.poczatek + " do " + okno.koniec + " to " + okno.srednia + ".";
+                             " w okresie czasu od " + okno.poczatek + " do " + okno.koniec;
                     }
+                    wyniki_pomiarow.Text += " wynosi " + Math.Round(okno.srednia, 2) + ".";
                     wyniki_pomiarow.Text += " Baza zrealizowała zapytanie dziesięciokrotnie w czasie " + okno.czasBD + " ms., a drzewo RMVB w czasie " + okno.czasRMVB + " ms.";
 
                 }

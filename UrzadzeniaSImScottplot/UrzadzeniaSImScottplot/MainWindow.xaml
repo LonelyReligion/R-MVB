@@ -32,9 +32,9 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" x:Name="GenerujLosowy" Content="Dodaj urzadzenie"  Height="30" Width="120" VerticalAlignment="Center"  Click="GenerujLosowy_Click"/>
-                <Button Grid.Column="1" x:Name="Dezaktywuj" Content="(Dez)aktywuj urządzenie" Height="30" Width="130" VerticalAlignment="Center"  Click="Dezaktywuj_Click"/>
-                <Button Grid.Column="2" x:Name="GenerujPomiary" Content="Generuj pomiary" Height="30" Width="120" VerticalAlignment="Center" Click="GenerujPomiary_Click"/>
+                <Button Grid.Column="0" x:Name="GenerujLosowy" Content="Dodaj urzadzenia"  Height="30" Width="120" VerticalAlignment="Center"  HorizontalAlignment="Left" Click="GenerujLosowy_Click" Margin="10,0,0,0"/>
+                <Button Grid.Column="1" x:Name="Dezaktywuj" Content="(Dez)aktywuj urządzenie" Height="30" Width="150" VerticalAlignment="Center"  Click="Dezaktywuj_Click"/>
+                <Button Grid.Column="2" x:Name="GenerujPomiary" Content="Generuj pomiary" Height="30" Width="120" VerticalAlignment="Center" HorizontalAlignment="Right" Click="GenerujPomiary_Click" Margin="0,0,10,0"/>
             
             </Grid>
 
@@ -44,8 +44,8 @@
 
             <Grid Grid.Row="2">
                 <Button x:Name="przycisk_wyszukaj_srednia" Click="przycisk_wyszukaj_srednia_Click" Content="Wyszukaj średnią" Height="30" Width="120" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                <Button x:Name="przycisk_wyszukaj_urzadzenia" Content="Wyszukaj urządzenia" Height="30" Width="120" HorizontalAlignment="Center" Click="przycisk_wyszukaj_urzadzenia_Click"/>
-                <Button x:Name="przycisk_wyszukaj_wersje" Content="Wyszukaj wersję/e" Height="30" Width="120" HorizontalAlignment="Right" Margin="0,0,10,0" Click="przycisk_wyszukaj_wersje_Click"/>
+                <Button x:Name="przycisk_wyszukaj_urzadzenia" Content="Wyszukaj urządzenia" Height="30" Width="150" HorizontalAlignment="Center" Click="przycisk_wyszukaj_urzadzenia_Click"/>
+                <Button x:Name="przycisk_wyszukaj_wersje" Content="Wyszukaj wersje" Height="30" Width="120" HorizontalAlignment="Right" Margin="0,0,10,0" Click="przycisk_wyszukaj_wersje_Click"/>
             </Grid>
 
             <Grid Grid.Row="3" Margin="10,0,0,0">
