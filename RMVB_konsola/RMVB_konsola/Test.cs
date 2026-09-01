@@ -134,7 +134,8 @@ namespace RMVB_konsola
                     List<Wersja> z_okresu = ctx.Wersje
                         .Where(w => id_urzadzen.Contains(w.UrzadzenieID))
                         .Where(p => p.dataOstatniejModyfikacji >= poczatek)
-                        .Where(p => p.dataWygasniecia < koniec)
+                        .Where(p => p.dataWygasniecia < koniec ||
+                        (p.dataWygasniecia == DateTime.MaxValue && koniec == DateTime.MaxValue))
                         .GroupBy(w => w.UrzadzenieID) //ale tylko najnowsza wersja urządzenia spełniająca warunek
                         .Select(g => g.OrderByDescending(w => w.WersjaID).FirstOrDefault())
                         .ToList();
