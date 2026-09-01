@@ -69,6 +69,11 @@ namespace RMVB_konsola
             }
         }
 
+        public Wersja(int UrzadzenieID, Repo r, RMVB mvb, DateTime dataOstatniejModyfikacji) : this(UrzadzenieID, r, mvb) 
+        {
+            this.dataOstatniejModyfikacji = dataOstatniejModyfikacji;
+        }
+
         //konstruktor kopiujący
         public Wersja(Wersja w, Repo r, RMVB mvb) : this(r, mvb) {
             this.UrzadzenieID = w.UrzadzenieID;
@@ -123,27 +128,12 @@ namespace RMVB_konsola
             //testowy.WersjeUrzadzenia.Add(this);
             this.Pomiary.Add(testowy);
             dataOstatniejModyfikacji = testowy.dtpomiaru;
-            AktualizujSrednia();
-
         }
 
         public void usunPomiar(Pomiar testowy)
         {
             this.Pomiary.Remove(testowy);
             dataOstatniejModyfikacji = DateTime.Now;
-            AktualizujSrednia();
-        }
-
-        [NotMapped]
-        private decimal _srednia = 0;
-        public void AktualizujSrednia() {
-            if (Pomiary.Any()) {
-                _srednia = Pomiary.Average(p => p.Wartosc);
-            }
-        }
-
-        public (decimal, int) PobierzSredniaIliczbe() { 
-            return (_srednia, Pomiary.Count);
         }
     }
 }
