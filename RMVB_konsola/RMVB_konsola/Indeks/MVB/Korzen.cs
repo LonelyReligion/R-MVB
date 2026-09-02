@@ -524,7 +524,7 @@ namespace RMVB_konsola.Indeks.MVB
             {
                 Wpis wpis = wpisy[i].Item2;
                 //do sprawdzenia
-                if (wpis.minData < poczatek && wpis.maxData < poczatek || wpis.minData >= koniec && wpis.maxData >= koniec)
+                if ((wpis.minData < poczatek && wpis.maxData < poczatek) || (wpis.minData >= koniec && wpis.maxData >= koniec))
                     ;
                 else if (wpis.minData == poczatek && wpis.maxData < koniec)
                     wynikowa.AddRange(wpis.wezel.zwrocUrzadzenia());
@@ -533,8 +533,9 @@ namespace RMVB_konsola.Indeks.MVB
                     var urzadzenia = wpis.wezel.urzadzenia;
                     for (int j = 0; j < urzadzenia.Count(); j++)
                     {
-                        if (urzadzenia[j].Item2.dataOstatniejModyfikacji >= poczatek && urzadzenia[j].Item2.dataWygasniecia < koniec)
-                            wynikowa.Add(urzadzenia[j].Item2);
+                        Wersja rozpatrywana = urzadzenia[j].Item2;
+                        if (rozpatrywana.dataOstatniejModyfikacji >= poczatek && (rozpatrywana.dataWygasniecia < koniec || (rozpatrywana.dataWygasniecia == DateTime.MaxValue && koniec == DateTime.MaxValue)))
+                            wynikowa.Add(rozpatrywana);
                     }
                 }
             }
