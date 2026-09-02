@@ -515,8 +515,8 @@ namespace UrzadzeniaSImScottplot.okna
                             {
                                 if (pomiar.dtpomiaru >= poczatek && pomiar.dtpomiaru < koniec)
                                 {
-                                    suma += wersja.Pomiary.Sum(p => p.Wartosc);
-                                    liczba_pomiarow += wersja.Pomiary.Count;
+                                    suma += pomiar.Wartosc;
+                                    liczba_pomiarow++;
                                 }
                             }
                         }

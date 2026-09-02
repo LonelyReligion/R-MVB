@@ -184,7 +184,9 @@ namespace RMVB_konsola
                 for (int i = 0; i < ileRazy; i++)
                 {
                     if (wyniki_bd[i] != wyniki_rmvb[i]) {
-                        Console.WriteLine("Wyszukiwanie średniej od " + losowe_przedzialy[i].Item1 + " do " + losowe_przedzialy[i].Item2);
+                        (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
+
+                        Console.WriteLine("Wyszukiwanie średniej od " + poczatek + " do " + koniec);
                         Console.WriteLine("Wyniki sie nie zgadzaja " + wyniki_bd[i] + " vs " + wyniki_rmvb[i]); //poprawic zeby ten blad cokolwiek mowil
                         Console.WriteLine("Liczba pomiarow " + liczby_pomiarow_bd[i] + " vs " + liczby_pomiarow_rmvb[i]);
                         Console.WriteLine("Liczba urządzen " + liczby_urzadzen_bd[i] + " vs " + liczby_urzadzen_rmvb[i]);
@@ -202,11 +204,12 @@ namespace RMVB_konsola
                         List<int> id_urzadzen = urzadzenia_w_prostokacie.Select(u => u.UrzadzenieID).ToList();
                         liczby_urzadzen_bd.Add(id_urzadzen.Count);
 
-                        (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
+
                         List<Wersja> z_okresu = ctx.Wersje
                             .Where(w => id_urzadzen.Contains(w.UrzadzenieID))
                             .Where(p => p.dataOstatniejModyfikacji >= poczatek)
-                            .Where(p => p.dataWygasniecia < koniec)
+                            .Where(p => p.dataWygasniecia < koniec ||
+                            (p.dataWygasniecia == DateTime.MaxValue && koniec == DateTime.MaxValue))
                             .GroupBy(w => w.UrzadzenieID) //ale tylko najnowsza wersja urządzenia spełniająca warunek
                             .Select(g => g.OrderByDescending(w => w.WersjaID).FirstOrDefault())
                             .ToList();
@@ -221,8 +224,8 @@ namespace RMVB_konsola
                             {
                                 if (pomiar.dtpomiaru >= poczatek && pomiar.dtpomiaru < koniec)
                                 {
-                                    suma += wersja.Pomiary.Sum(p => p.Wartosc);
-                                    liczba_pomiarow += wersja.Pomiary.Count;
+                                    suma += pomiar.Wartosc;
+                                    liczba_pomiarow++;
                                 }
                             }
                         }
