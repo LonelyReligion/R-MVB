@@ -55,7 +55,8 @@ namespace RMVB_konsola.Indeks.MVB
             Korzen ostatni_korzen = desk.Last().zwrocKorzen();
             if (!ostatni_korzen.dodaj(u))
             {
-                DateTime czas_zmiany = DateTime.Now;
+                DateTime czas_zmiany = u.dataOstatniejModyfikacji; //to jest po czasie pomiaru przeciez!
+
                 desk.Last().ustawKoniec(czas_zmiany);
                 //zczytac zywe
                 List<Wersja> zywe = ostatni_korzen.zwrocZywe();
