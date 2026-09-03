@@ -239,9 +239,16 @@ namespace RMVB_konsola
 
                     Console.WriteLine("Szukanie sredniej z pomiarow z urzadzen znajdujacych sie na obszarze " + "xMin(" + szukane_prostokaty[i].XMin + "), " + "yMin(" + szukane_prostokaty[i].YMin + "), " +
                     "xMax(" + szukane_prostokaty[i].XMax + "), " + "yMax(" + szukane_prostokaty[i].YMax + "), z wersji aktualnych w czasie od " + losowe_przedzialy[i].Item1 + " do " + losowe_przedzialy[i].Item2);
-                    Console.WriteLine("Wynik: " + wyniki_bd[i] + "\n");
+                    Console.WriteLine("Wynik: " + wyniki_bd[i] + "\n");   
                 }
                 Console.WriteLine("Zrealizowano w czasie " + czas_bd + " ms. (bd) " + czas_rmvb + " ms. (rmvb)");
+                if (!blad)
+                {
+                    if (!blad)
+                    {
+                        wyniki.Add("RMVB | wyszukiwanie średniej z pomiarów urządzeń znajdujących się w losowym prostokącie w losowym oknie czasowym | " + czas_bd + " | " + czas_rmvb);
+                    }
+                }
             }
 
             return blad;
@@ -1087,10 +1094,11 @@ namespace RMVB_konsola
                         DateTime end = losowe_przedzialy[i].Item2;
                         rmvb.szukaj(start, end);
                     }
-                    else
-                    {
-                       wyniki.Add("MVB | wyszukiwanie wersji urządzeń aktywnych w losowym oknie czasowym | " + czas_baza + " | " + czas_mvb);
-                    }
+                }
+
+                if (!blad)
+                {
+                    wyniki.Add("MVB | wyszukiwanie wersji urządzeń aktywnych w losowym oknie czasowym | " + czas_baza + " | " + czas_mvb);
                 }
             }
             return blad;
