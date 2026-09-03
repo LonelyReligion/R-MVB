@@ -520,7 +520,8 @@ namespace UrzadzeniaSImScottplot
                 else {
                     var urzadzenia = wpis.wezel.urzadzenia;
                     for (int j = 0; j < urzadzenia.Count(); j++) {
-                        if (urzadzenia[j].Item2.dataOstatniejModyfikacji >= poczatek && (urzadzenia[j].Item2.dataWygasniecia < koniec || (urzadzenia[j].Item2.dataWygasniecia == DateTime.MaxValue && koniec == DateTime.MaxValue)))
+                        Wersja rozpatrywana = urzadzenia[j].Item2;
+                        if (rozpatrywana.dataOstatniejModyfikacji >= poczatek && (rozpatrywana.dataWygasniecia < koniec || (rozpatrywana.dataWygasniecia == DateTime.MaxValue && koniec == DateTime.MaxValue)))
                             wynikowa.Add(urzadzenia[j].Item2);
                     }
                 }
