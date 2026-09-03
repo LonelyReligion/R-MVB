@@ -47,7 +47,7 @@ namespace UrzadzeniaSImScottplot
             Korzen ostatni_korzen = desk.Last().zwrocKorzen();
             if (!ostatni_korzen.dodaj(u))
             {
-                DateTime czas_zmiany = DateTime.Now;
+                DateTime czas_zmiany = u.dataOstatniejModyfikacji;
                 desk.Last().ustawKoniec(czas_zmiany);
                 //zczytac zywe
                 List<Wersja> zywe = ostatni_korzen.zwrocZywe();
