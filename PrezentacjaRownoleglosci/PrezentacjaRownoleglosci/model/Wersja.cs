@@ -68,6 +68,11 @@ namespace Symulacja_strumieni.model
             }
         }
 
+        public Wersja(int UrzadzenieID, Repo r, RMVB mvb, DateTime dataOstatniejModyfikacji) : this(UrzadzenieID, r, mvb)
+        {
+            this.dataOstatniejModyfikacji = dataOstatniejModyfikacji;
+        }
+
         //konstruktor kopiujący
         public Wersja(Wersja w, Repo r, RMVB mvb) : this(r, mvb) {
             this.UrzadzenieID = w.UrzadzenieID;

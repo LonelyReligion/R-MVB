@@ -82,6 +82,11 @@ namespace UrzadzeniaSImScottplot
             }
         }
 
+        public Wersja(int UrzadzenieID, Repo r, RMVB mvb, DateTime dataOstatniejModyfikacji) : this(UrzadzenieID, r, mvb)
+        {
+            this.dataOstatniejModyfikacji = dataOstatniejModyfikacji;
+        }
+
         //konstruktor kopiujący
         public Wersja(Wersja w, Repo r, RMVB rmvb) : this(r, rmvb) {
             this.UrzadzenieID = w.UrzadzenieID;

@@ -216,7 +216,7 @@ namespace UrzadzeniaSImScottplot
             if (okno.sukces) {
                 
                 foreach (var (id,pomiar) in okno.wygenerowane) {
-                    Wersja nowa = new Wersja(id, _repozytorium, _rmvb);
+                    Wersja nowa = new Wersja(id, _repozytorium, _rmvb, pomiar.dtpomiaru);
                     _rmvb.dodajWersje(nowa);
                     _rmvb.dodajPomiar(id, pomiar, nowa);
                 }

@@ -162,7 +162,7 @@ namespace Symulacja_strumieni.rmvb
                     {
                         (int id, Pomiar pomiar) = ((int, Pomiar))last;
                         Console.WriteLine("Odebrano pomiar " + pomiar.Wartosc + " st. C przypisany do Urzadzenia o id " + id + ".");
-                        Wersja wersja = new Wersja(id, repo, this);
+                        Wersja wersja = new Wersja(id, repo, this, pomiar.dtpomiaru);
                         this.dodajWersje(wersja);
                         this.dodajPomiar(id, pomiar, wersja);
                     }
