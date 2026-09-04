@@ -23,7 +23,7 @@ namespace RMVB_konsola
         public static Generatory generator;
         public static Test instancja;
 
-        private static List<string> wyniki;
+        private static string wyniki;
         private static List<string> bledy;
 
         internal Stopwatch sw;
@@ -41,11 +41,11 @@ namespace RMVB_konsola
         }
 
         public bool wykonajTesty(int ileRazy) {
-            wyniki = new List<string>();
             bledy = new List<string>();
 
-            wyniki.Add("Liczba powtórzeń każdego zapytania: " + ileRazy);
-            wyniki.Add("Drzewo realizujące zapytanie | Rodzaj zapytania | Czas wykonania w bazie (ms.) | Czas wykonania za pomocą drzewa (ms.)");
+            wyniki += "Liczba powtórzeń każdego zapytania:," + ileRazy + "\n" ;
+            wyniki += ",,Czas wykonania\n";
+            wyniki += "Komponent odpowiedzielny za zapytanie,Rodzaj zapytania, BD (ms.), RMVB (ms.)\n";
             
             bool blad = false;
             
@@ -244,10 +244,7 @@ namespace RMVB_konsola
                 Console.WriteLine("Zrealizowano w czasie " + czas_bd + " ms. (bd) " + czas_rmvb + " ms. (rmvb)");
                 if (!blad)
                 {
-                    if (!blad)
-                    {
-                        wyniki.Add("RMVB | wyszukiwanie średniej z pomiarów urządzeń znajdujących się w losowym prostokącie w losowym oknie czasowym | " + czas_bd + " | " + czas_rmvb);
-                    }
+                    wyniki+="RMVB,wyszukiwanie średniej z pomiarów urządzeń znajdujących się w losowym prostokącie w losowym oknie czasowym," + czas_bd + "," + czas_rmvb +"\n";
                 }
             }
 
@@ -440,7 +437,7 @@ namespace RMVB_konsola
             if (!blad)
             {
                 Console.WriteLine("CZASY:    Recznie: " + wynik + " vs " + "RMVB: " + wynik3);
-                wyniki.Add("R | wyszukuje agregaty powierzchniowe losowego prostokata | " + wynik + " | " + wynik3);
+                wyniki += "R,wyszukuje agregaty powierzchniowe losowego prostokata," + wynik + "," + wynik3 + "\n";
             }
 
             return blad;
@@ -551,7 +548,7 @@ namespace RMVB_konsola
                 Console.WriteLine("**********************************");
             }
             Console.WriteLine("CZASY: Baza: " + czasBD + " vs " + "Rtree: " + czas);
-            wyniki.Add("R | wyszukuje agregat czasowy losowego urządzenia | " + czasBD + " | " + czas);
+            wyniki += "R,wyszukuje agregat czasowy losowego urządzenia," + czasBD + "," + czas + "\n";
             return blad;
 
         }
@@ -650,7 +647,7 @@ namespace RMVB_konsola
             }
 
             Console.WriteLine("RMVB: " + wynik3 + " vs " + "Recznie: " + wynik);
-            wyniki.Add("R | wyszukuje urzadzenia znajdujace sie w losowym prostokacie |" + wynik +  " | " + wynik3);
+            wyniki+="R,wyszukuje urzadzenia znajdujace sie w losowym prostokacie," + wynik +  "," + wynik3+"\n";
             return blad;
         }
 
@@ -717,7 +714,7 @@ namespace RMVB_konsola
                 if (!blad)
                 {
                     Console.WriteLine("MVB w czasie: " + czas_mvb + "ms.");
-                    wyniki.Add("MVB | wyszukiwanie losowego urządzenia po dacie i id | " + czas_baza + " | " + czas_mvb);
+                    wyniki+="MVB,wyszukiwanie losowego urządzenia po dacie i id," + czas_baza + "," + czas_mvb+"\n";
                 }
                 else
                 {
@@ -857,7 +854,7 @@ namespace RMVB_konsola
             if (!blad_mvb)
             {
                 Console.WriteLine("MVB w czasie: " + czas_mvb + " ms.");
-                wyniki.Add("MVB | wyszukiwanie ostatniej wersji po id | " + czas_baza + " | " + czas_mvb );
+                wyniki+="MVB,wyszukiwanie ostatniej wersji po id," + czas_baza + "," + czas_mvb +"\n";
             }
 
             if (blad_baza || blad_mvb)
@@ -931,7 +928,7 @@ namespace RMVB_konsola
             if (!blad)
             {
                 Console.WriteLine("CZAS WYKONANIA: baza: " + czas_baza + " rmvb: " + czas_mvb);
-                wyniki.Add("MVB | wyszukiwanie losowych urządzeń po id i wersji | " + czas_baza + " | " + czas_mvb);
+                wyniki+="MVB,wyszukiwanie losowych urządzeń po id i wersji," + czas_baza + "," + czas_mvb+"\n";
             }
             else {
                 bledy.Add("Działanie testów zakończyło się na wyszukiwaniu wersji urządzenia o określonym id oraz numerze wersji. Kolejne testy nie zostały wykonane, poprzednie zostały zrealizowane pomyślnie. ");
@@ -1098,7 +1095,7 @@ namespace RMVB_konsola
 
                 if (!blad)
                 {
-                    wyniki.Add("MVB | wyszukiwanie wersji urządzeń aktywnych w losowym oknie czasowym | " + czas_baza + " | " + czas_mvb);
+                    wyniki+="MVB,wyszukiwanie wersji urządzeń aktywnych w losowym oknie czasowym," + czas_baza + "," + czas_mvb + "\n";
                 }
             }
             return blad;
@@ -1106,10 +1103,9 @@ namespace RMVB_konsola
 
         internal void zapiszWyniki(string v)
         {
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "Testy.txt")))
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "Testy.csv"), false, Encoding.UTF8))
             {
-                foreach (string linijka in wyniki)
-                    outputFile.WriteLine(linijka);
+                outputFile.WriteLine(wyniki);
             }
         }
 
