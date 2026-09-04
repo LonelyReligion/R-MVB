@@ -160,7 +160,7 @@ namespace RMVB_konsola
                         srednia = suma / liczba_pomiarow;
                     
 
-                    wyniki_bd.Add(srednia);
+                    wyniki_bd.Add(Math.Round(srednia,4));
                     liczby_pomiarow_bd.Add((int)liczba_pomiarow);
                 }
                 long czas_bd = sw.ElapsedMilliseconds;
@@ -175,7 +175,7 @@ namespace RMVB_konsola
                     (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
                     (int liczba_urzadzen, int liczba_pomiarow, decimal srednia) = rmvb.zwrocLiczbeUrzadzenPomiarowSrednia(szukane_prostokaty[i], poczatek, koniec);
                     
-                    wyniki_rmvb.Add(srednia);
+                    wyniki_rmvb.Add(Math.Round(srednia,4));
                     liczby_pomiarow_rmvb.Add(liczba_pomiarow);
                     liczby_urzadzen_rmvb.Add(liczba_urzadzen);
                 }

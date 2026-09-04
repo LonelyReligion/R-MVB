@@ -155,7 +155,7 @@ namespace RMVB_konsola
         }
 
         public Pomiar generujLosowyPomiar() {
-            Decimal temp = (Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0);
+            Decimal temp = Math.Truncate((Decimal)(rnd.NextDouble() * (41.0 - (-41.0)) - 41.0) * 100) / 100;
             Pomiar testowy = new Pomiar(temp, DateTime.Now);
             return testowy;
         }
