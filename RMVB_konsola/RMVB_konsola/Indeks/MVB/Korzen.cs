@@ -150,7 +150,7 @@ namespace RMVB_konsola.Indeks.MVB
             {
                 if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
                 { //kopiujemy zywe
-                    Wersja kopia = new Wersja(urzadzenie, repo, rmvb);
+                    Wersja kopia = new Wersja(urzadzenie, rmvb);
                     DateTime dt = DateTime.Now;
 
 
@@ -207,7 +207,7 @@ namespace RMVB_konsola.Indeks.MVB
                             if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
                             {
                                 //kopiujemy zywe
-                                Wersja kopia = new Wersja(urzadzenie, repo, rmvb);
+                                Wersja kopia = new Wersja(urzadzenie, rmvb);
 
                                 DateTime dt = DateTime.Now;
 
@@ -353,7 +353,7 @@ namespace RMVB_konsola.Indeks.MVB
                 {
                     if (urzadzenie.dataWygasniecia == DateTime.MaxValue)
                     { //kopiujemy zywe
-                        Wersja kopia = new Wersja(urzadzenie, repo, rmvb);
+                        Wersja kopia = new Wersja(urzadzenie, rmvb);
 
                         DateTime dt = DateTime.Now;
                         using (var ctx = new Kontekst())

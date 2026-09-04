@@ -77,7 +77,6 @@ using (var ctx = new Kontekst())
 }
 
 //
-Random rnd = new Random();
 RMVB rmvb = new RMVB();
 Generatory generator = new Generatory(rmvb.zwrocRepo());
 

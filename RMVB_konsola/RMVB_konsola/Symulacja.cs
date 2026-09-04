@@ -32,13 +32,14 @@ namespace RMVB_konsola
                 for (int j = 0; j < liczba_pomiarow; j++) 
                 {
                     Pomiar pomiar = _generator.generujLosowyPomiar();
-                    Wersja wersja = new Wersja(urzadzenie.UrzadzenieID, _rmvb.zwrocRepo(), _rmvb, pomiar.dtpomiaru);
+                    Wersja wersja = new Wersja(urzadzenie.UrzadzenieID, _rmvb, pomiar.dtpomiaru);
 
                     _rmvb.dodajWersje(wersja);
                     _rmvb.dodajPomiar(urzadzenie.UrzadzenieID, pomiar, wersja);
                 }
             }
 
+            Console.WriteLine("Zakonczono generowanie danych");
         }
 
     }

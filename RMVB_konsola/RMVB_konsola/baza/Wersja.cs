@@ -36,24 +36,24 @@ namespace RMVB_konsola
             dataWygasniecia = DateTime.MaxValue;
             Aktywne = true;
         }
-        public Wersja(Repo r, RMVB mvb) : this()
+        public Wersja(RMVB mvb) : this()
         {
-            _repo = r;
+            _repo = mvb.zwrocRepo();
             _rmvb = mvb;
         }
 
-        public Wersja(int UrzadzenieID, Repo r, RMVB mvb) : this(r, mvb)
+        public Wersja(int UrzadzenieID, RMVB mvb) : this(mvb)
         {
             this.UrzadzenieID = UrzadzenieID;
-            if (r.czyUrzadzenieIstnieje(UrzadzenieID) && r.zwroc_urzadzenie_wersje()[UrzadzenieID].Count() != 0)
+            if (_repo.czyUrzadzenieIstnieje(UrzadzenieID) && _repo.zwroc_urzadzenie_wersje()[UrzadzenieID].Count() != 0)
             {
                 Wersja w;
                 using (var ctx = new Kontekst())
                 {
-                    int id_wersji = r.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
+                    int id_wersji = _repo.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
                     w = ctx.Wersje.Include(x => x.Pomiary).First(x => x.UrzadzenieID == UrzadzenieID && x.WersjaID == id_wersji);
 
-                    r.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
+                    _repo.zwroc_urzadzenie_wersje()[UrzadzenieID].Last();
 
                     foreach (var element in w.Pomiary)
                         this.Pomiary.Add(element);
@@ -64,18 +64,18 @@ namespace RMVB_konsola
 
                     dataWygasniecia = DateTime.MaxValue;
 
-                    ustalWersje(this.UrzadzenieID, r);
+                    ustalWersje(this.UrzadzenieID, _repo);
                 }
             }
         }
 
-        public Wersja(int UrzadzenieID, Repo r, RMVB mvb, DateTime dataOstatniejModyfikacji) : this(UrzadzenieID, r, mvb) 
+        public Wersja(int UrzadzenieID, RMVB mvb, DateTime dataOstatniejModyfikacji) : this(UrzadzenieID, mvb) 
         {
             this.dataOstatniejModyfikacji = dataOstatniejModyfikacji;
         }
 
         //konstruktor kopiujący
-        public Wersja(Wersja w, Repo r, RMVB mvb) : this(r, mvb) {
+        public Wersja(Wersja w,RMVB mvb) : this(mvb) {
             this.UrzadzenieID = w.UrzadzenieID;
             
             ustalWersje(this.UrzadzenieID, _repo);

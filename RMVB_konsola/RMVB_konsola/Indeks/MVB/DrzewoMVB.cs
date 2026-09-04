@@ -74,7 +74,7 @@ namespace RMVB_konsola.Indeks.MVB
                     DateTime teraz = DateTime.Now;
                     w.dezaktywuj(teraz);
 
-                    Wersja kopia = new Wersja(w.UrzadzenieID, Repo, rmvb);
+                    Wersja kopia = new Wersja(w.UrzadzenieID, rmvb);
                     kopia.dataOstatniejModyfikacji = czas_zmiany;
                     Repo.saveVersion(kopia);
                     do_dodania.Add(kopia);
