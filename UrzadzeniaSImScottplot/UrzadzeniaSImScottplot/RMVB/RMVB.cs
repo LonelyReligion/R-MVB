@@ -31,21 +31,16 @@ namespace UrzadzeniaSImScottplot
         //dodaj
         internal void dodajUrzadzenie(Urzadzenie u)
         {
-            repo.saveDevice(u);
             R.dodajUrzadzenie(u);
         }
 
         internal void dodajWersje(Wersja w)
         {
-            repo.saveVersion(w);
             MVB.dodajUrzadzenie(w);
         }
 
-        internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
+        internal void dodajPomiar(int UrzadzenieID, Pomiar p)
         {
-            alfa.dodajPomiar(p);
-            repo.saveMeasurement(UrzadzenieID, p, alfa);
-
             R.dodajPomiar(UrzadzenieID, p);
         }
 
@@ -53,7 +48,6 @@ namespace UrzadzeniaSImScottplot
         internal void usunWersje(Wersja w)
         {
             MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
-            repo.modifyVersion(w);
         }
 
         //szukaj
@@ -111,19 +105,13 @@ namespace UrzadzeniaSImScottplot
             R.obliczAgregaty(); //po co to jest??
         }
 
-        internal void zapiszMVB(string v)
+        internal List<string> drukujDrzewo()
         {
-            List<string> linijki = MVB.drukujDrzewo();
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "MVB.txt")))
-            {
-                foreach (string linijka in linijki)
-                    outputFile.WriteLine(linijka);
-            }
+            return MVB.drukujDrzewo();
         }
 
         public void Reset()
         {
-            repo.Reset();
             MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
         }

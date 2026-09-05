@@ -15,8 +15,9 @@ namespace UrzadzeniaSImScottplot
     {
 
         private Repo _repozytorium;
-        private Generatory _generator; 
-        private RMVB _rmvb = new RMVB();
+        private Generatory _generator;
+        private Pamiec _pamiec = new Pamiec();
+        private RMVB _rmvb;
         public void InicjujKontrolki() {
             using (var ctx = new Kontekst())
             {
@@ -84,6 +85,7 @@ namespace UrzadzeniaSImScottplot
 
         public MainWindow()
         {
+            _rmvb = _pamiec.zwrocRMVB();
             _repozytorium = _rmvb.zwrocRepo();
             _generator = new Generatory(_repozytorium);
             _repozytorium.InicjujBazeDanych();
@@ -97,7 +99,7 @@ namespace UrzadzeniaSImScottplot
         }
         private void GenerujLosowy_Click(object sender, RoutedEventArgs e)
         {
-            DodajUrzadzenia okno_generowania = new DodajUrzadzenia(_repozytorium);
+            DodajUrzadzenia okno_generowania = new DodajUrzadzenia(_pamiec);
             okno_generowania.ShowDialog();
 
             if (okno_generowania.sukces)
@@ -106,9 +108,9 @@ namespace UrzadzeniaSImScottplot
                     var dlugosc = u.Dlugosc;
                     var szerokosc = u.Szerokosc;
 
-                    _rmvb.dodajUrzadzenie(u); //dodaje tez do bazy
+                    _pamiec.dodajUrzadzenie(u); //dodaje tez do bazy
                     Wersja pierwsza = new Wersja(u.UrzadzenieID, _repozytorium, _rmvb);
-                    _rmvb.dodajWersje(pierwsza);
+                    _pamiec.dodajWersje(pierwsza);
 
                     double dlugosc_w_systemie_dziesietnym = do_dziesietnego(dlugosc);
                     double szerokosc_w_systemie_dziesietnym = do_dziesietnego(szerokosc);
@@ -217,8 +219,8 @@ namespace UrzadzeniaSImScottplot
                 
                 foreach (var (id,pomiar) in okno.wygenerowane) {
                     Wersja nowa = new Wersja(id, _repozytorium, _rmvb, pomiar.dtpomiaru);
-                    _rmvb.dodajWersje(nowa);
-                    _rmvb.dodajPomiar(id, pomiar, nowa);
+                    _pamiec.dodajWersje(nowa);
+                    _pamiec.dodajPomiar(id, pomiar, nowa);
                 }
                 AktualizujSiatkeUrzadzen();
             }

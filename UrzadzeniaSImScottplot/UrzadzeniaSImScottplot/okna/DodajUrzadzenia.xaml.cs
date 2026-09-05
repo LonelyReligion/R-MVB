@@ -25,13 +25,13 @@ namespace UrzadzeniaSImScottplot.okna
         public bool sukces = false;
         public List<Urzadzenie> wygenerowane = new List<Urzadzenie>();
         private Generatory _generator;
-        private Repo _repo;
-        public DodajUrzadzenia(Repo repo)
+        private Pamiec _pamiec;
+        public DodajUrzadzenia(Pamiec pamiec)
         {
             DataContext = this;
             InitializeComponent();
-            _repo = repo;
-            _generator = new Generatory(_repo);
+            _pamiec = pamiec;
+            _generator = new Generatory(_pamiec.zwrocRepo());
         }
 
         private void Anuluj_Click(object sender, RoutedEventArgs e)
