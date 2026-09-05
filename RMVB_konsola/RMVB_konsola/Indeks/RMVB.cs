@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using RMVB_konsola.baza;
 using RMVB_konsola.Indeks.MVB;
 using RMVB_konsola.Indeks.R;
 using System;
@@ -25,37 +26,20 @@ namespace RMVB_konsola.Indeks
         internal Repo zwrocRepo() { return repo; }
         internal bool czyUrzadzenieIstnieje(int id) { return repo.czyUrzadzenieIstnieje(id); }
         internal DrzewoMVB zwrocMVB() { return MVB; }
-        internal void wypiszMVB()
-        {
-            foreach (string linijka in MVB.drukujDrzewo())
-                Console.WriteLine(linijka);
-        }
+
         //dodaj
         internal void dodajUrzadzenie(Urzadzenie u)
         {
-            repo.saveDevice(u);
             R.dodajUrzadzenie(u);
         }
 
         internal void dodajWersje(Wersja w)
         {
-            repo.saveVersion(w);
             MVB.dodajUrzadzenie(w);
         }
 
-        internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
+        internal void dodajPomiar(int UrzadzenieID, Pomiar p)
         {
-            alfa.dodajPomiar(p);
-            using (var ctx = new Kontekst())
-            {
-                ctx.Wersje.Attach(alfa);
-                ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
-                ctx.Entry(alfa).State = EntityState.Modified;
-
-                ctx.Pomiary.Add(p);
-                ctx.SaveChanges();
-            }
-
             R.dodajPomiar(UrzadzenieID, p);
         }
 
@@ -63,7 +47,6 @@ namespace RMVB_konsola.Indeks
         internal void usunWersje(Wersja w)
         {
             MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
-            repo.modifyVersion(w);
         }
 
         //szukaj
@@ -155,19 +138,13 @@ namespace RMVB_konsola.Indeks
                 return (liczba_urzadzen, 0, 0);
         }
 
-        internal void zapiszMVB(string v)
+        public List<string> drukujDrzewo() 
         {
-            List<string> linijki = MVB.drukujDrzewo();
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "MVB.txt")))
-            {
-                foreach (string linijka in linijki)
-                    outputFile.WriteLine(linijka);
-            }
+            return MVB.drukujDrzewo();
         }
 
         public void Reset()
         {
-            repo.Reset();
             MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
         }

@@ -77,7 +77,8 @@ using (var ctx = new Kontekst())
 }
 
 //
-RMVB rmvb = new RMVB();
+Pamiec pamiec = new Pamiec();
+RMVB rmvb = pamiec.zwrocRMVB();
 Generatory generator = new Generatory(rmvb.zwrocRepo());
 
 Test.repo = rmvb.zwrocRepo();
@@ -85,7 +86,7 @@ Test.rmvb = rmvb;
 Test.generator = generator;
 
 Urzadzenie.repo = rmvb.zwrocRepo();
-Symulacja sym = new Symulacja(liczbaUrzadzen,rmvb,generator);
+Symulacja sym = new Symulacja(liczbaUrzadzen,pamiec,generator);
 //
 
 Console.WriteLine("Uwaga, wszystkie pliki znajdujące się w folderze " + sciezkaFolderuWyjsciowego + " zostaną trwale usunięte.");
@@ -99,7 +100,7 @@ foreach (var plik in sciezkiPlikow)
 sym.Symuluj();
 
 
-rmvb.wypiszMVB();
+pamiec.wypiszMVB();
 
 Test jednostka_testujaca = Test.pobierzInstancje();
 if (jednostka_testujaca.wykonajTesty(100))
@@ -114,7 +115,7 @@ else
     jednostka_testujaca.zapiszWyniki(sciezkaFolderuWyjsciowego); //osobne logowanie błędów do innego pliku wyżej powinno nastąpić
 }
 
-rmvb.Reset();
-rmvb.zapiszMVB(sciezkaFolderuWyjsciowego);
+pamiec.Reset();
+pamiec.zapiszMVB(sciezkaFolderuWyjsciowego);
 
 return 0;

@@ -12,6 +12,7 @@ using System.Diagnostics.Metrics;
 using System.Diagnostics.Eventing.Reader;
 using RMVB_konsola.Indeks;
 using RMVB_konsola.Indeks.R;
+using RMVB_konsola.baza;
 
 //singleton, test bedzie wykonywany jednowatkowo stąd brak dodatkowego zabezpieczenia
 namespace RMVB_konsola

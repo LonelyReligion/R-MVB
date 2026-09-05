@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using RMVB_konsola.Indeks;
+using RMVB_konsola.baza;
 
 namespace RMVB_konsola
 {

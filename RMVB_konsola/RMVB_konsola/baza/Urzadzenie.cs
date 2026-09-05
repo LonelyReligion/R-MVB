@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 
 using RMVB_konsola.Indeks.MVB;
-using RMVB_konsola;
 using System.Diagnostics.CodeAnalysis;
 using RMVB_konsola.Indeks.R;
+using RMVB_konsola.baza;
 
 namespace RMVB_konsola
 {

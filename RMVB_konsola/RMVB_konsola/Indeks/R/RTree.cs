@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using RMVB_konsola.baza;
 using RMVB_konsola.R;
 
 namespace RMVB_konsola.Indeks.R
