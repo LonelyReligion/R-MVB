@@ -9,7 +9,7 @@ using System.Data.Entity;
 using RMVB_konsola.Indeks;
 using RMVB_konsola.baza;
 
-namespace RMVB_konsola
+namespace RMVB_konsola.baza
 {
     public class Wersja
     {

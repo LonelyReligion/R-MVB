@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace UrzadzeniaSImScottplot
+namespace UrzadzeniaSImScottplot.baza
 {
     public class Pomiar
     {

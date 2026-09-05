@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Windows;
 using UrzadzeniaSImScottplot.kontrolki;
+using UrzadzeniaSImScottplot.baza;
 
 namespace UrzadzeniaSImScottplot.okna
 {

@@ -2,12 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using System;
 using Symulacja_strumieni.rmvb.mvb;
-using Symulacja_strumieni;
 using System.Diagnostics.CodeAnalysis;
 using Symulacja_strumieni.rmvb.r;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using PrezentacjaRownoleglosci.baza;
 
 namespace Symulacja_strumieni.model
 {

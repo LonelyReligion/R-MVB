@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using UrzadzeniaSImScottplot.okna;
 using UrzadzeniaSImScottplot.narzedzia;
-using UrzadzeniaSImScottplot.repo;
+using UrzadzeniaSImScottplot.baza;
 
 namespace UrzadzeniaSImScottplot
 {

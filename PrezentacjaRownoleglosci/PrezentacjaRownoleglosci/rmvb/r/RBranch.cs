@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using Symulacja_strumieni.model;
+using PrezentacjaRownoleglosci.baza;
 
 namespace Symulacja_strumieni.rmvb.r
 {

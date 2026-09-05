@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using Symulacja_strumieni.rmvb;
+using PrezentacjaRownoleglosci.baza;
 
 namespace Symulacja_strumieni.model
 {

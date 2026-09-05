@@ -1,4 +1,4 @@
-﻿using UrzadzeniaSImScottplot.repo;
+﻿using UrzadzeniaSImScottplot.baza;
 
 namespace UrzadzeniaSImScottplot.narzedzia
 {

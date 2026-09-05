@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace RMVB_konsola
+namespace RMVB_konsola.baza
 {
     public class Pomiar
     {

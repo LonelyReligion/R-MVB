@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RMVB_konsola.baza;
 
 namespace RMVB_konsola
 {

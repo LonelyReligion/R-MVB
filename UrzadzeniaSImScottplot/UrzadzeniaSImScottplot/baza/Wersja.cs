@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using UrzadzeniaSImScottplot.repo;
+using UrzadzeniaSImScottplot.baza;
 
-namespace UrzadzeniaSImScottplot
+namespace UrzadzeniaSImScottplot.baza
 {
     public class Wersja
     {

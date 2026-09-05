@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
+using UrzadzeniaSImScottplot.baza;
 
 namespace UrzadzeniaSImScottplot.okna
 {

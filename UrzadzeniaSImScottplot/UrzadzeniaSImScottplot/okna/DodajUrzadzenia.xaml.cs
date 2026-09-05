@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using UrzadzeniaSImScottplot.narzedzia;
-using UrzadzeniaSImScottplot.repo;
+using UrzadzeniaSImScottplot.baza;
 
 namespace UrzadzeniaSImScottplot.okna
 {

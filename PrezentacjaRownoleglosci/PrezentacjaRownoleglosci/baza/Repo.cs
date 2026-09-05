@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Symulacja_strumieni.model;
+using Symulacja_strumieni;
 
-namespace Symulacja_strumieni
+namespace PrezentacjaRownoleglosci.baza
 {
     public class Repo
     {
@@ -20,9 +21,10 @@ namespace Symulacja_strumieni
         //do zwrocenia wszystkich
         private List<Wersja> wersje = new List<Wersja>();
 
-        internal Dictionary<int, List<int>>  zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
+        internal Dictionary<int, List<int>> zwroc_urzadzenie_wersje() { return urzadzenia_wersje; }
 
-        public void saveDevice(Urzadzenie device) {
+        public void saveDevice(Urzadzenie device)
+        {
 
             using (var ctx = new Kontekst())
             {
@@ -33,7 +35,8 @@ namespace Symulacja_strumieni
             }
         }
 
-        public void saveVersion(Wersja v) {
+        public void saveVersion(Wersja v)
+        {
 
             using (var ctx = new Kontekst())
             {
@@ -50,7 +53,7 @@ namespace Symulacja_strumieni
             }
 
             urzadzenia_wersje[v.UrzadzenieID].Add(v.WersjaID);
-            this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
+            pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
         }
 
         public void modifyVersion(Wersja v)
@@ -77,32 +80,37 @@ namespace Symulacja_strumieni
             }
 
             urzadzenia_wersje[v.UrzadzenieID].Add(v.WersjaID);
-            this.pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
+            pobierzUrzadzenia()[v.UrzadzenieID].Wersje.Add(v);
         }
 
-        public bool czyUrzadzenieIstnieje(int UrzadzenieID) {
+        public bool czyUrzadzenieIstnieje(int UrzadzenieID)
+        {
             return urzadzenia.ContainsKey(UrzadzenieID);
         }
 
-        public bool czyWersjaIstnieje(int UrzadzenieID, int WersjaID) {
+        public bool czyWersjaIstnieje(int UrzadzenieID, int WersjaID)
+        {
             if (!urzadzenia.ContainsKey(UrzadzenieID))
                 return false;
-            else 
-                foreach (int w in urzadzenia_wersje[UrzadzenieID]) 
-                    if(w == WersjaID)
-                        return  true;
+            else
+                foreach (int w in urzadzenia_wersje[UrzadzenieID])
+                    if (w == WersjaID)
+                        return true;
             return false;
         }
 
-        public Dictionary<int, Urzadzenie> pobierzUrzadzenia() {
+        public Dictionary<int, Urzadzenie> pobierzUrzadzenia()
+        {
             return urzadzenia;
         }
 
-        public List<Wersja> pobierzWersje() {
+        public List<Wersja> pobierzWersje()
+        {
             return wersje;
         }
 
-        public void Reset() {
+        public void Reset()
+        {
             urzadzenia_wersje = new Dictionary<int, List<int>>();
             urzadzenia = new Dictionary<int, Urzadzenie>();
             wersje = new List<Wersja>();

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.Data.Entity;
+using PrezentacjaRownoleglosci.baza;
 
 namespace Symulacja_strumieni.rmvb
 {

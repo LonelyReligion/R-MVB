@@ -9,7 +9,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using UrzadzeniaSImScottplot.repo;
+using UrzadzeniaSImScottplot.baza;
 
 namespace UrzadzeniaSImScottplot
 {

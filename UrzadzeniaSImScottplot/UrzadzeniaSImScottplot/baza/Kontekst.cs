@@ -1,7 +1,7 @@
 ﻿/*using RMVB_konsola.R;*/
 using System.Data.Entity;
 
-namespace UrzadzeniaSImScottplot
+namespace UrzadzeniaSImScottplot.baza
 {
     public class Kontekst : DbContext
     {

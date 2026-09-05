@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using UrzadzeniaSImScottplot.repo;
+using UrzadzeniaSImScottplot.baza;
 
 
 namespace UrzadzeniaSImScottplot

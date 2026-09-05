@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PrezentacjaRownoleglosci.baza;
 using Symulacja_strumieni.model;
 
 namespace Symulacja_strumieni.rmvb.mvb

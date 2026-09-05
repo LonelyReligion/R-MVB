@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
+using PrezentacjaRownoleglosci.baza;
 using Symulacja_strumieni.model;
 
 namespace Symulacja_strumieni.rmvb.r

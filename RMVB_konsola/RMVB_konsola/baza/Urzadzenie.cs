@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using RMVB_konsola.Indeks.R;
 using RMVB_konsola.baza;
 
-namespace RMVB_konsola
+namespace RMVB_konsola.baza
 {
     public class Urzadzenie
     {

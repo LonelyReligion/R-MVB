@@ -12,6 +12,7 @@ using RMVB_konsola.Indeks.MVB;
 using RMVB_konsola.Indeks;
 using System.Drawing;
 using Rectangle = RMVB_konsola.Indeks.R.Rectangle;
+using RMVB_konsola.baza;
 
 //Setup
 string sciezkaFolderuWyjsciowego;
