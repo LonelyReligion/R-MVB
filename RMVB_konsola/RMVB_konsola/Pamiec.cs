@@ -8,6 +8,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CsvHelper;
+using System.Globalization;
 
 namespace RMVB_konsola
 {
@@ -68,6 +70,46 @@ namespace RMVB_konsola
                 foreach (string linijka in linijki)
                     outputFile.WriteLine(linijka);
             }
+        }
+
+        internal void zapiszEncje(string v) 
+        {
+            using (var ctx = new Kontekst())
+            {
+                ctx.Configuration.AutoDetectChangesEnabled = false;
+                ctx.Configuration.LazyLoadingEnabled = false;
+                ctx.Configuration.ProxyCreationEnabled = false;
+                ctx.Configuration.ValidateOnSaveEnabled = false;
+            }
+            zapiszUrzadzenia(v);
+        }
+
+        internal void zapiszUrzadzenia(string v) {
+            using (var ctx = new Kontekst())
+            {
+                List<Urzadzenie> urzadzenia = ctx.Urzadzenia.ToList();
+
+                using (var writer = new StreamWriter(Path.Combine(v, "Urzadzenia.csv")))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    csv.WriteRecords(urzadzenia);
+                }
+            }
+        }
+
+        internal void zapiszWersje()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void zapiszPomiary()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void zapiszSrednieUrzadzen()
+        {
+            throw new NotImplementedException();
         }
 
         public void Reset()

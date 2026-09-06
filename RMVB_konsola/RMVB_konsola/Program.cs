@@ -118,5 +118,6 @@ else
 
 pamiec.Reset();
 pamiec.zapiszMVB(sciezkaFolderuWyjsciowego);
+pamiec.zapiszEncje(sciezkaFolderuWyjsciowego);
 
 return 0;
