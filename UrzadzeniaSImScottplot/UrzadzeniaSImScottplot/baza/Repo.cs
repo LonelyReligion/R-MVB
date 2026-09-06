@@ -29,7 +29,7 @@ namespace UrzadzeniaSImScottplot.baza
             urzadzenia.Add(device.UrzadzenieID, device);
         }
 
-        public void saveMeasurement(int UrzadzenieID, Pomiar p, Wersja alfa) {
+        public void saveMeasurement(Pomiar p, Wersja alfa) {
             using (var ctx = new Kontekst())
             {
                 ctx.Wersje.Attach(alfa);

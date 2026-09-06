@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UrzadzeniaSImScottplot.baza;
 
-namespace UrzadzeniaSImScottplot.baza
+namespace UrzadzeniaSImScottplot
 {
     public class Pamiec
     {
@@ -47,7 +48,7 @@ namespace UrzadzeniaSImScottplot.baza
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
         {
             alfa.dodajPomiar(p);
-            _repo.saveMeasurement(UrzadzenieID, p, alfa);
+            _repo.saveMeasurement(p, alfa);
             _rmvb.dodajPomiar(UrzadzenieID, p);
         }
 

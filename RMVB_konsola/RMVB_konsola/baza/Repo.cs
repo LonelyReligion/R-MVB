@@ -33,7 +33,7 @@ namespace RMVB_konsola.baza
                 ctx.SaveChanges();
             }
         }
-        public void saveMeasurement(int UrzadzenieID, Pomiar p, Wersja alfa)
+        public void saveMeasurement(Pomiar p, Wersja alfa)
         {
             using (var ctx = new Kontekst())
             {

@@ -49,7 +49,7 @@ namespace RMVB_konsola
         internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
         {
             alfa.dodajPomiar(p);
-            _repo.saveMeasurement(UrzadzenieID, p, alfa);
+            _repo.saveMeasurement(p, alfa);
             _rmvb.dodajPomiar(UrzadzenieID, p);
         }
 
