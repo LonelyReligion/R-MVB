@@ -35,6 +35,19 @@ namespace PrezentacjaRownoleglosci.baza
             }
         }
 
+        public void saveMeasurement(Pomiar p, Wersja alfa) {
+            using (var ctx = new Kontekst())
+            {
+                ctx.Wersje.Attach(alfa);
+                ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
+                ctx.Entry(alfa).State = EntityState.Modified;
+
+                alfa.Pomiary.Add(p);
+                ctx.Pomiary.Add(p);
+                ctx.SaveChanges();
+            }
+        }
+
         public void saveVersion(Wersja v)
         {
 

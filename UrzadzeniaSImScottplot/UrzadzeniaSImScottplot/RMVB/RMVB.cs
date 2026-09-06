@@ -23,11 +23,7 @@ namespace UrzadzeniaSImScottplot
         internal Repo zwrocRepo() { return repo; }
         internal bool czyUrzadzenieIstnieje(int id) { return repo.czyUrzadzenieIstnieje(id); }
         internal DrzewoMVB zwrocMVB() { return MVB; }
-        internal void wypiszMVB()
-        {
-            foreach (String linijka in MVB.drukujDrzewo())
-                Console.WriteLine(linijka);
-        }
+        
         //dodaj
         internal void dodajUrzadzenie(Urzadzenie u)
         {

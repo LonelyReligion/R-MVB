@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using PrezentacjaRownoleglosci;
 using Symulacja_strumieni.rmvb;
+using PrezentacjaRownoleglosci.baza;
 
 namespace Symulacja_strumieni
 {
@@ -19,7 +20,7 @@ namespace Symulacja_strumieni
 
             BlockingCollection<object> kolekcja = new BlockingCollection<object>();
             
-            RMVB konsument = new RMVB(kolekcja);
+            Pamiec konsument = new Pamiec(kolekcja);
 
             Symulacja producent = new Symulacja(kolekcja, liczba_urzadzen); //moze producentm powinna byc jednosta jakas symulujaca pojedyncze urzadzemnie, mialoby to wiecej sensu
             producent.zdefiniujLiczbePomiarow(liczba_pomiarow);

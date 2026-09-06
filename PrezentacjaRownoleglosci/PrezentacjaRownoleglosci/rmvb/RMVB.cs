@@ -13,12 +13,12 @@ using PrezentacjaRownoleglosci.baza;
 
 namespace Symulacja_strumieni.rmvb
 {
-    public class RMVB : Konsument
+    public class RMVB
     {
         private DrzewoMVB MVB;
         private RTreeAdapter R;
         private Repo repo;
-        internal RMVB(BlockingCollection<object> k) : base(k)
+        internal RMVB()
         {
             repo = new Repo();
             MVB = new DrzewoMVB(repo, this);
@@ -28,42 +28,19 @@ namespace Symulacja_strumieni.rmvb
         internal Repo zwrocRepo() { return repo; }
         internal bool czyUrzadzenieIstnieje(int id) { return repo.czyUrzadzenieIstnieje(id); }
         internal DrzewoMVB zwrocMVB() { return MVB; }
-        internal void wypiszMVB()
-        {
-            foreach (string linijka in MVB.drukujDrzewo())
-                Console.WriteLine(linijka);
-        }
         //dodaj
         internal void dodajUrzadzenie(Urzadzenie u)
         {
-            List<Task> ts = new List<Task>();
-            ts.Add(Task.Run(()=>repo.saveDevice(u)));
-            ts.Add(Task.Run(() => R.dodajUrzadzenie(u)));
-            Task.WaitAll(ts.ToArray());
+            R.dodajUrzadzenie(u);
         }
 
         internal void dodajWersje(Wersja w)
         {
-            List<Task> ts = new List<Task>();
-            ts.Add(Task.Run(() => repo.saveVersion(w)));
-            ts.Add(Task.Run(() => MVB.dodajUrzadzenie(w)));
-            Task.WaitAll(ts.ToArray());
+            MVB.dodajUrzadzenie(w);
         }
 
-        internal void dodajPomiar(int UrzadzenieID, Pomiar p, Wersja alfa)
+        internal void dodajPomiar(int UrzadzenieID, Pomiar p)
         {
-            alfa.dodajPomiar(p);
-            using (var ctx = new Kontekst())
-            {
-                ctx.Wersje.Attach(alfa);
-                ctx.Entry(alfa).Collection(x => x.Pomiary).Load();
-                ctx.Entry(alfa).State = EntityState.Modified;
-
-                alfa.Pomiary.Add(p);
-                ctx.Pomiary.Add(p);
-                ctx.SaveChanges();
-            }
-
             R.dodajPomiar(UrzadzenieID, p);
         }
 
@@ -71,7 +48,6 @@ namespace Symulacja_strumieni.rmvb
         internal void usunWersje(Wersja w)
         {
             MVB.usunUrzadzenie(w); //jawnie dezaktywujemy urzadzenie, sprawdzamy czy nie nastpil weakVersionUnderflow
-            repo.modifyVersion(w);
         }
 
         //szukaj
@@ -129,52 +105,15 @@ namespace Symulacja_strumieni.rmvb
             R.obliczAgregaty();
         }
 
-        internal void zapiszMVB(string v)
+        internal List<string> drukujDrzewo()
         {
-            List<string> linijki = MVB.drukujDrzewo();
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(v, "mvb.txt")))
-            {
-                foreach (string linijka in linijki)
-                    outputFile.WriteLine(linijka);
-            }
+             return MVB.drukujDrzewo();
         }
 
         public void Reset()
         {
-            repo.Reset();
             MVB = new DrzewoMVB(repo, this);
             R = new RTreeAdapter(new RTree(repo));
-        }
-
-        public override void Konsumuj()
-        {
-            //jakos inaczej ofc, ale to nie teraz
-            foreach (var last in kolekcja.GetConsumingEnumerable())
-            {
-                try
-                {
-                    Urzadzenie urzadzenie = (Urzadzenie)last;
-                    this.dodajUrzadzenie(urzadzenie);
-                    Console.WriteLine("Odebrano urządzenie o id " + urzadzenie.UrzadzenieID + ".");
-                }
-                catch
-                {
-                    try
-                    {
-                        (int id, Pomiar pomiar) = ((int, Pomiar))last;
-                        Console.WriteLine("Odebrano pomiar " + pomiar.Wartosc + " st. C przypisany do Urzadzenia o id " + id + ".");
-                        Wersja wersja = new Wersja(id, repo, this, pomiar.dtpomiaru);
-                        this.dodajWersje(wersja);
-                        this.dodajPomiar(id, pomiar, wersja);
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Nie udalo sie odczytac danych.");
-                    }
-
-                }
-                
-            }
         }
 
         // zwracamy srednia z okresu czasu z pomiarow urzadzen znajdujacych sie na podanym obszarze
