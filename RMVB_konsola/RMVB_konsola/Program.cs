@@ -121,22 +121,29 @@ if (generujemy)
 }
 else 
 {
-    pamiec.odczytajEncje();
+    if (!pamiec.odczytajEncje()) return 0 ;
 }
 
 pamiec.wypiszMVB();
 
 Test jednostka_testujaca = Test.pobierzInstancje();
-if (jednostka_testujaca.wykonajTesty(100))
+if (rmvb.zwrocRepo().pobierzUrzadzenia().Count == 0)
 {
-    Console.WriteLine("W czasie wykonywania testów wystąpiły błędy. Szczegóły wyżej."); //dopisać oraz w pliku (ścieżka i nazwa z pliku konfiguracyjnego)
-    Console.WriteLine("Scenariusz testowy zakładał dodanie urządzeń o podanych id w poniższej kolejności:");
-
-    jednostka_testujaca.zapiszBledy(sciezkaFolderuWyjsciowego);
+    Console.WriteLine("W bazie nie ma żadnych urządzeń. Testy nie zostaną wykonane.");
 }
 else
-{
-    jednostka_testujaca.zapiszWyniki(sciezkaFolderuWyjsciowego); //osobne logowanie błędów do innego pliku wyżej powinno nastąpić
+{ 
+    if (jednostka_testujaca.wykonajTesty(100))
+    {
+        Console.WriteLine("W czasie wykonywania testów wystąpiły błędy. Szczegóły wyżej."); //dopisać oraz w pliku (ścieżka i nazwa z pliku konfiguracyjnego)
+        Console.WriteLine("Scenariusz testowy zakładał dodanie urządzeń o podanych id w poniższej kolejności:");
+
+        jednostka_testujaca.zapiszBledy(sciezkaFolderuWyjsciowego);
+    }
+    else
+    {
+        jednostka_testujaca.zapiszWyniki(sciezkaFolderuWyjsciowego); //osobne logowanie błędów do innego pliku wyżej powinno nastąpić
+    }
 }
 
 pamiec.Reset();
