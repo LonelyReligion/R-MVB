@@ -19,7 +19,7 @@ namespace RMVB_konsola
         RMVB _rmvb = new RMVB();
         Repo _repo;
 
-        public Pamiec() { 
+        public Pamiec() {
             _repo = _rmvb.zwrocRepo();
         }
 
@@ -73,7 +73,7 @@ namespace RMVB_konsola
             }
         }
 
-        internal void zapiszEncje(string v) 
+        internal void zapiszEncje(string v)
         {
             using (var ctx = new Kontekst())
             {
@@ -133,8 +133,8 @@ namespace RMVB_konsola
         {
             using (var ctx = new Kontekst())
             {
-                var WersjePomiary = new List<dynamic> ();
-                foreach (Wersja w in ctx.Wersje.ToList()) 
+                var WersjePomiary = new List<dynamic>();
+                foreach (Wersja w in ctx.Wersje.ToList())
                 {
                     foreach (Pomiar p in w.Pomiary.ToList())
                     {
@@ -142,7 +142,7 @@ namespace RMVB_konsola
                         obiekt.IDUrzadzenia = w.UrzadzenieID;
                         obiekt.IDWersji = w.WersjaID;
                         obiekt.IDPomiaru = p.PomiarID;
-                        
+
                         WersjePomiary.Add(obiekt);
                     }
                 }
@@ -153,6 +153,31 @@ namespace RMVB_konsola
                     csv.WriteRecords(WersjePomiary);
                 }
             }
+        }
+
+        internal void odczytajEncje() 
+        {
+            throw new NotImplementedException();
+        }
+
+        internal List<Urzadzenie> odczytajUrzadzenia() 
+        { 
+            throw new NotImplementedException();
+        }
+
+        internal List<Urzadzenie> odczytajWersje()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal List<Urzadzenie> odczytajPomiary()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal List<dynamic> odczytajWersjePomiary()
+        {
+            throw new NotImplementedException();
         }
 
         public void Reset()

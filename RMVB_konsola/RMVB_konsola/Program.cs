@@ -28,20 +28,37 @@ if (!Directory.Exists(sciezkaFolderuWyjsciowego))
 }
 Console.WriteLine("Pliki wyjściowe znajdziesz pod adresem: " + Path.GetFullPath(sciezkaFolderuWyjsciowego));
 
-
-string liczbaUrzadzenStr = ConfigurationManager.AppSettings.Get("liczba_urzadzen");
 int liczbaUrzadzen = 0;
-try
+string generujemyStr = ConfigurationManager.AppSettings.Get("generujemy").Trim();
+bool generujemy = false;
+if (generujemyStr == "false" || generujemyStr == "False")
 {
-    liczbaUrzadzen = int.Parse(liczbaUrzadzenStr);
-    Generatory.liczba_urzadzen = liczbaUrzadzen;
+    generujemy = false;
 }
-catch
+else if (generujemyStr == "true" || generujemyStr == "True")
 {
-    Console.WriteLine("Podana liczba urządzeń nie jest liczbą całkowitą.");
-    Console.WriteLine("Podaj poprawną liczbę urządzeń id spróbuj ponownie.");
+    generujemy = true;
+    string liczbaUrzadzenStr = ConfigurationManager.AppSettings.Get("liczba_urzadzen");
+    try
+    {
+        liczbaUrzadzen = int.Parse(liczbaUrzadzenStr);
+        Generatory.liczba_urzadzen = liczbaUrzadzen;
+    }
+    catch
+    {
+        Console.WriteLine("Podana liczba urządzeń nie jest liczbą całkowitą.");
+        Console.WriteLine("Podaj poprawną liczbę urządzeń id spróbuj ponownie.");
+        return 0;
+    }
+}
+else 
+{
+    Console.WriteLine("Wartość atrubutu 'generujemy' jest nieprawidłowa. Atrybut przyjmuje wartości: true, false, True, False.");
+    Console.WriteLine("Podaj poprawną wartość atrubutu i spróbuj ponownie.");
     return 0;
 }
+
+
 
 string granicaPrzezywalnosciStr = ConfigurationManager.AppSettings.Get("granica_przezywalnosci");
 double granicaPrzezywalnosci = 0;
@@ -98,8 +115,14 @@ foreach (var plik in sciezkiPlikow)
 }
 //
 
-sym.Symuluj();
-
+if (generujemy)
+{
+    sym.Symuluj();
+}
+else 
+{
+    pamiec.odczytajEncje();
+}
 
 pamiec.wypiszMVB();
 
