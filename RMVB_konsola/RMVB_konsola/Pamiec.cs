@@ -149,9 +149,9 @@ namespace RMVB_konsola
             {
                 List<Urzadzenie> urzadzenia = odczytajUrzadzenia();
                 List<Pomiar> pomiary = odczytajPomiary();
-                List<dynamic> urzadzeniaPomiary = odczytajUrzadzeniaPomiary();
+                Dictionary<int, int> urzadzeniaPomiary = odczytajUrzadzeniaPomiary();
 
-/*                foreach(var urzadzenie in urzadzenia)
+/*                foreach (var urzadzenie in urzadzenia)
                     dodajUrzadzenie(urzadzenie);
 
                 foreach (var pomiar in pomiary)
@@ -193,12 +193,32 @@ namespace RMVB_konsola
             }
         }
 
-        internal List<dynamic> odczytajUrzadzeniaPomiary() {
+        //klucz: id pomiaru
+        //wartosc: id urzadzenia
+        internal Dictionary<int, int> odczytajUrzadzeniaPomiary() {
+            List<dynamic> lista = new List<dynamic>();
             using (var reader = new StreamReader("..\\..\\..\\Pliki wejściowe\\UrzadzeniaPomiary.csv"))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                return csv.GetRecords<dynamic>().ToList();
+                lista = csv.GetRecords<dynamic>().ToList();
             }
+
+            Dictionary<int, int> slownik = new Dictionary<int, int>();
+            foreach (var obiekt in lista) 
+            {
+                int IDUrzadzenia = Convert.ToInt32(obiekt.IDUrzadzenia);
+                int IDPomiaru = Convert.ToInt32(obiekt.IDPomiaru);
+
+                if (!slownik.ContainsKey(IDPomiaru))
+                {
+                    slownik[IDPomiaru] = IDUrzadzenia;
+                }
+                else 
+                {
+                    Console.WriteLine("UWAGA: Mamy powtarzajace sie pomiary. Działanie programu może być nieprawidłowe.");
+                }
+            }
+            return slownik;
         }
 
         public void Reset()
