@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using System.Globalization;
 using System.Dynamic;
+using System.Reflection.Emit;
 
 namespace RMVB_konsola
 {
@@ -84,6 +85,7 @@ namespace RMVB_konsola
             }
             zapiszUrzadzenia(v);
             zapiszPomiary(v);
+            zapiszUrzadzeniaPomiary(v);
         }
 
         internal void zapiszUrzadzenia(string v) {
@@ -113,12 +115,51 @@ namespace RMVB_konsola
             }
         }
 
+        internal void zapiszUrzadzeniaPomiary(string v)
+
+        {
+            using (var ctx = new Kontekst())
+            {
+                //tu poprawwic
+                var UrzadzeniaPomiary = new List<dynamic>();
+                foreach (Wersja w in ctx.Wersje.ToList())
+                {
+                    foreach (Pomiar p in w.Pomiary.ToList())
+                    {
+                        dynamic obiekt = new ExpandoObject();
+                        obiekt.IDUrzadzenia = w.UrzadzenieID;
+                        obiekt.IDPomiaru = p.PomiarID;
+
+                        UrzadzeniaPomiary.Add(obiekt);
+                    }
+                }
+
+                using (var writer = new StreamWriter(Path.Combine(v, "UrzadzeniaPomiary.csv")))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    csv.WriteRecords(UrzadzeniaPomiary.Distinct().ToList());
+                }
+            }
+        }
 
         internal bool odczytajEncje() 
         {
             try
             {
                 List<Urzadzenie> urzadzenia = odczytajUrzadzenia();
+                List<Pomiar> pomiary = odczytajPomiary();
+                List<dynamic> urzadzeniaPomiary = odczytajUrzadzeniaPomiary();
+
+/*                foreach(var urzadzenie in urzadzenia)
+                    dodajUrzadzenie(urzadzenie);
+
+                foreach (var pomiar in pomiary)
+                {
+                    Wersja wersja = new Wersja(pomiar.WersjeUrzadzenia.First().UrzadzenieID, _pamiec.zwrocRMVB(), pomiar.dtpomiaru);
+
+                    _pamiec.dodajWersje(wersja);
+                    _pamiec.dodajPomiar(urzadzenie.UrzadzenieID, pomiar, wersja);
+                }*/
 
                 return true;
             }
@@ -142,11 +183,22 @@ namespace RMVB_konsola
             }
         }
 
-        internal List<Urzadzenie> odczytajPomiary()
+        internal List<Pomiar> odczytajPomiary()
         {
-            throw new NotImplementedException();
+            using (var reader = new StreamReader("..\\..\\..\\Pliki wejściowe\\Pomiary.csv"))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                return csv.GetRecords<Pomiar>().ToList();
+            }
         }
 
+        internal List<dynamic> odczytajUrzadzeniaPomiary() {
+            using (var reader = new StreamReader("..\\..\\..\\Pliki wejściowe\\UrzadzeniaPomiary.csv"))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                return csv.GetRecords<dynamic>().ToList();
+            }
+        }
 
         public void Reset()
         {
