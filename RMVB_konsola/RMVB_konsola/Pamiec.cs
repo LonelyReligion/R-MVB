@@ -137,7 +137,8 @@ namespace RMVB_konsola
                 using (var writer = new StreamWriter(Path.Combine(v, "UrzadzeniaPomiary.csv")))
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
-                    csv.WriteRecords(UrzadzeniaPomiary.Distinct().ToList());
+                    var unikatoweWartosci = UrzadzeniaPomiary.GroupBy(wiersz => wiersz.IDPomiaru).Select(group => group.First()); 
+                    csv.WriteRecords(unikatoweWartosci);
                 }
             }
         }
