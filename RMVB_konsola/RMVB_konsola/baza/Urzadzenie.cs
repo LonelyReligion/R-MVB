@@ -26,7 +26,7 @@ namespace RMVB_konsola.baza
         public virtual ICollection<Wersja> Wersje { get; set; }
 
         //metody
-        protected Urzadzenie() { 
+        public Urzadzenie() { 
             Wersje = new HashSet<Wersja>();
         }
         public Urzadzenie((Decimal, Decimal) dlugosc_szerokosc) : this()

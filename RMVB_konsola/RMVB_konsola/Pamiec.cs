@@ -96,6 +96,7 @@ namespace RMVB_konsola
                 using (var writer = new StreamWriter(Path.Combine(v, "Urzadzenia.csv")))
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
+
                     csv.WriteRecords(urzadzenia);
                 }
             }
@@ -151,16 +152,15 @@ namespace RMVB_konsola
                 List<Pomiar> pomiary = odczytajPomiary();
                 Dictionary<int, int> urzadzeniaPomiary = odczytajUrzadzeniaPomiary();
 
-/*                foreach (var urzadzenie in urzadzenia)
+                foreach (var urzadzenie in urzadzenia)
                     dodajUrzadzenie(urzadzenie);
 
                 foreach (var pomiar in pomiary)
                 {
-                    Wersja wersja = new Wersja(pomiar.WersjeUrzadzenia.First().UrzadzenieID, _pamiec.zwrocRMVB(), pomiar.dtpomiaru);
-
-                    _pamiec.dodajWersje(wersja);
-                    _pamiec.dodajPomiar(urzadzenie.UrzadzenieID, pomiar, wersja);
-                }*/
+                    Wersja wersja = new Wersja(urzadzeniaPomiary[pomiar.PomiarID], _rmvb, pomiar.dtpomiaru);
+                    dodajWersje(wersja);
+                    dodajPomiar(urzadzeniaPomiary[pomiar.PomiarID], pomiar, wersja);
+                }
 
                 return true;
             }
@@ -180,6 +180,7 @@ namespace RMVB_konsola
             using (var reader = new StreamReader("..\\..\\..\\Pliki wejściowe\\Urzadzenia.csv"))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
+
                 return csv.GetRecords<Urzadzenie>().ToList();
             }
         }
