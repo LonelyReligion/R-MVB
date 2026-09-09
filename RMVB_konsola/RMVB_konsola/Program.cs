@@ -146,8 +146,8 @@ else
     }
 }
 
-pamiec.Reset();
 pamiec.zapiszMVB(sciezkaFolderuWyjsciowego);
 pamiec.zapiszEncje(sciezkaFolderuWyjsciowego);
+pamiec.Reset();
 
 return 0;
