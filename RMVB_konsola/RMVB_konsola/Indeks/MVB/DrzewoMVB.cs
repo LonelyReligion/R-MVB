@@ -12,16 +12,20 @@ namespace RMVB_konsola.Indeks.MVB
 {
     internal class DrzewoMVB
     {
-        private double Pversion = 1.0 / 3;
-        private double Psvu = 1.0 / 3;
-        private double Psvo = 5.0 / 6;
+        private double Pversion;
+        private double Psvu;
+        private double Psvo;
 
         private Repo Repo;
 
         private List<DeskryptorKorzenia> desk = new List<DeskryptorKorzenia>(); // "List of tree descriptors. Descriptors for all roots in the tree are connected in a list(or other structures) according to growing, separable life spans."
         private RMVB rmvb;
-        internal DrzewoMVB(Repo repo, RMVB rmvb)
+        internal DrzewoMVB(Repo repo, RMVB rmvb, double Pversion, double Psvu, double Psvo)
         {
+            this.Pversion = Pversion;
+            this.Psvu = Psvu;
+            this.Psvo = Psvo;
+
             Korzen k = new Korzen(repo, Pversion, rmvb);
 
             Wezel.Psvu = Psvu;

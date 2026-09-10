@@ -13,16 +13,17 @@ using System.Globalization;
 using System.Dynamic;
 using System.Reflection.Emit;
 using System.Configuration;
+using System.Data;
 
 namespace RMVB_konsola
 {
     internal class Pamiec
     {
-        RMVB _rmvb = new RMVB();
+        RMVB _rmvb;
         Repo _repo;
 
         public Pamiec() {
-            _repo = _rmvb.zwrocRepo();
+            
         }
 
         public RMVB zwrocRMVB() {
@@ -297,6 +298,32 @@ namespace RMVB_konsola
                 Console.WriteLine("Podaj poprawną liczbę urządzeń w korzeniu id spróbuj ponownie.");
                 return false;
             }
+
+            double Pversion;
+            double Psvu;
+            double Psvo;
+
+            string PversionStr = ConfigurationManager.AppSettings.Get("Pversion");
+            string PsvuStr = ConfigurationManager.AppSettings.Get("Psvu");
+            string PsvoStr = ConfigurationManager.AppSettings.Get("Psvo");
+
+            var table = new DataTable();
+            try
+            {
+                Pversion = Convert.ToDouble(table.Compute(PversionStr, string.Empty));
+                Psvu = Convert.ToDouble(table.Compute(PsvuStr, string.Empty));
+                Psvo = Convert.ToDouble(table.Compute(PsvoStr, string.Empty));
+            }
+            catch 
+            {
+                Console.WriteLine("Nie powiodlo sie odczytanie parametrow drzewa.");
+                Console.WriteLine("Podaj poprawne wartości i spróbuj ponownie.");
+                return false;
+            }
+
+            _rmvb = new RMVB(Pversion, Psvu, Psvo);
+            _repo = _rmvb.zwrocRepo();
+
             return true;
         }
     }
