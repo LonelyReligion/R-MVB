@@ -154,5 +154,12 @@ namespace RMVB_konsola.baza
                 ctx.SaveChanges();
             }
         }
+
+        public void przygotujBaze() {
+            using (var ctx = new Kontekst())
+            {
+                ctx.Urzadzenia.FirstOrDefault();
+            }
+        }
     }
 }

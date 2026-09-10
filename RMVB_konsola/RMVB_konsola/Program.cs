@@ -15,87 +15,17 @@ using Rectangle = RMVB_konsola.Indeks.R.Rectangle;
 using RMVB_konsola.baza;
 
 //Setup
-string sciezkaFolderuWyjsciowego;
-sciezkaFolderuWyjsciowego = ConfigurationManager.AppSettings.Get("sciezka_folderu_wyjsciowego");
-
-
-Directory.CreateDirectory(sciezkaFolderuWyjsciowego);
-
-if (!Directory.Exists(sciezkaFolderuWyjsciowego))
-{
-    Console.WriteLine("Podana ścieżka jest niepoprawna.");
-    return 0;
-}
-Console.WriteLine("Pliki wyjściowe znajdziesz pod adresem: " + Path.GetFullPath(sciezkaFolderuWyjsciowego));
-
-int liczbaUrzadzen = 0;
-string generujemyStr = ConfigurationManager.AppSettings.Get("generujemy").Trim();
-bool generujemy = false;
-if (generujemyStr == "false" || generujemyStr == "False")
-{
-    generujemy = false;
-}
-else if (generujemyStr == "true" || generujemyStr == "True")
-{
-    generujemy = true;
-    string liczbaUrzadzenStr = ConfigurationManager.AppSettings.Get("liczba_urzadzen");
-    try
-    {
-        liczbaUrzadzen = int.Parse(liczbaUrzadzenStr);
-        Generatory.liczba_urzadzen = liczbaUrzadzen;
-    }
-    catch
-    {
-        Console.WriteLine("Podana liczba urządzeń nie jest liczbą całkowitą.");
-        Console.WriteLine("Podaj poprawną liczbę urządzeń id spróbuj ponownie.");
-        return 0;
-    }
-}
-else 
-{
-    Console.WriteLine("Wartość atrubutu 'generujemy' jest nieprawidłowa. Atrybut przyjmuje wartości: true, false, True, False.");
-    Console.WriteLine("Podaj poprawną wartość atrubutu i spróbuj ponownie.");
-    return 0;
-}
-
-
-
-string granicaPrzezywalnosciStr = ConfigurationManager.AppSettings.Get("granica_przezywalnosci");
-double granicaPrzezywalnosci = 0;
-CultureInfo kultura = CultureInfo.CreateSpecificCulture("pl-PL");
-try
-{
-    granicaPrzezywalnosci = Double.Parse(granicaPrzezywalnosciStr, kultura);
-    Korzen.granica_przezywalnosci = (decimal)granicaPrzezywalnosci;
-}
-catch
-{
-    Console.WriteLine("Podana granica przeżywalności urządzeń nie jest poprawna.");
-    Console.WriteLine("Czy użyłeś/aś kropki (.) zamiast przecinka (,)?");
-    Console.WriteLine("Podaj poprawną granicę przeżywalności id spróbuj ponownie.");
-    return 0;
-}
-
-string minimalnaLiczbaUrzadzenWKorzeniu = ConfigurationManager.AppSettings.Get("min_urzadzen_korzen");
-try
-{
-    int minimalnaLiczbaUrzadzenWKorzeniu_int = int.Parse(minimalnaLiczbaUrzadzenWKorzeniu);
-    Korzen.min_urzadzen_korzen = minimalnaLiczbaUrzadzenWKorzeniu_int;
-}
-catch
-{
-    Console.WriteLine("Minimalna liczba urządzeń w korzeniu nie jest liczbą całkowitą.");
-    Console.WriteLine("Podaj poprawną liczbę urządzeń w korzeniu id spróbuj ponownie.");
-    return 0;
-}
-
-using (var ctx = new Kontekst())
-{
-    ctx.Urzadzenia.FirstOrDefault();
-}
-
-//
 Pamiec pamiec = new Pamiec();
+string sciezkaFolderuWyjsciowego="", generujemyStr = "";
+int liczbaUrzadzen = 0;
+bool generujemy = false;
+
+if (!pamiec.zaladujZmienne(ref sciezkaFolderuWyjsciowego, ref liczbaUrzadzen, ref generujemy))
+    return 0;
+
+pamiec.zwrocRepo().przygotujBaze();
+//
+
 RMVB rmvb = pamiec.zwrocRMVB();
 Generatory generator = new Generatory(rmvb.zwrocRepo());
 

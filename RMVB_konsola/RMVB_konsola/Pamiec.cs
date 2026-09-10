@@ -12,6 +12,7 @@ using CsvHelper;
 using System.Globalization;
 using System.Dynamic;
 using System.Reflection.Emit;
+using System.Configuration;
 
 namespace RMVB_konsola
 {
@@ -226,6 +227,77 @@ namespace RMVB_konsola
         {
             _repo.Reset();
             _rmvb.Reset();
+        }
+
+        public bool zaladujZmienne(ref string sciezkaFolderuWyjsciowego, ref int liczbaUrzadzen, ref bool generujemy) {
+            sciezkaFolderuWyjsciowego = ConfigurationManager.AppSettings.Get("sciezka_folderu_wyjsciowego");
+
+            Directory.CreateDirectory(sciezkaFolderuWyjsciowego);
+            if (!Directory.Exists(sciezkaFolderuWyjsciowego))
+            {
+                Console.WriteLine("Podana ścieżka jest niepoprawna.");
+                return false;
+            }
+            Console.WriteLine("Pliki wyjściowe znajdziesz pod adresem: " + Path.GetFullPath(sciezkaFolderuWyjsciowego));
+
+            string generujemyStr = ConfigurationManager.AppSettings.Get("generujemy").Trim();
+            if (generujemyStr == "false" || generujemyStr == "False")
+            {
+                generujemy = false;
+            }
+            else if (generujemyStr == "true" || generujemyStr == "True")
+            {
+                generujemy = true;
+                string liczbaUrzadzenStr = ConfigurationManager.AppSettings.Get("liczba_urzadzen");
+                try
+                {
+                    liczbaUrzadzen = int.Parse(liczbaUrzadzenStr);
+                    Generatory.liczba_urzadzen = liczbaUrzadzen;
+                }
+                catch
+                {
+                    Console.WriteLine("Podana liczba urządzeń nie jest liczbą całkowitą.");
+                    Console.WriteLine("Podaj poprawną liczbę urządzeń id spróbuj ponownie.");
+                    return false;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Wartość atrubutu 'generujemy' jest nieprawidłowa. Atrybut przyjmuje wartości: true, false, True, False.");
+                Console.WriteLine("Podaj poprawną wartość atrubutu i spróbuj ponownie.");
+                return false;
+            }
+
+            double granicaPrzezywalnosci = 0;
+            string granicaPrzezywalnosciStr = ConfigurationManager.AppSettings.Get("granica_przezywalnosci");
+            string minimalnaLiczbaUrzadzenWKorzeniu = ConfigurationManager.AppSettings.Get("min_urzadzen_korzen");
+
+            CultureInfo kultura = CultureInfo.CreateSpecificCulture("pl-PL");
+            try
+            {
+                granicaPrzezywalnosci = Double.Parse(granicaPrzezywalnosciStr, kultura);
+                Korzen.granica_przezywalnosci = (decimal)granicaPrzezywalnosci;
+            }
+            catch
+            {
+                Console.WriteLine("Podana granica przeżywalności urządzeń nie jest poprawna.");
+                Console.WriteLine("Czy użyłeś/aś kropki (.) zamiast przecinka (,)?");
+                Console.WriteLine("Podaj poprawną granicę przeżywalności id spróbuj ponownie.");
+                return false;
+            }
+
+            try
+            {
+                int minimalnaLiczbaUrzadzenWKorzeniu_int = int.Parse(minimalnaLiczbaUrzadzenWKorzeniu);
+                Korzen.min_urzadzen_korzen = minimalnaLiczbaUrzadzenWKorzeniu_int;
+            }
+            catch
+            {
+                Console.WriteLine("Minimalna liczba urządzeń w korzeniu nie jest liczbą całkowitą.");
+                Console.WriteLine("Podaj poprawną liczbę urządzeń w korzeniu id spróbuj ponownie.");
+                return false;
+            }
+            return true;
         }
     }
 }
