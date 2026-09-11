@@ -14,7 +14,7 @@ namespace RMVB_konsola.Indeks.MVB
         public static char aktualne_id = 'A';
         public char id; //do wyswietlania, ale i wyszukiwania sasiada
 
-        public static int pojemnoscWezla = 6;
+        public static int B = 6;
         public static double Psvu;
         public static double Psvo;
 
@@ -29,7 +29,7 @@ namespace RMVB_konsola.Indeks.MVB
         //zwraca true jezeli sie zmiescilo, false jezeli block ov
         internal bool dodaj(Wersja u)
         {
-            if (urzadzenia.Count() < pojemnoscWezla)
+            if (urzadzenia.Count() <= B * Psvo)//czy wystapi svo
             {
                 urzadzenia.Add((u.UrzadzenieID, u));
                 urzadzenia = urzadzenia.OrderBy(w => w.Item1).ToList();
@@ -72,18 +72,18 @@ namespace RMVB_konsola.Indeks.MVB
 
         internal bool strongVersionOverflow()
         {
-            return liczbaZywych() > pojemnoscWezla * Psvo;
+            return liczbaZywych() > B * Psvo;
         }
 
         //"A strong version underflow occurs when the number of entries becomes lower than B x Psvu." 
         internal bool strongVersionUnderflow()
         {
-            return liczbaZywych() < pojemnoscWezla * Psvu;
+            return liczbaZywych() < B * Psvu;
         }
 
         internal bool weakVersionUnderFlow()
         {
-            return liczbaZywych() < pojemnoscWezla * Psvu;
+            return liczbaZywych() < B * Psvu;
         }
 
         internal int liczbaZywych()

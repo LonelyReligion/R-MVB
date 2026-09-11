@@ -134,12 +134,12 @@ namespace RMVB_konsola.Indeks.MVB
         //dla POTENCJALNEGO węzła
         internal bool strongVersionOverflow(int rozm_listy)
         {
-            return rozm_listy > Wezel.pojemnoscWezla * Wezel.Psvo;
+            return rozm_listy > Wezel.B * Wezel.Psvo;
         }
         private bool strongVersionUnderflow(int count)
         {
             //zalozenie -- w liscie sa same zywe
-            return count < Wezel.pojemnoscWezla * Wezel.Psvu;
+            return count < Wezel.B * Wezel.Psvu;
         }
 
         internal bool versionSplit(int numer_wezla, Wersja u)
