@@ -30,6 +30,7 @@ namespace RMVB_konsola.Indeks.MVB
 
             Wezel.Psvu = Psvu;
             Wezel.Psvo = Psvo;
+            Wezel.Pversion = Pversion;
 
             desk.Add(new DeskryptorKorzenia(DateTime.Now, DateTime.MaxValue, k));
             Repo = repo;

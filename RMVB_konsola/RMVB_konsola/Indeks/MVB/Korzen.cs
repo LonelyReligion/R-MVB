@@ -327,7 +327,6 @@ namespace RMVB_konsola.Indeks.MVB
             return wyjsciowa;
         }
 
-        //potrzebne sprawdzenie weakVersionUnderflow
         internal void usun(Wersja u)
         {
             DateTime teraz = DateTime.Now;
@@ -372,7 +371,7 @@ namespace RMVB_konsola.Indeks.MVB
                         repo.saveVersion(kopia);
 
                         //ctx.Wersje.Add(kopia); //?
-                        repo.saveVersion(kopia);
+                        //repo.saveVersion(kopia);
 
                     }
                 }

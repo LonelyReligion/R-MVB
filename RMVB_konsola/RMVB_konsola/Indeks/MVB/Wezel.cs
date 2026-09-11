@@ -17,6 +17,7 @@ namespace RMVB_konsola.Indeks.MVB
         public static int B = 6;
         public static double Psvu;
         public static double Psvo;
+        public static double Pversion;
 
         //moze samo urzadzenie atp
         internal List<(int, Wersja)> urzadzenia; //zmienic
@@ -81,9 +82,10 @@ namespace RMVB_konsola.Indeks.MVB
             return liczbaZywych() < B * Psvu;
         }
 
+        /* either none or at least P*Pversion entries are alive at time t... */
         internal bool weakVersionUnderFlow()
         {
-            return liczbaZywych() < B * Psvu;
+            return liczbaZywych() != 0 && liczbaZywych() < B * Pversion;
         }
 
         internal int liczbaZywych()
