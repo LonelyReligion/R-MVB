@@ -15,22 +15,25 @@ namespace RMVB_konsola.Indeks.MVB
         private double Pversion;
         private double Psvu;
         private double Psvo;
+        private int B;
 
         private Repo Repo;
 
         private List<DeskryptorKorzenia> desk = new List<DeskryptorKorzenia>(); // "List of tree descriptors. Descriptors for all roots in the tree are connected in a list(or other structures) according to growing, separable life spans."
         private RMVB rmvb;
-        internal DrzewoMVB(Repo repo, RMVB rmvb, double Pversion, double Psvu, double Psvo)
+        internal DrzewoMVB(Repo repo, RMVB rmvb, double Pversion, double Psvu, double Psvo, int B)
         {
             this.Pversion = Pversion;
             this.Psvu = Psvu;
             this.Psvo = Psvo;
+            this.B = B;
 
             Korzen k = new Korzen(repo, Pversion, rmvb);
 
             Wezel.Psvu = Psvu;
             Wezel.Psvo = Psvo;
             Wezel.Pversion = Pversion;
+            Wezel.B = B;
 
             desk.Add(new DeskryptorKorzenia(DateTime.Now, DateTime.MaxValue, k));
             Repo = repo;

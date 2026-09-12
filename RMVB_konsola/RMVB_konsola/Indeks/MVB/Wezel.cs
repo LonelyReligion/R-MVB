@@ -14,7 +14,7 @@ namespace RMVB_konsola.Indeks.MVB
         public static char aktualne_id = 'A';
         public char id; //do wyswietlania, ale i wyszukiwania sasiada
 
-        public static int B = 6;
+        public static int B;
         public static double Psvu;
         public static double Psvo;
         public static double Pversion;

@@ -17,14 +17,21 @@ namespace RMVB_konsola.Indeks
         private RTreeAdapter R;
         private Repo repo;
         
+        //parametry drzewa MVB
         double Pversion;
         double Psvu; 
         double Psvo;
+        int B;
 
-        internal RMVB(double Pversion, double Psvu, double Psvo)
+        internal RMVB(double Pversion, double Psvu, double Psvo, int B)
         {
+            this.Pversion = Pversion;
+            this.Psvu = Psvu;
+            this.Psvo = Psvo;
+            this.B = B;
+
             repo = new Repo();
-            MVB = new DrzewoMVB(repo, this, Pversion, Psvu, Psvo);
+            MVB = new DrzewoMVB(repo, this, Pversion, Psvu, Psvo, B);
             R = new RTreeAdapter(new RTree(repo));
         }
 
@@ -150,7 +157,7 @@ namespace RMVB_konsola.Indeks
 
         public void Reset()
         {
-            MVB = new DrzewoMVB(repo, this, Pversion, Psvu, Psvo);
+            MVB = new DrzewoMVB(repo, this, Pversion, Psvu, Psvo, B);
             R = new RTreeAdapter(new RTree(repo));
         }
 

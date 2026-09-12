@@ -302,17 +302,19 @@ namespace RMVB_konsola
             double Pversion;
             double Psvu;
             double Psvo;
+            int B;
 
             string PversionStr = ConfigurationManager.AppSettings.Get("Pversion");
             string PsvuStr = ConfigurationManager.AppSettings.Get("Psvu");
             string PsvoStr = ConfigurationManager.AppSettings.Get("Psvo");
-
+            string BStr = ConfigurationManager.AppSettings.Get("B");
             var table = new DataTable();
             try
             {
                 Pversion = Convert.ToDouble(table.Compute(PversionStr, string.Empty));
                 Psvu = Convert.ToDouble(table.Compute(PsvuStr, string.Empty));
                 Psvo = Convert.ToDouble(table.Compute(PsvoStr, string.Empty));
+                B = Convert.ToInt32(BStr);
             }
             catch 
             {
@@ -321,7 +323,7 @@ namespace RMVB_konsola
                 return false;
             }
 
-            _rmvb = new RMVB(Pversion, Psvu, Psvo);
+            _rmvb = new RMVB(Pversion, Psvu, Psvo, B);
             _repo = _rmvb.zwrocRepo();
 
             return true;
