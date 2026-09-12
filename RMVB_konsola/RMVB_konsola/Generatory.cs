@@ -120,14 +120,6 @@ namespace RMVB_konsola
             List<Decimal> szerokosci = new List<Decimal>();
             for (int i = 0; i < 2; i++) {
                 Decimal szerokosc = (Decimal)(rnd.Next(49, 54) * 100);
-                if (szerokosc < 5400)
-                {
-                    szerokosc += rnd.Next(00, 59);
-                }
-                else
-                {
-                    szerokosc += rnd.Next(00, 50);
-                }
                 szerokosc = szerokosc / 100.0m;
                 szerokosci.Add(szerokosc);
             }
@@ -135,14 +127,6 @@ namespace RMVB_konsola
             List<Decimal> dlugosci = new List<Decimal>();
             for (int i = 0; i < 2; i++) {
                 Decimal dlugosc = (Decimal)(rnd.Next(14, 24) * 100);
-                if (dlugosc < 2400)
-                {
-                    dlugosc += rnd.Next(07, 59);
-                }
-                else
-                {
-                    dlugosc += rnd.Next(00, 09);
-                }
                 dlugosc = dlugosc / 100.0m;
                 dlugosci.Add(dlugosc);
             }
