@@ -119,37 +119,31 @@ namespace RMVB_konsola
         public Rectangle generujProstokat() {
             List<Decimal> szerokosci = new List<Decimal>();
             for (int i = 0; i < 2; i++) {
-                Decimal szerokosc = (Decimal)(rnd.Next(49, 54) * 10000);
-                if (szerokosc < 540000)
+                Decimal szerokosc = (Decimal)(rnd.Next(49, 54) * 100);
+                if (szerokosc < 5400)
                 {
-                    szerokosc += rnd.Next(00, 59) * 100;
                     szerokosc += rnd.Next(00, 59);
                 }
                 else
                 {
-                    szerokosc += rnd.Next(00, 50) * 100;
-                    if (szerokosc != 545000)
-                        szerokosc += rnd.Next(00, 59);
+                    szerokosc += rnd.Next(00, 50);
                 }
-                szerokosc = szerokosc / 10000.0m;
+                szerokosc = szerokosc / 100.0m;
                 szerokosci.Add(szerokosc);
             }
 
             List<Decimal> dlugosci = new List<Decimal>();
             for (int i = 0; i < 2; i++) {
-                Decimal dlugosc = (Decimal)(rnd.Next(14, 24) * 10000);
-                if (dlugosc < 240000)
+                Decimal dlugosc = (Decimal)(rnd.Next(14, 24) * 100);
+                if (dlugosc < 2400)
                 {
-                    dlugosc += rnd.Next(07, 59) * 100;
-                    dlugosc += rnd.Next(00, 59);
+                    dlugosc += rnd.Next(07, 59);
                 }
                 else
                 {
-                    dlugosc += rnd.Next(00, 09) * 100;
-                    if (dlugosc != 240900)
-                        dlugosc += rnd.Next(00, 59);
+                    dlugosc += rnd.Next(00, 09);
                 }
-                dlugosc = dlugosc / 10000.0m;
+                dlugosc = dlugosc / 100.0m;
                 dlugosci.Add(dlugosc);
             }
             return new Rectangle(szerokosci.Min(), dlugosci.Min(), szerokosci.Max(), dlugosci.Max());
