@@ -538,6 +538,7 @@ namespace RMVB_konsola
                         Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
                     }
                     bledy.Add("");
+                    wynikR.Add(rmvb.szukajAgregatuCzasowego(x, y));
 
                 }
                 Console.WriteLine("**********************************");

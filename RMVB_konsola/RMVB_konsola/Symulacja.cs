@@ -24,6 +24,7 @@ namespace RMVB_konsola
 
 
         public void Symuluj() {
+            Console.WriteLine("Poczatek generowania danych");
             for (int i = 0; i < _liczba_urzadzen; i++) 
             {
                 Urzadzenie urzadzenie = new Urzadzenie(_generator.generujWspolrzedne());

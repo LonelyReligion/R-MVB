@@ -86,28 +86,46 @@ namespace RMVB_konsola
         }
 
 
-        public (Decimal, Decimal) generujWspolrzedne() {
-            Decimal szerokosc = (Decimal)(rnd.Next(49, 55) * 100);
-            if (szerokosc < 5400)
+        public bool czyUrzadzenieJuzIstnieje(decimal dlugosc, decimal szerokosc) 
+        {
+            using (var ctx = new Kontekst()) 
             {
-                szerokosc += rnd.Next(00, 59);
-            }
-            else
-            {
-                szerokosc += rnd.Next(00, 50);
-            }
-            szerokosc = szerokosc / 100.0m;
 
-            Decimal dlugosc = (Decimal)(rnd.Next(14, 24) * 100);
-            if (dlugosc < 2400)
-            {
-                dlugosc += rnd.Next(07, 59);
+                 List<Urzadzenie> urzadzenia = ctx.Urzadzenia.Where(u => u.Dlugosc == dlugosc).Where(u => u.Szerokosc == szerokosc).ToList();
+                if (urzadzenia.Count() != 0)
+                    return true;
+                return false;
+                
             }
-            else
+        }
+
+        public (Decimal, Decimal) generujWspolrzedne() {
+            Decimal szerokosc, dlugosc;
+            do
             {
-                dlugosc += rnd.Next(00, 09);
+                szerokosc = (Decimal)(rnd.Next(49, 55) * 100);
+                if (szerokosc < 5400)
+                {
+                    szerokosc += rnd.Next(00, 59);
+                }
+                else
+                {
+                    szerokosc += rnd.Next(00, 50);
+                }
+                szerokosc = szerokosc / 100.0m;
+
+                dlugosc = (Decimal)(rnd.Next(14, 24) * 100);
+                if (dlugosc < 2400)
+                {
+                    dlugosc += rnd.Next(07, 59);
+                }
+                else
+                {
+                    dlugosc += rnd.Next(00, 09);
+                }
+                dlugosc = dlugosc / 100.0m;
             }
-            dlugosc = dlugosc / 100.0m;
+            while (czyUrzadzenieJuzIstnieje(dlugosc, szerokosc));
 
             return (dlugosc, szerokosc);
         }
