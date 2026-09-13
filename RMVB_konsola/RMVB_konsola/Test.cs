@@ -13,6 +13,7 @@ using System.Diagnostics.Eventing.Reader;
 using RMVB_konsola.Indeks;
 using RMVB_konsola.Indeks.R;
 using RMVB_konsola.baza;
+using System.Data.Entity.Core.Metadata.Edm;
 
 //singleton, test bedzie wykonywany jednowatkowo stąd brak dodatkowego zabezpieczenia
 namespace RMVB_konsola
@@ -474,14 +475,12 @@ namespace RMVB_konsola
                         .Where(u => u.Dlugosc == x)
                         .First()
                         .UrzadzenieID;
-
-                    if (id[i] != -1)
+                    int idik = id[i];
+                    if (idik != -1)
                     {
-                        int aktualne_id = id[i];
-                        List<Pomiar> pomiary = ctx.Pomiary
-                                                .AsNoTracking()
-                                                .Where(p => p.WersjeUrzadzenia.FirstOrDefault().UrzadzenieID == aktualne_id)
-                                                .ToList();
+                        List<Wersja> wersje = ctx.Wersje.Where(w => w.UrzadzenieID == idik).OrderByDescending(w => w.WersjaID).ToList();
+                        List<Pomiar> pomiary = wersje[0].Pomiary.ToList();
+
                         liczby[i] += pomiary.Count;
                         foreach (Pomiar p in pomiary) wynikBD[i] += p.Wartosc;
 
