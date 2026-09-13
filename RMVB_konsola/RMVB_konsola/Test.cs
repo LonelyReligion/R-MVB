@@ -1017,7 +1017,7 @@ namespace RMVB_konsola
                     szukane_wersje_mvb[i].AddRange(rmvb.szukaj(start, end));
                 }
                 long czas_mvb = sw.ElapsedMilliseconds;
-                Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");
+                Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");//to nie ma sensu
 
                 bool once = false;
 

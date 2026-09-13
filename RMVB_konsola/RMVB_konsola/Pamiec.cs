@@ -113,6 +113,7 @@ namespace RMVB_konsola
                 using (var writer = new StreamWriter(Path.Combine(v, "Pomiary.csv")))
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
+                    csv.Context.RegisterClassMap<PomiarMap>();
                     csv.WriteRecords(pomiary);
                 }
             }
@@ -159,6 +160,7 @@ namespace RMVB_konsola
 
                 foreach (var pomiar in pomiary)
                 {
+                    pomiar.dtpomiaru = DateTime.Now;
                     Wersja wersja = new Wersja(urzadzeniaPomiary[pomiar.PomiarID], _rmvb, pomiar.dtpomiaru);
                     dodajWersje(wersja);
                     dodajPomiar(urzadzeniaPomiary[pomiar.PomiarID], pomiar, wersja);
@@ -192,6 +194,7 @@ namespace RMVB_konsola
             using (var reader = new StreamReader("..\\..\\..\\Pliki wejściowe\\Pomiary.csv"))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
+                csv.Context.RegisterClassMap<PomiarMap>();
                 return csv.GetRecords<Pomiar>().ToList();
             }
         }
