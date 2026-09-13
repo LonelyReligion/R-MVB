@@ -64,9 +64,9 @@ namespace RMVB_konsola.Indeks.MVB
             Korzen ostatni_korzen = desk.Last().zwrocKorzen();
             if (!ostatni_korzen.dodaj(u))
             {
-                DateTime czas_zmiany = u.dataOstatniejModyfikacji; //to jest po czasie pomiaru przeciez!
-
+                DateTime czas_zmiany = u.dataOstatniejModyfikacji; 
                 desk.Last().ustawKoniec(czas_zmiany);
+
                 //zczytac zywe
                 List<Wersja> zywe = ostatni_korzen.zwrocZywe();
 
@@ -82,12 +82,12 @@ namespace RMVB_konsola.Indeks.MVB
                 {
                     DateTime teraz = DateTime.Now;
                     w.dezaktywuj(teraz);
+                    //Repo.modifyVersion(w);
 
                     Wersja kopia = new Wersja(w.UrzadzenieID, rmvb);
                     kopia.dataOstatniejModyfikacji = czas_zmiany;
                     Repo.saveVersion(kopia);
                     do_dodania.Add(kopia);
-
                 }
 
                 do_dodania.Add(u);//tego nie musimy kopiowac;)

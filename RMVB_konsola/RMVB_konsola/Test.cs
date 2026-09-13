@@ -102,12 +102,7 @@ namespace RMVB_konsola
 
             using (var ctx = new Kontekst())
             {
-                DateTime min = ctx.Wersje.OrderBy(u => u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji;
-                
-                //najpozniejsza data konca, wyszukujemy tylko z martwych urzadzen
-                DateTime max = ctx.Wersje.Where(u => u.dataWygasniecia != DateTime.MaxValue).OrderByDescending(u => u.dataWygasniecia).Select(u => u.dataWygasniecia).First();
-
-                List<(DateTime, DateTime)> losowe_przedzialy = wylosujPrzedzialy(min, max, ileRazy);
+                List<(DateTime, DateTime)> losowe_przedzialy = wylosujPrzedzialy(ileRazy);
 
                 Random rnd = new Random();
                 losowe_przedzialy[rnd.Next(losowe_przedzialy.Count - 1)] = (losowe_przedzialy[rnd.Next(losowe_przedzialy.Count - 1)].Item1, DateTime.MaxValue); //zeby rmvb mialo szanse sie popisac wgl 
@@ -956,18 +951,25 @@ namespace RMVB_konsola
             return blad;
         }
 
-        public List<(DateTime, DateTime)> wylosujPrzedzialy(DateTime poczatek, DateTime koniec, int liczba_przedzialow) {
-            List<(DateTime, DateTime)> wyjsciowa = new List<(DateTime, DateTime)>();
-            long range = (koniec - poczatek).Ticks; //ile czasu miedzy poczatkiem a koncem
+        public List<(DateTime, DateTime)> wylosujPrzedzialy(int liczba_przedzialow) {
+            List<DateTime> punkty_czaowe = new List<DateTime>();
+            using (var ctx = new Kontekst()) {
+                foreach (var wersja in ctx.Wersje.ToList()) {
+                    punkty_czaowe.Add(wersja.dataOstatniejModyfikacji);
+                    punkty_czaowe.Add(wersja.dataWygasniecia);
+                }
+            }
 
+            punkty_czaowe.Sort();
+
+            List<(DateTime, DateTime)> wyjsciowa = new List<(DateTime,DateTime)>();
             for (int i = 0; i < liczba_przedzialow; i++) {
-                DateTime losowa1 = poczatek.AddTicks((long)(rnd.NextDouble() * range));
-                DateTime losowa2 = poczatek.AddTicks((long)(rnd.NextDouble() * range));
-
-                if (losowa1 > losowa2)
-                    wyjsciowa.Add((losowa2, losowa1));
-                else
-                    wyjsciowa.Add((losowa1, losowa2));
+                int indeks_poczatku = rnd.Next(punkty_czaowe.Count()-1);
+                while (punkty_czaowe[indeks_poczatku] == DateTime.MaxValue) {
+                    indeks_poczatku = rnd.Next(punkty_czaowe.Count());
+                }
+                int indeks_konca = rnd.Next(indeks_poczatku, punkty_czaowe.Count());
+                wyjsciowa.Add((punkty_czaowe[indeks_poczatku], punkty_czaowe[indeks_konca]));
             }
             return wyjsciowa;
         }
@@ -980,11 +982,7 @@ namespace RMVB_konsola
 
             using (var ctx = new Kontekst())
             {
-                DateTime poczatek = ctx.Wersje.OrderBy(u => u.dataOstatniejModyfikacji).FirstOrDefault().dataOstatniejModyfikacji;
-                //najpozniejsza data konca, wyszukujemy tylko z martwych urzadzen
-                DateTime koniec_nie_9999 = ctx.Wersje.Where(u => u.dataWygasniecia != DateTime.MaxValue).OrderByDescending(u => u.dataWygasniecia).Select(u => u.dataWygasniecia).First();
-
-                List<(DateTime, DateTime)> losowe_przedzialy = wylosujPrzedzialy(poczatek, koniec_nie_9999, ileRazy);
+                List<(DateTime, DateTime)> losowe_przedzialy = wylosujPrzedzialy(ileRazy);
 
 
                 var szukane_wersje = new List<List<Wersja>>();
