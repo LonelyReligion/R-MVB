@@ -1006,7 +1006,6 @@ namespace RMVB_konsola
                     }
                 }
                 long czas_baza = sw.ElapsedMilliseconds;
-                Console.WriteLine("Baza: " + szukane_wersje.Count + " w czasie: " + czas_baza + " ms.");
 
                 sw = Stopwatch.StartNew();
                 for (int i = 0; i < ileRazy; i++)
@@ -1017,8 +1016,7 @@ namespace RMVB_konsola
                     szukane_wersje_mvb[i].AddRange(rmvb.szukaj(start, end));
                 }
                 long czas_mvb = sw.ElapsedMilliseconds;
-                Console.WriteLine("RMVB: " + szukane_wersje_mvb.Count + " w czasie: " + czas_mvb + " ms.");//to nie ma sensu
-
+                
                 bool once = false;
 
                 for (int i = 0; i < ileRazy; i++)
@@ -1060,11 +1058,12 @@ namespace RMVB_konsola
                                 bledy.Add(u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
                             }
                         }
-                        else if (szukane_wersje[i].Count < szukane_wersje_mvb[i].Count && liczba_roznych_urzadzen == liczba_urzadzen) {
+                        else if (szukane_wersje[i].Count < szukane_wersje_mvb[i].Count && liczba_roznych_urzadzen == liczba_urzadzen)
+                        {
                             Console.WriteLine("MVB odnalazlo wiecej urzadzen niz baza...");
                         }
 
-                         if (liczba_roznych_urzadzen != liczba_urzadzen)
+                        if (liczba_roznych_urzadzen != liczba_urzadzen)
                         {
                             bledy.Add("MVB znalazło nadmiarowe (powstarzające się) urządzenia: ");
                             Console.WriteLine("Znaleziono nadmiarowe urządzenia: ");
@@ -1073,7 +1072,6 @@ namespace RMVB_konsola
                             foreach (var elem in szukane_wersje_mvb[i].Distinct())
                                 nadmiarowe.Remove(elem);
 
-                            //zostaja same duble, wychodzi nam cos niemozliwego...
                             foreach (var u in nadmiarowe)
                             {
                                 Console.WriteLine("BAZA: " + u.UrzadzenieID + "v" + u.WersjaID + " " + u.dataOstatniejModyfikacji.Ticks + "-" + u.dataWygasniecia.Ticks);
@@ -1091,6 +1089,8 @@ namespace RMVB_konsola
                         rmvb.szukaj(start, end);
                     }
                 }
+                Console.WriteLine("RMVB w czasie: " + czas_mvb + " ms.");
+                Console.WriteLine("Baza w czasie: " + czas_baza + " ms.");
 
                 if (!blad)
                 {
