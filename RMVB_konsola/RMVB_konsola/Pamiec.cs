@@ -21,6 +21,7 @@ namespace RMVB_konsola
     {
         RMVB _rmvb;
         Repo _repo;
+        String lokalizacjaDanych;
 
         public Pamiec() {
             
@@ -181,7 +182,7 @@ namespace RMVB_konsola
 
         internal List<Urzadzenie> odczytajUrzadzenia() 
         {
-            using (var reader = new StreamReader("..\\..\\..\\Pliki wejściowe\\Urzadzenia.csv"))
+            using (var reader = new StreamReader(Path.Combine(lokalizacjaDanych, "Urzadzenia.csv")))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 csv.Context.RegisterClassMap<UrzadzenieMap>();
@@ -191,7 +192,7 @@ namespace RMVB_konsola
 
         internal List<Pomiar> odczytajPomiary()
         {
-            using (var reader = new StreamReader("..\\..\\..\\Pliki wejściowe\\Pomiary.csv"))
+            using (var reader = new StreamReader(Path.Combine(lokalizacjaDanych, "Pomiary.csv")))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 csv.Context.RegisterClassMap<PomiarMap>();
@@ -203,7 +204,7 @@ namespace RMVB_konsola
         //wartosc: id urzadzenia
         internal Dictionary<int, int> odczytajUrzadzeniaPomiary() {
             List<dynamic> lista = new List<dynamic>();
-            using (var reader = new StreamReader("..\\..\\..\\Pliki wejściowe\\UrzadzeniaPomiary.csv"))
+            using (var reader = new StreamReader(Path.Combine(lokalizacjaDanych, "UrzadzeniaPomiary.csv")))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 lista = csv.GetRecords<dynamic>().ToList();
@@ -236,20 +237,36 @@ namespace RMVB_konsola
         public bool zaladujZmienne(ref string sciezkaFolderuWyjsciowego, ref int liczbaUrzadzen, ref bool generujemy) {
             sciezkaFolderuWyjsciowego = ConfigurationManager.AppSettings.Get("sciezka_folderu_wyjsciowego");
 
-            Directory.CreateDirectory(sciezkaFolderuWyjsciowego);
+            try
+            {
+                Directory.CreateDirectory(sciezkaFolderuWyjsciowego);
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine("Nie masz prawa do zapisu pod podana ścieżka folderu wyjściowego.");
+                return false;
+            }
+            
             if (!Directory.Exists(sciezkaFolderuWyjsciowego))
             {
-                Console.WriteLine("Podana ścieżka jest niepoprawna.");
+                Console.WriteLine("Podana ścieżka folderu wyjściowego jest niepoprawna lub nie masz prawa do odczytu.");
                 return false;
             }
             Console.WriteLine("Pliki wyjściowe znajdziesz pod adresem: " + Path.GetFullPath(sciezkaFolderuWyjsciowego));
 
             string generujemyStr = ConfigurationManager.AppSettings.Get("generujemy").Trim();
-            if (generujemyStr == "false" || generujemyStr == "False")
+            if (generujemyStr.ToLower() == "false")
             {
                 generujemy = false;
+                lokalizacjaDanych = ConfigurationManager.AppSettings.Get("lokalizacja_danych");
+                if (!Directory.Exists(sciezkaFolderuWyjsciowego))
+                {
+                    Console.WriteLine("Podana ścieżka folderu z danymi jest niepoprawna.");
+                    return false;
+                }
+
             }
-            else if (generujemyStr == "true" || generujemyStr == "True")
+            else if (generujemyStr.ToLower() == "true")
             {
                 generujemy = true;
                 string liczbaUrzadzenStr = ConfigurationManager.AppSettings.Get("liczba_urzadzen");
