@@ -39,9 +39,17 @@ Symulacja sym = new Symulacja(liczbaUrzadzen,pamiec,generator);
 
 Console.WriteLine("Uwaga, wszystkie pliki znajdujące się w folderze " + sciezkaFolderuWyjsciowego + " zostaną trwale usunięte.");
 string[] sciezkiPlikow = Directory.GetFiles(sciezkaFolderuWyjsciowego);
-foreach (var plik in sciezkiPlikow)
+try
 {
-    File.Delete(plik);
+    foreach (var plik in sciezkiPlikow)
+    {
+        File.Delete(plik);
+    }
+}
+catch (Exception ex) 
+{ 
+    Console.WriteLine("Nie mamy uprawnien do zapisu w folderze wyjsciowym. Wybierz inny folder lub przydziel odpowiednie uprawnienia.");
+    return 0;
 }
 //
 
