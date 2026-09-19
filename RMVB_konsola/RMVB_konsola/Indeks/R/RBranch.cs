@@ -163,6 +163,7 @@ namespace RMVB_konsola.Indeks.R
             }
         }
 
+        SpaceAggregate ostatni_agregat_powierzchniowy;
         public override (double, int) SpaceAggregate(Repo repository)
         {
             double sum = 0;
@@ -185,8 +186,7 @@ namespace RMVB_konsola.Indeks.R
             if (counter > 0)
             {
                 decimal valueSpaceAggregate = (decimal)sum / counter;
-                SpaceAggregate spaceAggregate = new SpaceAggregate(mbr, DateTime.Now, valueSpaceAggregate);
-                repository.saveSpaceAggregate(spaceAggregate);
+                base.ostatni_agregat_powierzchniowy = new SpaceAggregate(mbr, DateTime.Now, valueSpaceAggregate);
             }
 
             return (sum, counter);

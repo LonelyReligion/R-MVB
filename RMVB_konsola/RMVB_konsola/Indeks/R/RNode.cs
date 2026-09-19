@@ -18,7 +18,7 @@ namespace RMVB_konsola.Indeks.R
 
         public Rectangle mbr { get; }
 
-        protected SpaceAggregate spaceAggregate;
+        protected SpaceAggregate ostatni_agregat_powierzchniowy;
 
         //zwraca liczbe dzieci albo 0 jezeli to lisc
         public abstract int zwrocLiczbeDzieci();

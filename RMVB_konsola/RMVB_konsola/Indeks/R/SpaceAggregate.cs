@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace RMVB_konsola.Indeks.R
 {
+    [NotMapped]
     public class SpaceAggregate
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int spaceAggregateId { get; set; }
 
         public decimal xMin { get; set; }

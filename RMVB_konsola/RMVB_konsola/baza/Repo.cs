@@ -146,15 +146,6 @@ namespace RMVB_konsola.baza
             }
         }
 
-        public void saveSpaceAggregate(SpaceAggregate spaceAggregate)
-        {
-            using (var ctx = new Kontekst())
-            {
-                ctx.SpaceAggregates.Add(spaceAggregate);
-                ctx.SaveChanges();
-            }
-        }
-
         public void przygotujBaze() {
             using (var ctx = new Kontekst())
             {

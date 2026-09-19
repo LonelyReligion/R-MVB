@@ -134,8 +134,7 @@ namespace RMVB_konsola.Indeks.R
             if (counter > 0)
             {
                 decimal valueSpaceAggregate = (decimal)sum / counter;
-                spaceAggregate = new SpaceAggregate(mbr, DateTime.Now, valueSpaceAggregate);
-                repository.saveSpaceAggregate(spaceAggregate);
+                ostatni_agregat_powierzchniowy = new SpaceAggregate(mbr, DateTime.Now, valueSpaceAggregate);
             }
             return (sum, counter);
         }
