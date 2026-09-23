@@ -75,8 +75,9 @@ namespace RMVB_konsola.Indeks.R
 
             foreach (Urzadzenie device in devicesInRect)
             {
-                sum += device.get_liczba_suma().Item2;
-                liczba_pomiarow += device.get_liczba_suma().Item1;
+                (int liczba, decimal do_dodania) = device.get_liczba_suma();
+                sum += do_dodania;
+                liczba_pomiarow += liczba;
             }
 
             List<int> ids = devicesInRect.Select((o) => o.UrzadzenieID).ToList();

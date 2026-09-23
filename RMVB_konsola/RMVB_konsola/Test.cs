@@ -76,11 +76,11 @@ namespace RMVB_konsola
             bool blad4 = testProstokat(ileRazy);
             Console.WriteLine("\n");
 
-            Console.WriteLine("# Obliczanie agregatow czasowych"); //srednie
+            Console.WriteLine("# Wyszukiwanie agregatow czasowych"); //srednie
             bool blad5 = testAgregatyCzasowe(ileRazy);
             Console.WriteLine("\n");
 
-            Console.WriteLine("# Wyszukiwanie agregatów powierzchniowych"); //srednie
+            Console.WriteLine("# Obliczanie agregatów powierzchniowych"); //srednie
             bool blad6 = testAgregatyPowierzchniowe(ileRazy);
             Console.WriteLine("\n");
 
@@ -616,6 +616,116 @@ namespace RMVB_konsola
             return blad;
         }
 
+        //zwraca agregat czasowy 
+        private bool testAgregatyCzasowe(int ileRazy)
+        {
+            bool blad = false;
+            //losowanie ze zwracaniem
+            List<(Decimal, Decimal)> wspolrzedne = new List<(Decimal, Decimal)>();
+            for (int i = 0; i < ileRazy; i++)
+                wspolrzedne.Add(generator.wylosujWspolrzedne());
+
+            List<Decimal> wynikBD = new List<Decimal>();
+            List<Decimal> wynikR = new List<Decimal>();
+
+            Stopwatch sw;
+            int cnt_1 = 0;
+
+            sw = Stopwatch.StartNew();
+            List<int> liczby = new List<int>();
+            List<int> id = new List<int>();
+
+
+            using (var ctx = new Kontekst())
+            {
+                for (int i = 0; i < ileRazy; i++)
+                {
+                    (Decimal x, Decimal y) = wspolrzedne[i];
+                    wynikBD.Add(0);
+                    liczby.Add(0);
+                    id.Add(-1);
+
+                    id[i] = ctx.Urzadzenia
+                        .AsNoTracking()
+                        .Where(u => u.Szerokosc == y)
+                        .Where(u => u.Dlugosc == x)
+                        .First()
+                        .UrzadzenieID;
+                    int idik = id[i];
+                    if (idik != -1)
+                    {
+                        List<Wersja> wersje = ctx.Wersje.AsNoTracking().Where(w => w.UrzadzenieID == idik).OrderByDescending(w => w.WersjaID).ToList();
+                        List<Pomiar> pomiary = wersje[0].Pomiary.ToList();
+
+                        liczby[i] += pomiary.Count;
+                        foreach (Pomiar p in pomiary) wynikBD[i] += p.Wartosc;
+
+                        if (liczby[i] != 0)
+                            wynikBD[i] /= liczby[i];
+                        else
+                            wynikBD[i] = 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Urzadzenie o wsp. " + x + " " + y + " nie istnieje w bazie");
+                        blad = true;
+                    }
+                }
+            }
+            long czasBD = sw.ElapsedMilliseconds;
+
+            sw = Stopwatch.StartNew();
+
+            List<Urzadzenie> resDevices = new List<Urzadzenie>();
+            sw = Stopwatch.StartNew();
+            for (int i = 0; i < ileRazy; i++)
+            {
+                (Decimal x, Decimal y) = wspolrzedne[i];
+                wynikR.Add(rmvb.szukajAgregatuCzasowego(x, y));
+            }
+            long czas = sw.ElapsedMilliseconds;
+            Console.WriteLine("**********************************");
+            for (int i = 0; i < ileRazy; i++)
+            {
+                (Decimal x, Decimal y) = wspolrzedne[i];
+                Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id[i].ToString());
+                Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
+                if (wynikBD[i] != wynikR[i] || repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 != liczby[i])
+                {
+                    if (!blad)
+                    {
+                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu agregatu czasowego. Poprzednie testy przebiegły pomyślnie, kolejne nie zostały zrealizowane.");
+                        bledy.Add("Komunikat(y) błędu(ów): \n");
+                    }
+                    blad = true;
+
+                    if (wynikBD[i] != wynikR[i])
+                    {
+                        bledy.Add("Mamy rozbieznosc miedzy obliczonymi wartościami: " + wynikR[i] + "(R) " + wynikBD[i] + "(ręcznie)");
+                        Console.WriteLine("Mamy rozbieznosc miedzy obliczonymi wartościami.");
+                    }
+
+                    if (repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 != liczby[i])
+                    {
+                        bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + liczby[i] + " (baza) " +
+                            repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (r)");
+
+                        Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu czasowego urządzenia o współrzędnych: (" +
+                            wspolrzedne[i].Item1 + "," + wspolrzedne[i].Item2 + ") i id: " + id[i]);
+                        Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
+                    }
+                    bledy.Add("");
+                    wynikR.Add(rmvb.szukajAgregatuCzasowego(x, y));
+
+                }
+                Console.WriteLine("**********************************");
+            }
+            Console.WriteLine("CZASY: Baza: " + czasBD + " vs " + "Rtree: " + czas);
+            wyniki += "R,wyszukuje agregat czasowy losowego urządzenia," + czasBD + "," + czas + "\n";
+            return blad;
+
+        }
+
         private bool testRectDataData(int ileRazy)
         {
             bool blad = false;
@@ -652,6 +762,7 @@ namespace RMVB_konsola
 
                     (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
                     List<Wersja> z_okresu = ctx.Wersje
+                        .AsNoTracking()
                         .Where(w => id_urzadzen.Contains(w.UrzadzenieID))
                         .Where(p => p.dataOstatniejModyfikacji >= poczatek)
                         .Where(p => p.dataWygasniecia < koniec ||
@@ -817,7 +928,7 @@ namespace RMVB_konsola
 
                 Out.Add("(");
 
-                List<int> ostatnieUrzadzenia = id_urzadzen_bd.Last();
+                List<int> ostatnieUrzadzenia = id_urzadzen_bd.Last(); //id urzadzen
 
                 List<Pomiar> pomiary = ctx.Pomiary
                     .AsNoTracking()
@@ -963,114 +1074,6 @@ namespace RMVB_konsola
             return blad;
         }
 
-        //zwraca agregat czasowy 
-        private bool testAgregatyCzasowe(int ileRazy)
-        {
-            bool blad = false;
-            //losowanie ze zwracaniem
-            List<(Decimal, Decimal)> wspolrzedne = new List<(Decimal, Decimal)>();
-            for (int i = 0; i < ileRazy; i++)
-                wspolrzedne.Add(generator.wylosujWspolrzedne());
-
-            List<Decimal> wynikBD = new List<Decimal>();
-            List<Decimal> wynikR = new List<Decimal>();
-
-            Stopwatch sw;
-            int cnt_1 = 0;
-
-            sw = Stopwatch.StartNew();
-            List<int> liczby = new List<int>();
-            List<int> id = new List<int>();
-
-
-            using (var ctx = new Kontekst())
-            {
-                for (int i = 0; i < ileRazy; i++)
-                {
-                    (Decimal x, Decimal y) = wspolrzedne[i];
-                    wynikBD.Add(0);
-                    liczby.Add(0);
-                    id.Add(-1);
-
-                    id[i] = ctx.Urzadzenia
-                        .AsNoTracking()
-                        .Where(u => u.Szerokosc == y)
-                        .Where(u => u.Dlugosc == x)
-                        .First()
-                        .UrzadzenieID;
-                    int idik = id[i];
-                    if (idik != -1)
-                    {
-                        List<Wersja> wersje = ctx.Wersje.Where(w => w.UrzadzenieID == idik).OrderByDescending(w => w.WersjaID).ToList();
-                        List<Pomiar> pomiary = wersje[0].Pomiary.ToList();
-
-                        liczby[i] += pomiary.Count;
-                        foreach (Pomiar p in pomiary) wynikBD[i] += p.Wartosc;
-
-                        if (liczby[i] != 0)
-                            wynikBD[i] /= liczby[i];
-                        else
-                            wynikBD[i] = 0;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Urzadzenie o wsp. " + x + " " + y + " nie istnieje w bazie");
-                        blad = true;
-                    }
-                }
-            }
-            long czasBD = sw.ElapsedMilliseconds;
-
-            sw = Stopwatch.StartNew();
-
-            List<Urzadzenie> resDevices = new List<Urzadzenie>();
-            sw = Stopwatch.StartNew();
-            for (int i = 0; i < ileRazy; i++)
-            {
-                (Decimal x, Decimal y) = wspolrzedne[i];
-                wynikR.Add(rmvb.szukajAgregatuCzasowego(x, y));
-            }
-            long czas = sw.ElapsedMilliseconds;
-            Console.WriteLine("**********************************");
-            for (int i = 0; i < ileRazy; i++)
-            {
-                (Decimal x, Decimal y) = wspolrzedne[i];
-                Console.WriteLine("Szukanie agregatu czasowego dla urządzenia o (x, y) = (" + x + ", " + y + ") i id = " + id[i].ToString());
-                Console.WriteLine("WARTOŚCI: Baza: " + wynikBD[i] + " vs " + "Rtree: " + wynikR[i]);
-                if (wynikBD[i] != wynikR[i] || repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 != liczby[i])
-                {
-                    if (!blad) {
-                        bledy.Add("Działanie testów zakończyło się na wyszukiwaniu agregatu czasowego. Poprzednie testy przebiegły pomyślnie, kolejne nie zostały zrealizowane.");
-                        bledy.Add("Komunikat(y) błędu(ów): \n");
-                    }
-                    blad = true;
-
-                    if (wynikBD[i] != wynikR[i])
-                    {
-                        bledy.Add("Mamy rozbieznosc miedzy obliczonymi wartościami: " + wynikR[i] + "(R) " + wynikBD[i] + "(ręcznie)");
-                        Console.WriteLine("Mamy rozbieznosc miedzy obliczonymi wartościami.");
-                    }
-
-                    if (repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 != liczby[i])
-                    {
-                        bledy.Add("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu: " + liczby[i] + " (baza) " +
-                            repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (r)");
-
-                        Console.WriteLine("Mamy rozbieznosc miedzy liczba pomiarow wykorzystanych do policzenia agregatu czasowego urządzenia o współrzędnych: (" +
-                            wspolrzedne[i].Item1 + "," + wspolrzedne[i].Item2 + ") i id: " + id[i]);
-                        Console.WriteLine("Na podstawie " + repo.pobierzUrzadzenia()[id[i]].get_liczba_suma().Item1 + " (R) " + liczby[i] + " (ręcznie)" + " pomiarów");
-                    }
-                    bledy.Add("");
-                    wynikR.Add(rmvb.szukajAgregatuCzasowego(x, y));
-
-                }
-                Console.WriteLine("**********************************");
-            }
-            Console.WriteLine("CZASY: Baza: " + czasBD + " vs " + "Rtree: " + czas);
-            wyniki += "R,wyszukuje agregat czasowy losowego urządzenia," + czasBD + "," + czas + "\n";
-            return blad;
-
-        }
 
 
 
