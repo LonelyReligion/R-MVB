@@ -814,10 +814,15 @@ namespace RMVB_konsola
 
                 for (int i = 0; i < ileRazy; i++)
                 {
+                    (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
                     if (wyniki_bd[i] != wyniki_rmvb[i]) {
-                        (DateTime poczatek, DateTime koniec) = losowe_przedzialy[i];
 
-                        Console.WriteLine("Wyszukiwanie średniej od " + poczatek + " do " + koniec);
+
+                        Console.WriteLine(
+                            $"Wyszukiwanie średniej od {poczatek:dd/MM/yyyy HH:mm:ss.fff} " +
+                            $"do {koniec:dd/MM/yyyy HH:mm:ss.fff}"
+                        );
+
                         Console.WriteLine("Wyniki sie nie zgadzaja " + wyniki_bd[i] + " vs " + wyniki_rmvb[i]); //poprawic zeby ten blad cokolwiek mowil
                         Console.WriteLine("Liczba pomiarow " + liczby_pomiarow_bd[i] + " vs " + liczby_pomiarow_rmvb[i]);
                         Console.WriteLine("Liczba urządzen " + liczby_urzadzen_bd[i] + " vs " + liczby_urzadzen_rmvb[i]);
@@ -868,8 +873,16 @@ namespace RMVB_konsola
                         rmvb.zwrocLiczbeUrzadzenPomiarowSrednia(szukane_prostokaty[i], poczatek, koniec);
                     }
 
-                    Console.WriteLine("Szukanie sredniej z pomiarow z urzadzen znajdujacych sie na obszarze " + "xMin(" + szukane_prostokaty[i].XMin + "), " + "yMin(" + szukane_prostokaty[i].YMin + "), " +
+/*                    Console.WriteLine("Szukanie sredniej z pomiarow z urzadzen znajdujacych sie na obszarze " + "xMin(" + szukane_prostokaty[i].XMin + "), " + "yMin(" + szukane_prostokaty[i].YMin + "), " +
                     "xMax(" + szukane_prostokaty[i].XMax + "), " + "yMax(" + szukane_prostokaty[i].YMax + "), z wersji aktualnych w czasie od " + losowe_przedzialy[i].Item1 + " do " + losowe_przedzialy[i].Item2);
+                    */
+                    Console.WriteLine(
+                        $"Szukanie sredniej z pomiarow z urzadzen znajdujacych sie na obszarze xMin(" + szukane_prostokaty[i].XMin + "), " + "yMin(" + szukane_prostokaty[i].YMin + "), " +
+                        $"xMax(" + szukane_prostokaty[i].XMax + "), " + "yMax(" + szukane_prostokaty[i].YMax + ")" +
+                        $" od {poczatek:dd/MM/yyyy HH:mm:ss.fff} " +
+                        $"do {koniec:dd/MM/yyyy HH:mm:ss.fff}"
+                     );
+
                     Console.WriteLine("Wynik: " + wyniki_bd[i] + "\n");   
                 }
                 Console.WriteLine("Zrealizowano w czasie " + czas_bd + " ms. (bd) " + czas_rmvb + " ms. (rmvb)");
