@@ -67,8 +67,16 @@ namespace RMVB_konsola.baza
             repository.saveTimeAggregate(timeAggregate);
         }
 
-        public void RemoveMeasure() { 
-            throw new NotImplementedException();
+        public void RemoveMeasure(Pomiar p, Repo repository) {
+            suma -= p.Wartosc;
+            liczba_uwzglednionych--;
+
+            if (liczba_uwzglednionych != 0)
+            {
+                rTimeAggregate = suma / liczba_uwzglednionych;
+                TimeAggregate timeAggregate = new TimeAggregate(rTimeAggregate, DateTime.Now, UrzadzenieID);
+                repository.saveTimeAggregate(timeAggregate);
+            }
         }
 
         public Decimal GetTimeAggregate()

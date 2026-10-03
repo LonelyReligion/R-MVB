@@ -55,6 +55,11 @@ namespace RMVB_konsola.Indeks
             R.dodajPomiar(UrzadzenieID, p);
         }
 
+        internal void usunPomiar(Wersja w, Pomiar p) {
+            R.usunPomiar(w.UrzadzenieID, p);
+            w.usunPomiar(p);
+        }
+
         //usun
         internal void usunWersje(Wersja w)
         {

@@ -67,5 +67,10 @@ namespace RMVB_konsola.Indeks.R
         {
             drzewo.SpaceAggregate();
         }
+
+        internal void usunPomiar(int urzadzenieID, Pomiar p)
+        {
+            drzewo.RemoveMeasure(urzadzenieID, p);
+        }
     }
 }

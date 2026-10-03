@@ -121,6 +121,15 @@ namespace RMVB_konsola.Indeks.R
         {
             return repository.pobierzUrzadzenia().Count;
         }
+
+        internal void RemoveMeasure(int id, Pomiar p)
+        {
+            Urzadzenie dev = repository.pobierzUrzadzenia()[id];
+            if (dev != null)
+            {
+                dev.RemoveMeasure(p, repository);
+            }
+        }
     }
 
 
