@@ -67,6 +67,10 @@ namespace RMVB_konsola.baza
             repository.saveTimeAggregate(timeAggregate);
         }
 
+        public void RemoveMeasure() { 
+            throw new NotImplementedException();
+        }
+
         public Decimal GetTimeAggregate()
         {
             return rTimeAggregate;

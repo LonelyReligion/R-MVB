@@ -291,7 +291,7 @@ namespace RMVB_konsola
 
             double granicaPrzezywalnosci = 0;
             string granicaPrzezywalnosciStr = ConfigurationManager.AppSettings.Get("granica_przezywalnosci");
-            string minimalnaLiczbaUrzadzenWKorzeniu = ConfigurationManager.AppSettings.Get("min_urzadzen_korzen");
+            string minimalnaLiczbaWersjiWKorzeniu = ConfigurationManager.AppSettings.Get("min_wersji_korzen");
 
             CultureInfo kultura = CultureInfo.CreateSpecificCulture("pl-PL");
             try
@@ -309,8 +309,8 @@ namespace RMVB_konsola
 
             try
             {
-                int minimalnaLiczbaUrzadzenWKorzeniu_int = int.Parse(minimalnaLiczbaUrzadzenWKorzeniu);
-                Korzen.min_urzadzen_korzen = minimalnaLiczbaUrzadzenWKorzeniu_int;
+                int minimalnaLiczbaWersjiWKorzeniu_int = int.Parse(minimalnaLiczbaWersjiWKorzeniu);
+                Korzen.min_wersji_korzen = minimalnaLiczbaWersjiWKorzeniu_int;
             }
             catch
             {

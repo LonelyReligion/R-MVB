@@ -17,12 +17,12 @@ namespace RMVB_konsola.Indeks.MVB
     internal class Korzen
     {
         public static decimal granica_przezywalnosci;
-        public static int min_urzadzen_korzen;
+        public static int min_wersji_korzen;
         Repo repo;
         RMVB rmvb;
         List<(int, Wpis)> wpisy; //po to zeby mozna bylo znalezc ostatni wezel szybko np.
 
-        int liczba_urzadzen = 0;
+        int liczba_wersji = 0;
         //parametry drzewa, sa zdefiniowane w klasie drzewa
         static double Pversion;
 
@@ -62,7 +62,7 @@ namespace RMVB_konsola.Indeks.MVB
 
         internal bool dodaj(Wersja u)
         {
-            if (liczba_urzadzen > min_urzadzen_korzen && zwrocPrzezywalnosc() < granica_przezywalnosci)
+            if (liczba_wersji > min_wersji_korzen && zwrocPrzezywalnosc() < granica_przezywalnosci)
                 return false;
 
             bool dodano = false;
@@ -71,7 +71,7 @@ namespace RMVB_konsola.Indeks.MVB
                 Wezel nowy = new Wezel();
                 nowy.dodaj(u);
                 wpisy.Add((wpisy.Count, new Wpis(u.UrzadzenieID, u.UrzadzenieID, u.dataOstatniejModyfikacji, u.dataWygasniecia, nowy)));
-                liczba_urzadzen++;
+                liczba_wersji++;
                 return true;
             }
             else
@@ -111,7 +111,7 @@ namespace RMVB_konsola.Indeks.MVB
                 {
                     //wezel jest pelny
                     bool wynik = versionSplit(numer_wezla, u);
-                    if (wynik) liczba_urzadzen++;
+                    if (wynik) liczba_wersji++;
                     return wynik;
                 }
                 else
@@ -127,7 +127,7 @@ namespace RMVB_konsola.Indeks.MVB
                         wpisy[numer_wezla].Item2.maxData = u.dataWygasniecia;
                 }
             }
-            if (dodano) liczba_urzadzen++;
+            if (dodano) liczba_wersji++;
             return dodano;
         }
 
